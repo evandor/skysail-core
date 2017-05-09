@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path=".gradle-wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="cnf/cache/3.3.0/bnd-cache/biz.aQute.junit/biz.aQute.junit-3.3.0.jar"/>
+	<classpathentry kind="lib" path="cnf/cache/3.3.0/bnd-cache/biz.aQute.launcher/biz.aQute.launcher-3.3.0.jar"/>
+	<classpathentry kind="lib" path="cnf/cache/3.3.0/bnd-cache/biz.aQute.remote.launcher/biz.aQute.remote.launcher-3.3.0.jar"/>
+	<classpathentry kind="lib" path="cnf/cache/3.3.0/bnd-cache/biz.aQute.tester/biz.aQute.tester-3.3.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
