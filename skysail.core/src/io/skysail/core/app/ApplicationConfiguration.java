@@ -1,4 +1,4 @@
-package io.skysail.restlet.app;
+package io.skysail.core.app;
 
 public @interface ApplicationConfiguration {
 

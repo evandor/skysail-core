@@ -1,7 +1,6 @@
 package io.skysail.restlet.forms
 
 import java.lang.reflect.Field
-import io.skysail.restlet.app.SkysailApplicationService
 import io.skysail.core.html.InputType
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size

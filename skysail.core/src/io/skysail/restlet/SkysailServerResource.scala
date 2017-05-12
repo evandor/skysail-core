@@ -1,7 +1,7 @@
 package io.skysail.restlet
 
 import io.skysail.api.text.Translation
-import io.skysail.restlet.app.SkysailApplication
+import io.skysail.core.app.SkysailApplication
 import io.skysail.restlet.forms.ScalaFormField
 import java.util.function.Consumer
 import org.restlet.resource.ServerResource
@@ -49,7 +49,8 @@ abstract class SkysailServerResource[T] extends ServerResource {
 
   def getSkysailApplication() = getApplication().asInstanceOf[SkysailApplication]
   def getMetricsCollector() = getSkysailApplication().getMetricsCollector()
-  def getParameterizedType() = ScalaReflectionUtils.getParameterizedType(getClass());
+  def getParameterizedType() = ScalaReflectionUtils.getParameterizedType(getClass())
+  def getModel() = getSkysailApplication().getApplicationModel2()
 
   /*def getPathSubstitutions(): Consumer[Link] = {
     return l -> {

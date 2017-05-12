@@ -9,25 +9,25 @@ import org.scalatest.junit.JUnitRunner
 class ResourceModelSpec extends FlatSpec with BeforeAndAfterEach {
 
   "A ResourceModel" should "not accept a null value as its path" in {
-    assertThrows[IllegalArgumentException] { new ResourceModel(null, null) }
+    assertThrows[IllegalArgumentException] { new ResourceModel(null, null, null) }
   }
 
   "A ResourceModel" should "not accept a null value as its target class" in {
-    assertThrows[IllegalArgumentException] { new ResourceModel("/path", null) }
+    assertThrows[IllegalArgumentException] { new ResourceModel(null, "/path", null) }
   }
 
   "A ResourceModel" should "provide access to the target resource" in {
-    val model = ResourceModel("/path", classOf[TestResource])
+    val model = ResourceModel(null, "/path", classOf[TestResource])
     assert(model.resource.getClass.getName == classOf[TestResource].getName)
   }
 
   "A ResourceModel" should "provide access to the target entity" in {
-    val model = ResourceModel("/path", classOf[TestResource])
+    val model = ResourceModel(null, "/path", classOf[TestResource])
     assert(model.entityClass.toString == "class io.skysail.core.model.TestEntity")
   }
   
   "A ResourceModel" should "provide the resource type" in {
-    val model = ResourceModel("/path", classOf[TestResource])
+    val model = ResourceModel(null, "/path", classOf[TestResource])
     assert(model.resourceType == UNSPECIFIED_RESOURCE)
   }
   
@@ -43,7 +43,7 @@ class ResourceModelSpec extends FlatSpec with BeforeAndAfterEach {
 //  }
   
   "An ResourceModel" should "provide a decent toString representation" in {
-    val model = new ResourceModel("/path1", classOf[TestEntitiesResource])
+    val model = new ResourceModel(null, "/path1", classOf[TestEntitiesResource])
     println(model)
   }
 

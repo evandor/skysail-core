@@ -1,43 +1,34 @@
-package io.skysail.restlet.app
+package io.skysail.core.app
 
 import io.skysail.api.text.Translation
-import io.skysail.api.um.AuthenticationService
-import io.skysail.api.um.AuthenticationMode
+import io.skysail.api.um._
 import io.skysail.core.ApiVersion
+import io.skysail.core.security.config.SecurityConfigBuilder
+import io.skysail.core.model._
+import io.skysail.core.app.resources.ModelResource
 import io.skysail.core.Entity
 import io.skysail.domain.repo.ScalaDbRepository
 import io.skysail.restlet.router.SkysailRouter
 import io.skysail.restlet.utils.ScalaTranslationUtils
 import io.skysail.restlet.services._
+import io.skysail.restlet.RouteBuilder
+import io.skysail.restlet.utils._
+import io.skysail.restlet.filter.OriginalRequestFilter
+import io.skysail.restlet.menu.MenuItem
+import io.skysail.restlet.SkysailServerResource
 import java.util.ResourceBundle
 import java.util.Collections
 import java.util.ArrayList
-import java.util.Arrays
 import org.osgi.service.component.ComponentContext
 import org.osgi.framework._
 import org.osgi.service.component.annotations._
-import org.restlet.data.LocalReference
+import org.restlet.Request
 import org.restlet.routing.Router
 import org.restlet.resource.ServerResource
 import org.restlet.Restlet
-import org.restlet.data.MediaType
-import org.restlet.data.Protocol
+import org.restlet.data._
 import org.slf4j.LoggerFactory
-
 import scala.collection.JavaConverters._
-import io.skysail.restlet.RouteBuilder
-import io.skysail.restlet.utils.CompositeClassLoader
-import io.skysail.restlet.utils.ClassLoaderDirectory
-import io.skysail.core.security.config.SecurityConfigBuilder
-import io.skysail.restlet.utils.ScalaReflectionUtils
-import io.skysail.restlet.filter.OriginalRequestFilter
-import io.skysail.restlet.menu.MenuItem
-import io.skysail.restlet.menu.Category
-import io.skysail.restlet.menu.APPLICATION_MAIN_MENU
-import org.restlet.Request
-import io.skysail.core.model.ApplicationModel
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.core.model.ResourceAssociationType
 
 object SkysailApplication {
   var serviceListProvider: ScalaServiceListProvider = null
@@ -61,7 +52,7 @@ abstract class SkysailApplication(
 
   var componentContext: ComponentContext = null
   def getComponentContext() = componentContext
-
+  
   var applicationModel2: ApplicationModel = null
   def getApplicationModel2() = applicationModel2
 
@@ -129,19 +120,6 @@ abstract class SkysailApplication(
   }
 
   def attach(): Unit = {
-    //    val firstClassEntity = (SkysailEntityModel<?>) applicationModel
-    //                    .getEntity(applicationModel.getEntityIds().iterator().next());
-
-    //            attachToRouterIfNotNull(router, "", firstClassEntity.getListResourceClass());
-    //            attachToRouterIfNotNull(router, "/", firstClassEntity.getListResourceClass());
-    //
-    //        applicationModel.getEntityIds().stream().map(key -> applicationModel.getEntity(key)) // NOSONAR
-    //                .map(SkysailEntityModel.class::cast).forEach(entity -> {
-    //                    attachToRouterIfNotNull(router, "/" + entity.getId(), entity.getListResourceClass());
-    //                    attachToRouterIfNotNull(router, "/" + entity.getId() + "/", entity.getPostResourceClass());
-    //                    attachToRouterIfNotNull(router, "/" + entity.getId() + "/{id}", entity.getEntityResourceClass());
-    //                    attachToRouterIfNotNull(router, "/" + entity.getId() + "/{id}/", entity.getPutResourceClass());
-    //                });
   }
 
   override def createInboundRoot(): Restlet = {
@@ -168,13 +146,13 @@ abstract class SkysailApplication(
     log.debug("attaching application-specific routes");
     attach();
 
-    getApplicationModel2().build()
+    //getApplicationModel2().build()
 
     log.debug("attaching i18n route");
     //attachI18N();
 
     log.debug("attaching model route");
-    //attachModel();
+    attachModel();
 
     //log.debug("attaching swagger documentation");
     //attachSwaggerDocumentation();
@@ -189,8 +167,12 @@ abstract class SkysailApplication(
     val authenticationService = getAuthenticationService();
     val authenticationGuard = authenticationService.getApplicationAuthenticator(getContext(), AuthenticationMode.ANONYMOUS);
 
-    authenticationGuard.setNext(originalRequestFilter);
-    return authenticationGuard;
+    if (authenticationGuard != null) {
+      authenticationGuard.setNext(originalRequestFilter)
+      return authenticationGuard
+    }
+    log.warn("no authentication Guard defined!")
+    return originalRequestFilter
   }
 
   def getBundleContext(): Option[BundleContext] = {
@@ -306,5 +288,7 @@ abstract class SkysailApplication(
       associatedResourceClasses += tupel
     })
   }
+
+  private def attachModel() = router.attach(new RouteBuilder("/_model", classOf[ModelResource]));
 
 }

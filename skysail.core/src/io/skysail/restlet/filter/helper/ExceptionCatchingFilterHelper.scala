@@ -1,6 +1,6 @@
 package io.skysail.restlet.filter.helper
 
-import io.skysail.restlet.app.SkysailApplication
+import io.skysail.core.app.SkysailApplication
 import io.skysail.restlet.Wrapper3
 import org.slf4j.LoggerFactory
 import org.restlet.data.Status

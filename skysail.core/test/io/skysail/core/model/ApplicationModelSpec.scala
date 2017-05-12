@@ -29,7 +29,6 @@ class ApplicationModelSpec extends FlatSpec {
     val model = ApplicationModel("appName",null)
     model.addResourceModel("/list", classOf[TestEntitiesResource])
     model.addResourceModel("/list/", classOf[PostTestEntityResource])
-    model.build()
     val links = model.linksFor(classOf[TestEntitiesResource])//.filter { l => l. }
     assert(links.size == 1)
     assert(links.head.getUri == "/appName/list/")
@@ -66,8 +65,15 @@ class ApplicationModelSpec extends FlatSpec {
   "An ApplicationModel" should "retrieve the entity associated with a Resource" in {
     val appModel = ApplicationModel("appName",null,List())
     appModel.addResourceModel("/path", classOf[TestResource])
-    val id = classOf[TestEntity].getName
-    assert(appModel.entityModelFor(id).isDefined)
+    assert(appModel.entityModelFor(classOf[TestEntity]).isDefined)
+  }
+  
+  "Given a SkysailServerResource, an ApplicatioModel" should "provide access to the resource's entityModel" in {
+    val model = ApplicationModel("appName",new ApiVersion(1),List())
+    model.addResourceModel("/list", classOf[TestEntitiesResource])
+    val entityModel = model.entityModelFor(new TestEntitiesResource())    
+    assert(entityModel.isDefined)
+    assert(entityModel.get.entityClass == classOf[TestEntity])
   }
 
   "An ApplicationModel" should "provide the LinkModel for a resource identified by its class" in {
@@ -75,7 +81,6 @@ class ApplicationModelSpec extends FlatSpec {
     model.addResourceModel("/list", classOf[TestEntitiesResource])
     model.addResourceModel("/list/", classOf[PostTestEntityResource])
    // model.addResourceModel("/list/{id}", classOf[TestEntityResource])
-    model.build()
     //println(model)
     val links = model.linksFor(classOf[TestEntitiesResource])
     assert(links.size == 1)
@@ -87,7 +92,6 @@ class ApplicationModelSpec extends FlatSpec {
     model.addResourceModel("/list", classOf[TestEntitiesResource])
     model.addResourceModel("/list/", classOf[PostTestEntityResource])
     //model.addResourceModel("/list/{id}", classOf[TestEntityResource])
-    model.build()
     val links = model.linksFor(classOf[TestEntitiesResource])
     assert(links.size == 1)
     assert(links.head.getUri == "/appName/v1/list/")
@@ -97,7 +101,6 @@ class ApplicationModelSpec extends FlatSpec {
     val model = ApplicationModel("appName",null,List())
     model.addResourceModel("/list", classOf[TestEntitiesResource])
     model.addResourceModel("/list/{id}", classOf[TestEntityResource])
-    model.build()
     println(model)
   }
 

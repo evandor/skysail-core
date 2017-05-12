@@ -8,9 +8,9 @@ abstract class AbstractPathToAuthenticatorMatcher(securityConfigBuilder: Securit
 
   var authMode: AuthenticationMode = null
 
-  override def permitAll(): PathToAuthenticatorMatcherRegistry = {
-    authMode = AuthenticationMode.PERMIT_ALL;
-    return securityConfigBuilder.getPathToAuthenticatorMatcherRegistry();
+  override def permitAll() = {
+    authMode = AuthenticationMode.PERMIT_ALL
+    securityConfigBuilder.getPathToAuthenticatorMatcherRegistry()
   }
 
   override def anonymous() = {

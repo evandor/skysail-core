@@ -3,7 +3,6 @@ package io.skysail.restlet
 import java.util.Collections
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
-import io.skysail.restlet.app.SkysailApplicationService
 import io.skysail.restlet.forms.ScalaFormField
 
 trait FieldFactory {
@@ -18,7 +17,7 @@ trait FieldFactory {
     //require(appService != null, "service must not be null")
     val appModel = resource.getSkysailApplication().applicationModel2
     
-    val entityModel = appModel.entityModelFor(cls.getName)
+    val entityModel = appModel.entityModelFor(cls)
     
     //val entityModel = appService.getEntityModel(cls.getName());
 

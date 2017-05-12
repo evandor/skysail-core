@@ -1,6 +1,5 @@
-package io.skysail.restlet.app
+package io.skysail.core.app
 
-import io.skysail.api.validation.ValidatorService
 import io.skysail.api.um.AuthorizationService
 import io.skysail.api.um.AuthenticationService
 import org.osgi.service.component.annotations._
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory
 import io.skysail.api.metrics.MetricsCollector
 import io.skysail.api.metrics.NoOpMetricsCollector
 import io.skysail.api.text.TranslationStore
-import io.skysail.core.app.ScalaTranslationRenderServiceHolder
 import io.skysail.core.text.ScalaTranslationStoreHolder
 import io.skysail.restlet.services.ScalaSkysailComponentProvider
 

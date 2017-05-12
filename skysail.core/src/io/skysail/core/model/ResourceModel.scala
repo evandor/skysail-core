@@ -19,7 +19,10 @@ import io.skysail.core.ApiVersion
  *  @param path the uri path relative to the application
  *  @param targetClass a SkysailServerResource class to handle requests to the given path
  */
-case class ResourceModel(val path: String, val targetResourceClass: Class[_ <: SkysailServerResource[_]]) {
+case class ResourceModel(
+    appModel: ApplicationModel, 
+    val path: String, 
+    val targetResourceClass: Class[_ <: SkysailServerResource[_]]) {
 
   require(path != null, "A ResourceModel's path must not be null")
   require(targetResourceClass != null, "A ResourceModel's target class must not be null")
@@ -31,6 +34,8 @@ case class ResourceModel(val path: String, val targetResourceClass: Class[_ <: S
 
   var linkModel: LinkModel = _
   var linkModels: List[LinkModel] = List()
+  
+  def getUri() = appModel.name + appModel.apiVersion.getVersionPath() + path
 
   def resourceType() = {
     resource match {

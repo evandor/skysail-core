@@ -1,9 +1,9 @@
 package io.skysail.restlet
 
 import java.util.Locale
-import io.skysail.restlet.app.SkysailApplicationService
 import io.skysail.restlet.utils.ScalaSkysailBeanUtilsBean
 import scala.collection.JavaConverters._
+import io.skysail.core.app.SkysailApplicationService
 
 case class ScalaSkysailBeanUtils[T](bean: T, locale: Locale, service: SkysailApplicationService) {
   

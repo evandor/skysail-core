@@ -1,7 +1,6 @@
-package io.skysail.restlet.app
+package io.skysail.core.app
 
 import org.osgi.service.component.annotations._
-
 import scala.collection.JavaConverters._
 import org.restlet.Application
 import org.slf4j.LoggerFactory
@@ -9,7 +8,8 @@ import java.text.DecimalFormat
 import scala.collection.mutable.ListBuffer
 import io.skysail.restlet.ScalaSkysailComponent
 import io.skysail.restlet.services.SkysailStatusService
-import io.skysail.core.app.SkysailRootApplication
+import io.skysail.restlet.services.ResourceBundleProvider
+import org.osgi.service.cm.ManagedService
 
 @org.osgi.annotation.versioning.ProviderType
 trait ApplicationListProvider {

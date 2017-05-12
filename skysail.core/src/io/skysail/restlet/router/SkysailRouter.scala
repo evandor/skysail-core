@@ -1,7 +1,7 @@
 package io.skysail.restlet.router
 
 import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.app.SkysailApplication
+import io.skysail.core.app.SkysailApplication
 import org.restlet.routing.Router
 import org.restlet.resource.ServerResource
 import org.restlet.routing.TemplateRoute
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 import scala.collection.JavaConverters._
 import io.skysail.core.ApiVersion
 import io.skysail.restlet.RouteBuilder
-import io.skysail.core.security.config.ScalaSecurityConfig
+import io.skysail.core.security.config.SecurityConfig
 import io.skysail.restlet.RolesPredicateAuthorizer
 
 object SkysailRouter {
@@ -27,9 +27,9 @@ class SkysailRouter(skysailApplication: SkysailApplication, apiVersion: ApiVersi
 
   val pathRouteBuilderMap = new ConcurrentHashMap[String, RouteBuilder]();
 
-  var securityConfig: ScalaSecurityConfig = null
+  var securityConfig: SecurityConfig = null
 
-  def setSecurityConfig(s: ScalaSecurityConfig) = this.securityConfig = s
+  def setSecurityConfig(s: SecurityConfig) = this.securityConfig = s
 
   override def attach(pathTemplate: String, targetClass: Class[_ <: ServerResource]): TemplateRoute = {
     //log.warn("please use a RouteBuilder to attach this resource: {}", targetClass);

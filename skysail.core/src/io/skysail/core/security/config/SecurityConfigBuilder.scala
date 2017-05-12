@@ -13,8 +13,8 @@ class SecurityConfigBuilder(val apiVersion: ApiVersion) {
 
   def authorizeRequests() = pathToAuthenticatorMatcherRegistry
 
-  def build(): ScalaSecurityConfig = {
-    val securityConfig = new ScalaSecurityConfig(authenticationService);
+  def build(): SecurityConfig = {
+    val securityConfig = new SecurityConfig(authenticationService);
     if (pathToAuthenticatorMatcherRegistry != null) {
       val matchers = pathToAuthenticatorMatcherRegistry.getMatchers()
       for (matcher <- matchers) {

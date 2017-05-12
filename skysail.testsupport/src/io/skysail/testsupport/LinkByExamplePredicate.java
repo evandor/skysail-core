@@ -3,7 +3,7 @@ package io.skysail.testsupport;
 import org.restlet.data.Header;
 import org.restlet.util.Series;
 
-import io.skysail.api.links.Link;
+import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
 
 public class LinkByExamplePredicate extends LinkPredicate {
 

@@ -1,13 +1,10 @@
 package io.skysail.core.app
 
 import org.osgi.service.component.annotations._
-import io.skysail.restlet.app.SkysailApplication
-import io.skysail.restlet.app.ApplicationProvider
 import org.osgi.service.cm.ManagedService
 import io.skysail.restlet.services.ResourceBundleProvider
 import java.util.Dictionary
 import org.osgi.service.component._
-import io.skysail.restlet.app.ScalaServiceListProvider
 import io.skysail.core.security.config.SecurityConfigBuilder
 import io.skysail.restlet.RouteBuilder
 import io.skysail.core.app.resources.DefaultResource

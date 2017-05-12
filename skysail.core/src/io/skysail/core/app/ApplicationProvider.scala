@@ -1,4 +1,4 @@
-package io.skysail.restlet.app
+package io.skysail.core.app
 
 trait ApplicationProvider extends Ordered[ApplicationProvider] {
   def getSkysailApplication(): SkysailApplication
