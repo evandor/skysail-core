@@ -154,9 +154,6 @@ abstract class SkysailApplication(
     log.debug("attaching model route");
     attachModel();
 
-    //log.debug("attaching swagger documentation");
-    //attachSwaggerDocumentation();
-
     log.debug("attaching static directory");
     router.attach(createStaticDirectory());
 

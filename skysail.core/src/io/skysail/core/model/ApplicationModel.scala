@@ -29,8 +29,6 @@ case class ApplicationModel(
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
 
-  log.info(s">>>>> creating new ApplicationModel '${name}' with version '{apiVersion}'")
-  
   /** The list of resourceModels of this applicationModel. */
   private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
   
@@ -54,7 +52,6 @@ case class ApplicationModel(
     }
     val entityClass = resourceModel.entityClass
     if (!entityModelsMap.get(entityClass.getName).isDefined) {
-      log.info(s">>>adding '${entityClass.getName}' as Entity to ApplicationModel ${name}")
       entityModelsMap += entityClass.getName -> EntityModel(entityClass)
     }
     resourceModels += resourceModel
@@ -77,9 +74,7 @@ case class ApplicationModel(
     
     entityModelsMap
         .map(e => e._2)
-        //.filter((k,v) => v.entityClass == resModel.get.entityClass)
         .filter(v =>  v.entityClass == resModel.get.entityClass)
-        //.map(e => e._2)
         .headOption
   }
 
