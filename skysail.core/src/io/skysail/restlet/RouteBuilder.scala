@@ -6,15 +6,13 @@ import com.google.common.base.Predicate
 import org.restlet.Restlet
 import org.restlet.resource.ServerResource
 
-object RouteBuilder {
-  val pathVariablesPattern = Pattern.compile("\\{([^\\}])*\\}");
-}
+object RouteBuilder { val pathVariablesPattern = Pattern.compile("\\{([^\\}])*\\}") }
 
 class RouteBuilder(val pathTemplate: String, val targetClass: Class[_ <: ServerResource]) {
 
   var restlet: Restlet = null
 
-  val pathVariables = extractPathVariables(pathTemplate);
+  val pathVariables = extractPathVariables(pathTemplate)
 
   var rolesForAuthorization: Predicate[Array[String]] = null
 

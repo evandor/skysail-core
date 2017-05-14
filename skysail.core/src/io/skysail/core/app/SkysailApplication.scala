@@ -52,13 +52,15 @@ abstract class SkysailApplication(
 
   var componentContext: ComponentContext = null
   def getComponentContext() = componentContext
-  
+
   var applicationModel2: ApplicationModel = null
   def getApplicationModel2() = applicationModel2
 
   val repositories = new ArrayList[ScalaDbRepository]();
 
   var router: SkysailRouter = null
+  var host = "localhost"
+  def getHost = host
 
   val stringContextMap = new java.util.HashMap[ApplicationContextId, String]()
 
@@ -69,13 +71,8 @@ abstract class SkysailApplication(
   applicationModel2 = new ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
   //entityClasses.forEach(cls -> applicationModel.addOnce(EntityFactory.createFrom(this, cls, null)));
 
-  def this(name: String, apiVersion: ApiVersion) {
-    this(name, apiVersion, List())
-  }
-
-  def this(name: String) {
-    this(name, new ApiVersion(1))
-  }
+  def this(name: String, apiVersion: ApiVersion) = this(name, apiVersion, List())
+  def this(name: String) = this(name, new ApiVersion(1))
 
   def getResourceBundles() = List[ResourceBundle]()
 
@@ -98,7 +95,7 @@ abstract class SkysailApplication(
     //      configureCorsProperties(appConfig, corsService);
     //      getServices().add(corsService);
     //    }
-    // this.host = appConfig.host();
+    host = appConfig.host();
   }
 
   @Deactivate
@@ -266,6 +263,8 @@ abstract class SkysailApplication(
     }
     return router.getRouteBuildersForResource(cls);
   }
+
+  def routesMap: Map[String, RouteBuilder] = if (router == null) Map() else router.routesMap
 
   def isAuthenticated(request: Request): Boolean = {
     if (SkysailApplication.serviceListProvider == null || SkysailApplication.serviceListProvider.getAuthenticationService() == null) {

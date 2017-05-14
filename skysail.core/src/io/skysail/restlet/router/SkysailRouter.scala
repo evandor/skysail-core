@@ -26,6 +26,7 @@ class SkysailRouter(skysailApplication: SkysailApplication, apiVersion: ApiVersi
   val log = LoggerFactory.getLogger(classOf[SkysailRouter])
 
   val pathRouteBuilderMap = new ConcurrentHashMap[String, RouteBuilder]();
+  def routesMap = pathRouteBuilderMap.asScala.toMap
 
   var securityConfig: SecurityConfig = null
 
