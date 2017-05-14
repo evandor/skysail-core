@@ -10,9 +10,17 @@ import io.skysail.restlet.responses.ListResponse
 import io.skysail.restlet.ScalaListRequestHandler
 import io.skysail.core.model.ENTITY_RESOURCE_FOR_LIST_RESOURCE
 import io.skysail.core.model.ResourceAssociationType
+import io.skysail.api.doc.ApiMetadata.ApiMetadataBuilder
+import io.skysail.api.doc.ApiMetadata
 
-abstract class ListServerResource[T: Manifest](associatedEntityResource: Class[_ <: EntityServerResource[_]] = null) extends SkysailServerResource {
-  
+object ListServerResource {
+  val GET_ENTITY_METHOD_NAME = "getEntity";
+  val ERASE_ENTITY_METHOD_NAME = "eraseEntity";
+}
+
+abstract class ListServerResource[T: Manifest](
+    associatedEntityResource: Class[_ <: EntityServerResource[_]] = null) extends SkysailServerResource {
+
   addAssociatedResourceClasses(List((ENTITY_RESOURCE_FOR_LIST_RESOURCE, associatedEntityResource)))
 
   override def getVerbs(): Set[Method] = Set(Method.GET)
@@ -23,6 +31,20 @@ abstract class ListServerResource[T: Manifest](associatedEntityResource: Class[_
     val entitiesList = listEntities(variant);
     timerMetric.stop();
     new ListResponse[T](getResponse(), entitiesList);
+  }
+
+  override def getApiMetadata(): ApiMetadata = {
+    val apiMetadata = ApiMetadata.builder();
+
+    apiMetadata.summaryForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+
+    apiMetadata.summaryForDelete(this.getClass(), ListServerResource.ERASE_ENTITY_METHOD_NAME);
+    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+
+    return apiMetadata.build();
   }
 
   private final def listEntities(variant: Variant): List[T] = {

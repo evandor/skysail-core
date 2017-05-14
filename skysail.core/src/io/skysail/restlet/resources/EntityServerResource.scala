@@ -10,6 +10,12 @@ import org.restlet.representation.Variant
 import io.skysail.restlet.responses.EntityResponse
 import io.skysail.restlet.ScalaListRequestHandler
 import io.skysail.restlet.ScalaRequestHandler
+import io.skysail.api.doc.ApiMetadata
+
+object EntityServerResource {
+  val GET_ENTITY_METHOD_NAME = "getEntity"
+  val ERASE_ENTITY_METHOD_NAME = "eraseEntity"
+}
 
 class EntityServerResource[T: Manifest] extends SkysailServerResource {
 
@@ -53,6 +59,19 @@ class EntityServerResource[T: Manifest] extends SkysailServerResource {
   //        timerMetric.stop();
   //        return new EntityServerResponse<>(getResponse(), entity);
   //    }
+
+  override def getApiMetadata() = {
+    val apiMetadata = ApiMetadata.builder()
+    apiMetadata.summaryForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+
+    apiMetadata.summaryForDelete(this.getClass(), EntityServerResource.ERASE_ENTITY_METHOD_NAME);
+    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+
+    apiMetadata.build()
+  }
 
   final def getEntity3(): T = {
     val appModel = getSkysailApplication().getApplicationModel2()
