@@ -80,11 +80,7 @@ case class ApplicationModel(
 
   def linksFor(resourceClass: Class[_ <: io.skysail.restlet.SkysailServerResource[_]]): List[LinkModel] = {
     val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
-    if (r.isDefined) {
-      r.get.linkModels
-    } else {
-      List()
-    }
+    if (r.isDefined) r.get.linkModels else List()
   }
 
   def toHtml(request: Request) = s"""<b>${this.getClass.getSimpleName}</b>("$name","$apiVersion")<br><br>

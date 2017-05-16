@@ -3,12 +3,13 @@ package io.skysail.core.app.resources
 import io.skysail.restlet.resources._
 import io.skysail.restlet.menu.MenuItemDescriptor
 import io.skysail.core.app.SkysailRootApplication
+import io.skysail.restlet.menu.MenuItem
 
 class DefaultResource extends ListServerResource[MenuItemDescriptor] {
 
-  override def linkedResourceClasses() = {
+  override def runtimeLinks() = {
     val appService = getSkysailApplication().getSkysailApplicationService()
-    appService.getApplicationContextResources().map{_.targetResourceClass}.toList
+    appService.getApplicationContextResources().map{_.linkModel}.toList
   }
   
   //    private Link createLinkForApp(MenuItem mi) {
@@ -27,6 +28,8 @@ class DefaultResource extends ListServerResource[MenuItemDescriptor] {
     //                .map(i -> new MenuItemDescriptor(i))
     //                .sorted((m1,m2) -> m1.getName().compareTo(m2.getName()))
     //                .collect(Collectors.toList());
-    List()
+    val appService = getSkysailApplication().getSkysailApplicationService()
+    val linkModels = appService.getApplicationContextResources().map{_.linkModel}.toList
+    linkModels.map { linkModel => new MenuItemDescriptor(new MenuItem(linkModel.getTitle(), linkModel.getUri())) }
   }
 }

@@ -19,6 +19,7 @@ import io.skysail.restlet.resources.ListServerResource
 import io.skysail.core.model.ResourceAssociationType
 import io.skysail.core.model.ENTITY_RESOURCE_FOR_LIST_RESOURCE
 import org.slf4j.LoggerFactory
+import io.skysail.core.model.LinkModel
 
 object SkysailServerResource {
   //val SKYSAIL_SERVER_RESTLET_FORM = "de.twenty11.skysail.server.core.restlet.form";
@@ -137,6 +138,11 @@ abstract class SkysailServerResource[T] extends ServerResource {
  
   
   def linkedResourceClasses():List[Class[_ <: SkysailServerResource[_]]] = List()
+  
+  /**
+   * overwritten by Resources to provide links determined at runtime.
+   */
+  def runtimeLinks(): List[LinkModel] = List()
   
   protected def addAssociatedResourceClasses(typeAndClassTuples: List[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]]): Unit = {
     typeAndClassTuples.foreach(tupel => {

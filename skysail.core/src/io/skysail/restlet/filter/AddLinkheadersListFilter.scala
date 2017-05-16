@@ -24,7 +24,7 @@ class AddLinkheadersListFilter[T: Manifest](appModel: ApplicationModel) extends 
     //val linkheaderAuthorized = resource.getAuthorizedLinks();
 
     val s = resource.getClass
-    val links = appModel.linksFor(s)
+    val links = appModel.linksFor(s) ::: resource.runtimeLinks()
 
     //    linkheaderAuthorized.forEach(getPathSubstitutions(resource));
     //    val links = linkheaderAuthorized.stream().map(link -> link.toString(""))

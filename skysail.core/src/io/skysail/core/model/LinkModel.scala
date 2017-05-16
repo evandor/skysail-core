@@ -6,6 +6,23 @@ import scala.annotation.meta.field
 import scala.beans.BeanProperty
 import io.skysail.restlet.ResourceContextId
 
+object LinkModel {
+  def fromLinkheader(l: String): LinkModel = {
+     require(l != null, "the linkheader string must not be empty")
+     
+     val parts = l.split(";")
+     val uriPart = parts(0).trim()
+     val substring = uriPart.substring(1).substring(0, uriPart.length() - 2);
+//
+//        Builder builder = new Link.Builder(substring);
+//        for (int i = 1; i < parts.length; i++) {
+//            parsePart(builder, parts[i]);
+//        }
+//        return builder.build();
+     new LinkModel(context = "", path = uriPart, resource = null)
+  }
+}
+
 case class LinkModel(
     val context: String,
     val path: String,
@@ -21,7 +38,7 @@ case class LinkModel(
   @BeanProperty val linkRole: LinkRole = LinkRole.DEFAULT
   @BeanProperty var refId: String = _
   @BeanProperty var cls: Class[_] = _
-
+ 
   def getUri() = context + path
 
   override def toString() = s"'${path}': ${resourceClass.getSimpleName} ($rat) [title: $getTitle()]"
