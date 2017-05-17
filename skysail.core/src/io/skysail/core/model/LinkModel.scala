@@ -27,6 +27,7 @@ object LinkModel {
     keyValue(0).trim() match {
       case "title" =>  linkModel.setTitle(keyValue(1).replace("\"", ""))
       case "refId" =>  linkModel.setRefId(keyValue(1).replace("\"", ""))
+      case _ => 
     }
   }
 }
