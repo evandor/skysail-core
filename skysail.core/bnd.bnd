@@ -17,16 +17,16 @@ Import-Package: \
 	${commons},\
 	${javax},\
 	${fasterxml},\
-    skysail.api;version=0.1.0,\
+	skysail.api;version=0.1.0,\
 	com.thoughtworks.paranamer;version=2.8,\
 	com.google.guava;version='[16.0,16.1)',\
 	io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
-    io.skysail.bundled.owasp-java-html-sanitizer;version='[20160422.1.0,20160422.1.1)',\
+	io.skysail.bundled.owasp-java-html-sanitizer;version='[20160422.1.0,20160422.1.1)',\
 	com.fasterxml.jackson.core.jackson-annotations;version=2.5,\
-    org.scalatest;version=3.0,\
-    org.scalactic;version=3.0,\
-    org.scala-lang.modules.scala-xml;version=1.0
-    
+	org.scalatest;version=3.0,\
+	org.scalactic;version=3.0,\
+	org.scala-lang.modules.scala-xml;version=1.0
+	
 Export-Package: \
 	io.skysail.api.doc,\
 	io.skysail.core.security.token,\

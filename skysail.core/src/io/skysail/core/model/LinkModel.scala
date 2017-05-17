@@ -7,19 +7,27 @@ import scala.beans.BeanProperty
 import io.skysail.restlet.ResourceContextId
 
 object LinkModel {
-  def fromLinkheader(resource: SkysailServerResource[_], l: String): LinkModel = {
-     require(l != null, "the linkheader string must not be empty")
-     
-     val parts = l.split(";")
-     val uriPart = parts(0).trim()
-     val substring = uriPart.substring(1).substring(0, uriPart.length() - 2);
-//
-//        Builder builder = new Link.Builder(substring);
-//        for (int i = 1; i < parts.length; i++) {
-//            parsePart(builder, parts[i]);
-//        }
-//        return builder.build();
-     new LinkModel(context = "", path = uriPart, resource = resource)
+  def fromLinkheader(l: String): LinkModel = {
+    require(l != null, "the linkheader string must not be empty")
+
+    val parts = l.split(";")
+    val uriPart = parts(0).trim()
+    val substring = uriPart.substring(1).substring(0, uriPart.length() - 2);
+    val linkModel = new LinkModel(context = "", path = uriPart, resource = null)
+    parts.foreach { part => parsePart(part, linkModel) }
+    linkModel
+  }
+
+  def parsePart(part: String, linkModel: LinkModel):Unit = {
+    val keyValue = part.split("=");
+    if (keyValue.length != 2) {
+      return
+      //throw new IllegalArgumentException();
+    }
+    keyValue(0).trim() match {
+      case "title" =>  linkModel.setTitle(keyValue(1).replace("\"", ""))
+      case "refId" =>  linkModel.setRefId(keyValue(1).replace("\"", ""))
+    }
   }
 }
 
@@ -31,14 +39,14 @@ case class LinkModel(
     @BeanProperty val resourceClass: Class[_ <: SkysailServerResource[_]] = null) {
 
   @BeanProperty val relation: LinkRelation = if (resource != null) resource.getLinkRelation() else LinkRelation.ALTERNATE
-  @BeanProperty val verbs = if (resource != null) resource.getVerbs() else Set(Method.GET)
+  @BeanProperty val verbs = if (resource != null) resource.getVerbs() else Set()
   @BeanProperty var title = determineTitle()
   @BeanProperty val alt: String = "-"
   @BeanProperty val needsAuth: Boolean = false
   @BeanProperty val linkRole: LinkRole = LinkRole.DEFAULT
   @BeanProperty var refId: String = _
   @BeanProperty var cls: Class[_] = _
- 
+
   def getUri() = context + path
 
   override def toString() = s"'${path}': ${resourceClass} ($rat) [title: $getTitle()]"
@@ -56,7 +64,7 @@ case class LinkModel(
       .append(verbs.map(verb => verb.getName()).mkString(",")).append("\"");
     return sb.toString();
   }
-  
+
   def determineTitle(): String = {
     if (resource == null) {
       return "unknown"
