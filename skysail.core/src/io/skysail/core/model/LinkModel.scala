@@ -7,7 +7,7 @@ import scala.beans.BeanProperty
 import io.skysail.restlet.ResourceContextId
 
 object LinkModel {
-  def fromLinkheader(l: String): LinkModel = {
+  def fromLinkheader(resource: SkysailServerResource[_], l: String): LinkModel = {
      require(l != null, "the linkheader string must not be empty")
      
      val parts = l.split(";")
@@ -19,7 +19,7 @@ object LinkModel {
 //            parsePart(builder, parts[i]);
 //        }
 //        return builder.build();
-     new LinkModel(context = "", path = uriPart, resource = null)
+     new LinkModel(context = "", path = uriPart, resource = resource)
   }
 }
 
@@ -27,11 +27,11 @@ case class LinkModel(
     val context: String,
     val path: String,
     @BeanProperty rat: ResourceAssociationType = null,
-    resource: SkysailServerResource[_],
+    resource: SkysailServerResource[_] = null,
     @BeanProperty val resourceClass: Class[_ <: SkysailServerResource[_]] = null) {
 
-  @BeanProperty val relation: LinkRelation = resource.getLinkRelation()
-  @BeanProperty val verbs = resource.getVerbs()
+  @BeanProperty val relation: LinkRelation = if (resource != null) resource.getLinkRelation() else LinkRelation.ALTERNATE
+  @BeanProperty val verbs = if (resource != null) resource.getVerbs() else Set(Method.GET)
   @BeanProperty var title = determineTitle()
   @BeanProperty val alt: String = "-"
   @BeanProperty val needsAuth: Boolean = false
@@ -41,7 +41,7 @@ case class LinkModel(
  
   def getUri() = context + path
 
-  override def toString() = s"'${path}': ${resourceClass.getSimpleName} ($rat) [title: $getTitle()]"
+  override def toString() = s"'${path}': ${resourceClass} ($rat) [title: $getTitle()]"
 
   def asLinkheaderElement(): String = {
     val sb = new StringBuilder().append("<").append(getUri()).append(">");
@@ -58,6 +58,9 @@ case class LinkModel(
   }
   
   def determineTitle(): String = {
+    if (resource == null) {
+      return "unknown"
+    }
     val title = resource.getFromContext(ResourceContextId.LINK_TITLE)
     if (title == null) "unknown" else title
   }
