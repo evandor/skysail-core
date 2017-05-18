@@ -9,10 +9,8 @@ import io.skysail.restlet.ResourceContextId
 object LinkModel {
   def fromLinkheader(l: String): LinkModel = {
     require(l != null, "the linkheader string must not be empty")
-
     val parts = l.split(";")
-    val uriPart = parts(0).trim()
-    val substring = uriPart.substring(1).substring(0, uriPart.length() - 2);
+    val uriPart = parts(0).trim().replace("<","").replace(">", "")
     val linkModel = new LinkModel(context = "", path = uriPart, resource = null)
     parts.foreach { part => parsePart(part, linkModel) }
     linkModel
