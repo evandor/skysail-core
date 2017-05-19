@@ -26,11 +26,11 @@ abstract class ListServerResource[T: Manifest](
   override def getVerbs(): Set[Method] = Set(Method.GET)
 
   @Get("html|json|yaml|xml|csv|timeline|carbon|standalone|data")
-  def getEntities(variant: Variant): ListResponse[T] = {
+  def getEntities(variant: Variant): ListResponse[List[T]] = {
     val timerMetric = getMetricsCollector().timerFor(this.getClass(), "getEntities");
     val entitiesList = listEntities(variant);
     timerMetric.stop();
-    new ListResponse[T](getResponse(), entitiesList);
+    new ListResponse[List[T]](getResponse(), entitiesList);
   }
 
   override def getApiMetadata(): ApiMetadata = {
