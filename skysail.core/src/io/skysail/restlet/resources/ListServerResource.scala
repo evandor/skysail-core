@@ -3,7 +3,6 @@ package io.skysail.restlet.resources
 import org.restlet.representation.Variant
 import org.restlet.resource.Get
 import org.restlet.data.Method
-import io.skysail.api.responses.SkysailResponse
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.responses.ScalaSkysailResponse
 import io.skysail.restlet.responses.ListResponse

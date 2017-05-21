@@ -1,6 +1,5 @@
 package io.skysail.restlet.resources
 
-import io.skysail.api.responses.SkysailResponse
 import io.skysail.restlet.SkysailServerResource
 import org.restlet.data.Method
 import io.skysail.core.model.LinkRelation
@@ -11,6 +10,7 @@ import io.skysail.restlet.responses.EntityResponse
 import io.skysail.restlet.ScalaListRequestHandler
 import io.skysail.restlet.ScalaRequestHandler
 import io.skysail.api.doc.ApiMetadata
+import io.skysail.restlet.responses.ScalaSkysailResponse
 
 object EntityServerResource {
   val GET_ENTITY_METHOD_NAME = "getEntity"
@@ -21,7 +21,7 @@ abstract class EntityServerResource[T: Manifest] extends SkysailServerResource[T
 
   addToContext(ResourceContextId.LINK_TITLE, "show");
 
-  def eraseEntity() = new SkysailResponse[T]()
+  def eraseEntity() = null//new ScalaSkysailResponse[T](){}
 
   override def getVerbs(): Set[Method] = Set(Method.GET)
 

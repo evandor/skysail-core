@@ -1,8 +1,7 @@
 package io.skysail.restlet
 
-import io.skysail.api.responses.SkysailResponse
-import io.skysail.api.responses.FormResponse
 import io.skysail.restlet.responses.ScalaSkysailResponse
+import io.skysail.restlet.responses.FormResponse
 
 object FieldsFactory {
   def getFactory(response: ScalaSkysailResponse[_]): FieldFactory = {
@@ -21,6 +20,6 @@ object FieldsFactory {
   }
 
   private def entityFactoryForForm(source: FormResponse[_]):FieldFactory = {
-    new FormResponseEntityFieldFactory(source.getEntity().getClass());
+    new FormResponseEntityFieldFactory(source.entity.getClass());
   }
 }

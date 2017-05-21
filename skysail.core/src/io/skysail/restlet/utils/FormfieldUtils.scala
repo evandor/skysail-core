@@ -1,7 +1,6 @@
 package io.skysail.restlet.utils
 
 import io.skysail.restlet.SkysailServerResource
-import io.skysail.api.responses.SkysailResponse
 import io.skysail.restlet.FieldsFactory
 import io.skysail.restlet.responses.ScalaSkysailResponse
 import io.skysail.restlet.forms.ScalaFormField
