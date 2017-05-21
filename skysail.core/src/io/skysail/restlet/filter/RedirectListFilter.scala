@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 
-class RedirectListFilter[T: Manifest]() extends ScalaAbstractListResourceFilter[T] {
+class RedirectListFilter[T <: List[_]]() extends ScalaAbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[AddLinkheadersListFilter[T]])
 

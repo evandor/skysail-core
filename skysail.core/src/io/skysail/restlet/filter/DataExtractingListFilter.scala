@@ -9,7 +9,7 @@ import io.skysail.domain.ddd.ScalaEntity
 import io.skysail.restlet.Wrapper3
 import io.skysail.restlet.ScalaListResponseWrapper
 
-class ScalaDataExtractingListFilter[T:Manifest] extends ScalaAbstractListResourceFilter[T] {
+class ScalaDataExtractingListFilter[T <: List[_]] extends ScalaAbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[ScalaExceptionCatchingListFilter[T]])
 

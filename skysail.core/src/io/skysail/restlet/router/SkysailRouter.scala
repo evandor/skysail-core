@@ -84,13 +84,7 @@ class SkysailRouter(skysailApplication: SkysailApplication, apiVersion: ApiVersi
     val targetClass = routeBuilder.targetClass
     if (targetClass != null && classOf[SkysailServerResource[_]].isAssignableFrom(targetClass)) {
       try {
-        val resourceInstance = targetClass.newInstance().asInstanceOf[SkysailServerResource[_]];
-        val parameterizedType = SkysailRouter.getResourcesGenericType(resourceInstance);
-        //applicationModel.addOnce(ScalaEntityFactory.createFrom(skysailApplication, parameterizedType, resourceInstance))
-        
-        val resourceId = routeBuilder.pathTemplate
         applicationModel2.addResourceModel(routeBuilder.pathTemplate, targetClass.asInstanceOf[Class[SkysailServerResource[_]]])
-        
       } catch {
         case e: Throwable => log.error(e.getMessage(), e);
       }

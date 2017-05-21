@@ -26,7 +26,7 @@ object PostEntityServerResource {
   val CREATE_ENTITY_TEMPLATE_METHOD_NAME = "createEntityTemplate"
 }
 
-abstract class PostEntityServerResource[T: Manifest] extends SkysailServerResource {
+abstract class PostEntityServerResource[T: Manifest] extends SkysailServerResource[T] {
 
   //   override def getLinks() = List(Link(".", relation = LinkRelation.NEXT, title = "form target", verbs = Set(Method.POST)))
   //override def associatedResourceClasses() = List((FORM_TARGET_RESOURCE,associatedEntiyResource))

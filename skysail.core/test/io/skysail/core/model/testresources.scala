@@ -3,13 +3,17 @@ package io.skysail.core.model
 import io.skysail.restlet.ResourceContextId
 import io.skysail.restlet.resources._
 
-class TestEntitiesResource extends ListServerResource[TestEntity](classOf[TestEntityResource]) { 
-  def getEntity(): Any = "hi"
+class TestEntitiesResource extends ListServerResource[List[TestEntity]](classOf[TestEntityResource]) { 
+  def getEntity() = List(TestEntity(None,"hi"))
   override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
 class TestEntityResource extends EntityServerResource[TestEntity] { 
   override def linkedResourceClasses() = List(classOf[PutTestEntityResource])
+
+  def getEntity(): TestEntity = {
+    ???
+  }
 }
 
 class PostTestEntityResource extends PostEntityServerResource[TestEntity] {

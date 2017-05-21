@@ -5,7 +5,7 @@ import io.skysail.restlet.menu.MenuItemDescriptor
 import io.skysail.core.app.SkysailRootApplication
 import io.skysail.restlet.menu.MenuItem
 
-class DefaultResource extends ListServerResource[MenuItemDescriptor] {
+class DefaultResource extends ListServerResource[List[MenuItemDescriptor]] {
 
   override def runtimeLinks() = {
     val appService = getSkysailApplication().getSkysailApplicationService()
@@ -22,7 +22,7 @@ class DefaultResource extends ListServerResource[MenuItemDescriptor] {
     getSkysailApplication().asInstanceOf[SkysailRootApplication].getRedirectTo(this);
   }
 
-  override def getEntity() = {
+  override def getEntity():List[MenuItemDescriptor] = {
     //        Set<MenuItem> mainMenuItems = ((SkysailRootApplication)getApplication()).getMainMenuItems(this,getRequest());
     //        return mainMenuItems.stream()
     //                .map(i -> new MenuItemDescriptor(i))
@@ -30,6 +30,6 @@ class DefaultResource extends ListServerResource[MenuItemDescriptor] {
     //                .collect(Collectors.toList());
     val appService = getSkysailApplication().getSkysailApplicationService()
     val linkModels = appService.getApplicationContextResources().map{_.linkModel}.toList
-    linkModels.map { linkModel => new MenuItemDescriptor(new MenuItem(linkModel.getTitle(), linkModel.getUri())) }
+    linkModels.map { linkModel => new MenuItemDescriptor(new MenuItem(linkModel.getTitle(), linkModel.getUri())) }.toList
   }
 }

@@ -39,10 +39,10 @@ abstract class SkysailServerResource[T] extends ServerResource {
   
   private val log = LoggerFactory.getLogger(this.getClass())
 
-  var entity: AnyRef = null
-  def setEntity(e: AnyRef) = entity = e
+  var entity: T = _
+  def setEntity(e: T) = entity = e
 
-  def getEntity(): Any
+  def getEntity(): T
 
   val stringContextMap = new java.util.HashMap[ResourceContextId, String]()
   

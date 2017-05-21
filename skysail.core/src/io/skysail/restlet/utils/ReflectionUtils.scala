@@ -32,39 +32,25 @@ object ScalaReflectionUtils {
     result.toList
   }
 
-  //  def getParameterizedType(getClass: Class[?0]) = {
-  //    ???
-  //  }
-  //
-  //  
-  //  
-  //
-  //    public static List<Method> getInheritedMethods(Class<?> type) {
-  //        List<Method> result = new ArrayList<Method>()
-  //
-  //        Class<?> i = type
-  //        while (i != null && i != Object.class) {
-  //            while (i != null && i != Object.class) {
-  //                for (Method method : i.getDeclaredMethods()) {
-  //                    if (!method.isSynthetic()) {
-  //                        result.add(method)
-  //                    }
-  //                }
-  //                i = i.getSuperclass()
-  //            }
-  //        }
-  //
-  //        return result
-  //    }
-  //
   def getParameterizedType(cls: Class[_]): Class[_] = {
     val parameterizedType = getParameterizedType1(cls)
     if (parameterizedType == null) {
       return classOf[Any]
     }
+    val typeArgumentsSize = parameterizedType.getActualTypeArguments().size
     val firstActualTypeArgument = parameterizedType.getActualTypeArguments()(0)
     if (firstActualTypeArgument.getTypeName().startsWith("java.util.Map")) {
       return classOf[Map[_, _]]
+    }
+    try {
+      val f = firstActualTypeArgument.getClass.getDeclaredField("actualTypeArguments")
+      //firstActualTypeArgument.
+      f.setAccessible(true)
+      val t = f.get(firstActualTypeArgument).asInstanceOf[Array[Type]]
+      println(t(0))
+      return t(0).asInstanceOf[Class[_]]
+    } catch {
+      case e:Any =>
     }
     return firstActualTypeArgument.asInstanceOf[Class[_]]
   }
@@ -74,8 +60,6 @@ object ScalaReflectionUtils {
     if (genericSuperclass == null) {
       val genericInterfaces = cls.getGenericInterfaces()
       val pt = genericInterfaces.filter(i => i.isInstanceOf[ParameterizedType]).headOption
-
-      //val pt = java.util.Arrays.stream(genericInterfaces).filter(i => i.isInstanceOf[ParameterizedType]).findFirst()
       if (pt.isDefined) {
         return pt.get.asInstanceOf[ParameterizedType]
       }

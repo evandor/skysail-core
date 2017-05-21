@@ -17,7 +17,7 @@ object EntityServerResource {
   val ERASE_ENTITY_METHOD_NAME = "eraseEntity"
 }
 
-class EntityServerResource[T: Manifest] extends SkysailServerResource {
+abstract class EntityServerResource[T: Manifest] extends SkysailServerResource[T] {
 
   addToContext(ResourceContextId.LINK_TITLE, "show");
 
@@ -85,7 +85,5 @@ class EntityServerResource[T: Manifest] extends SkysailServerResource {
     //        return wrapper.getEntity();
   }
 
-  def getEntity(): Any = {
-    ???
-  }
+ 
 }

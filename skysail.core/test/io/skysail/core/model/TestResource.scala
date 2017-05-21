@@ -4,7 +4,5 @@ import io.skysail.restlet.SkysailServerResource
 
 class TestResource extends SkysailServerResource[TestEntity] { 
   
-  def getEntity(): Any = {
-    "hi"
-  }
+  def getEntity(): TestEntity = TestEntity(None,"hi")
 }

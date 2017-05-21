@@ -11,7 +11,7 @@ object PutEntityServerResource {
 
 }
 
-class PutEntityServerResource[T] extends SkysailServerResource {
+class PutEntityServerResource[T] extends SkysailServerResource[T] {
 
   override def getVerbs(): Set[Method] = Set(Method.GET, Method.PUT)
 
@@ -25,7 +25,7 @@ class PutEntityServerResource[T] extends SkysailServerResource {
     }
   }
 
-  def getEntity(): Any = {
+  def getEntity(): T = {
     ???
   }
 

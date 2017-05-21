@@ -18,8 +18,13 @@ object ListServerResource {
   val ERASE_ENTITY_METHOD_NAME = "eraseEntity";
 }
 
-abstract class ListServerResource[T: Manifest](
-    associatedEntityResource: Class[_ <: EntityServerResource[_]] = null) extends SkysailServerResource {
+/**
+ * Extend this class to create representations of Lists of Entities.
+ * 
+ *  
+ */
+abstract class ListServerResource[T <: List[_]](
+    associatedEntityResource: Class[_ <: EntityServerResource[_]] = null) extends SkysailServerResource[T] {
 
   addAssociatedResourceClasses(List((ENTITY_RESOURCE_FOR_LIST_RESOURCE, associatedEntityResource)))
 
