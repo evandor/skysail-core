@@ -11,7 +11,7 @@ import io.skysail.core.html._
 import io.skysail.domain.ddd.ScalaEntity
 import io.skysail.restlet.forms._
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 case class Pact (
     var id: Option[String] = None,
     @BeanProperty @(Field @field) /*@(NotNull @field) @Size(min=1)*/ var title: String = "",
