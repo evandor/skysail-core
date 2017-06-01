@@ -2,7 +2,6 @@ package io.skysail.testsupport
 
 import org.restlet.data.MediaType
 import org.slf4j.LoggerFactory
-import io.skysail.testsupport.authentication.AuthenticationStrategy2
 import org.restlet.resource.ClientResource
 import org.restlet.data.ChallengeResponse
 import org.restlet.representation.Representation
@@ -12,6 +11,7 @@ import java.net.URI
 import ScalaApplicationClient.{ TESTTAG => logPrefix }
 import io.skysail.testsupport.PathDsl._
 import org.restlet.data.Form
+import io.skysail.testsupport.authentication.AuthenticationStrategy2
 
 object ScalaApplicationClient {
   val TESTTAG = " > TEST:";

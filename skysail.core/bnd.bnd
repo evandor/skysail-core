@@ -8,6 +8,8 @@ Import-Package: \
     
 -includeresource: OSGI-OPT/src=src/
     
+Require-Capability: io.skysail.api.um
+
 -buildpath: \
 	${osgi},\
 	org.osgi.service.event;version=1.3,\
