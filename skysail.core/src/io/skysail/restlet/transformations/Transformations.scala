@@ -30,7 +30,7 @@ object Transformations {
     parse("{" + sb + "}")
   }
 
-  def normalize(key: String) = 
+  private def normalize(key: String) = 
     key match {
       case "@rid" => "id"
       case k => k

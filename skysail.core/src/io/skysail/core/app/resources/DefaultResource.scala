@@ -12,22 +12,11 @@ class DefaultResource extends ListServerResource[List[MenuItemDescriptor]] {
     appService.getApplicationContextResources().map{_.linkModel}.toList
   }
   
-  //    private Link createLinkForApp(MenuItem mi) {
-  //        Predicate<String[]> securedBy = null;
-  //        return new Link.Builder(mi.getLink()).relation(LinkRelation.ITEM).title(mi.getName()).role(LinkRole.MENU_ITEM)
-  //                .authenticationNeeded(true).needsRoles(securedBy).build();
-  //    }
-
   override def redirectTo(): String = {
     getSkysailApplication().asInstanceOf[SkysailRootApplication].getRedirectTo(this);
   }
 
   override def getEntity():List[MenuItemDescriptor] = {
-    //        Set<MenuItem> mainMenuItems = ((SkysailRootApplication)getApplication()).getMainMenuItems(this,getRequest());
-    //        return mainMenuItems.stream()
-    //                .map(i -> new MenuItemDescriptor(i))
-    //                .sorted((m1,m2) -> m1.getName().compareTo(m2.getName()))
-    //                .collect(Collectors.toList());
     val appService = getSkysailApplication().getSkysailApplicationService()
     val linkModels = appService.getApplicationContextResources().map{_.linkModel}.toList
     linkModels.map { linkModel => new MenuItemDescriptor(new MenuItem(linkModel.getTitle(), linkModel.getUri())) }.toList
