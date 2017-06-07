@@ -25,5 +25,7 @@ class PostTestEntityResource extends PostEntityServerResource[TestEntity] {
 }
 
 class PutTestEntityResource extends PutEntityServerResource[TestEntity] {
-  
+  def updateEntity(entity: TestEntity): Unit = {
+    ???
+  }
 }

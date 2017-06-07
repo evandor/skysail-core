@@ -1,6 +1,6 @@
 package io.skysail.restlet.menu
 
-import io.skysail.domain.ddd.ScalaEntity
+import io.skysail.core.domain.ScalaEntity
 import io.skysail.core.html.Field
 import io.skysail.restlet.forms.ListView
 

@@ -54,10 +54,10 @@ Export-Package: \
 	io.skysail.core.model,\
 	io.skysail.core.utils,\
 	io.skysail.domain.core.repos,\
-	io.skysail.domain.ddd,\
 	io.skysail.domain.repo,\
 	io.skysail.restlet,\
 	io.skysail.restlet.app,\
+	io.skysail.core.domain,\
 	io.skysail.restlet.transformations,\
 	io.skysail.restlet.resources,\
 	io.skysail.restlet.services,\
@@ -70,6 +70,7 @@ Export-Package: \
 	io.skysail.core.model.resource
 	
 Private-Package: \
+	io.skysail.core.restlet.filter,\
 	io.skysail.restlet.filter.helper,\
 	io.skysail.core.security.config,\
 	io.skysail.restlet.menu,\

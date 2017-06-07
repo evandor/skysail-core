@@ -14,7 +14,7 @@ abstract case class AbstractSkysailResponse[T](response:Response) extends ScalaS
   def status() = response.getStatus
 }
 
-final class FormResponse[T](response: Response, entity: T, target: String) extends AbstractSkysailResponse[T](response) {
+final class FormResponse[T](response: Response, entity: T, var target: String) extends AbstractSkysailResponse[T](response) {
   def entity(): T = entity
 }
 

@@ -11,6 +11,7 @@ import io.skysail.restlet.ScalaListRequestHandler
 import io.skysail.restlet.ScalaRequestHandler
 import io.skysail.api.doc.ApiMetadata
 import io.skysail.restlet.responses.ScalaSkysailResponse
+import org.restlet.resource.Delete
 
 object EntityServerResource {
   val GET_ENTITY_METHOD_NAME = "getEntity"
@@ -47,18 +48,20 @@ abstract class EntityServerResource[T: Manifest] extends SkysailServerResource[T
   //        return new FormResponse<>(getResponse(), getEntity("dummy"), ".", "/");
   //    }
 
-  //    @Delete("x-www-form-urlencoded:html|html|json")
-  //    public EntityServerResponse<T> deleteEntity(Variant variant) {
-  //        TimerMetric timerMetric = getMetricsCollector().timerFor(this.getClass(), "deleteEntity");
-  //        if (variant != null) {
-  //            getRequest().getAttributes().put(SKYSAIL_SERVER_RESTLET_VARIANT, variant);
-  //        }
-  //        RequestHandler<T> requestHandler = new RequestHandler<>(getApplication());
-  //        AbstractResourceFilter<EntityServerResource<T>, T> handler = requestHandler.createForEntity(Method.DELETE);
-  //        T entity = handler.handle(this, getResponse()).getEntity();
-  //        timerMetric.stop();
-  //        return new EntityServerResponse<>(getResponse(), entity);
-  //    }
+   @Delete("x-www-form-urlencoded:html|html|json")
+    def  deleteEntity(variant: Variant): EntityResponse[T] = {
+    val timerMetric = getMetricsCollector().timerFor(this.getClass(), "deleteEntity");
+//        if (variant != null) {
+//            getRequest().getAttributes().put(SKYSAIL_SERVER_RESTLET_VARIANT, variant);
+//        }
+        //val requestHandler = new RequestHandler<>(getApplication());
+        val requestHandler = new ScalaRequestHandler[T](null.asInstanceOf[T], null) 
+        //AbstractResourceFilter<EntityServerResource<T>, T> handler = requestHandler.createForEntity(Method.DELETE);
+        val responseWrapper = requestHandler.createForDelete().handle(this, getResponse())
+        //T entity = handler.handle(this, getResponse()).getEntity();
+        timerMetric.stop();
+        new EntityResponse[T](getResponse(), entity);
+    }
 
   override def getApiMetadata() = {
     val apiMetadata = ApiMetadata.builder()
@@ -77,11 +80,6 @@ abstract class EntityServerResource[T: Manifest] extends SkysailServerResource[T
     val requestHandler = new ScalaRequestHandler[T](null.asInstanceOf[T], null) //, appModel)
     val responseWrapper = requestHandler.createForGet().handle(this, getResponse())
     responseWrapper.getEntity().asInstanceOf[T]
-
-    //        val requestHandler = new RequestHandler<>(getApplication());
-    //        AbstractResourceFilter<EntityServerResource<T>, T> chain = requestHandler.createForEntity(Method.GET);
-    //        ResponseWrapper<T> wrapper = chain.handle(this, getResponse());
-    //        return wrapper.getEntity();
   }
 
  

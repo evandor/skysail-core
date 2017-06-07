@@ -1,6 +1,6 @@
 package io.skysail.restlet.menu
 
-import io.skysail.domain.ddd.ScalaEntity
+import io.skysail.core.domain.ScalaEntity
 
 trait Category
 case class APPLICATION_MAIN_MENU() extends Category

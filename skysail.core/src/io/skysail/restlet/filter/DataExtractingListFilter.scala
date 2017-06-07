@@ -5,7 +5,7 @@ import io.skysail.restlet.ScalaAbstractListResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.ScalaListResponseWrapper
 import io.skysail.restlet.utils.ScalaCookiesUtils
-import io.skysail.domain.ddd.ScalaEntity
+import io.skysail.core.domain.ScalaEntity
 import io.skysail.restlet.Wrapper3
 import io.skysail.restlet.ScalaListResponseWrapper
 

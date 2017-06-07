@@ -1,6 +1,4 @@
-package io.skysail.domain.ddd
-
-import scala.beans.BeanProperty
+package io.skysail.core.domain
 
 trait ScalaEntity[IdType] {
   var id:Option[IdType]
