@@ -1,12 +1,12 @@
 package io.skysail.core.restlet.filter
 
 
-import io.skysail.restlet.ScalaAbstractResourceFilter
+import io.skysail.restlet.AbstractResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import org.slf4j.LoggerFactory
 
-class CheckBusinessViolationsFilter[T:Manifest](entity: T) extends ScalaAbstractResourceFilter[T] {
+class CheckBusinessViolationsFilter[T:Manifest](entity: T) extends AbstractResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[CheckBusinessViolationsFilter[T]])
 

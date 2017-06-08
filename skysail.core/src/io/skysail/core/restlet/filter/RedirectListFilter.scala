@@ -1,12 +1,12 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.ScalaAbstractListResourceFilter
+import io.skysail.restlet.AbstractListResourceFilter
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import io.skysail.core.restlet.filter.AddLinkheadersListFilter
 
-class RedirectListFilter[T <: List[_]]() extends ScalaAbstractListResourceFilter[T] {
+class RedirectListFilter[T <: List[_]]() extends AbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[AddLinkheadersListFilter[T]])
 

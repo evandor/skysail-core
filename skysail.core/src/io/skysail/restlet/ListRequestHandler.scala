@@ -7,7 +7,7 @@ import io.skysail.core.restlet.filter._
 
 class ScalaListRequestHandler[T <: List[_]](variant: Variant, appModel: ApplicationModel) {
 
-  def createForList(method: Method): ScalaAbstractListResourceFilter[T] = {
+  def createForList(method: Method): AbstractListResourceFilter[T] = {
     if (method.equals(Method.GET)) {
       return chainForListGet();
     } else if (method.equals(Method.POST)) {
@@ -17,13 +17,13 @@ class ScalaListRequestHandler[T <: List[_]](variant: Variant, appModel: Applicat
     //  throw new RuntimeException("Method " + method + " is not yet supported");
   }
 
-  private def chainForListGet(): ScalaAbstractListResourceFilter[T] = {
+  private def chainForListGet(): AbstractListResourceFilter[T] = {
     new ScalaExceptionCatchingListFilter[T]()
       // .calling(new ExtractStandardQueryParametersResourceFilter<>())
       .calling(new ScalaDataExtractingListFilter[T]())
       .calling(new AddLinkheadersListFilter[T](appModel))
       //      .calling(new SetExecutionTimeInListResponseFilter())
       .calling(new RedirectListFilter[T]())
-      .asInstanceOf[ScalaAbstractListResourceFilter[T]]
+      .asInstanceOf[AbstractListResourceFilter[T]]
   }
 }

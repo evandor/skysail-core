@@ -1,6 +1,6 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.ScalaAbstractResourceFilter
+import io.skysail.restlet.AbstractResourceFilter
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
@@ -8,7 +8,7 @@ import org.restlet.data.MediaType
 import org.restlet.representation.Variant
 import io.skysail.core.restlet.filter.PutRedirectGetFilter
 
-class DeleteRedirectGetFilter2[T: Manifest](variant: Variant) extends ScalaAbstractResourceFilter[T] {
+class DeleteRedirectGetFilter2[T: Manifest](variant: Variant) extends AbstractResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[PutRedirectGetFilter[T]])
 

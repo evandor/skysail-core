@@ -17,7 +17,7 @@ import io.skysail.core.restlet.filter.UpdateEntityFilter
 
 class ScalaRequestHandler[T: Manifest](entity: T, variant: Variant) {
 
-  def createForPost(): ScalaAbstractResourceFilter[T] = {
+  def createForPost(): AbstractResourceFilter[T] = {
 
     new ExceptionCatchingFilter[T]()
       .calling(new ExtractStandardQueryParametersResourceFilter[T]())
@@ -28,10 +28,10 @@ class ScalaRequestHandler[T: Manifest](entity: T, variant: Variant) {
       .calling(new EntityWasAddedFilter[T](entity))
       .calling(new AddLinkheadersFilter[T]())
       .calling(new PostRedirectGetFilter[T](variant))
-      .asInstanceOf[ScalaAbstractResourceFilter[T]]
+      .asInstanceOf[AbstractResourceFilter[T]]
   }
 
-  def createForPut(): ScalaAbstractResourceFilter[T] = {
+  def createForPut(): AbstractResourceFilter[T] = {
 
     new ExceptionCatchingFilter[T]()
       .calling(new ExtractStandardQueryParametersResourceFilter[T]())
@@ -42,26 +42,26 @@ class ScalaRequestHandler[T: Manifest](entity: T, variant: Variant) {
       .calling(new EntityWasAddedFilter[T](entity))
       .calling(new AddLinkheadersFilter[T]())
       .calling(new PutRedirectGetFilter[T](variant))
-      .asInstanceOf[ScalaAbstractResourceFilter[T]]
+      .asInstanceOf[AbstractResourceFilter[T]]
   }
 
-  def createForGet(): ScalaAbstractResourceFilter[T] = {
+  def createForGet(): AbstractResourceFilter[T] = {
     new ExceptionCatchingFilter[T]()
       .calling(new ExtractStandardQueryParametersResourceFilter[T]())
       .calling(new DataExtractingFilter[T]())
       //.calling(new AddReferrerCookieFilter[T]())
       .calling(new AddLinkheadersFilter[T]())
-      .asInstanceOf[ScalaAbstractResourceFilter[T]]
+      .asInstanceOf[AbstractResourceFilter[T]]
 
   }
 
-  def createForDelete(): ScalaAbstractResourceFilter[T] = {
+  def createForDelete(): AbstractResourceFilter[T] = {
     new ExceptionCatchingFilter[T]()
       .calling(new ExtractStandardQueryParametersResourceFilter[T]())
       .calling(new DeleteEntityFilter[T]())
       .calling(new EntityWasDeletedFilter[T]())
       .calling(new DeleteRedirectGetFilter2[T](variant))
-      .asInstanceOf[ScalaAbstractResourceFilter[T]]
+      .asInstanceOf[AbstractResourceFilter[T]]
   }
 
 }

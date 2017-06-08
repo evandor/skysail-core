@@ -1,14 +1,13 @@
 package io.skysail.core.restlet.filter
 
 import org.slf4j.LoggerFactory
-import io.skysail.restlet.ScalaAbstractListResourceFilter
+import io.skysail.restlet.AbstractListResourceFilter
 import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.ScalaListResponseWrapper
+import io.skysail.restlet.ListResponseWrapper
 import io.skysail.core.domain.ScalaEntity
 import io.skysail.restlet.Wrapper3
-import io.skysail.core.restlet.filter.ScalaExceptionCatchingListFilter
 
-class ScalaDataExtractingListFilter[T <: List[_]] extends ScalaAbstractListResourceFilter[T] {
+class ScalaDataExtractingListFilter[T <: List[_]] extends AbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[ScalaExceptionCatchingListFilter[T]])
 
@@ -21,7 +20,7 @@ class ScalaDataExtractingListFilter[T <: List[_]] extends ScalaAbstractListResou
       val data = entity.asInstanceOf[List[T]]
       //sanitizeIds(data);
 
-      responseWrapper.asInstanceOf[ScalaListResponseWrapper[T]].setEntity(data);
+      responseWrapper.asInstanceOf[ListResponseWrapper[T]].setEntity(data);
 //      resource.setCurrentEntity(data); // TODO why both wrapper AND
       // resource?
     } else {

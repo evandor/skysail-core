@@ -1,14 +1,14 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.ScalaAbstractListResourceFilter
+import io.skysail.restlet.AbstractListResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import org.slf4j.LoggerFactory
 import org.restlet.resource.ResourceException
 import io.skysail.core.restlet.filter.ExceptionCatchingFilterHelper
-import io.skysail.restlet.ScalaListResponseWrapper
+import io.skysail.restlet.ListResponseWrapper
 
-class ScalaExceptionCatchingListFilter[T <: List[_]] extends ScalaAbstractListResourceFilter[T] {
+class ScalaExceptionCatchingListFilter[T <: List[_]] extends AbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[ScalaExceptionCatchingListFilter[T]])
 

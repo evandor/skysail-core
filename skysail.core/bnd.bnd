@@ -35,8 +35,6 @@ Require-Capability: io.skysail.api.um
 	
 Export-Package: \
 	io.skysail.api.doc,\
-	io.skysail.api.features,\
-	io.skysail.api.features.annotations,\
 	io.skysail.api.links,\
 	io.skysail.api.metrics,\
 	io.skysail.api.text,\

@@ -120,8 +120,7 @@ public class ApiMetadata {
         private Method getMethod(Class<?> cls,String methodName) {
             try {
                 return cls.getDeclaredMethod(methodName);
-            } catch (NoSuchMethodException | SecurityException e) {
-                //log.error(e.getMessage(), e);
+            } catch (NoSuchMethodException | SecurityException e) { // NOSONAR
             	log.warn(e.getMessage());
             }
             return null;

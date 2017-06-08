@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import org.restlet.Request
 import io.skysail.restlet.resources._
 
-abstract class ScalaAbstractResourceFilter[T:Manifest] extends ScalaResourceFilter[T] {
+abstract class AbstractResourceFilter[T:Manifest] extends ResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(this.getClass())
 

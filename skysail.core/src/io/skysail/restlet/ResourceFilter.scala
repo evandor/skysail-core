@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory
 import io.skysail.core.restlet.filter.FilterResult
 import io.skysail.core.restlet.filter.FilterResult._
 
-trait ScalaResourceFilter[T] {
+trait ResourceFilter[T] {
 
   val log = LoggerFactory.getLogger(this.getClass())
 
-  var next: ScalaResourceFilter[T] = null
+  var next: ResourceFilter[T] = null
 
   protected def getLast() = {
     var result = this;
@@ -47,7 +47,7 @@ trait ScalaResourceFilter[T] {
     CONTINUE;
   }
   
-  def calling(next: ScalaResourceFilter[T]) = {
+  def calling(next: ResourceFilter[T]) = {
     val lastInChain = getLast();
     lastInChain.setNext(next);
     this;
@@ -56,6 +56,6 @@ trait ScalaResourceFilter[T] {
 
   def afterHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3): Unit = {}
 
-  protected def getNext(): ScalaResourceFilter[T] = next
-  private def setNext(next: ScalaResourceFilter[T]) = this.next = next
+  protected def getNext(): ResourceFilter[T] = next
+  private def setNext(next: ResourceFilter[T]) = this.next = next
 }

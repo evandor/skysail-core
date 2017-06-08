@@ -2,12 +2,12 @@ package io.skysail.core.restlet.filter
 
 import org.slf4j.LoggerFactory
 
-import io.skysail.restlet.ScalaAbstractResourceFilter
+import io.skysail.restlet.AbstractResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import org.restlet.data.Header
-import io.skysail.restlet.ScalaAbstractListResourceFilter
-import io.skysail.restlet.ScalaListResponseWrapper
+import io.skysail.restlet.AbstractListResourceFilter
+import io.skysail.restlet.ListResponseWrapper
 import io.skysail.restlet.utils.ScalaHeadersUtils
 import io.skysail.core.model.ApplicationModel
 
@@ -15,7 +15,7 @@ object AddLinkheadersListFilter {
   val MAX_LINK_HEADER_SIZE = 2048
 }
 
-class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends ScalaAbstractListResourceFilter[T] {
+class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends AbstractListResourceFilter[T] {
 
   override val log = LoggerFactory.getLogger(classOf[AddLinkheadersListFilter[T]])
 
