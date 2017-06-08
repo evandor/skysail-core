@@ -1,4 +1,4 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
 import io.skysail.restlet.ScalaAbstractResourceFilter
 import org.slf4j.LoggerFactory
@@ -7,9 +7,9 @@ import io.skysail.restlet.Wrapper3
 import org.restlet.data.MediaType
 import org.restlet.representation.Variant
 
-class PostRedirectGetFilter[T: Manifest](variant: Variant) extends ScalaAbstractResourceFilter[T] {
+class PutRedirectGetFilter[T: Manifest](variant: Variant) extends ScalaAbstractResourceFilter[T] {
 
-  override val log = LoggerFactory.getLogger(classOf[PostRedirectGetFilter[T]])
+  override val log = LoggerFactory.getLogger(classOf[PutRedirectGetFilter[T]])
 
   override def afterHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3): Unit = {
     if (resource.getQuery() == null) {

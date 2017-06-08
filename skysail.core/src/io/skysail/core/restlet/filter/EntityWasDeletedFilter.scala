@@ -6,7 +6,6 @@ import io.skysail.restlet.ScalaAbstractResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import io.skysail.restlet.ScalaResponseWrapper
-import io.skysail.restlet.filter.FilterResult
 
 class EntityWasDeletedFilter[T:Manifest]() extends ScalaAbstractResourceFilter[T] {
 

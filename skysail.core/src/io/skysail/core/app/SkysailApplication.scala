@@ -7,13 +7,13 @@ import io.skysail.core.security.config.SecurityConfigBuilder
 import io.skysail.core.model._
 import io.skysail.core.app.resources.ModelResource
 import io.skysail.core.Entity
-import io.skysail.domain.repo.ScalaDbRepository
+import io.skysail.core.domain.repo.ScalaDbRepository
 import io.skysail.restlet.router.SkysailRouter
 import io.skysail.restlet.utils.ScalaTranslationUtils
 import io.skysail.restlet.services._
 import io.skysail.restlet.RouteBuilder
 import io.skysail.restlet.utils._
-import io.skysail.restlet.filter.OriginalRequestFilter
+import io.skysail.core.restlet.filter.OriginalRequestFilter
 import io.skysail.restlet.menu.MenuItem
 import io.skysail.restlet.SkysailServerResource
 import java.util.ResourceBundle

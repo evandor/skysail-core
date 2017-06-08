@@ -1,4 +1,4 @@
-package io.skysail.restlet.filter.helper
+package io.skysail.core.restlet.filter
 
 import io.skysail.core.app.SkysailApplication
 import io.skysail.restlet.Wrapper3

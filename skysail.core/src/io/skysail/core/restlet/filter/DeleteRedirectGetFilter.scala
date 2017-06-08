@@ -6,7 +6,7 @@ import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import org.restlet.data.MediaType
 import org.restlet.representation.Variant
-import io.skysail.restlet.filter.PutRedirectGetFilter
+import io.skysail.core.restlet.filter.PutRedirectGetFilter
 
 class DeleteRedirectGetFilter2[T: Manifest](variant: Variant) extends ScalaAbstractResourceFilter[T] {
 

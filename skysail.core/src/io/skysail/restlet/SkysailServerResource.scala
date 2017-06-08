@@ -49,6 +49,7 @@ abstract class SkysailServerResource[T] extends ServerResource {
   val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]]()
 
   def getSkysailApplication() = getApplication().asInstanceOf[SkysailApplication]
+  def applicationService = getSkysailApplication().getSkysailApplicationService()
   def getMetricsCollector() = getSkysailApplication().getMetricsCollector()
   def getParameterizedType() = ScalaReflectionUtils.getParameterizedType(getClass())
   def getModel() = getSkysailApplication().getApplicationModel2()

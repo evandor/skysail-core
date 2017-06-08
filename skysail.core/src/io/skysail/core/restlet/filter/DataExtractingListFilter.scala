@@ -1,13 +1,12 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.ScalaAbstractListResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.ScalaListResponseWrapper
-import io.skysail.restlet.utils.ScalaCookiesUtils
 import io.skysail.core.domain.ScalaEntity
 import io.skysail.restlet.Wrapper3
-import io.skysail.restlet.ScalaListResponseWrapper
+import io.skysail.core.restlet.filter.ScalaExceptionCatchingListFilter
 
 class ScalaDataExtractingListFilter[T <: List[_]] extends ScalaAbstractListResourceFilter[T] {
 

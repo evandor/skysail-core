@@ -4,7 +4,6 @@ import io.skysail.restlet.ScalaAbstractResourceFilter
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.Wrapper3
 import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.filter.FilterResult
 
 class DeleteEntityFilter[T: Manifest] extends ScalaAbstractResourceFilter[T] {
 

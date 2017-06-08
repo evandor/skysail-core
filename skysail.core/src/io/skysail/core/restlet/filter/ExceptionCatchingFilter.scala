@@ -1,18 +1,14 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.ScalaAbstractListResourceFilter
+import io.skysail.restlet.ScalaAbstractResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
-import org.slf4j.LoggerFactory
 import org.restlet.resource.ResourceException
-import io.skysail.restlet.filter.helper.ExceptionCatchingFilterHelper
-import io.skysail.restlet.ScalaListResponseWrapper
+import io.skysail.core.restlet.filter.ExceptionCatchingFilterHelper
 
-class ScalaExceptionCatchingListFilter[T <: List[_]] extends ScalaAbstractListResourceFilter[T] {
+class ExceptionCatchingFilter[T:Manifest] extends ScalaAbstractResourceFilter[T] {
 
-  override val log = LoggerFactory.getLogger(classOf[ScalaExceptionCatchingListFilter[T]])
-
-  override def doHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3): FilterResult = {
+  override def doHandle(resource: SkysailServerResource[_], responseWrapper:  Wrapper3): FilterResult = {
     log.debug("entering {}#doHandle", this.getClass().getSimpleName());
     try {
       super.doHandle(resource, responseWrapper)

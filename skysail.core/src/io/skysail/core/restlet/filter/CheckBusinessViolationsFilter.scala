@@ -1,11 +1,10 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
-import org.slf4j.LoggerFactory
+
 import io.skysail.restlet.ScalaAbstractResourceFilter
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
-import java.util.HashSet
-import io.skysail.restlet.ScalaResponseWrapper
+import org.slf4j.LoggerFactory
 
 class CheckBusinessViolationsFilter[T:Manifest](entity: T) extends ScalaAbstractResourceFilter[T] {
 

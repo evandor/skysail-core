@@ -1,11 +1,10 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
 import io.skysail.restlet.ScalaAbstractResourceFilter
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import io.skysail.restlet.resources.PostEntityServerResource
-import io.skysail.restlet.ScalaResponseWrapper
 
 class PersistEntityFilter[T:Manifest](entity: T) extends ScalaAbstractResourceFilter[T] {
 

@@ -4,6 +4,9 @@ import collection.mutable.Stack
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.junit._
+import org.assertj.core.api.Assertions._
+
 
 @RunWith(classOf[JUnitRunner])
 class EntityModelSpec extends FlatSpec with BeforeAndAfterEach {

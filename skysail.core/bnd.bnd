@@ -27,11 +27,14 @@ Require-Capability: io.skysail.api.um
 	com.fasterxml.jackson.core.jackson-annotations;version=2.5,\
 	org.scalatest;version=3.0,\
 	org.scalactic;version=3.0,\
-	org.scala-lang.modules.scala-xml;version=1.0
+	org.scala-lang.modules.scala-xml;version=1.0,\
+	org.assertj.core;version=3.5,\
+	de.twentyeleven.skysail.org.json-osgi;version=20080701.0,\
+	org.eclipse.jetty.server;version=9.2,\
+	org.eclipse.jetty.util;version=9.2
 	
 Export-Package: \
 	io.skysail.api.doc,\
-	io.skysail.core.security.token,\
 	io.skysail.api.features,\
 	io.skysail.api.features.annotations,\
 	io.skysail.api.links,\
@@ -42,22 +45,23 @@ Export-Package: \
 	io.skysail.api.validation,\
 	io.skysail.api.validation.hibernate,\
 	io.skysail.api.weaving,\
-	io.skysail.core.osgi.services,\
-	io.skysail.core.um.domain,\
-	io.skysail.core.security.config,\
-	io.skysail.core.security,\
 	io.skysail.core,\
-	io.skysail.core.resources,\
 	io.skysail.core.app,\
 	io.skysail.core.app.resources,\
+	io.skysail.core.domain,\
+	io.skysail.core.domain.repo,\
+	io.skysail.core.model.resource,\
+	io.skysail.core.osgi.services,\
+	io.skysail.core.resources,\
+	io.skysail.core.security,\
+	io.skysail.core.security.config,\
+	io.skysail.core.security.token,\
+	io.skysail.core.um.domain,\
 	io.skysail.core.html,\
 	io.skysail.core.model,\
 	io.skysail.core.utils,\
-	io.skysail.domain.core.repos,\
-	io.skysail.domain.repo,\
 	io.skysail.restlet,\
 	io.skysail.restlet.app,\
-	io.skysail.core.domain,\
 	io.skysail.restlet.transformations,\
 	io.skysail.restlet.resources,\
 	io.skysail.restlet.services,\
@@ -66,8 +70,7 @@ Export-Package: \
 	io.skysail.restlet.router,\
 	io.skysail.restlet.forms,\
 	io.skysail.restlet.model,\
-	io.skysail.restlet.queries,\
-	io.skysail.core.model.resource
+	io.skysail.restlet.queries
 	
 Private-Package: \
 	io.skysail.core.restlet.filter,\
@@ -77,3 +80,4 @@ Private-Package: \
 	io.skysail.restlet.filter,\
 	io.skysail.core.text,\
 	io.skysail.restlet.queries.impl
+	

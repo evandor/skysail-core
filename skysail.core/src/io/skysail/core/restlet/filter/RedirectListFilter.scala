@@ -1,10 +1,10 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
-import io.skysail.core.model.ApplicationModel
 import io.skysail.restlet.ScalaAbstractListResourceFilter
 import org.slf4j.LoggerFactory
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
+import io.skysail.core.restlet.filter.AddLinkheadersListFilter
 
 class RedirectListFilter[T <: List[_]]() extends ScalaAbstractListResourceFilter[T] {
 

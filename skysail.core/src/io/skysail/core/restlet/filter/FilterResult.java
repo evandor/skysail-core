@@ -1,4 +1,4 @@
-package io.skysail.restlet.filter;
+package io.skysail.core.restlet.filter;
 
 
 public enum FilterResult {

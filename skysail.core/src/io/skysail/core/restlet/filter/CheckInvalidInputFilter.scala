@@ -1,4 +1,4 @@
-package io.skysail.restlet.filter
+package io.skysail.core.restlet.filter
 
 import io.skysail.restlet.ScalaAbstractResourceFilter
 import org.slf4j.LoggerFactory
@@ -7,9 +7,8 @@ import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import org.restlet.Request
 import scala.collection.JavaConverters._
-import org.owasp.html.HtmlSanitizer
-import io.skysail.restlet.ScalaResponseWrapper
 import io.skysail.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.html.Field
 
 object CheckInvalidInputFilter {
   val noHtmlPolicyBuilder = new HtmlPolicyBuilder();
