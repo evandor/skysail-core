@@ -5,8 +5,7 @@ import io.skysail.api.um.AuthenticationService
 import org.osgi.service.component.annotations._
 import io.skysail.api.um.UserManagementProvider
 import org.slf4j.LoggerFactory
-import io.skysail.api.metrics.MetricsCollector
-import io.skysail.api.metrics.NoOpMetricsCollector
+import io.skysail.api.metrics._
 import io.skysail.api.text.TranslationStore
 import io.skysail.core.text.ScalaTranslationStoreHolder
 import io.skysail.restlet.services.ScalaSkysailComponentProvider

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import io.skysail.api.metrics.CounterMetric;
 
+
 public class CounterMetricTest {
 
     @Test
@@ -30,5 +31,4 @@ public class CounterMetricTest {
         CounterMetric counterMetric2 = new CounterMetric(Integer.class, "ident");
         assertThat(counterMetric1,is(not(counterMetric2)));
     }
-
 }
