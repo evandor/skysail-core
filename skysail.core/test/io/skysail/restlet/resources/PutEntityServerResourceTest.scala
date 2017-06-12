@@ -32,8 +32,8 @@ class PutEntityServerResourceTest {
       null
     }
 
-    def updateEntity(entity: TestNote): Unit = {
-      
+    def updateEntity(entity: TestNote): TestNote = {
+      null
     }
 
   }

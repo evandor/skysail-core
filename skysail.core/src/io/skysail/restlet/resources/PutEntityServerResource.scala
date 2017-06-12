@@ -25,7 +25,7 @@ abstract class PutEntityServerResource[T: Manifest] extends SkysailServerResourc
 
   override def getVerbs(): Set[Method] = Set(Method.GET, Method.PUT)
   
-  def updateEntity(entity: T)
+  def updateEntity(entity: T): T
 
   @Get("htmlform|html|json")
   def getPutTemplate(variant: Variant): FormResponse[T] = {
