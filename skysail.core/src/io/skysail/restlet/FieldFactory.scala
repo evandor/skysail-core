@@ -29,7 +29,6 @@ trait FieldFactory {
     }
     
     val fields = entityModel.get.fields
-   // println(fields)
 
     fields.values
       .map { field => new ScalaFormField(field, resource.entity) }

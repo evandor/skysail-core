@@ -26,7 +26,6 @@ object Transformations {
       .filter(_ != "@rid")
       .map(key => "\"" + normalize(key) + "\":\"" + map.get(key).get + "\"")
       .mkString(",")
-    println(sb)
     parse("{" + sb + "}")
   }
 

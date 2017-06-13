@@ -27,7 +27,6 @@ class DataExtractingFilter[T: Manifest]( /*entity: T*/ ) extends AbstractResourc
     //val installation = CookiesUtils.getInstallationFromCookie(resource.getRequest()).orElse(null);
     val entity = resource.getEntity();
     if (entity.isInstanceOf[List[_]]) {
-      println(entity)
       //      List < T > data = (List < T>) entity;
       //      sanitizeIds(data);
       //

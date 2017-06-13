@@ -47,7 +47,6 @@ object ScalaReflectionUtils {
       //firstActualTypeArgument.
       f.setAccessible(true)
       val t = f.get(firstActualTypeArgument).asInstanceOf[Array[Type]]
-      println(t(0))
       return t(0).asInstanceOf[Class[_]]
     } catch {
       case e:Any =>

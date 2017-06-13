@@ -36,10 +36,8 @@ abstract class AbstractStringTemplateProvider extends StringTemplateProvider {
   }
 
   def addToTemplates(url: URL): Unit = {
-//    println(url)
 //    val source = Source.fromURI(url.toURI())
     val source = Source.fromInputStream(url.openStream())
-//    println(source)
     templates += getIdentifier(url) -> source.mkString
 //    try {
 //      val inputStream = url.openStream();
