@@ -11,6 +11,7 @@ import io.skysail.restlet.ListResponseWrapper
 import io.skysail.restlet.utils.ScalaHeadersUtils
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.model.LinkModel
+import io.skysail.core.domain.ScalaEntity
 
 object AddLinkheadersListFilter {
   val MAX_LINK_HEADER_SIZE = 2048
@@ -22,12 +23,21 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
 
   override def afterHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3) = {
     val result = scala.collection.mutable.ListBuffer[LinkModel]()
+    val resourceModel = appModel.resourceModelFor(resource.getClass).get
+    //val pathVariables = resourceModel.pathVariables
+    val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
     for (link <- appModel.linksFor(resource.getClass)) {
-      if (link.getUri().contains("{")) {
-        result += link
-      } else {
-        result += link
+      val pathVariables = getPathVariables(link.getUri())
+      for (listEntity <- listEntities) {
+        //pathVariables.foreach { v => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
+        val link2 = pathVariables.map { v => link.copy(link.path.replace("{id}",listEntity.getId().toString())) }//.flatMap { x => ??? }
+        result += link2
       }
+//      if (link.getUri().contains("{")) {
+      //listEntity.foreach { e => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
+//      } else {
+//        result += link
+//      }
     }
     
     val links = appModel.linksFor(resource.getClass) ::: resource.runtimeLinks()
@@ -58,4 +68,9 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
     return links;
   }*/
 
+   private def getPathVariables(path: String) = 
+    "\\{([^\\}]*)\\}".r
+      .findAllIn(path)
+      .map { (e => e.toString().replace("{", "").replace("}", "")) }
+      .toList
 }
