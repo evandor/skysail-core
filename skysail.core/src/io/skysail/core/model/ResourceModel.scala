@@ -31,12 +31,13 @@ case class ResourceModel(
 
   val resource: SkysailServerResource[_] = targetResourceClass.newInstance().asInstanceOf[SkysailServerResource[_]]
   val entityClass: Class[_] = SkysailRouter.getResourcesGenericType(resource)
+  lazy val pathVariables = getPathVariables(path)
 
   var linkModel: LinkModel = _
   var linkModels: List[LinkModel] = List()
   
   def getUri() = appModel.name + appModel.apiVersion.getVersionPath() + path
-
+  
   def resourceType() = {
     resource match {
       case _: ListServerResource[_] => LIST_RESOURCE
@@ -61,5 +62,11 @@ case class ResourceModel(
 
   private def printList(list: List[_]) = list.map(v => v).mkString("")
 
+  private def getPathVariables(path: String) = 
+    "\\{([^\\}]*)\\}".r
+      .findAllIn(path)
+      .map { (e => e.toString().replace("{", "").replace("}", "")) }
+      .toList
+  
 
 }

@@ -16,6 +16,11 @@ class ResourceModelSpec extends FlatSpec with BeforeAndAfterEach {
     assertThrows[IllegalArgumentException] { new ResourceModel(null, "/path", null) }
   }
 
+  "A ResourceModel" should "provide its path variables" in {
+    val resourceModel = ResourceModel(null, "/path/{id}/subpath/{name}", classOf[TestResource])
+    assert(resourceModel.pathVariables == List("id","name"))
+  }
+
   "A ResourceModel" should "provide access to the target resource" in {
     val model = ResourceModel(null, "/path", classOf[TestResource])
     assert(model.resource.getClass.getName == classOf[TestResource].getName)

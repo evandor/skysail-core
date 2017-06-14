@@ -10,6 +10,7 @@ import io.skysail.restlet.AbstractListResourceFilter
 import io.skysail.restlet.ListResponseWrapper
 import io.skysail.restlet.utils.ScalaHeadersUtils
 import io.skysail.core.model.ApplicationModel
+import io.skysail.core.model.LinkModel
 
 object AddLinkheadersListFilter {
   val MAX_LINK_HEADER_SIZE = 2048
@@ -20,21 +21,28 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
   override val log = LoggerFactory.getLogger(classOf[AddLinkheadersListFilter[T]])
 
   override def afterHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3) = {
-    val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse());
-    //val linkheaderAuthorized = resource.getAuthorizedLinks();
-
-    val s = resource.getClass
-    val links = appModel.linksFor(s) ::: resource.runtimeLinks()
+    val result = scala.collection.mutable.ListBuffer[LinkModel]()
+    for (link <- appModel.linksFor(resource.getClass)) {
+      if (link.getUri().contains("{")) {
+        result += link
+      } else {
+        result += link
+      }
+    }
+    
+    val links = appModel.linksFor(resource.getClass) ::: resource.runtimeLinks()
+    for (link <- links) {
+      
+    }
 
     //    linkheaderAuthorized.forEach(getPathSubstitutions(resource));
-    //    val links = linkheaderAuthorized.stream().map(link -> link.toString(""))
-    //      .collect(Collectors.joining(","));
     val linkCount = 50;
    // val limitedLinks = shrinkLinkHeaderSizeIfNecessary(linkCount, links.map(l => l.asLinkheaderElement()).mkString(","))
    	val limitedLinks = links.map(l => l.asLinkheaderElement()).mkString(",")
     //    if (limitedLinks.length() < links.length()) {
     //      responseHeaders.add(new Header("X-Link-Error", "link header was too large: " + links.length() + " bytes, cutting down to " + limitedLinks.length() + " bytes."));
     //    }
+    val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse())
     responseHeaders.add(new Header("Link", limitedLinks));
   }
 
