@@ -31,7 +31,7 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
       for (listEntity <- listEntities) {
         //pathVariables.foreach { v => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
         val link2 = pathVariables.map { v => link.copy(link.path.replace("{id}",listEntity.getId().toString())) }//.flatMap { x => ??? }
-        result += link2
+        result += link2.last
       }
 //      if (link.getUri().contains("{")) {
       //listEntity.foreach { e => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
