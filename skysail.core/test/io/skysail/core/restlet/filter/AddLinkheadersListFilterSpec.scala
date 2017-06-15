@@ -11,26 +11,35 @@ import org.mockito.Mockito
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.Wrapper3
 import io.skysail.core.ApiVersion
-import io.skysail.core.model.TestEntitiesResource
+import io.skysail.restlet.utils.ScalaHeadersUtils
+import org.restlet._
+import io.skysail.core.model._
 
 @RunWith(classOf[JUnitRunner])
-class EntityModelSpec extends FlatSpec with BeforeAndAfterEach {
+class AddLinkheadersListFilterSpec extends FlatSpec with BeforeAndAfterEach {
 
-//  var model: EntityModel = null
-//
-//  override def beforeEach() {
-//    model = EntityModel(new TestEntity(Some("id"),"content").getClass())
-//  }
+  var appModel: ApplicationModel = null
+  var resource: SkysailServerResource[_] = null
+  var request: Request = null
+  var response: Response = null
+  var responseWrapper: Wrapper3 = null
 
-  "A AddListheadersListFilter" should "not accept a null entity in constructor" in {
-    val appModel = ApplicationModel("appName",new ApiVersion(1),List())
+  override def beforeEach() {
+    appModel = ApplicationModel("appName", new ApiVersion(1), List())
     appModel.addResourceModel("/list", classOf[TestEntitiesResource])
-    val resource = new TestEntitiesResource()
-    val responseWrapper = Mockito.mock(classOf[Wrapper3])
+    appModel.addResourceModel("/list/{id}/name/{name}", classOf[TestEntityResource])
+    resource = new TestEntitiesResource()
+    request = new Request()
+    response = new Response(request)
+    resource.init(null, request, response)
+    responseWrapper = Mockito.mock(classOf[Wrapper3])
+  }
+
+  "A AddListheadersListFilter" should "adds the appropriate linkheaders to the response headers" in {
     val filter = new AddLinkheadersListFilter(appModel)
     filter.afterHandle(resource, responseWrapper)
+    val linkheader = ScalaHeadersUtils.getHeaders(resource.getResponse()).getFirstValue("Link")
+    assertThat(linkheader).contains("/list/23")
   }
-  
-  
 
 }

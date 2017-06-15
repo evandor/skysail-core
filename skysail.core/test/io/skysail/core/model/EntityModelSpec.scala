@@ -14,7 +14,7 @@ class EntityModelSpec extends FlatSpec with BeforeAndAfterEach {
   var model: EntityModel = null
 
   override def beforeEach() {
-    model = EntityModel(new TestEntity(Some("id"),"content").getClass())
+    model = EntityModel(new TestEntity(Some("id"),"hi", "content").getClass())
   }
 
   "An EntityModel" should "not accept a null entity in constructor" in {

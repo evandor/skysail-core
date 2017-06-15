@@ -24,49 +24,19 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
   override def afterHandle(resource: SkysailServerResource[_], responseWrapper: Wrapper3) = {
     val result = scala.collection.mutable.ListBuffer[LinkModel]()
     val resourceModel = appModel.resourceModelFor(resource.getClass).get
-    //val pathVariables = resourceModel.pathVariables
     val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
     for (link <- appModel.linksFor(resource.getClass)) {
       val pathVariables = getPathVariables(link.getUri())
       for (listEntity <- listEntities) {
-        //pathVariables.foreach { v => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
-        val link2 = pathVariables.map { v => link.copy(link.path.replace("{id}",listEntity.getId().toString())) }//.flatMap { x => ??? }
-        result += link2.last
+        val substituedUrl = pathVariables.foldLeft(link.path)((seed,variable) => seed.replace("{"+variable+"}",listEntity.getId().toString()))
+        result += link.copy(path = substituedUrl)
       }
-//      if (link.getUri().contains("{")) {
-      //listEntity.foreach { e => result += link.copy(path = link.path.replace("{id}", e.id.get.toString())) }
-//      } else {
-//        result += link
-//      }
     }
-    
-    val links = appModel.linksFor(resource.getClass) ::: resource.runtimeLinks()
-    for (link <- links) {
-      
-    }
-
-    //    linkheaderAuthorized.forEach(getPathSubstitutions(resource));
-    val linkCount = 50;
-   // val limitedLinks = shrinkLinkHeaderSizeIfNecessary(linkCount, links.map(l => l.asLinkheaderElement()).mkString(","))
+    val links = result.toList ::: resource.runtimeLinks()
    	val limitedLinks = links.map(l => l.asLinkheaderElement()).mkString(",")
-    //    if (limitedLinks.length() < links.length()) {
-    //      responseHeaders.add(new Header("X-Link-Error", "link header was too large: " + links.length() + " bytes, cutting down to " + limitedLinks.length() + " bytes."));
-    //    }
     val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse())
     responseHeaders.add(new Header("Link", limitedLinks));
   }
-
- /* private def shrinkLinkHeaderSizeIfNecessary(linkCount: Int, links: String): String = {
-    if (linkCount <= 0) {
-      return ""
-    }
-    if (links.length() > AddLinkheadersListFilter.MAX_LINK_HEADER_SIZE) {
-      val reducedLinks = Arrays.stream(links.split(",", linkCount)).limit(linkCount - 1)
-        .collect(Collectors.joining(",")); // NOSONAR
-      return shrinkLinkHeaderSizeIfNecessary(linkCount - 10, reducedLinks);
-    }
-    return links;
-  }*/
 
    private def getPathVariables(path: String) = 
     "\\{([^\\}]*)\\}".r

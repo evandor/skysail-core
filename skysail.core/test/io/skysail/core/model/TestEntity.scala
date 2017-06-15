@@ -8,6 +8,7 @@ import io.skysail.core.html.Field
 @BeanProperty
 case class TestEntity (
     var id: Option[String],
-    @BeanProperty @(Field @field) /*@(NotNull @field) @Size(min=1)*/ var content: String
+    @BeanProperty @(Field @field) var name: String,
+    @BeanProperty @(Field @field) var content: String
   ) extends ScalaEntity[String] {
 }
