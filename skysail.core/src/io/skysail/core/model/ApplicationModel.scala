@@ -15,9 +15,10 @@ import org.restlet.Request
  *
  *  @constructor create a new application model, identified by its name.
  *
- *  @param name the model's (unique and descriptive) name
+ *  @param name the application's (unique and descriptive) name
  *  @param apiVersion the applications API version, can be null
  *  @param associatedResourceClasses a list of associated Resource Classes together with the relation type.
+ *  
  */
 case class ApplicationModel(
     val name: String,
