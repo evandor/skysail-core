@@ -68,7 +68,7 @@ abstract class SkysailApplication(
   //getEncoderService().getIgnoredMediaTypes().add(SkysailApplication.SKYSAIL_SERVER_SENT_EVENTS);
   getEncoderService().setEnabled(true);
   log.debug("Instanciating new Skysail ApplicationModel '{}'", this.getClass().getSimpleName());
-  applicationModel2 = new ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
+  applicationModel2 = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
   //entityClasses.forEach(cls -> applicationModel.addOnce(EntityFactory.createFrom(this, cls, null)));
 
   def this(name: String, apiVersion: ApiVersion) = this(name, apiVersion, List())
