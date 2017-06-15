@@ -27,18 +27,22 @@ class AddLinkheadersListFilter[T <: List[_]](appModel: ApplicationModel) extends
     val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
     for (link <- appModel.linksFor(resource.getClass)) {
       val pathVariables = getPathVariables(link.getUri())
-      for (listEntity <- listEntities) {
-        val substituedUrl = pathVariables.foldLeft(link.path)((seed,variable) => seed.replace("{"+variable+"}",listEntity.getId().toString()))
-        result += link.copy(path = substituedUrl)
+      if (pathVariables.size == 0) {
+        result += link
+      } else {
+        for (listEntity <- listEntities) {
+          val substituedUrl = pathVariables.foldLeft(link.path)((seed, variable) => seed.replace("{" + variable + "}", listEntity.getId().toString()))
+          result += link.copy(path = substituedUrl)
+        }
       }
     }
     val links = result.toList ::: resource.runtimeLinks()
-   	val limitedLinks = links.map(l => l.asLinkheaderElement()).mkString(",")
+    val limitedLinks = links.map(l => l.asLinkheaderElement()).mkString(",")
     val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse())
     responseHeaders.add(new Header("Link", limitedLinks));
   }
 
-   private def getPathVariables(path: String) = 
+  private def getPathVariables(path: String) =
     "\\{([^\\}]*)\\}".r
       .findAllIn(path)
       .map { (e => e.toString().replace("{", "").replace("}", "")) }
