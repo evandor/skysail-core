@@ -9,7 +9,7 @@ import scala.beans.BeanProperty
 
 import io.skysail.core.html._
 import io.skysail.core.domain.ScalaEntity
-import io.skysail.restlet.forms._
+import io.skysail.core.forms._
 
 case class SimpleEntity (
     var id: Option[String] = None,

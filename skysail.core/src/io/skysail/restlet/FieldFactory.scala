@@ -3,7 +3,7 @@ package io.skysail.restlet
 import java.util.Collections
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
-import io.skysail.restlet.forms.ScalaFormField
+import io.skysail.core.forms.ScalaFormField
 
 trait FieldFactory {
 

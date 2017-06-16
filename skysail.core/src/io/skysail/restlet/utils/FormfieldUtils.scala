@@ -3,7 +3,7 @@ package io.skysail.restlet.utils
 import io.skysail.restlet.SkysailServerResource
 import io.skysail.restlet.FieldsFactory
 import io.skysail.restlet.responses.ScalaSkysailResponse
-import io.skysail.restlet.forms.ScalaFormField
+import io.skysail.core.forms.ScalaFormField
 import io.skysail.core.app.SkysailApplicationService
 
 object ScalaFormfieldUtils {

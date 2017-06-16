@@ -2,7 +2,7 @@ package io.skysail.restlet
 
 import io.skysail.api.text.Translation
 import io.skysail.core.app.SkysailApplication
-import io.skysail.restlet.forms.ScalaFormField
+import io.skysail.core.forms.ScalaFormField
 import java.util.function.Consumer
 import org.restlet.resource.ServerResource
 import io.skysail.restlet.utils.ScalaMessagesUtils

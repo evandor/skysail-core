@@ -3,7 +3,7 @@ package io.skysail.core.app.resources
 import io.skysail.core.domain.ScalaEntity
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
-import io.skysail.restlet.forms._
+import io.skysail.core.forms._
 import io.skysail.core.html._
 
 case class StringEntity (

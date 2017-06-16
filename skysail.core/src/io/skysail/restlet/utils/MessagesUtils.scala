@@ -1,6 +1,6 @@
 package io.skysail.restlet.utils
 
-import io.skysail.restlet.forms.ScalaFormField
+import io.skysail.core.forms.ScalaFormField
 
 object ScalaMessagesUtils {
   def getBaseKey(entityClass: Class[_], f: ScalaFormField) = f.getId()

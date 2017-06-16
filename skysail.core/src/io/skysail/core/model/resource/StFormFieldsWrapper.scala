@@ -1,6 +1,6 @@
 package io.skysail.core.model.resource
 
-import io.skysail.restlet.forms.ScalaFormField
+import io.skysail.core.forms.ScalaFormField
 import org.restlet.Request
 import io.skysail.api.text.Translation
 import scala.collection.JavaConverters._
