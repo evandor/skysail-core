@@ -1,4 +1,4 @@
-package io.skysail.restlet.forms;
+package io.skysail.core.forms;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

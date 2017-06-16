@@ -1,4 +1,4 @@
-package io.skysail.restlet.forms
+package io.skysail.core.forms
 
 import scala.annotation.meta._
 import io.skysail.restlet.SkysailServerResource

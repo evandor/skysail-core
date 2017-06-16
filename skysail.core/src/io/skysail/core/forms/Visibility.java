@@ -1,4 +1,4 @@
-package io.skysail.restlet.forms;
+package io.skysail.core.forms;
 
 public enum Visibility {
     

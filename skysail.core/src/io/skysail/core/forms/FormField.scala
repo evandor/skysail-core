@@ -1,4 +1,4 @@
-package io.skysail.restlet.forms
+package io.skysail.core.forms
 
 import java.lang.reflect.Field
 import io.skysail.core.html.InputType
