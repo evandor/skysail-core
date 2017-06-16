@@ -3,12 +3,16 @@ package io.skysail.core.model
 import scala.collection.JavaConverters._
 import java.lang.reflect.Field
 import io.skysail.restlet.utils.ScalaReflectionUtils
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.restlet.router.SkysailRouter
-import io.skysail.restlet.resources._
+import io.skysail.core.restlet.resources._
 import org.slf4j.LoggerFactory
 import org.restlet.Request
 import io.skysail.core.ApiVersion
+import io.skysail.core.restlet.resources.EntityServerResource
+import io.skysail.core.restlet.resources.PostEntityServerResource
+import io.skysail.core.restlet.resources.PutEntityServerResource
+import io.skysail.core.restlet.resources.ListServerResource
 
 /**
  * A ResourceModel captures the link between a path and a SkysailServerResource, defining

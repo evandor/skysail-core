@@ -2,5 +2,5 @@ package io.skysail.restlet.services
 
 trait ScalaSkysailComponentProvider {
 
-    def getSkysailComponent(): io.skysail.restlet.ScalaSkysailComponent
+    def getSkysailComponent(): io.skysail.core.restlet.ScalaSkysailComponent
 }

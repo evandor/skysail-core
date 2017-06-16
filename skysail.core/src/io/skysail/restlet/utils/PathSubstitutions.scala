@@ -1,6 +1,6 @@
 package io.skysail.restlet.utils
 
-import io.skysail.restlet.RouteBuilder
+import io.skysail.core.restlet.RouteBuilder
 import io.skysail.core.Entity
 
 class PathSubstitutions(requestAttributes: java.util.Map[String, Object], routeBuilders: List[RouteBuilder]) {

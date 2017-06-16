@@ -1,2 +1,2 @@
 @org.osgi.annotation.versioning.Version("1.0.0")
-package io.skysail.restlet.resources;
+package io.skysail.core.restlet;

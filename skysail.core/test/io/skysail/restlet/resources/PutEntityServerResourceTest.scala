@@ -3,7 +3,7 @@ package io.skysail.restlet.forms
 import scala.annotation.meta._
 
 import org.mockito.Mockito
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.Request
 import org.restlet.Response
 import org.restlet.data.Reference
@@ -17,8 +17,9 @@ import org.restlet.util.Series
 import org.junit.runner.RunWith
 import org.junit.Ignore
 import javax.validation.constraints._
-import io.skysail.restlet.resources._
+import io.skysail.core.restlet.resources._
 import org.restlet.representation.Variant
+import io.skysail.core.restlet.resources.PutEntityServerResource
 
 @Ignore
 class PutEntityServerResourceTest {

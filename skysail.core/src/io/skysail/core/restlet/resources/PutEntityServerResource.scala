@@ -1,4 +1,4 @@
-package io.skysail.restlet.resources
+package io.skysail.core.restlet.resources
 
 import io.skysail.restlet._
 import io.skysail.restlet.utils.ScalaResourceUtils
@@ -13,6 +13,11 @@ import io.skysail.restlet.responses.ScalaSkysailResponse
 import org.restlet.data.Form
 import io.skysail.restlet.transformations.Transformations
 import org.json4s.DefaultFormats
+import org.json4s.jvalue2extractable
+import io.skysail.core.restlet.ScalaRequestHandler
+import io.skysail.core.restlet.ScalaResponseWrapper
+import io.skysail.core.restlet.ScalaSkysailBeanUtils
+import io.skysail.core.restlet.SkysailServerResource
 
 object PutEntityServerResource {
   val GET_ENTITY_METHOD_NAME = "getEntity"

@@ -1,7 +1,7 @@
 package io.skysail.core.forms
 
 import scala.annotation.meta._
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 
 @getter @setter @beanGetter @beanSetter
 class ListView(

@@ -1,4 +1,4 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.restlet.Component
 import org.slf4j.LoggerFactory

@@ -5,10 +5,10 @@ import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
-import io.skysail.restlet.resources.ListServerResource
+import io.skysail.core.restlet.resources.ListServerResource
 
 class SkysailRouterSpec extends FlatSpec {
 

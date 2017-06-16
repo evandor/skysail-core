@@ -1,10 +1,12 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.restlet.Response
-import io.skysail.restlet.responses.ListResponse
 import org.slf4j.LoggerFactory
 import org.restlet.Request
-import io.skysail.restlet.resources._
+import io.skysail.core.restlet.resources._
+import io.skysail.core.restlet.resources.EntityServerResource
+import io.skysail.core.restlet.resources.PostEntityServerResource
+import io.skysail.core.restlet.ScalaResponseWrapper
 
 abstract class AbstractResourceFilter[T:Manifest] extends ResourceFilter[T] {
 

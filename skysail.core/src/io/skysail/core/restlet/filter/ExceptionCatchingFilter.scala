@@ -1,10 +1,9 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.AbstractResourceFilter
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.Wrapper3
+import io.skysail.core.restlet.AbstractResourceFilter
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.resource.ResourceException
-import io.skysail.core.restlet.filter.ExceptionCatchingFilterHelper
+import io.skysail.core.restlet.Wrapper3
 
 class ExceptionCatchingFilter[T:Manifest] extends AbstractResourceFilter[T] {
 

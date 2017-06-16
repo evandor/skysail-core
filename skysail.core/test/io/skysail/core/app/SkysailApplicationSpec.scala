@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
 import org.mockito.Mockito
 import io.skysail.api.um.AuthenticationService
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.app.resources.ModelResource
 
 @RunWith(classOf[JUnitRunner])

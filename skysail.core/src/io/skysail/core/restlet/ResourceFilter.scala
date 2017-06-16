@@ -1,7 +1,6 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.slf4j.LoggerFactory
-
 import io.skysail.core.restlet.filter.FilterResult
 import io.skysail.core.restlet.filter.FilterResult._
 

@@ -1,4 +1,4 @@
-package io.skysail.restlet.resources
+package io.skysail.core.restlet.resources
 
 import org.restlet.resource.Post
 import org.restlet.representation.Variant
@@ -6,20 +6,17 @@ import org.restlet.data.Form
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import scala.collection.JavaConversions._
-import scala.collection.mutable.MutableList
 import org.restlet.resource.Get
-import java.util.Arrays
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.restlet.responses.FormResponse
 import io.skysail.restlet.responses.ScalaSkysailResponse
 import org.restlet.data.Status
-import io.skysail.restlet.ScalaRequestHandler
-import io.skysail.restlet.ScalaResponseWrapper
 import io.skysail.restlet.transformations.Transformations
 import org.restlet.data.Method
-import io.skysail.core.model.FORM_TARGET_RESOURCE
 import io.skysail.core.model.LinkRelation
 import io.skysail.api.doc.ApiMetadata
+import io.skysail.core.restlet.ScalaResponseWrapper
+import io.skysail.core.restlet.ScalaRequestHandler
 
 object PostEntityServerResource {
   val ADD_ENTITY_METHOD_NAME = "addEntity"

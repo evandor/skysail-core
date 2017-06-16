@@ -1,7 +1,7 @@
 package io.skysail.restlet.utils
 
 import java.util.Locale
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import org.slf4j.LoggerFactory
 import org.restlet.resource.Resource
 

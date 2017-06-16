@@ -1,8 +1,6 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.restlet.Response
-import io.skysail.restlet.responses.ListResponse
-import org.slf4j.LoggerFactory
 
 abstract class AbstractListResourceFilter[T <: List[_]] extends ResourceFilter[T] {
 

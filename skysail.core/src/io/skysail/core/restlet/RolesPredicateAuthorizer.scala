@@ -1,10 +1,9 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import com.google.common.base.Predicate
 import org.restlet.security.Authorizer
 import org.restlet.Response
 import org.restlet.Request
-
 import scala.collection.JavaConverters._
 
 class RolesPredicateAuthorizer(rolesPredicate: Predicate[Array[String]]) extends Authorizer {

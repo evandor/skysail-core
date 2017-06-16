@@ -1,17 +1,15 @@
-package io.skysail.restlet.resources
+package io.skysail.core.restlet.resources
 
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.data.Method
 import io.skysail.core.model.LinkRelation
-import io.skysail.restlet.ResourceContextId
+import io.skysail.core.restlet.ResourceContextId
 import org.restlet.resource.Get
 import org.restlet.representation.Variant
 import io.skysail.restlet.responses.EntityResponse
-import io.skysail.restlet.ScalaListRequestHandler
-import io.skysail.restlet.ScalaRequestHandler
 import io.skysail.api.doc.ApiMetadata
-import io.skysail.restlet.responses.ScalaSkysailResponse
 import org.restlet.resource.Delete
+import io.skysail.core.restlet.ScalaRequestHandler
 
 object EntityServerResource {
   val GET_ENTITY_METHOD_NAME = "getEntity"

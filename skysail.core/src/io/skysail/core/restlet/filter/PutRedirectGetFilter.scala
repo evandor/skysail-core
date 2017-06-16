@@ -1,11 +1,11 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet.AbstractResourceFilter
+import io.skysail.core.restlet.AbstractResourceFilter
 import org.slf4j.LoggerFactory
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.Wrapper3
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.data.MediaType
 import org.restlet.representation.Variant
+import io.skysail.core.restlet.Wrapper3
 
 class PutRedirectGetFilter[T: Manifest](variant: Variant) extends AbstractResourceFilter[T] {
 

@@ -1,6 +1,6 @@
-package io.skysail.restlet.resources
+package io.skysail.core.restlet.resources
 
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.resource.Get
 import org.restlet.representation.Variant
 import io.skysail.restlet.responses.EntityResponse

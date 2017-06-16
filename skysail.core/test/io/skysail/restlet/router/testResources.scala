@@ -1,6 +1,8 @@
 package io.skysail.restlet.router
 
 import io.skysail.restlet.resources._
+import io.skysail.core.restlet.resources.EntityServerResource
+import io.skysail.core.restlet.resources.ListServerResource
 
 case class TestEntity() {}
 

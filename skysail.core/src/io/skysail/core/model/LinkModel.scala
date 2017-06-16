@@ -1,10 +1,10 @@
 package io.skysail.core.model
 
 import org.restlet.data.Method
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
-import io.skysail.restlet.ResourceContextId
+import io.skysail.core.restlet.ResourceContextId
 
 object LinkModel {
   def fromLinkheader(l: String): LinkModel = {

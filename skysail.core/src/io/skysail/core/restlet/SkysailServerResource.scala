@@ -1,21 +1,17 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import io.skysail.api.text.Translation
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.forms.ScalaFormField
-import java.util.function.Consumer
 import org.restlet.resource.ServerResource
 import io.skysail.restlet.utils.ScalaMessagesUtils
-import org.restlet.Application
 import java.util.Locale
-import java.util.Collections
 import io.skysail.restlet.utils._
 import io.skysail.api.doc.ApiMetadata
 import scala.reflect.runtime.universe._
 import io.skysail.core.model.ResourceAssociationType
 import io.skysail.core.model.LinkRelation
 import org.restlet.data.Method
-import io.skysail.restlet.resources.ListServerResource
 import io.skysail.core.model.ResourceAssociationType
 import io.skysail.core.model.ENTITY_RESOURCE_FOR_LIST_RESOURCE
 import org.slf4j.LoggerFactory

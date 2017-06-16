@@ -1,4 +1,4 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import java.util.Locale
 import io.skysail.restlet.utils.ScalaSkysailBeanUtilsBean

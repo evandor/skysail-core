@@ -1,7 +1,6 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.restlet.Response
-import io.skysail.restlet.responses.ListResponse
 
 class ScalaResponseWrapper[T](response: Response) extends Wrapper3 {
 

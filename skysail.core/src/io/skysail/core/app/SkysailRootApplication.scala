@@ -6,7 +6,7 @@ import io.skysail.restlet.services.ResourceBundleProvider
 import java.util.Dictionary
 import org.osgi.service.component._
 import io.skysail.core.security.config.SecurityConfigBuilder
-import io.skysail.restlet.RouteBuilder
+import io.skysail.core.restlet.RouteBuilder
 import io.skysail.core.app.resources.DefaultResource
 import io.skysail.core.app.resources.LoginResource
 

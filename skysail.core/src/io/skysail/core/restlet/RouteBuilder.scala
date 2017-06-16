@@ -1,4 +1,4 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import java.util.regex.Pattern
 import io.skysail.core.ApiVersion

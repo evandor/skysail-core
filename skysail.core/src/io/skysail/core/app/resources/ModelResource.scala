@@ -1,6 +1,6 @@
 package io.skysail.core.app.resources
 
-import io.skysail.restlet.resources.EntityServerResource
+import io.skysail.core.restlet.resources.EntityServerResource
 
 class ModelResource extends EntityServerResource[StringEntity] {
 

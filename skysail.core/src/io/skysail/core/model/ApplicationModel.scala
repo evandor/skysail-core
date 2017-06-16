@@ -3,7 +3,7 @@ package io.skysail.core.model
 import scala.collection.mutable.LinkedHashMap
 import org.slf4j.LoggerFactory
 import scala.collection.mutable.HashMap
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.ApiVersion
 import scala.None
 import org.restlet.Request
@@ -44,7 +44,7 @@ case class ApplicationModel(
    *
    * Otherwise, the resource model will be added to the map of managed resources.
    */
-  def addResourceModel(path: String, cls: Class[_ <: io.skysail.restlet.SkysailServerResource[_]]): Option[Class[_]] = {
+  def addResourceModel(path: String, cls: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): Option[Class[_]] = {
     require(path != null, "The resource's path can be empty, but must not be null")
     val resourceModel = new ResourceModel(this, path, cls)
     if (resourceModels.filter(rm => rm.path == resourceModel.path).headOption.isDefined) {
@@ -67,7 +67,7 @@ case class ApplicationModel(
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 
-  def entityModelFor(ssr: io.skysail.restlet.SkysailServerResource[_]): Option[EntityModel] = {
+  def entityModelFor(ssr: io.skysail.core.restlet.SkysailServerResource[_]): Option[EntityModel] = {
     val resModel = resourceModelFor(ssr.getClass)
     if (resModel.isEmpty) {
         None
@@ -79,7 +79,7 @@ case class ApplicationModel(
         .headOption
   }
 
-  def linksFor(resourceClass: Class[_ <: io.skysail.restlet.SkysailServerResource[_]]): List[LinkModel] = {
+  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel] = {
     val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
     if (r.isDefined) r.get.linkModels else List()
   }

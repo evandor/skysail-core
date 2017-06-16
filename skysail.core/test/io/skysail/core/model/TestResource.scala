@@ -1,6 +1,6 @@
 package io.skysail.core.model
 
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 
 class TestResource extends SkysailServerResource[TestEntity] { 
   

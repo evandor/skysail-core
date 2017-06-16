@@ -1,4 +1,4 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import org.restlet.representation.Variant
 import io.skysail.core.restlet.filter._

@@ -1,7 +1,8 @@
 package io.skysail.core.model
 
-import io.skysail.restlet.ResourceContextId
-import io.skysail.restlet.resources._
+import io.skysail.core.restlet.resources
+import io.skysail.core.restlet.resources._
+import io.skysail.core.restlet.ResourceContextId
 
 class TestEntitiesResource extends ListServerResource[List[TestEntity]](classOf[TestEntityResource]) { 
   def getEntity() = List(TestEntity(Some("23"),"hi", "content"))

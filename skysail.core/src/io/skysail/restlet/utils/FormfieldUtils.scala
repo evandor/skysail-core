@@ -1,10 +1,10 @@
 package io.skysail.restlet.utils
 
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.FieldsFactory
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.restlet.responses.ScalaSkysailResponse
 import io.skysail.core.forms.ScalaFormField
 import io.skysail.core.app.SkysailApplicationService
+import io.skysail.core.restlet.FieldsFactory
 
 object ScalaFormfieldUtils {
   def determineFormfields(resource: SkysailServerResource[_], appService: SkysailApplicationService): java.util.Map[String, ScalaFormField] = {

@@ -1,4 +1,4 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
 import io.skysail.restlet.responses.ScalaSkysailResponse
 import io.skysail.restlet.responses.FormResponse

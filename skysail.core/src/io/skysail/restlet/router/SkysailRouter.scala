@@ -1,6 +1,6 @@
 package io.skysail.restlet.router
 
-import io.skysail.restlet.SkysailServerResource
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.app.SkysailApplication
 import org.restlet.routing.Router
 import org.restlet.resource.ServerResource
@@ -13,9 +13,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 import scala.collection.JavaConverters._
 import io.skysail.core.ApiVersion
-import io.skysail.restlet.RouteBuilder
 import io.skysail.core.security.config.SecurityConfig
-import io.skysail.restlet.RolesPredicateAuthorizer
+import io.skysail.core.restlet.RouteBuilder
+import io.skysail.core.restlet.RolesPredicateAuthorizer
 
 object SkysailRouter {
   def getResourcesGenericType(resourceInstance: SkysailServerResource[_]) = resourceInstance.getParameterizedType()

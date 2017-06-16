@@ -1,16 +1,13 @@
-package io.skysail.restlet.resources
+package io.skysail.core.restlet.resources
 
 import org.restlet.representation.Variant
 import org.restlet.resource.Get
 import org.restlet.data.Method
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.responses.ScalaSkysailResponse
+import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.restlet.responses.ListResponse
-import io.skysail.restlet.ScalaListRequestHandler
 import io.skysail.core.model.ENTITY_RESOURCE_FOR_LIST_RESOURCE
-import io.skysail.core.model.ResourceAssociationType
-import io.skysail.api.doc.ApiMetadata.ApiMetadataBuilder
 import io.skysail.api.doc.ApiMetadata
+import io.skysail.core.restlet.ScalaListRequestHandler
 
 object ListServerResource {
   val GET_ENTITY_METHOD_NAME = "getEntity";

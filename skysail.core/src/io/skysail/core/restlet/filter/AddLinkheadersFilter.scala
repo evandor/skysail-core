@@ -1,11 +1,11 @@
 package io.skysail.core.restlet.filter
 
 import org.slf4j.LoggerFactory
-import io.skysail.restlet.AbstractResourceFilter
-import io.skysail.restlet.SkysailServerResource
-import io.skysail.restlet.Wrapper3
+import io.skysail.core.restlet.AbstractResourceFilter
+import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.data.Header
 import io.skysail.restlet.utils.ScalaHeadersUtils
+import io.skysail.core.restlet.Wrapper3
 
 object AddLinkheadersFilter {
   val MAX_LINK_HEADER_SIZE = 2048

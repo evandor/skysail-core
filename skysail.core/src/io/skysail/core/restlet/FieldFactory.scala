@@ -1,6 +1,5 @@
-package io.skysail.restlet
+package io.skysail.core.restlet
 
-import java.util.Collections
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 import io.skysail.core.forms.ScalaFormField
