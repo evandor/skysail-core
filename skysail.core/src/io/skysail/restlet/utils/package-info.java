@@ -1,2 +1,2 @@
-@org.osgi.annotation.versioning.Version("0.1.1")
+@org.osgi.annotation.versioning.Version("1.0.0")
 package io.skysail.restlet.utils;
