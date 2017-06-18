@@ -3,7 +3,7 @@ package io.skysail.core.restlet.resources
 import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.resource.Get
 import org.restlet.representation.Variant
-import io.skysail.restlet.responses.EntityResponse
+import io.skysail.core.restlet.responses.EntityResponse
 import org.restlet.data.Method
 
 abstract class RedirectResource[T] extends SkysailServerResource[T] {

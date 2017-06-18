@@ -1,17 +1,17 @@
 package io.skysail.core.restlet.resources
 
-import io.skysail.restlet._
-import io.skysail.restlet.utils.ScalaResourceUtils
+import io.skysail.core.restlet._
+import io.skysail.core.restlet.utils.ScalaResourceUtils
 import org.restlet.data.Method
 import org.restlet.data.Status
 import io.skysail.api.doc.ApiMetadata
 import io.skysail.core.model.LinkRelation
 import org.restlet.resource._
 import org.restlet.representation.Variant
-import io.skysail.restlet.responses.FormResponse
-import io.skysail.restlet.responses.ScalaSkysailResponse
+import io.skysail.core.restlet.responses.FormResponse
+import io.skysail.core.restlet.responses.ScalaSkysailResponse
 import org.restlet.data.Form
-import io.skysail.restlet.transformations.Transformations
+import io.skysail.core.restlet.transformations.Transformations
 import org.json4s.DefaultFormats
 import org.json4s.jvalue2extractable
 import io.skysail.core.restlet.ScalaRequestHandler

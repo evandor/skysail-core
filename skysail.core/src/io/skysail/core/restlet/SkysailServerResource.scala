@@ -4,9 +4,9 @@ import io.skysail.api.text.Translation
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.forms.ScalaFormField
 import org.restlet.resource.ServerResource
-import io.skysail.restlet.utils.ScalaMessagesUtils
+import io.skysail.core.restlet.utils.ScalaMessagesUtils
 import java.util.Locale
-import io.skysail.restlet.utils._
+import io.skysail.core.restlet.utils._
 import io.skysail.api.doc.ApiMetadata
 import scala.reflect.runtime.universe._
 import io.skysail.core.model.ResourceAssociationType

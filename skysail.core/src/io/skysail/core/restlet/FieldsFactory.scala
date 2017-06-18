@@ -1,7 +1,7 @@
 package io.skysail.core.restlet
 
-import io.skysail.restlet.responses.ScalaSkysailResponse
-import io.skysail.restlet.responses.FormResponse
+import io.skysail.core.restlet.responses.ScalaSkysailResponse
+import io.skysail.core.restlet.responses.FormResponse
 
 object FieldsFactory {
   def getFactory(response: ScalaSkysailResponse[_]): FieldFactory = {

@@ -2,7 +2,7 @@ package io.skysail.core.app
 
 import org.osgi.service.component.annotations._
 import org.osgi.service.cm.ManagedService
-import io.skysail.restlet.services.ResourceBundleProvider
+import io.skysail.core.restlet.services.ResourceBundleProvider
 import java.util.Dictionary
 import org.osgi.service.component._
 import io.skysail.core.security.config.SecurityConfigBuilder

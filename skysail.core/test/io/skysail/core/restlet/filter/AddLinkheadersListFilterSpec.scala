@@ -10,7 +10,7 @@ import io.skysail.core.model.ApplicationModel
 import org.mockito.Mockito
 import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.ApiVersion
-import io.skysail.restlet.utils.ScalaHeadersUtils
+import io.skysail.core.restlet.utils.ScalaHeadersUtils
 import org.restlet._
 import io.skysail.core.model._
 import io.skysail.core.restlet.Wrapper3

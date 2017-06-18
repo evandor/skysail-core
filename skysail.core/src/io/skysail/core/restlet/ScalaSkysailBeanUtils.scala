@@ -1,7 +1,7 @@
 package io.skysail.core.restlet
 
 import java.util.Locale
-import io.skysail.restlet.utils.ScalaSkysailBeanUtilsBean
+import io.skysail.core.restlet.utils.ScalaSkysailBeanUtilsBean
 import scala.collection.JavaConverters._
 import io.skysail.core.app.SkysailApplicationService
 

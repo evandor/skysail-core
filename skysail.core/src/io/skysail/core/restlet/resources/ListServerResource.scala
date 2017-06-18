@@ -4,7 +4,7 @@ import org.restlet.representation.Variant
 import org.restlet.resource.Get
 import org.restlet.data.Method
 import io.skysail.core.restlet.SkysailServerResource
-import io.skysail.restlet.responses.ListResponse
+import io.skysail.core.restlet.responses.ListResponse
 import io.skysail.core.model.ENTITY_RESOURCE_FOR_LIST_RESOURCE
 import io.skysail.api.doc.ApiMetadata
 import io.skysail.core.restlet.ScalaListRequestHandler

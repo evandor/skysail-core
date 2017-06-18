@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory
 import java.text.DecimalFormat
 import scala.collection.mutable.ListBuffer
 import io.skysail.core.restlet.ScalaSkysailComponent
-import io.skysail.restlet.services.SkysailStatusService
-import io.skysail.restlet.services.ResourceBundleProvider
+import io.skysail.core.restlet.services.SkysailStatusService
+import io.skysail.core.restlet.services.ResourceBundleProvider
 import org.osgi.service.cm.ManagedService
 
 @org.osgi.annotation.versioning.ProviderType

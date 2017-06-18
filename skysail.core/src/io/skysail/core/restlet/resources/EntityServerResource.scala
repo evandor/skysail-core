@@ -6,7 +6,7 @@ import io.skysail.core.model.LinkRelation
 import io.skysail.core.restlet.ResourceContextId
 import org.restlet.resource.Get
 import org.restlet.representation.Variant
-import io.skysail.restlet.responses.EntityResponse
+import io.skysail.core.restlet.responses.EntityResponse
 import io.skysail.api.doc.ApiMetadata
 import org.restlet.resource.Delete
 import io.skysail.core.restlet.ScalaRequestHandler

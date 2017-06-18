@@ -8,13 +8,13 @@ import io.skysail.core.model._
 import io.skysail.core.app.resources.ModelResource
 import io.skysail.core.Entity
 import io.skysail.core.domain.repo.ScalaDbRepository
-import io.skysail.restlet.router.SkysailRouter
-import io.skysail.restlet.utils.ScalaTranslationUtils
-import io.skysail.restlet.services._
+import io.skysail.core.restlet.router.SkysailRouter
+import io.skysail.core.restlet.utils.ScalaTranslationUtils
+import io.skysail.core.restlet.services._
 import io.skysail.core.restlet.RouteBuilder
-import io.skysail.restlet.utils._
+import io.skysail.core.restlet.utils._
 import io.skysail.core.restlet.filter.OriginalRequestFilter
-import io.skysail.restlet.menu.MenuItem
+import io.skysail.core.restlet.menu.MenuItem
 import io.skysail.core.restlet.SkysailServerResource
 import java.util.ResourceBundle
 import java.util.Collections
@@ -29,6 +29,10 @@ import org.restlet.Restlet
 import org.restlet.data._
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
+import io.skysail.core.restlet.services.ResourceBundleProvider
+import io.skysail.core.restlet.utils.ClassLoaderDirectory
+import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.restlet.utils.CompositeClassLoader
 
 object SkysailApplication {
   var serviceListProvider: ScalaServiceListProvider = null

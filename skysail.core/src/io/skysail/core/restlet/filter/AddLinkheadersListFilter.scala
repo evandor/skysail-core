@@ -6,7 +6,7 @@ import io.skysail.core.restlet.AbstractResourceFilter
 import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.data.Header
 import io.skysail.core.restlet.ListResponseWrapper
-import io.skysail.restlet.utils.ScalaHeadersUtils
+import io.skysail.core.restlet.utils.ScalaHeadersUtils
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.model.LinkModel
 import io.skysail.core.domain.ScalaEntity

@@ -1,6 +1,6 @@
 package io.skysail.core.restlet.filter
 
-import io.skysail.restlet._
+import io.skysail.core.restlet._
 import io.skysail.core.restlet.Wrapper3
 import org.slf4j.LoggerFactory
 import org.owasp.html._

@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import io.skysail.core.restlet.AbstractResourceFilter
 import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.data.Header
-import io.skysail.restlet.utils.ScalaHeadersUtils
+import io.skysail.core.restlet.utils.ScalaHeadersUtils
 import io.skysail.core.restlet.Wrapper3
 
 object AddLinkheadersFilter {

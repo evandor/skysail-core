@@ -3,7 +3,7 @@ package io.skysail.core.app
 import org.osgi.service.component.annotations._
 import java.util.ArrayList
 import scala.collection.JavaConverters._
-import io.skysail.restlet.services.EntityApi
+import io.skysail.core.restlet.services.EntityApi
 import io.skysail.core.model.EntityModel
 import io.skysail.core.model.APPLICATION_CONTEXT_RESOURCE
 import io.skysail.core.model.ResourceModel

@@ -20,6 +20,7 @@ import scala.annotation.meta.field
 import scala.beans.BeanProperty
 import io.skysail.core.html._
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.skysail.core.restlet.transformations.Transformations
 
 class FormDeserializerTest {
 

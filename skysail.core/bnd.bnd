@@ -52,7 +52,13 @@ Export-Package: \
 	io.skysail.core.osgi.services,\
 	io.skysail.core.resources,\
 	io.skysail.core.restlet,\
+	io.skysail.core.restlet.menu,\
+	io.skysail.core.restlet.queries,\
 	io.skysail.core.restlet.resources,\
+	io.skysail.core.restlet.responses,\
+	io.skysail.core.restlet.router,\
+	io.skysail.core.restlet.services,\
+	io.skysail.core.restlet.transformations,\
 	io.skysail.core.security,\
 	io.skysail.core.security.config,\
 	io.skysail.core.security.token,\
@@ -61,22 +67,12 @@ Export-Package: \
 	io.skysail.core.model,\
 	io.skysail.core.metrics,\
 	io.skysail.core.utils,\
-	io.skysail.restlet.app,\
-	io.skysail.restlet.transformations,\
-	io.skysail.restlet.resources,\
-	io.skysail.restlet.services,\
-	io.skysail.restlet.utils,\
-	io.skysail.restlet.responses,\
-	io.skysail.restlet.router,\
 	io.skysail.core.forms,\
 	io.skysail.restlet.model,\
 	io.skysail.restlet.queries
 	
 Private-Package: \
-	io.skysail.core.restlet.filter,\
 	io.skysail.core.security.config,\
-	io.skysail.restlet.menu,\
-	io.skysail.restlet.filter,\
 	io.skysail.core.text,\
 	io.skysail.restlet.queries.impl
 	

@@ -6,7 +6,7 @@ import org.owasp.html.HtmlPolicyBuilder
 import io.skysail.core.restlet.SkysailServerResource
 import org.restlet.Request
 import scala.collection.JavaConverters._
-import io.skysail.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.html.Field
 import io.skysail.core.restlet.Wrapper3
 

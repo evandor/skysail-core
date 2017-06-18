@@ -8,10 +8,10 @@ import org.json4s.jackson.JsonMethods._
 import scala.collection.JavaConversions._
 import org.restlet.resource.Get
 import io.skysail.core.restlet.SkysailServerResource
-import io.skysail.restlet.responses.FormResponse
-import io.skysail.restlet.responses.ScalaSkysailResponse
+import io.skysail.core.restlet.responses.FormResponse
+import io.skysail.core.restlet.responses.ScalaSkysailResponse
 import org.restlet.data.Status
-import io.skysail.restlet.transformations.Transformations
+import io.skysail.core.restlet.transformations.Transformations
 import org.restlet.data.Method
 import io.skysail.core.model.LinkRelation
 import io.skysail.api.doc.ApiMetadata

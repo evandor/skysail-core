@@ -11,6 +11,7 @@ import org.junit.Assert._
 import io.skysail.core.restlet.resources.ListServerResource
 import io.skysail.core.model.TestEntity
 import io.skysail.core.restlet.resources.EntityServerResource
+import io.skysail.core.restlet.utils.ScalaReflectionUtils
 
 class ReflectionUtilsSpec extends FlatSpec {
 

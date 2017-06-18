@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import io.skysail.api.metrics._
 import io.skysail.api.text.TranslationStore
 import io.skysail.core.text.ScalaTranslationStoreHolder
-import io.skysail.restlet.services.ScalaSkysailComponentProvider
+import io.skysail.core.restlet.services.ScalaSkysailComponentProvider
 
 @org.osgi.annotation.versioning.ProviderType
 trait ScalaServiceListProvider {
