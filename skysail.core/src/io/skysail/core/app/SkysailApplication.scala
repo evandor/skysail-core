@@ -6,7 +6,6 @@ import io.skysail.core.ApiVersion
 import io.skysail.core.security.config.SecurityConfigBuilder
 import io.skysail.core.model._
 import io.skysail.core.app.resources.ModelResource
-import io.skysail.core.Entity
 import io.skysail.core.domain.repo.ScalaDbRepository
 import io.skysail.core.restlet.router.SkysailRouter
 import io.skysail.core.restlet.utils.ScalaTranslationUtils
@@ -42,8 +41,7 @@ object SkysailApplication {
 
 abstract class SkysailApplication(
   name: String,
-  val apiVersion: ApiVersion,
-  entityClasses: List[Class[_ <: Entity]])
+  val apiVersion: ApiVersion)
     extends org.restlet.Application
     with ApplicationProvider
     with ResourceBundleProvider {
@@ -73,9 +71,7 @@ abstract class SkysailApplication(
   getEncoderService().setEnabled(true);
   log.debug("Instanciating new Skysail ApplicationModel '{}'", this.getClass().getSimpleName());
   applicationModel2 = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
-  //entityClasses.forEach(cls -> applicationModel.addOnce(EntityFactory.createFrom(this, cls, null)));
 
-  def this(name: String, apiVersion: ApiVersion) = this(name, apiVersion, List())
   def this(name: String) = this(name, new ApiVersion(1))
 
   def getResourceBundles() = List[ResourceBundle]()

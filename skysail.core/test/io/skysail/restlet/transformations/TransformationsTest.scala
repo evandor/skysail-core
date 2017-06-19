@@ -14,7 +14,6 @@ import org.restlet.data.Form
 
 import com.fasterxml.jackson.annotation.JsonFormat
 
-import io.skysail.core.Entity
 import javax.validation.constraints._
 import scala.annotation.meta.field
 import scala.beans.BeanProperty

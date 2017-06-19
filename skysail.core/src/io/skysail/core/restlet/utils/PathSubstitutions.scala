@@ -1,7 +1,7 @@
 package io.skysail.core.restlet.utils
 
 import io.skysail.core.restlet.RouteBuilder
-import io.skysail.core.Entity
+import javax.naming.OperationNotSupportedException
 
 class PathSubstitutions(requestAttributes: java.util.Map[String, Object], routeBuilders: List[RouteBuilder]) {
 
@@ -15,16 +15,17 @@ class PathSubstitutions(requestAttributes: java.util.Map[String, Object], routeB
   determinePathVariables(requestAttributes, routeBuilders);
 
   def getFor(theObject: Any): scala.collection.mutable.Map[String, String] = {
-    if (!(theObject.isInstanceOf[Entity])) {
-      return result;
-    }
-    val identifiable = theObject.asInstanceOf[Entity]
-    if (identifiable.getId() != null) {
-      if (pathVariables.size == 1) {
-        idVariable = pathVariables(0)
-      }
-      result += idVariable -> identifiable.getId().replace("#", "")
-    }
+    throw new OperationNotSupportedException()
+//    if (!(theObject.isInstanceOf[Entity])) {
+//      return result;
+//    }
+//    val identifiable = theObject.asInstanceOf[Entity]
+//    if (identifiable.getId() != null) {
+//      if (pathVariables.size == 1) {
+//        idVariable = pathVariables(0)
+//      }
+//      result += idVariable -> identifiable.getId().replace("#", "")
+//    }
     return result
   }
 

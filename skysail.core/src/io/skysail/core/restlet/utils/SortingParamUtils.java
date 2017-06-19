@@ -13,8 +13,6 @@ import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 
-import io.skysail.core.Entity;
-
 public class SortingParamUtils extends ParamsUtils {
 
     private static final String SORTING_PARAM_KEY = "_s";
@@ -75,44 +73,44 @@ public class SortingParamUtils extends ParamsUtils {
         return " order by " + orderBy;
     }
 
-    @SuppressWarnings("unchecked")
-    public Comparator<Entity> getComparator(Class<?> cls) {
-        if (getSortingParam() == null) {
-            return (o1, o2) -> 0;
-        }
-        Map<String, String> searchParams = getSearchParams(getSortingParam());
-
-        List<Comparator> comparators = searchParams.keySet().stream()
-                .map(key -> createReflectionComparator(cls, searchParams, key))
-                .map(Comparator.class::cast)
-                .collect(Collectors.toList());
-
-        return (o1, o2) -> {
-            for (Comparator comparator : comparators) {
-                int result = comparator.compare(o1, o2);
-                if (result != 0) {
-                    return result;
-                }
-            }
-            return 0;
-        };
-    }
-
-    private Comparator<Entity> createReflectionComparator(Class<?> cls, Map<String, String> searchParams,
-            String key) {
-        return (Comparator<Entity>) (o1, o2) -> {
-            try {
-                Field declaredField = cls.getDeclaredField(key);
-                declaredField.setAccessible(true);
-                Comparable object1 = (Comparable) declaredField.get(o1);
-                Comparable object2 = (Comparable) declaredField.get(o2);
-                return searchParams.get(key).equals("ASC") ? object1.compareTo(object2) : object2.compareTo(object1);
-            } catch (Exception e) {
-                //log.error(e.getMessage(), e);
-            }
-            return 0;
-        };
-    }
+//    @SuppressWarnings("unchecked")
+//    public Comparator<Entity> getComparator(Class<?> cls) {
+//        if (getSortingParam() == null) {
+//            return (o1, o2) -> 0;
+//        }
+//        Map<String, String> searchParams = getSearchParams(getSortingParam());
+//
+//        List<Comparator> comparators = searchParams.keySet().stream()
+//                .map(key -> createReflectionComparator(cls, searchParams, key))
+//                .map(Comparator.class::cast)
+//                .collect(Collectors.toList());
+//
+//        return (o1, o2) -> {
+//            for (Comparator comparator : comparators) {
+//                int result = comparator.compare(o1, o2);
+//                if (result != 0) {
+//                    return result;
+//                }
+//            }
+//            return 0;
+//        };
+//    }
+//
+//    private Comparator<Entity> createReflectionComparator(Class<?> cls, Map<String, String> searchParams,
+//            String key) {
+//        return (Comparator<Entity>) (o1, o2) -> {
+//            try {
+//                Field declaredField = cls.getDeclaredField(key);
+//                declaredField.setAccessible(true);
+//                Comparable object1 = (Comparable) declaredField.get(o1);
+//                Comparable object2 = (Comparable) declaredField.get(o2);
+//                return searchParams.get(key).equals("ASC") ? object1.compareTo(object2) : object2.compareTo(object1);
+//            } catch (Exception e) {
+//                //log.error(e.getMessage(), e);
+//            }
+//            return 0;
+//        };
+//    }
 
     public String getSortIndicator() {
         if (getSortingParam() == null) {

@@ -1,9 +1,9 @@
 package io.skysail.core.restlet.menu;
 
-import io.skysail.core.Entity;
+import io.skysail.core.domain.ScalaEntity;
 import io.skysail.core.html.Field;
 
-public class MenuItemDescriptorJava implements Entity {
+public class MenuItemDescriptorJava { //implements ScalaEntity<String> {
 
     @Field
     //@ListView
@@ -17,7 +17,7 @@ public class MenuItemDescriptorJava implements Entity {
 //        url = "<a href='"+link+"'>"+name+"</a>";
     }
 
-    @Override
+   // @Override
     public String getId() {
         return url;
     }
