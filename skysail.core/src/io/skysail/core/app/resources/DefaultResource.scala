@@ -13,10 +13,14 @@ import io.skysail.core.restlet.resources.ListServerResource
 class DefaultResource extends ListServerResource[List[MenuItemDescriptor]] {
 
   override def runtimeLinks() = {
-    applicationService.getApplicationContextResources().map{_.linkModel}.toList
+    applicationService.getApplicationContextResources().map { _.linkModel }.toList
   }
-  
-  override def getEntity():List[MenuItemDescriptor] = {
+
+  override def getEntity(): List[MenuItemDescriptor] = {
     runtimeLinks().map { linkModel => new MenuItemDescriptor(new MenuItem(linkModel.getTitle(), linkModel.getUri())) }.toList
+  }
+
+  override def redirectTo() = {
+    getSkysailApplication().asInstanceOf[SkysailRootApplication].getRedirectTo(this);
   }
 }

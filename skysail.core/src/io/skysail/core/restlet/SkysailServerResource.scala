@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory
 import io.skysail.core.model.LinkModel
 
 object SkysailServerResource {
-  //val SKYSAIL_SERVER_RESTLET_FORM = "de.twenty11.skysail.server.core.restlet.form";
   val SKYSAIL_SERVER_RESTLET_ENTITY = classOf[SkysailServerResource[_]].getName + ".entity"
   val SKYSAIL_SERVER_RESTLET_VARIANT = classOf[SkysailServerResource[_]].getName + ".variant"
 
@@ -49,16 +48,7 @@ abstract class SkysailServerResource[T] extends ServerResource {
   def getMetricsCollector() = getSkysailApplication().getMetricsCollector()
   def getParameterizedType() = ScalaReflectionUtils.getParameterizedType(getClass())
   def getModel() = getSkysailApplication().getApplicationModel2()
-
-  /*def getPathSubstitutions(): Consumer[Link] = {
-    return l -> {
-      val uri = l.getUri();
-      l.setUri(LinkUtils.replaceValues(uri, getRequestAttributes()));
-    }
-  }*/
-
   def getFromContext(id: ResourceContextId) = stringContextMap.get(id)
-
   def addToContext(id: ResourceContextId, value: String): Unit = stringContextMap.put(id, value)
 
   def getMessages(): java.util.Map[String, Translation] = {
@@ -124,12 +114,8 @@ abstract class SkysailServerResource[T] extends ServerResource {
   def redirectTo(): String = null
 
   def redirectTo(cls: Class[_ <: SkysailServerResource[_]]): String = {
-//    val linkheader = LinkUtils.fromResource(getSkysailApplication(), cls);
-//    if (linkheader == null) {
-      return null;
-//    }
-//    //getPathSubstitutions().accept(linkheader);
-//    linkheader.uri
+    val resourceModel = getModel().resourceModelFor(cls).get
+    getModel().appPath() + resourceModel.linkModel.path
   }
 
  

@@ -197,7 +197,7 @@ abstract class SkysailApplication(
   }
 
   def getMenuEntries(): List[MenuItem] = {
-    val appMenu = new MenuItem(getName(), "/" + getName() + apiVersion.getVersionPath());
+    val appMenu = new MenuItem(getName(), applicationModel2.appPath())
     //appMenu.setCategory(APPLICATION_MAIN_MENU);
     // appMenu.setIcon(stringContextMap.get(ApplicationContextId.IMG));
     List(appMenu);

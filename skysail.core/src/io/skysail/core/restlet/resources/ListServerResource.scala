@@ -20,7 +20,8 @@ object ListServerResource {
  *  
  */
 abstract class ListServerResource[T <: List[_]](
-    associatedEntityResource: Class[_ <: EntityServerResource[_]] = null) extends SkysailServerResource[T] {
+    associatedEntityResource: Class[_ <: EntityServerResource[_]] = null
+  ) extends SkysailServerResource[T] {
 
   addAssociatedResourceClasses(List((ENTITY_RESOURCE_FOR_LIST_RESOURCE, associatedEntityResource)))
 
@@ -49,10 +50,8 @@ abstract class ListServerResource[T <: List[_]](
   }
 
   private final def listEntities(variant: Variant): List[T] = {
-    val appModel = getSkysailApplication().getApplicationModel2()
-    val requestHandler = new ScalaListRequestHandler[T](variant, appModel)
-    val responseWrapper = requestHandler.createForList(Method.GET).handle(this, getResponse())
-    return responseWrapper.getEntity()
+    val requestHandler = new ScalaListRequestHandler[T](variant, getModel())
+    requestHandler.createForList(Method.GET).handle(this, getResponse()).getEntity()
   }
 
 }

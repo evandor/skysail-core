@@ -18,7 +18,7 @@ import org.restlet.Request
  *  @param name the application's (unique and descriptive) name
  *  @param apiVersion the applications API version, can be null
  *  @param associatedResourceClasses a list of associated Resource Classes together with the relation type.
- *  
+ *
  */
 case class ApplicationModel(
     val name: String,
@@ -32,7 +32,7 @@ case class ApplicationModel(
 
   /** The list of resourceModels of this applicationModel. */
   private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
-  
+
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
 
@@ -61,7 +61,6 @@ case class ApplicationModel(
   }
 
   def resourceModelFor(cls: Class[_ <: SkysailServerResource[_]]) = {
-    //log.info(s"resourceModelFor($cls): checking ${resourceModels.map(m => m.targetResourceClass).mkString(";")}")
     resourceModels.filter { model => model.targetResourceClass == cls }.headOption
   }
 
@@ -70,14 +69,19 @@ case class ApplicationModel(
   def entityModelFor(ssr: io.skysail.core.restlet.SkysailServerResource[_]): Option[EntityModel] = {
     val resModel = resourceModelFor(ssr.getClass)
     if (resModel.isEmpty) {
-        None
+      None
     }
-    
+
     entityModelsMap
-        .map(e => e._2)
-        .filter(v =>  v.entityClass == resModel.get.entityClass)
-        .headOption
+      .map(e => e._2)
+      .filter(v => v.entityClass == resModel.get.entityClass)
+      .headOption
   }
+
+  /**
+   * @return the context path of the application, e.g. "/testapp/v2" or "/appwithoutversion".
+   */
+  def appPath() = "/" + name + (if (apiVersion != null) apiVersion.getVersionPath() else "")
 
   def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel] = {
     val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
@@ -97,8 +101,6 @@ case class ApplicationModel(
 
   private def printMap(map: scala.collection.mutable.Map[String, EntityModel]) = map.map(v => s"""
       "${v._1}" -> ${v._2.toHtml}""").mkString("")
-
-  private def appPath() = "/" + name + (if (apiVersion != null) apiVersion.getVersionPath() else "")
 
   private def build(): Unit = {
     resourceModels.foreach {

@@ -73,11 +73,11 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       val lPnotAuth = properties.get(SkysailRootApplication.CONFIG_IDENTIFIER_LANDINGPAGE_NOT_AUTHENTICATED)
       return if (lPnotAuth != null) lPnotAuth.toString() else null
     }
-    val landingPage = properties.get(SkysailRootApplication.CONFIG_IDENTIFIER_LANDINGPAGE_AUTHENTICATED)//.toString()
+    val landingPage = properties.get(SkysailRootApplication.CONFIG_IDENTIFIER_LANDINGPAGE_AUTHENTICATED).toString()
     if (landingPage == null || "".equals(landingPage) || "/".equals(landingPage)) {
       return null
     }
-    return landingPage.toString()
+    return landingPage
   }
 
 }
