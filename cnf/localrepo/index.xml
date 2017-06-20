@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1497891952000" name="Local" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1497936773000" name="Local" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.actor"/>
@@ -922,6 +922,46 @@
   </resource>
   <resource>
     <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="com.typesafe.config"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="1.3.1"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="e6fadfc6108220d3a6b86aa7e4e16c9e7bb857ba58955886308bb13972264af0"/>
+      <attribute name="url" value="com.typesafe.config/com.typesafe.config-1.3.1.jar"/>
+      <attribute name="size" type="Long" value="282549"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="com.typesafe.config"/>
+      <attribute name="bundle-version" type="Version" value="1.3.1"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="com.typesafe.config"/>
+      <attribute name="bundle-version" type="Version" value="1.3.1"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="com.typesafe.config"/>
+      <attribute name="version" type="Version" value="1.3.1"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.config"/>
+      <attribute name="bundle-version" type="Version" value="1.3.1"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="com.typesafe.config.impl"/>
+      <attribute name="version" type="Version" value="1.3.1"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.config"/>
+      <attribute name="bundle-version" type="Version" value="1.3.1"/>
+      <directive name="uses" value="com.typesafe.config"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=com.typesafe.config)"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="io.spray.json"/>
       <attribute name="type" value="osgi.bundle"/>
       <attribute name="version" type="Version" value="1.3.3"/>
@@ -982,6 +1022,148 @@
     </requirement>
     <requirement namespace="osgi.wiring.package">
       <directive name="filter" value="(&amp;(osgi.wiring.package=spray.json)(version&gt;=1.3.3))"/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="org.reactivestreams.reactive-streams"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="1.0.0.final"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="d2a870c5d292c4ec5a73f2ad2da00d45af8462776b48c33a411a083b7154b3ce"/>
+      <attribute name="url" value="org.reactivestreams.reactive-streams/org.reactivestreams.reactive-streams-1.0.0.jar"/>
+      <attribute name="size" type="Long" value="2041"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="org.reactivestreams.reactive-streams"/>
+      <attribute name="bundle-version" type="Version" value="1.0.0.final"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="org.reactivestreams.reactive-streams"/>
+      <attribute name="bundle-version" type="Version" value="1.0.0.final"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="org.reactivestreams"/>
+      <attribute name="version" type="Version" value="1.0.0.final"/>
+      <attribute name="bundle-symbolic-name" value="org.reactivestreams.reactive-streams"/>
+      <attribute name="bundle-version" type="Version" value="1.0.0.final"/>
+    </capability>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="46268a5fbe2559ac3610c4aeacad9ee7e41b24fd942379b87a6fcd2dc7ca6c2c"/>
+      <attribute name="url" value="org.scala-lang.modules.scala-java8-compat/org.scala-lang.modules.scala-java8-compat-0.8.0.jar"/>
+      <attribute name="size" type="Long" value="1213949"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.runtime.java8"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.collection,scala.collection.generic,scala.collection.immutable,scala.collection.mutable,scala.compat.java8.collectionImpl,scala.compat.java8.converterImpl,scala.concurrent,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.FunctionConverters"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.compat.java8,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.SpliteratorConverters"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala.compat.java8.collectionImpl,scala.reflect"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.collectionImpl"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.collection,scala.collection.generic,scala.collection.immutable,scala.compat.java8.converterImpl,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.converterImpl"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.collection,scala.collection.generic,scala.collection.immutable,scala.collection.mutable,scala.compat.java8.collectionImpl,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.functionConverterImpls"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.runtime"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+      <directive name="uses" value="scala,scala.collection,scala.collection.immutable,scala.collection.mutable,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="scala.compat.java8.wrappers"/>
+      <attribute name="version" type="Version" value="0.8.0"/>
+      <attribute name="bundle-symbolic-name" value="org.scala-lang.modules.scala-java8-compat"/>
+      <attribute name="bundle-version" type="Version" value="0.8.0"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.generic)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.immutable)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.mutable)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.concurrent)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.concurrent.impl)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.math)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.reflect)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.runtime)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.util)(version&gt;=2.11.0)(!(version&gt;=3.0.0)))"/>
     </requirement>
   </resource>
 </repository>

@@ -6,7 +6,6 @@ import org.restlet.Request
 import io.skysail.core.restlet.resources._
 import io.skysail.core.restlet.resources.EntityServerResource
 import io.skysail.core.restlet.resources.PostEntityServerResource
-import io.skysail.core.restlet.ScalaResponseWrapper
 
 abstract class AbstractResourceFilter[T:Manifest] extends ResourceFilter[T] {
 

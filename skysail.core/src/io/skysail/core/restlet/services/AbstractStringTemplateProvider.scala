@@ -4,7 +4,6 @@ import org.osgi.framework.Bundle
 import java.net.URL
 import org.slf4j.LoggerFactory
 import scala.io.Source
-import io.skysail.core.restlet.services.StringTemplateProvider
 
 object AbstractStringTemplateProvider {
   val TEMPLATES_DIR = "/templates";
