@@ -1,0 +1,22 @@
+########################################################################################
+### --- general settings, do not change unless you know what you are doing --------- ###
+########################################################################################
+
+-resolve.effective: active;skip:="osgi.service"
+-runee: JavaSE-1.8
+-runfw: org.apache.felix.framework;version=${org.apache.felix.framework.version}
+-runsystemcapabilities: ${native_capability}
+-runsystempackages: ${runsystempackages}
+-runtrace: false
+-runproperties: ${runproperties}
+
+########################################################################################
+### --- run-file-specific settings ------------------------------------------------- ###
+########################################################################################
+
+logback.configurationFile.path = config/local
+
+				
+-runrequires: osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.http.experimental)(version>=2.4.11.2))'
+	
+-resolve: auto

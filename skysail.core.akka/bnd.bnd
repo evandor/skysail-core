@@ -18,16 +18,16 @@ Import-Package: \
 	org.scala-lang.modules.scala-xml;version=1.0,\
 	org.assertj.core;version=3.5,\
 	io.spray.json;version=1.3,\
-	com.typesafe.akka.osgi;version=2.5,\
-	com.typesafe.akka.actor;version=2.5,\
-	com.typesafe.akka.stream;version=2.5,\
-	com.typesafe.akka.http.core;version=10.0,\
-	com.typesafe.akka.http.experimental;version=2.4,\
-	com.typesafe.akka.http.spray.json.experimental;version=2.4,\
+	com.typesafe.akka.osgi;version=${akka.version},\
+	com.typesafe.akka.actor;version=${akka.version},\
+	com.typesafe.akka.stream;version=${akka.version},\
+	com.typesafe.akka.http.core;version=${akka.version},\
+	com.typesafe.akka.http.experimental;version=${akka.version},\
+	com.typesafe.akka.http.spray.json.experimental;version=${akka.version},\
 	com.typesafe.config;version=1.3,\
 	org.reactivestreams.reactive-streams;version=1.0,\
     org.scala-lang.modules.scala-java8-compat;version=0.8,\
-	com.typesafe.akka.testkit;version=2.5
+	com.typesafe.akka.testkit;version=${akka.version}
 
 Bundle-Activator: io.skysail.core.akka.Activator
 
