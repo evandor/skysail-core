@@ -24,7 +24,7 @@ case class EntityModel(entityClass: Class[_]) {
   }
 
   def toHtml() = s"""${this.getClass.getSimpleName}("$name")<br>
-        <br><u>Fields</u>: <ul>${printHtmlMap(fields)}</ul>"""
+        <br><u>Fields</u>: <ul>${printHtmlMap(fields)}</ul><br>"""
   
   override def toString() = s"""${this.getClass.getSimpleName}("$name")
         Fields: ${printMap(fields)}"""
