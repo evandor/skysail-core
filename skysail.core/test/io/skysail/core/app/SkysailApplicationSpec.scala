@@ -26,6 +26,6 @@ class SkysailApplicationSpec extends FlatSpec with BeforeAndAfterEach {
     app.createInboundRoot()
     val resourceModels = app.getApplicationModel2().resourceModelFor(classOf[ModelResource])
     assert(resourceModels.size == 1)
-    assert(resourceModels.head.path == "/_model!")
+    assert(resourceModels.head.path == "/_model")
   }
 }
