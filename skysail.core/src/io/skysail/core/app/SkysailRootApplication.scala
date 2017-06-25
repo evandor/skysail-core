@@ -9,6 +9,9 @@ import io.skysail.core.security.config.SecurityConfigBuilder
 import io.skysail.core.restlet.RouteBuilder
 import io.skysail.core.app.resources.DefaultResource
 import io.skysail.core.app.resources.LoginResource
+import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model.StatusCodes
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -27,9 +30,12 @@ object SkysailRootApplication {
 @Component(
   immediate = true,
   property = { Array("service.pid=landingpages") },
-  service = Array(classOf[ApplicationProvider], classOf[ResourceBundleProvider], classOf[ManagedService]))
+  service = Array(classOf[ApplicationProvider], classOf[ApplicationRoutesProvider], classOf[ResourceBundleProvider], classOf[ManagedService]))
 class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
-    with ApplicationProvider with ResourceBundleProvider with ManagedService {
+    with ApplicationProvider
+    with ApplicationRoutesProvider
+    with ResourceBundleProvider
+    with ManagedService {
 
   var properties: Dictionary[String, _] = null
 
@@ -47,6 +53,13 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   override def deactivate(componentContext: ComponentContext) = this.componentContext = null
 
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
+
+  override def routes(): List[Route] = {
+    val route = path("auction") {
+      get { complete((StatusCodes.Accepted, "bid placed")) }
+    }
+    List(route)
+  }
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
   def setApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.setServiceListProvider(service)

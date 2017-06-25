@@ -48,7 +48,7 @@ abstract class ListServerResource[T <: List[_]](
 
     return apiMetadata.build();
   }
-
+  
   private final def listEntities(variant: Variant): List[T] = {
     val requestHandler = new ScalaListRequestHandler[T](variant, getModel())
     requestHandler.createForList(Method.GET).handle(this, getResponse()).getEntity()

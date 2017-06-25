@@ -32,6 +32,7 @@ import io.skysail.core.restlet.services.ResourceBundleProvider
 import io.skysail.core.restlet.utils.ClassLoaderDirectory
 import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.restlet.utils.CompositeClassLoader
+import akka.http.scaladsl.server.Route
 
 object SkysailApplication {
   var serviceListProvider: ScalaServiceListProvider = null
@@ -44,6 +45,7 @@ abstract class SkysailApplication(
   val apiVersion: ApiVersion)
     extends org.restlet.Application
     with ApplicationProvider
+    with ApplicationRoutesProvider
     with ResourceBundleProvider {
 
   val IN_MEMORY_TRANSLATION_STORE = "InMemoryTranslationStore"
@@ -73,6 +75,8 @@ abstract class SkysailApplication(
   applicationModel2 = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
 
   def this(name: String) = this(name, new ApiVersion(1))
+  
+  def routes(): List[Route] = List()
 
   def getResourceBundles() = List[ResourceBundle]()
 
