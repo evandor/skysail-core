@@ -13,15 +13,20 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import scala.concurrent.Future
 import domino.service_watching.ServiceWatcherEvent._
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpMethods._
+import akka.http.scaladsl.model._
+import akka.stream.ActorMaterializer
+import akka.http.scaladsl.server.Directives._
+import org.slf4j.LoggerFactory
 
 class Server3 extends DominoActivator {
 
   implicit var theSystem: ActorSystem = _
   
+  private var log = LoggerFactory.getLogger(this.getClass)
   var routes = scala.collection.mutable.ListBuffer[Route]()
-
-  var futureBinding: Future[Http.ServerBinding] =
-    _
+  var futureBinding: Future[Http.ServerBinding] = _
 
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
@@ -29,7 +34,6 @@ class Server3 extends DominoActivator {
     override def stop(): Unit = stop(bundleContext)
 
     def configure(osgiContext: BundleContext, system: ActorSystem): Unit = {
-      val log = system.log
       log info "Registering Actor System as Service."
       registerService(osgiContext, system)
       log info s"ActorSystem [${system.name}] initialized."
@@ -48,15 +52,13 @@ class Server3 extends DominoActivator {
     
     watchServices[ApplicationRoutesProvider] {
       case AddingService(s, context) =>
-        println("Adding service " + s)
-        val serviceRef = context.ref
-        val serviceTracker = context.tracker
+        log info s"Adding routes ${s.routes()} from ${s.getClass.getName}"
         routes ++= s.routes()
         restartServer(routes.toList)
       case ModifiedService(s, _) =>
         println("Service modified")
       case RemovedService(s, _) =>
-        println("Service removed")
+        log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
         routes --= s.routes()
         restartServer(routes.toList)
     }
@@ -74,7 +76,8 @@ class Server3 extends DominoActivator {
 
   private def startServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
-//    arg.reduce((a,b) => a ~ b)
-    Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)
+    //implicit val executionContext = theSystem.dispatcher
+    val allRoutes = arg.reduce((a,b) => a ~ b)
+    Http(theSystem).bindAndHandle(allRoutes, "localhost", 8080)
   }
 }
