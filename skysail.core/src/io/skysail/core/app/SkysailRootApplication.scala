@@ -55,13 +55,13 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
   override def routes(): List[Route] = {
-    val route = path("auction") {
-      get { complete((StatusCodes.Accepted, "bid placed")) }
-    }
-    //getApplicationModel().
-    
+    //val route = createRoute()
+    val appModel = getApplicationModel()
+    println(appModel)
+    val pathResourceTuple = appModel.getResourceModels().map { (m => (appModel.appPath() + m.path, m.targetResourceClass)) }
+    pathResourceTuple.map { prt => createRoute(prt._1) }.toList
     //val route2 = AkkaRouteBuilder("/", classOf[DefaultResource])
-    List(route)
+    //List(route)
   }
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
@@ -94,6 +94,12 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       return null
     }
     return landingPage
+  }
+  
+  private def createRoute(appPath: String) = {
+    path(appPath) {
+      get { complete((StatusCodes.Accepted, "bid placed for path " + appPath)) }
+    }
   }
 
 }

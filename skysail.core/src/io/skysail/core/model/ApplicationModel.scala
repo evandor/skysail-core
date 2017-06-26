@@ -63,6 +63,10 @@ case class ApplicationModel(
   def resourceModelFor(cls: Class[_ <: SkysailServerResource[_]]) = {
     resourceModels.filter { model => model.targetResourceClass == cls }.headOption
   }
+  
+  def getResourceModels(): List[ResourceModel] = {
+    resourceModels.toList
+  }
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 

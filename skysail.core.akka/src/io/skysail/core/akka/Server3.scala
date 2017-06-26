@@ -77,6 +77,10 @@ class Server3 extends DominoActivator {
   private def startServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
     //implicit val executionContext = theSystem.dispatcher
+//    if (arg.size == 0) {
+//      log warn "no routes defined"
+//      return
+//    }
     val allRoutes = arg.reduce((a,b) => a ~ b)
     Http(theSystem).bindAndHandle(allRoutes, "localhost", 8080)
   }
