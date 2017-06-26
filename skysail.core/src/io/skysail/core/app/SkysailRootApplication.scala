@@ -58,6 +58,9 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     val route = path("auction") {
       get { complete((StatusCodes.Accepted, "bid placed")) }
     }
+    //getApplicationModel().
+    
+    //val route2 = AkkaRouteBuilder("/", classOf[DefaultResource])
     List(route)
   }
 

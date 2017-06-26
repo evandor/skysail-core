@@ -30,7 +30,7 @@ class SkysailApplicationService {
       .filter(association => association._1 == APPLICATION_CONTEXT_RESOURCE)
       .map(association => association._2)
 
-    val allApplicationModels = allApps.map { app => app.getApplicationModel2() }
+    val allApplicationModels = allApps.map { app => app.getApplicationModel() }
 
     val optionalResourceModels = for (
       appModel <- allApplicationModels;
@@ -46,7 +46,7 @@ class SkysailApplicationService {
   
   def getEntityModel(name: String): EntityModel = {
     println(name) //io.skysail.app.notes.domain.Note
-    val appModels = applicationListProvider.getApplications().map(a => a.getApplicationModel2()).toList
+    val appModels = applicationListProvider.getApplications().map(a => a.getApplicationModel()).toList
     println(appModels)
     null
   }

@@ -63,7 +63,7 @@ class SkysailRouter(skysailApplication: SkysailApplication, apiVersion: ApiVersi
 
   private def updateApplicationModel(routeBuilder: RouteBuilder): Unit = {
     //var applicationModel = skysailApplication.getApplicationModel()
-    var applicationModel2 = skysailApplication.getApplicationModel2()
+    var applicationModel2 = skysailApplication.getApplicationModel()
     if (applicationModel2 == null) {
       log.warn("applicationModel is null")
       return

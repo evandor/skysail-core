@@ -57,8 +57,8 @@ abstract class SkysailApplication(
   var componentContext: ComponentContext = null
   def getComponentContext() = componentContext
 
-  var applicationModel2: ApplicationModel = null
-  def getApplicationModel2() = applicationModel2
+  var applicationModel: ApplicationModel = null
+  def getApplicationModel() = applicationModel
 
   val repositories = new ArrayList[ScalaDbRepository]();
 
@@ -72,7 +72,7 @@ abstract class SkysailApplication(
   //getEncoderService().getIgnoredMediaTypes().add(SkysailApplication.SKYSAIL_SERVER_SENT_EVENTS);
   getEncoderService().setEnabled(true);
   log.debug("Instanciating new Skysail ApplicationModel '{}'", this.getClass().getSimpleName());
-  applicationModel2 = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
+  applicationModel = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
 
   def this(name: String) = this(name, new ApiVersion(1))
   
@@ -147,7 +147,7 @@ abstract class SkysailApplication(
     log.debug("attaching application-specific routes");
     attach();
 
-    //getApplicationModel2().build()
+    //getApplicationModel().build()
 
     log.debug("attaching i18n route");
     //attachI18N();
@@ -197,7 +197,7 @@ abstract class SkysailApplication(
   }
 
   def getMenuEntries(): List[MenuItem] = {
-    val appMenu = new MenuItem(getName(), applicationModel2.appPath())
+    val appMenu = new MenuItem(getName(), applicationModel.appPath())
     //appMenu.setCategory(APPLICATION_MAIN_MENU);
     // appMenu.setIcon(stringContextMap.get(ApplicationContextId.IMG));
     List(appMenu);

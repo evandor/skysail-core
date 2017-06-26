@@ -14,7 +14,7 @@ trait FieldFactory {
       resource: SkysailServerResource[_], cls: Class[_]): Map[String, ScalaFormField] = {
     
     //require(appService != null, "service must not be null")
-    val appModel = resource.getSkysailApplication().applicationModel2
+    val appModel = resource.getSkysailApplication().applicationModel
     
     val entityModel = appModel.entityModelFor(cls)
     

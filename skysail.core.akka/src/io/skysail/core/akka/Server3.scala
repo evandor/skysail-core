@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory
 
 class Server3 extends DominoActivator {
 
-  implicit var theSystem: ActorSystem = _
+	private var log = LoggerFactory.getLogger(this.getClass)
   
-  private var log = LoggerFactory.getLogger(this.getClass)
+  implicit var theSystem: ActorSystem = _
   var routes = scala.collection.mutable.ListBuffer[Route]()
   var futureBinding: Future[Http.ServerBinding] = _
 

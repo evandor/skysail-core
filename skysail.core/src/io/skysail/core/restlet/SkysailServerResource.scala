@@ -47,7 +47,7 @@ abstract class SkysailServerResource[T] extends ServerResource {
   def applicationService = getSkysailApplication().getSkysailApplicationService()
   def getMetricsCollector() = getSkysailApplication().getMetricsCollector()
   def getParameterizedType() = ScalaReflectionUtils.getParameterizedType(getClass())
-  def getModel() = getSkysailApplication().getApplicationModel2()
+  def getModel() = getSkysailApplication().getApplicationModel()
   def getFromContext(id: ResourceContextId) = stringContextMap.get(id)
   def addToContext(id: ResourceContextId, value: String): Unit = stringContextMap.put(id, value)
 
