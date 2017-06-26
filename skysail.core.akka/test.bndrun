@@ -17,6 +17,13 @@
 logback.configurationFile.path = config/local
 
 				
--runrequires: osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.http.experimental)(version>=2.4.11.2))'
+-runrequires: \
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.actor)(version>=2.4.19)(version<=2.4.99))',\
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.stream)(version>=2.4.19)(version<=2.4.99))',\
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.osgi)(version>=2.4.19)(version<=2.4.99))',\
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.parsing)(version>=2.4.11.2)(version<=2.4.99))',\
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.http.core)(version>=2.4.11.2)(version<=2.4.99))',\
+	osgi.identity;filter:='(&(osgi.identity=com.typesafe.akka.http.experimental)(version>=2.4.11.2))'
 	
 -resolve: auto
+

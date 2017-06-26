@@ -52,7 +52,7 @@ class Server3 extends DominoActivator {
     
     watchServices[ApplicationRoutesProvider] {
       case AddingService(s, context) =>
-        log info s"Adding routes ${s.routes()} from ${s.getClass.getName}"
+        log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
         routes ++= s.routes()
         restartServer(routes.toList)
       case ModifiedService(s, _) =>
@@ -76,12 +76,17 @@ class Server3 extends DominoActivator {
 
   private def startServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
+    println(arg)
+    arg.size match {
+      case 0 => log warn "Akka HTTP Server not started as no routes are defined"; null
+      case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)  
+      case _ => Http(theSystem).bindAndHandle(arg.reduce((a,b) => a ~ b), "localhost", 8080)
+    }
+    
     //implicit val executionContext = theSystem.dispatcher
 //    if (arg.size == 0) {
 //      log warn "no routes defined"
 //      return
 //    }
-    val allRoutes = arg.reduce((a,b) => a ~ b)
-    Http(theSystem).bindAndHandle(allRoutes, "localhost", 8080)
   }
 }

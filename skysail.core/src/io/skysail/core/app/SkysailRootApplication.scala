@@ -4,14 +4,17 @@ import org.osgi.service.component.annotations._
 import org.osgi.service.cm.ManagedService
 import io.skysail.core.restlet.services.ResourceBundleProvider
 import java.util.Dictionary
+
+import akka.actor.ActorSystem
 import org.osgi.service.component._
 import io.skysail.core.security.config.SecurityConfigBuilder
 import io.skysail.core.restlet.RouteBuilder
 import io.skysail.core.app.resources.DefaultResource
 import io.skysail.core.app.resources.LoginResource
-import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.{PathMatcher, Route}
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
+import io.skysail.core.model.ApplicationModel
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -38,6 +41,10 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     with ManagedService {
 
   var properties: Dictionary[String, _] = null
+  
+  var appRoutes: List[Route] = _
+
+  var system: ActorSystem = _
 
   @Activate
   override def activate(componentContext: ComponentContext) = {
@@ -47,6 +54,16 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     this.componentContext = componentContext
     //setComponentContext(componentContext)
     //dumpBundlesInformationToLog(componentContext.getBundleContext().getBundles())
+
+    var akkaModel = ApplicationModel(SkysailRootApplication.ROOT_APPLICATION_NAME, apiVersion)
+    akkaModel.addResourceModel("", classOf[DefaultResource])
+    val pathResourceTuple = akkaModel.getResourceModels().map {
+      m => {
+        log info s"creating route for ${akkaModel.name}/test${m.path}"
+        (akkaModel.name / "test", m.targetResourceClass)
+      }
+    }
+    appRoutes = pathResourceTuple.map { prt => createRoute(prt._1) }.toList
   }
 
   @Deactivate
@@ -55,19 +72,19 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
   override def routes(): List[Route] = {
-    //val route = createRoute()
-    val appModel = getApplicationModel()
-    println(appModel)
-    val pathResourceTuple = appModel.getResourceModels().map { (m => (appModel.appPath() + m.path, m.targetResourceClass)) }
-    pathResourceTuple.map { prt => createRoute(prt._1) }.toList
-    //val route2 = AkkaRouteBuilder("/", classOf[DefaultResource])
-    //List(route)
+    val route = createRoute("auction" / "test")
+    appRoutes
+    //    List(route)
   }
 
-  @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
+  @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
   def setApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.setServiceListProvider(service)
 
   def unsetApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.unsetServiceListProvider(service)
+
+//  //@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
+//  def setActorSystem(as: ActorSystem) = this.system = as
+//  def unsetActorSystem(as: ActorSystem) = this.system = null
 
   override def defineSecurityConfig(securityConfigBuilder: SecurityConfigBuilder) = {
     securityConfigBuilder.authorizeRequests().startsWithMatcher("").permitAll()
@@ -95,10 +112,13 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     }
     return landingPage
   }
-  
-  private def createRoute(appPath: String) = {
+
+  private def createRoute(appPath: PathMatcher[Unit]) = {
     path(appPath) {
-      get { complete((StatusCodes.Accepted, "bid placed for path " + appPath)) }
+      get {
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+        //complete((StatusCodes.Accepted, "get request for path: " + appPath))
+      }
     }
   }
 

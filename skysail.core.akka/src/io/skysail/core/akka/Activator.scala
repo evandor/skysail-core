@@ -8,7 +8,6 @@ import akka.util.Timeout
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
-import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 
 import com.typesafe.config.{ Config, ConfigFactory }
@@ -46,7 +45,7 @@ class Activator extends ActorSystemActivator {
   }
 
   def requestTimeout(): Timeout = {
-    val t = "1000" //config.getString("akka.http.server.request-timeout")
+    val t = "10 s" //config.getString("akka.http.server.request-timeout")
     val d = Duration(t)
     FiniteDuration(d.length, d.unit)
   }
