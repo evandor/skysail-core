@@ -1,4 +1,0 @@
-akka-runtime: \
-    ${akka-compiletime},\
-	com.typesafe.akka.parsing;version=10.0,\
-	org.scala-lang.modules.scala-parser-combinators;version=1.0.6
