@@ -20,8 +20,9 @@ import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.actor.Actor
 import akka.actor.ActorLogging
+import java.util.Date
 
-case class Bid(userId: String, offer: Int)
+case class Bid(userId: String, offer: Int) { }
 case object GetBids
 case class Bids(bids: List[Bid])
 
