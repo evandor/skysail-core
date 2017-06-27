@@ -1,39 +1,25 @@
-package io.skysail.restlet.forms
+package io.skysail.core.restlet
 
 import scala.annotation.meta._
-
-import org.mockito.Mockito
-import io.skysail.core.restlet.SkysailServerResource
-import org.restlet.Request
-import org.restlet.Response
-import org.restlet.data.Reference
 import org.junit.Test
-
 import org.junit.Assert._
 import org.mockito.Mockito._
 import org.hamcrest.CoreMatchers._
 import org.restlet.data.Form
-import org.restlet.util.Series
-import org.junit.runner.RunWith
 import org.junit.Ignore
 import javax.validation.constraints._
 import io.skysail.core.restlet.resources._
-import org.restlet.representation.Variant
-import io.skysail.core.restlet.resources.PutEntityServerResource
+import io.skysail.core.restlet.resources.PostEntityServerResource
 
 @Ignore
-class PutEntityServerResourceTest {
+class PostEntityServerResourceTest {
 
   case class TestNote(@(NotNull @field) val content: String)
   
-  class PutTestNoteServerResource extends PutEntityServerResource[TestNote] {
+  class PostTestNoteServerResource extends PostEntityServerResource[TestNote] {
     def createEntityTemplate(): TestNote = new TestNote("hi")
 
     def addEntity(entity: TestNote): TestNote = {
-      null
-    }
-
-    def updateEntity(entity: TestNote): TestNote = {
       null
     }
 
@@ -41,7 +27,7 @@ class PutEntityServerResourceTest {
 
   @Test
   def atest(): TestNote = {
-    val postResource = new PutTestNoteServerResource()
+    val postResource = new PostTestNoteServerResource()
     val form = new Form()
     //postResource.post(form, Variant.A)
     

@@ -1,15 +1,11 @@
-package io.skysail.restlet.transformations
+package io.skysail.core.restlet.transformations
 
 import javax.validation.constraints._
 import com.fasterxml.jackson.annotation._
-import java.util.Date
-
-import scala.annotation.meta.field
 import scala.beans.BeanProperty
-
 import io.skysail.core.html._
-import io.skysail.core.domain.ScalaEntity
 import io.skysail.core.forms._
+import scala.annotation.meta.field
 
 case class Turn (
     @BeanProperty @(Field @field) var nextTurn: String = "initial",

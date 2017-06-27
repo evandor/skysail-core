@@ -1,9 +1,6 @@
-package io.skysail.restlet.transformations
-
-import java.util.Date
+package io.skysail.core.restlet.transformations
 
 import scala.beans.BeanProperty
-
 import org.hamcrest.CoreMatchers.is
 import org.json4s.DefaultFormats
 import org.json4s.jvalue2extractable
@@ -11,15 +8,11 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.restlet.data.Form
-
-import com.fasterxml.jackson.annotation.JsonFormat
-
 import javax.validation.constraints._
-import scala.annotation.meta.field
 import scala.beans.BeanProperty
 import io.skysail.core.html._
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import io.skysail.core.restlet.transformations.Transformations
+import scala.annotation.meta.field
 
 class FormDeserializerTest {
 

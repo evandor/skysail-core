@@ -1,17 +1,11 @@
-package io.skysail.restlet.utils
+package io.skysail.core.restlet.utils
 
-import collection.mutable.Stack
 import org.scalatest._
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.slf4j.LoggerFactory
-import io.skysail.core.restlet.SkysailServerResource
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
-import io.skysail.core.restlet.resources.ListServerResource
-import io.skysail.core.model.TestEntity
 import io.skysail.core.restlet.resources.EntityServerResource
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.restlet.resources.{EntityServerResource => EntityServerResource}
+import io.skysail.core.model.TestEntity
 
 class ReflectionUtilsSpec extends FlatSpec {
 

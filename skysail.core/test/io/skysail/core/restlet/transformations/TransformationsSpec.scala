@@ -1,15 +1,10 @@
-package io.skysail.restlet.transformations
+package io.skysail.core.restlet.transformations
 
-import collection.mutable.Stack
 import org.scalatest._
-import org.scalatest.junit.JUnitRunner
-import org.slf4j.LoggerFactory
 import org.restlet.data.Form
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import org.json4s.native.Serialization
-import org.json4s.native.Serialization.{ read, write }
-import io.skysail.core.restlet.transformations.Transformations
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 class TransformationsSpec extends FlatSpec {
 
