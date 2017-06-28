@@ -37,20 +37,31 @@ class Auction extends Actor with ActorLogging {
   }
 }
 
-class AkkaRouteProvider(routePath: String) {
-
-  implicit val bidFormat = jsonFormat2(Bid)
-  implicit val bidsFormat = jsonFormat1(Bids)
-
-  def getRoute() =
-    path(routePath) {
-
-      get {
-        implicit val timeout: Timeout = 5.seconds
-
-        // query the actor for the current auction state
-        val bids = List[Bid]() //Future[Bids] = (auction ? GetBids).mapTo[Bids]
-        complete(bids)
-      }
-    }
+class ListRequestHandler extends Actor with ActorLogging {
+  var bids = List.empty[Bid]
+  def receive = {
+    case bid @ Bid(userId, offer) =>
+      bids = bids :+ bid
+      log.info(s"Bid complete: $userId, $offer")
+    case GetBids => sender() ! Bids(bids)
+    case _ => log.info("Invalid message")
+  }
 }
+
+//class AkkaRouteProvider(routePath: String) {
+//
+//  implicit val bidFormat = jsonFormat2(Bid)
+//  implicit val bidsFormat = jsonFormat1(Bids)
+//
+//  def getRoute() =
+//    path(routePath) {
+//
+//      get {
+//        implicit val timeout: Timeout = 5.seconds
+//
+//        // query the actor for the current auction state
+//        val bids = List[Bid]() //Future[Bids] = (auction ? GetBids).mapTo[Bids]
+//        complete(bids)
+//      }
+//    }
+//}

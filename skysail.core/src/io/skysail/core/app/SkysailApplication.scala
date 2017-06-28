@@ -33,6 +33,7 @@ import io.skysail.core.restlet.utils.ClassLoaderDirectory
 import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.restlet.utils.CompositeClassLoader
 import akka.http.scaladsl.server.Route
+import io.skysail.core.model.ApplicationModel
 
 object SkysailApplication {
   var serviceListProvider: ScalaServiceListProvider = null

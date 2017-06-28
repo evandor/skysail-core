@@ -34,7 +34,7 @@ case class ResourceModel(
   private val log = LoggerFactory.getLogger(this.getClass())
   
   // akka evaluation
-  def akkaRoute = new AkkaRouteProvider(path)
+ // def akkaRoute = new AkkaRouteProvider(path)
 
   val resource: SkysailServerResource[_] = targetResourceClass.newInstance().asInstanceOf[SkysailServerResource[_]]
   val entityClass: Class[_] = SkysailRouter.getResourcesGenericType(resource)

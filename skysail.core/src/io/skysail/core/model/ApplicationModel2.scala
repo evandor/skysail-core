@@ -7,7 +7,10 @@ import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.ApiVersion
 import scala.None
 import org.restlet.Request
+import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model._
+import io.skysail.core.akka.ResourceDefinition
+import akka.http.scaladsl.server.Directives._
 
 
 /**
@@ -22,58 +25,51 @@ import io.skysail.core.model._
  *  @param associatedResourceClasses a list of associated Resource Classes together with the relation type.
  *
  */
-case class ApplicationModel(
+case class ApplicationModel2(
     val name: String,
     apiVersion: ApiVersion,
-    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]] = List()) {
+    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: ResourceDefinition[_]]]] = List()) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
+  
+  private val appRoute = if (apiVersion == null) PathMatcher(name) else name / apiVersion.versionNr.toString()
 
   /** The list of resourceModels of this applicationModel. */
-  private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
-  private val resourceModels2 = scala.collection.mutable.ListBuffer[ResourceModel2]()
+  private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel2]()
 
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
 
-  /**
-   * adds an non-null resource model identified by its path.
-   *
-   * If a resource model with the same name exists already, this method
-   * returns None, otherwise it returns "Some('the resources entity class')"
-   *
-   * Otherwise, the resource model will be added to the map of managed resources.
-   */
-  def addResourceModel(path: String, cls: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): Option[Class[_]] = {
-    require(path != null, "The resource's path can be empty, but must not be null")
-    val resourceModel = new ResourceModel(this, path, cls)
-    if (resourceModels.filter(rm => rm.path == resourceModel.path).headOption.isDefined) {
-      log.info(s"trying to add entity ${resourceModel.path} again, ignoring...")
+  def addResourceModel(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]): Option[Class[_]] = {
+    require(pathMatcher != null, "The resource's pathMatcher cannot be null")
+    val resourceModel2 = new ResourceModel2(this, appRoute / pathMatcher, cls)
+    if (resourceModels.filter(rm => rm.pathMatcher == resourceModel2.pathMatcher).headOption.isDefined) {
+      log.info(s"trying to add entity ${resourceModel2.pathMatcher} again, ignoring...")
       return None
     }
-    val entityClass = resourceModel.entityClass
+    val entityClass = resourceModel2.entityClass
     if (!entityModelsMap.get(entityClass.getName).isDefined) {
       entityModelsMap += entityClass.getName -> EntityModel(entityClass)
     }
-    resourceModels += resourceModel
+    resourceModels += resourceModel2
     build()
-    Some(resourceModel.entityClass)
+    Some(resourceModel2.entityClass)
   }
-  
-  def resourceModelFor(cls: Class[_ <: SkysailServerResource[_]]) = {
+
+  def resourceModelFor(cls: Class[_ <: ResourceDefinition[_]]) = {
     resourceModels.filter { model => model.targetResourceClass == cls }.headOption
   }
   
-  def getResourceModels(): List[ResourceModel] = {
+  def getResourceModels(): List[ResourceModel2] = {
     resourceModels.toList
   }
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 
-  def entityModelFor(ssr: io.skysail.core.restlet.SkysailServerResource[_]): Option[EntityModel] = {
+  def entityModelFor(ssr: ResourceDefinition[_]): Option[EntityModel] = {
     val resModel = resourceModelFor(ssr.getClass)
     if (resModel.isEmpty) {
       None
@@ -90,7 +86,7 @@ case class ApplicationModel(
    */
   def appPath() = "/" + name + (if (apiVersion != null) apiVersion.getVersionPath() else "")
 
-  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel] = {
+  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel2] = {
     val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
     if (r.isDefined) r.get.linkModels else List()
   }
@@ -113,14 +109,14 @@ case class ApplicationModel(
     resourceModels.foreach {
       resourceModel =>
         {
-          resourceModel.linkModel = new LinkModel(appPath(), resourceModel.path, RESOURCE_SELF, resourceModel.resource, resourceModel.resource.getClass)
-          var result = scala.collection.mutable.ListBuffer[LinkModel]()
+          resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.pathMatcher, RESOURCE_SELF, resourceModel.resource, resourceModel.resource.getClass)
+          var result = scala.collection.mutable.ListBuffer[LinkModel2]()
           resourceModel.resource.linkedResourceClasses().foreach {
             lrCls =>
               {
                 val res = resourceModelFor(lrCls)
                 if (res.isDefined) {
-                  result += new LinkModel(appPath(), res.get.path, LINKED_RESOURCE, res.get.resource, lrCls)
+                  result += new LinkModel2(appPath(), res.get.pathMatcher, LINKED_RESOURCE, res.get.resource, lrCls)
                 }
               }
           }
@@ -132,12 +128,13 @@ case class ApplicationModel(
 
           associatedResourceModels.foreach { resModel =>
             {
-              result += new LinkModel(appPath(), resModel.path, LINKED_RESOURCE, resModel.resource, resModel.resource.getClass)
+              result += new LinkModel2(appPath(), resModel.pathMatcher, LINKED_RESOURCE, resModel.resource, resModel.resource.getClass)
             }
           }
           resourceModel.linkModels = result.toList
         }
     }
   }
+   
 
 }
