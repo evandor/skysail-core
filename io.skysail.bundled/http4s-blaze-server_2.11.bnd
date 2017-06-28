@@ -1,0 +1,13 @@
+Bundle-Version: 0.15.13.${tstamp}
+
+-classpath: jar/http4s-blaze-server_2.11-0.15.13.jar
+
+Export-Package: \
+    org.http4s.*;version=0.15.13
+    
+Bundle-Name: http4s-blaze-server_2.11.jar
+
+Import-Package: \
+    *
+
+

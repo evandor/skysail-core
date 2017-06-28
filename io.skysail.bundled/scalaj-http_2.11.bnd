@@ -1,0 +1,13 @@
+Bundle-Version: 2.3.0.${tstamp}
+
+-classpath: jar/scalaj-http_2.11-2.3.0.jar
+
+Export-Package: \
+    scalaj.http.*;version=2.3.0
+    
+Bundle-Name: scalaj-http_2.11.jar
+
+Import-Package: \
+    *
+
+

@@ -1,0 +1,13 @@
+Bundle-Version: 2.1.3.${tstamp}
+
+-classpath: jar/scalapact-core_2.11-2.1.3.jar
+
+Export-Package: \
+    com.itv.scalapactcore.*;version=2.1.3
+    
+Bundle-Name: scalapact-core_2.11.jar
+
+Import-Package: \
+    *
+
+

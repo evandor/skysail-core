@@ -1,0 +1,13 @@
+Bundle-Version: 2.1.4.${tstamp}
+
+-classpath: jar/parboiled_2.11-2.1.4.jar
+
+Export-Package: \
+    org.parboiled2.*;version=2.1.4
+    
+Bundle-Name: parboiled_2.11.jar
+
+Import-Package: \
+    *
+
+
