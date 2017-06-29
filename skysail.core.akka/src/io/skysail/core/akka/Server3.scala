@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory
 
 class Server3 extends DominoActivator {
 
-	private var log = LoggerFactory.getLogger(this.getClass)
-  
+  private var log = LoggerFactory.getLogger(this.getClass)
+
   implicit var theSystem: ActorSystem = _
   var routes = scala.collection.mutable.ListBuffer[Route]()
   var futureBinding: Future[Http.ServerBinding] = _
@@ -45,16 +45,20 @@ class Server3 extends DominoActivator {
 
   whenBundleActive {
     addCapsule(new AkkaCapsule(bundleContext))
-//    services[ApplicationRoutesProvider] foreach { arp =>
-//      routes ++= arp.routes()
-//      restartServer(arp.routes())
-//    }
-    
+    //    services[ApplicationRoutesProvider] foreach { arp =>
+    //      routes ++= arp.routes()
+    //      restartServer(arp.routes())
+    //    }
+
     watchServices[ApplicationRoutesProvider] {
       case AddingService(s, context) =>
-        log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
-        routes ++= s.routes()
-        restartServer(routes.toList)
+        if (s == null) {
+          log warn "service null"
+        } else {
+          log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
+          routes ++= s.routes()
+          restartServer(routes.toList)
+        }
       case ModifiedService(s, _) =>
         println("Service modified")
       case RemovedService(s, _) =>
@@ -78,15 +82,16 @@ class Server3 extends DominoActivator {
     implicit val materializer = ActorMaterializer()
     println(arg)
     arg.size match {
-      case 0 => log warn "Akka HTTP Server not started as no routes are defined"; null
-      case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)  
-      case _ => Http(theSystem).bindAndHandle(arg.reduce((a,b) => a ~ b), "localhost", 8080)
+      case 0 =>
+        log warn "Akka HTTP Server not started as no routes are defined"; null
+      case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)
+      case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
     }
-    
+
     //implicit val executionContext = theSystem.dispatcher
-//    if (arg.size == 0) {
-//      log warn "no routes defined"
-//      return
-//    }
+    //    if (arg.size == 0) {
+    //      log warn "no routes defined"
+    //      return
+    //    }
   }
 }

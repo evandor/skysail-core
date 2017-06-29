@@ -1,6 +1,5 @@
 package io.skysail.core.app
 
-
 import akka.actor.{ Actor, ActorSystem, Props, ActorLogging }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
@@ -84,7 +83,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
           (m.pathMatcher, m.targetResourceClass)
         }
     }
-    appRoutes = pathResourceTuple.map { prt => createRoute(prt._1,prt._2) }.toList
+    appRoutes = pathResourceTuple.map { prt => createRoute(prt._1, prt._2) }.toList
   }
 
   @Deactivate
@@ -95,11 +94,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
-  override def routes(): List[Route] = {
-    //val route = createRoute("auction" / "test")
-    appRoutes
-    //    List(route)
-  }
+  override def routes(): List[Route] = appRoutes
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
   def setApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.setServiceListProvider(service)
@@ -137,9 +132,8 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     return landingPage
   }
 
-  private def createRoute2(appPath: PathMatcher[Unit]) = {
-    val auction2 = system.actorOf(Props[Auction], "auction")
-    val listRequestHandler = system.actorOf(Props[ListRequestHandler], "listRequestHandler")
+  private def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]) = {
+    val auction2 = system.actorOf(Props[Auction]) //, "auction2")
     path(appPath) {
       get {
         //complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
@@ -151,19 +145,23 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
         implicit val materializer = ActorMaterializer()
         implicit val bidFormat = jsonFormat2(Bid)
         implicit val bidsFormat = jsonFormat1(Bids)
-        val bids: Future[Bids] = (listRequestHandler ? GetBids).mapTo[Bids]
+        val bids: Future[Bids] = (auction2 ? GetBids).mapTo[Bids]
         complete(bids)
-      }
+      } ~
+        post {
+          parameter("bid".as[Int], "user") { (bid, user) =>
+            // place a bid, fire-and-forget
+            auction2 ! Bid(user, bid)
+            complete((StatusCodes.Accepted, "bid placed"))
+          }
+        }
     }
   }
-  
-   private def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]) = {
-    val auction2 = system.actorOf(Props[Auction])//, "auction2")
+
+  private def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]) = {
+    val auction2 = system.actorOf(Props.apply(cls)) //, "auction2")
     path(appPath) {
       get {
-        //complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-        //complete((StatusCodes.Accepted, "get request for path: " + appPath))
-
         implicit val timeout: Timeout = 5.seconds
         implicit val system = ActorSystem()
         implicit val executionContext = system.dispatcher
