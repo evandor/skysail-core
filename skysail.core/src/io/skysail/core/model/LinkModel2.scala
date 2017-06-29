@@ -35,12 +35,13 @@ object LinkModel2 {
 case class LinkModel2(
     val context: String,
     val pathMatcher: PathMatcher[Unit],
-    @BeanProperty rat: ResourceAssociationType = null,
-    resource: ResourceDefinition[_] = null,
-    @BeanProperty val resourceClass: Class[_ <: ResourceDefinition[_]] = null) {
+    @BeanProperty rat: ResourceAssociationType = null
+    //resource: ResourceDefinition[_] = null
+    //@BeanProperty val resourceClass: Class[_ <: ResourceDefinition[_]] = null
+    ) {
 
-  @BeanProperty val relation: LinkRelation = if (resource != null) resource.getLinkRelation() else LinkRelation.ALTERNATE
-  @BeanProperty val verbs = if (resource != null) resource.getVerbs() else Set()
+  @BeanProperty val relation: LinkRelation = LinkRelation.ALTERNATE//if (resource != null) resource.getLinkRelation() else LinkRelation.ALTERNATE
+  @BeanProperty val verbs = Set()//if (resource != null) resource.getVerbs() else Set()
   @BeanProperty var title = determineTitle()
   @BeanProperty val alt: String = "-"
   @BeanProperty val needsAuth: Boolean = false
@@ -50,7 +51,7 @@ case class LinkModel2(
 
   def getUri() = context //+ path
 
-  override def toString() = s"'{path}': ${resourceClass} ($rat) [title: $getTitle()]"
+  override def toString() = s"'{path}': {resourceClass} ($rat) [title: $getTitle()]"
 
   def asLinkheaderElement(): String = {
     val sb = new StringBuilder().append("<").append(getUri()).append(">");
@@ -62,14 +63,14 @@ case class LinkModel2(
       sb.append("; refId=\"").append(getRefId()).append("\"");
     }
     sb.append("; verbs=\"")
-      .append(verbs.map(verb => verb.getName()).mkString(",")).append("\"");
+      //.append(verbs.map(verb => verb.getName()).mkString(",")).append("\"");
     return sb.toString();
   }
 
   def determineTitle(): String = {
-    if (resource == null) {
-      return "unknown.."
-    }
+//    if (resource == null) {
+//      return "unknown.."
+//    }
 //    val title = resource.getFromContext(ResourceContextId.LINK_TITLE)
 //    if (title == null) "unknown" else title
     "unknown..."

@@ -34,6 +34,7 @@ import scala.concurrent.Future
 import scala.io.StdIn
 import io.skysail.core.akka.ResourceDefinition
 import io.skysail.core.model.ApplicationModel2
+import io.skysail.core.model.ApplicationModel2
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -72,18 +73,6 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       setContext(getContext().createChildContext())
     }
     this.componentContext = componentContext
-
-    var akkaModel = ApplicationModel2(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
-    akkaModel.addResourceModel("first", classOf[DefaultResource2])
-    akkaModel.addResourceModel("second", classOf[DefaultResource2])
-    val pathResourceTuple = akkaModel.getResourceModels().map {
-      m =>
-        {
-          log info s"creating route for ${akkaModel.name}/${m.pathMatcher}"
-          (m.pathMatcher, m.targetResourceClass)
-        }
-    }
-    appRoutes = pathResourceTuple.map { prt => createRoute(prt._1, prt._2) }.toList
   }
 
   @Deactivate
@@ -94,7 +83,19 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
-  override def routes(): List[Route] = appRoutes
+  override def routes(): List[Route] = {
+    var akkaModel = ApplicationModel2(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
+    akkaModel.addResourceModel("first", classOf[DefaultResource2])
+    akkaModel.addResourceModel("second", classOf[DefaultResource2])
+    val pathResourceTuple = akkaModel.getResourceModels().map {
+      m =>
+        {
+          log info s"creating route for ${akkaModel.name}/${m.pathMatcher}"
+          (m.pathMatcher, m.targetResourceClass)
+        }
+    }
+    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
+  }
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
   def setApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.setServiceListProvider(service)
@@ -166,18 +167,11 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
         implicit val system = ActorSystem()
         implicit val executionContext = system.dispatcher
         implicit val materializer = ActorMaterializer()
-        implicit val bidFormat = jsonFormat2(Bid)
-        implicit val bidsFormat = jsonFormat1(Bids)
-        val bids: Future[Bids] = (auction2 ? GetBids).mapTo[Bids]
+        //implicit val bidFormat = jsonFormat2(Bid)
+        //implicit val bidsFormat = jsonFormat1(Bids)
+        val bids = (auction2 ? "msg").mapTo[String]
         complete(bids)
-      } ~
-        post {
-          parameter("bid".as[Int], "user") { (bid, user) =>
-            // place a bid, fire-and-forget
-            auction2 ! Bid(user, bid)
-            complete((StatusCodes.Accepted, "bid placed"))
-          }
-        }
+      }
     }
   }
 

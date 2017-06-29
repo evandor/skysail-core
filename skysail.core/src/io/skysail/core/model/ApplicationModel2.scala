@@ -87,8 +87,9 @@ case class ApplicationModel2(
   def appPath() = "/" + name + (if (apiVersion != null) apiVersion.getVersionPath() else "")
 
   def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel2] = {
-    val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
-    if (r.isDefined) r.get.linkModels else List()
+//    val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
+//    if (r.isDefined) r.get.linkModels else List()
+    List()
   }
 
   def toHtml(request: Request) = s"""<b>${this.getClass.getSimpleName}</b>("$name","$apiVersion")<br><br>
@@ -109,28 +110,28 @@ case class ApplicationModel2(
     resourceModels.foreach {
       resourceModel =>
         {
-          resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.pathMatcher, RESOURCE_SELF, resourceModel.resource, resourceModel.resource.getClass)
+          resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.pathMatcher, RESOURCE_SELF)//, resourceModel)//.resource, resourceModel.resource.getClass)
           var result = scala.collection.mutable.ListBuffer[LinkModel2]()
-          resourceModel.resource.linkedResourceClasses().foreach {
-            lrCls =>
-              {
-                val res = resourceModelFor(lrCls)
-                if (res.isDefined) {
-                  result += new LinkModel2(appPath(), res.get.pathMatcher, LINKED_RESOURCE, res.get.resource, lrCls)
-                }
-              }
-          }
-          val associatedResourceModels = resourceModel.resource.associatedResourceClasses
-            .map(r => resourceModelFor(r._2))
-            .filter(r => r.isDefined)
-            .map(r => r.get)
-            .toList
-
-          associatedResourceModels.foreach { resModel =>
-            {
-              result += new LinkModel2(appPath(), resModel.pathMatcher, LINKED_RESOURCE, resModel.resource, resModel.resource.getClass)
-            }
-          }
+//          resourceModel.resource.linkedResourceClasses().foreach {
+//            lrCls =>
+//              {
+//                val res = resourceModelFor(lrCls)
+//                if (res.isDefined) {
+//                  result += new LinkModel2(appPath(), res.get.pathMatcher, LINKED_RESOURCE, res.get.resource, lrCls)
+//                }
+//              }
+//          }
+//          val associatedResourceModels = resourceModel.resource.associatedResourceClasses
+//            .map(r => resourceModelFor(r._2))
+//            .filter(r => r.isDefined)
+//            .map(r => r.get)
+//            .toList
+//
+//          associatedResourceModels.foreach { resModel =>
+//            {
+//              result += new LinkModel2(appPath(), resModel.pathMatcher, LINKED_RESOURCE, resModel.resource, resModel.resource.getClass)
+//            }
+//          }
           resourceModel.linkModels = result.toList
         }
     }

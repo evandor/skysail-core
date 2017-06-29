@@ -26,8 +26,8 @@ case class ResourceModel2(
 
   private val log = LoggerFactory.getLogger(this.getClass())
   
-  val resource: ResourceDefinition[_] = targetResourceClass.newInstance().asInstanceOf[ResourceDefinition[_]]
-  val entityClass: Class[_] = SkysailRouter.getResourcesGenericType(resource)
+  //val resource: ResourceDefinition[_] = targetResourceClass.newInstance().asInstanceOf[ResourceDefinition[_]]
+  val entityClass: Class[_] = ScalaReflectionUtils.getParameterizedType(targetResourceClass)//SkysailRouter.getResourcesGenericType(resource)
  // lazy val pathVariables = getPathVariables(path)
 
   var linkModel: LinkModel2 = _
@@ -36,13 +36,14 @@ case class ResourceModel2(
  // def getUri() = appModel.name + appModel.apiVersion.getVersionPath() + path
   
   def resourceType() = {
-    resource match {
-      case _: ListServerResource[_] => LIST_RESOURCE
-      case _: EntityServerResource[_] => ENTITY_RESOURCE
-      case _: PutEntityServerResource[_] => UPDATE_ENTITY_RESOURCE
-      case _: PostEntityServerResource[_] => CREATE_ENTITY_RESOURCE
-      case _ => UNSPECIFIED_RESOURCE
-    }
+//    resource match {
+//      case _: ListServerResource[_] => LIST_RESOURCE
+//      case _: EntityServerResource[_] => ENTITY_RESOURCE
+//      case _: PutEntityServerResource[_] => UPDATE_ENTITY_RESOURCE
+//      case _: PostEntityServerResource[_] => CREATE_ENTITY_RESOURCE
+//      case _ => UNSPECIFIED_RESOURCE
+//    }
+    LIST_RESOURCE
   }
 
   def toHtml(name: String, apiVersion: ApiVersion, request: Request) = {
