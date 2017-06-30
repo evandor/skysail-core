@@ -37,16 +37,16 @@ class Auction extends Actor with ActorLogging {
   }
 }
 
-class ListRequestHandler extends Actor with ActorLogging {
-  var bids = List.empty[Bid]
-  def receive = {
-    case bid @ Bid(userId, offer) =>
-      bids = bids :+ bid
-      log.info(s"Bid complete: $userId, $offer")
-    case GetBids => sender() ! Bids(bids)
-    case _ => log.info("Invalid message")
-  }
-}
+//class ListRequestHandler extends Actor with ActorLogging {
+//  var bids = List.empty[Bid]
+//  def receive = {
+//    case bid @ Bid(userId, offer) =>
+//      bids = bids :+ bid
+//      log.info(s"Bid complete: $userId, $offer")
+//    case GetBids => sender() ! Bids(bids)
+//    case _ => log.info("Invalid message")
+//  }
+//}
 
 //class AkkaRouteProvider(routePath: String) {
 //

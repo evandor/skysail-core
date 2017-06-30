@@ -19,7 +19,6 @@ import io.skysail.core.restlet.services.ResourceBundleProvider
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.restlet.resources.GetBids
 import io.skysail.core.restlet.resources.Bid
-import io.skysail.core.restlet.resources.ListRequestHandler
 import io.skysail.core.app.resources.DefaultResource2
 import io.skysail.core.restlet.resources.Bids
 import io.skysail.core.restlet.resources.Auction
