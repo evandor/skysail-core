@@ -6,7 +6,7 @@ Import-Package: \
     io.skysail.api.weaving,\
     *
     
--includeresource: OSGI-OPT/src=src/
+-includeresource: OSGI-OPT/src=src/,resources
     
 #Require-Capability: io.skysail.api.um
 
