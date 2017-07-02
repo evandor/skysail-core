@@ -97,16 +97,17 @@ abstract class PutEntityServerResource[T: Manifest] extends SkysailServerResourc
   }
 
   override def getApiMetadata() = {
-    val apiMetadata = ApiMetadata.builder()
-    apiMetadata.summaryForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
-    apiMetadata.descriptionForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
-    apiMetadata.tagsForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
-
-    apiMetadata.summaryForPut(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
-    apiMetadata.descriptionForGet(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
-    apiMetadata.tagsForGet(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
-
-    apiMetadata.build()
+//    val apiMetadata = ApiMetadata.builder()
+//    apiMetadata.summaryForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
+//    apiMetadata.descriptionForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
+//    apiMetadata.tagsForGet(this.getClass(), PutEntityServerResource.GET_ENTITY_METHOD_NAME)
+//
+//    apiMetadata.summaryForPut(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
+//    apiMetadata.descriptionForGet(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
+//    apiMetadata.tagsForGet(this.getClass(), PutEntityServerResource.UPDATE_ENTITY_METHOD_NAME)
+//
+//    apiMetadata.build()
+    null
   }
 
   def getEntity3() = {

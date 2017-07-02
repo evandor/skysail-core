@@ -109,7 +109,7 @@ abstract class SkysailServerResource[T] extends ServerResource {
 
   def getLinkRelation() = LinkRelation.CANONICAL
   def getVerbs():Set[Method] = Set()
-  def getApiMetadata() = ApiMetadata.builder().build()
+  def getApiMetadata() = null//ApiMetadata.builder().build()
 
   def redirectTo(): String = null
 

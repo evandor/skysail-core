@@ -79,17 +79,17 @@ abstract class PostEntityServerResource[T: Manifest] extends SkysailServerResour
   }
 
   override def getApiMetadata() = {
-    val apiMetadata = ApiMetadata.builder();
-    apiMetadata.summaryForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
-    apiMetadata.descriptionForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
-    apiMetadata.tagsForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
-
-    apiMetadata.summaryForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
-    apiMetadata.descriptionForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
-    apiMetadata.tagsForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
-
-    apiMetadata.build()
-
+//    val apiMetadata = ApiMetadata.builder();
+//    apiMetadata.summaryForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
+//    apiMetadata.descriptionForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
+//    apiMetadata.tagsForGet(this.getClass(), PostEntityServerResource.CREATE_ENTITY_TEMPLATE_METHOD_NAME);
+//
+//    apiMetadata.summaryForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
+//    apiMetadata.descriptionForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
+//    apiMetadata.tagsForPost(this.getClass(), PostEntityServerResource.ADD_ENTITY_METHOD_NAME);
+//
+//    apiMetadata.build()
+    null
   }
 
   def doPost(entity: T, variant: Variant): ScalaResponseWrapper[T] = {

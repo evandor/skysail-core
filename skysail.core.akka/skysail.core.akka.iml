@@ -453,5 +453,14 @@
     <orderEntry type="library" name="Gradle: org.scala-lang:scala-reflect:2.11.8" level="project" />
     <orderEntry type="library" name="Gradle: org.scala-lang:scala-library:2.11.8" level="project" />
     <orderEntry type="module" module-name="skysail.api" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/generated/skysail.core.akka.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

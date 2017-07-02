@@ -2,11 +2,8 @@ package io.skysail.api.text;
 
 import java.util.*;
 
-import lombok.Getter;
-
 import org.restlet.resource.Resource;
 
-@Getter
 public class MessageArguments {
 
     public class ArgumentDesc {

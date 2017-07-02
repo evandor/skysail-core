@@ -35,19 +35,19 @@ abstract class ListServerResource[T <: List[_]](
     new ListResponse[List[T]](getResponse(), entitiesList);
   }
 
-  override def getApiMetadata(): ApiMetadata = {
-    val apiMetadata = ApiMetadata.builder();
-
-    apiMetadata.summaryForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
-
-    apiMetadata.summaryForDelete(this.getClass(), ListServerResource.ERASE_ENTITY_METHOD_NAME);
-    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
-
-    return apiMetadata.build();
-  }
+//  override def getApiMetadata(): ApiMetadata = {
+////    val apiMetadata = ApiMetadata.builder();
+////
+////    apiMetadata.summaryForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+////    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+////    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+////
+////    apiMetadata.summaryForDelete(this.getClass(), ListServerResource.ERASE_ENTITY_METHOD_NAME);
+////    apiMetadata.descriptionForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+////    apiMetadata.tagsForGet(this.getClass(), ListServerResource.GET_ENTITY_METHOD_NAME);
+////
+////    return apiMetadata.build();
+//  }
   
   private final def listEntities(variant: Variant): List[T] = {
     val requestHandler = new ScalaListRequestHandler[T](variant, getModel())

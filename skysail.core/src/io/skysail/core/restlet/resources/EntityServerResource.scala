@@ -62,16 +62,17 @@ abstract class EntityServerResource[T: Manifest] extends SkysailServerResource[T
     }
 
   override def getApiMetadata() = {
-    val apiMetadata = ApiMetadata.builder()
-    apiMetadata.summaryForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
-
-    apiMetadata.summaryForDelete(this.getClass(), EntityServerResource.ERASE_ENTITY_METHOD_NAME);
-    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
-    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
-
-    apiMetadata.build()
+//    val apiMetadata = ApiMetadata.builder()
+//    apiMetadata.summaryForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+//    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+//    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+//
+//    apiMetadata.summaryForDelete(this.getClass(), EntityServerResource.ERASE_ENTITY_METHOD_NAME);
+//    apiMetadata.descriptionForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+//    apiMetadata.tagsForGet(this.getClass(), EntityServerResource.GET_ENTITY_METHOD_NAME);
+//
+//    apiMetadata.build()
+    null
   }
 
   final def getEntity3(): T = {
