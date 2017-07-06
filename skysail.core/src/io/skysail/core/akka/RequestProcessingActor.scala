@@ -21,13 +21,19 @@ object RequestProcessingActor {
 
 class RequestProcessingActor[T](nextActor: ActorRef) extends Actor with ActorLogging {
   implicit val system = ActorSystem()
+  var returnTo:ActorRef = null
   def receive = {
-    case r: HttpRequest => {
+    case req: HttpRequest => {
+      returnTo = sender
       log info "starting Request Processing..."
       nextActor ! RequestEvent2(sender)
     }
-    case _ => {
-      log error "???"
+    case res: ResponseEvent => {
+      log info "finishing Request Processing..."
+      returnTo ! "hiXXX"
+    }
+    case any:Any => {
+      log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()
     }
   }
 }

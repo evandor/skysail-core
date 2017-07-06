@@ -9,17 +9,20 @@ import akka.actor.Props
 import java.util.Date
 import akka.http.scaladsl.model.HttpRequest
 
-//object AbstractRequestHandlerActor {
-//  def props(nextActor: ActorRef) = Props(new RequestProcessingActor(nextActor))
-//}
-
 abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
+
+  var returnTo: ActorRef = null
+  
   def handleRequest(nextActor: ActorRef, re: RequestEvent2) = {
     if (nextActor != null) {
       nextActor ! RequestEvent2(sender, re.response)
     } else {
       re.sender ! ResponseEvent()
     }
+  }
+  
+  def handleResponse(nextActor: ActorRef, re: ResponseEvent) = {
+    nextActor ! re
   }
 }
 
@@ -28,24 +31,46 @@ object Timer {
 }
 
 class Timer(nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
-  var returnTo:ActorRef = null
-  def receive: Actor.Receive = {
+  
+  var start: Long = System.currentTimeMillis()
+  def receive = {
     case re: RequestEvent2 => {
-      log info "starting @" + System.currentTimeMillis()
+      start = System.currentTimeMillis()
+      log info "started..."
       returnTo = sender
       super.handleRequest(nextActor, re)
     }
     case re: ResponseEvent => {
-      log info "stopping @" + System.currentTimeMillis()
-      sender ! re
+      val stopped = System.currentTimeMillis() - start
+      log info s"timer stopped after ${stopped}ms!"
+      super.handleResponse(returnTo, re)
     }
-    
-    case _ => log info "error"
+  }
+}
+
+object Delegator {
+  def props(nextActor: ActorRef) = Props(new Delegator(nextActor))
+}
+
+class Delegator(nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
+  def receive = {
+    case re: RequestEvent2 => {
+      log info "delegator started..."
+      returnTo = sender
+      super.handleRequest(nextActor, re)
+    }
+    case re: ResponseEvent => {
+      log info s"stopped"
+      super.handleResponse(returnTo, re)
+    }
   }
 }
 
 class Worker() extends AbstractRequestHandlerActor {
   def receive: Actor.Receive = {
-    case _ => sender ! ResponseEvent()
+    case _ => {
+      log info "uoohhh... workin'"
+      sender ! ResponseEvent()
+    }
   }
 }
