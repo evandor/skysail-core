@@ -2,9 +2,6 @@ package io.skysail.api.doc;
 
 import java.lang.reflect.Method;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 public class ApiMetadata {
 

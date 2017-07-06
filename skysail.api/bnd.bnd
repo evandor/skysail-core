@@ -14,8 +14,7 @@ Bundle-ActivationPolicy: lazy
 	org.restlet;version=${restlet.version},\
     slf4j.api;version=1.7.7,\
     javax.validation.api;version=1.1,\
-    org.hibernate.validator;version=${org.hibernate.validator.version},\
-   	lombok;version=1.16
+    org.hibernate.validator;version=${org.hibernate.validator.version}
 
 Export-Package: \
 	io.skysail.api.text,\
