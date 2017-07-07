@@ -25,10 +25,10 @@ class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
   "A RequestProcessingActor" must {
     "initiate a request/reponse cycle" in {
 
-      val worker = system.actorOf(Props[Worker], "worker")
-      val delegator = system.actorOf(Delegator.props(worker), "delegator")
-      val theTimer = system.actorOf(Timer.props(delegator), "timer")
-      val rpa = system.actorOf(RequestProcessingActor.then(theTimer), "rpa")
+      val worker = system.actorOf(Props(new Worker()), "worker")
+      val delegator = system.actorOf(Props(new Delegator(worker)), "delegator")
+      val theTimer = system.actorOf(Props(new Timer(delegator)), "timer")
+      val rpa = system.actorOf(Props(new RequestProcessingActor(theTimer)), "rpa")
 
       val future = rpa ? HttpRequest()
 

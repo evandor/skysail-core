@@ -1,76 +1,69 @@
 package io.skysail.core.akka
 
-import akka.actor.ActorLogging
-import akka.actor.Actor
+import akka.actor._
 import akka.actor.Actor._
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
 import java.util.Date
 import akka.http.scaladsl.model.HttpRequest
 
 abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 
   var returnTo: ActorRef = null
-  
-  def handleRequest(nextActor: ActorRef, re: RequestEvent2) = {
+
+  def receive = {
+    case req: RequestEvent => receivedRequestEvent(req)
+    case res: ResponseEvent => receivedResponseEvent(res)
+    case msg => log info s"unknown message of type '${msg.getClass.getName}' received"
+  }
+
+  def handleRequest(nextActor: ActorRef, req: RequestEvent) = {
     if (nextActor != null) {
-      nextActor ! RequestEvent2(sender, re.response)
+      nextActor ! RequestEvent(sender, req.request, req.response)
     } else {
-      re.sender ! ResponseEvent()
+      req.sender ! ResponseEvent(req)
     }
   }
-  
+
   def handleResponse(nextActor: ActorRef, re: ResponseEvent) = {
     nextActor ! re
   }
+
+  def nextActor(): ActorRef
+  def doRequest(req: RequestEvent): Unit = {}
+  def doResponse(res: ResponseEvent): Unit = {}
+
+  private def receivedRequestEvent(req: RequestEvent) = {
+    log info s"RequestEvent received"
+    returnTo = sender
+    doRequest(req)
+    handleRequest(nextActor(), req)
+  }
+
+  private def receivedResponseEvent(re: ResponseEvent) = {
+    log info s"ResponseEvent received"
+    doResponse(re)
+    handleResponse(returnTo, re)
+  }
 }
 
-object Timer {
-  def props(nextActor: ActorRef) = Props(new Timer(nextActor))
-}
-
-class Timer(nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
-  
+class Timer(val nextActor: ActorRef) extends AbstractRequestHandlerActor {
   var start: Long = System.currentTimeMillis()
-  def receive = {
-    case re: RequestEvent2 => {
-      start = System.currentTimeMillis()
-      log info "started..."
-      returnTo = sender
-      super.handleRequest(nextActor, re)
-    }
-    case re: ResponseEvent => {
-      val stopped = System.currentTimeMillis() - start
-      log info s"timer stopped after ${stopped}ms!"
-      super.handleResponse(returnTo, re)
-    }
+  override def doRequest(req: RequestEvent) = {
+    start = System.currentTimeMillis()
+  }
+  override def doResponse(res: ResponseEvent) = {
+    val stop = System.currentTimeMillis()
+    log info s"execution took ${stop - start}ms"
   }
 }
 
-object Delegator {
-  def props(nextActor: ActorRef) = Props(new Delegator(nextActor))
-}
-
-class Delegator(nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
-  def receive = {
-    case re: RequestEvent2 => {
-      log info "delegator started..."
-      returnTo = sender
-      super.handleRequest(nextActor, re)
-    }
-    case re: ResponseEvent => {
-      log info s"stopped"
-      super.handleResponse(returnTo, re)
-    }
-  }
-}
+class Delegator(val nextActor: ActorRef = null) extends AbstractRequestHandlerActor {}
 
 class Worker() extends AbstractRequestHandlerActor {
-  def receive: Actor.Receive = {
-    case _ => {
+  override def receive: Actor.Receive = {
+    case req: RequestEvent => {
       log info "uoohhh... workin'"
-      sender ! ResponseEvent()
+      sender ! ResponseEvent(req)
     }
   }
+  def nextActor() = null
 }
