@@ -14,6 +14,8 @@ import akka.http.scaladsl.model.HttpRequest
 import akka.pattern.ask
 import scala.concurrent.duration._
 
+import io.skysail.core.akka.ActorChainDsl._
+
 class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
     with WordSpecLike
     with ImplicitSender
@@ -24,13 +26,13 @@ class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
 
   "A RequestProcessingActor" must {
     "initiate a request/reponse cycle" in {
+      
+      val chain = classOf[RequestProcessingActor[_]] ==> 
+                    classOf[Timer] ==> 
+                    classOf[Delegator] ==> 
+                    classOf[Worker]
 
-      val worker = system.actorOf(Props(new Worker()), "worker")
-      val delegator = system.actorOf(Props(new Delegator(worker)), "delegator")
-      val theTimer = system.actorOf(Props(new Timer(delegator)), "timer")
-      val rpa = system.actorOf(Props(new RequestProcessingActor(theTimer)), "rpa")
-
-      val future = rpa ? HttpRequest()
+      val future = chain.build() ? HttpRequest()
 
       future.onComplete {
         case Failure(_) => println("failure")

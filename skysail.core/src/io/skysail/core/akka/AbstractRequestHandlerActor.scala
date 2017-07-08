@@ -58,12 +58,12 @@ class Timer(val nextActor: ActorRef) extends AbstractRequestHandlerActor {
 
 class Delegator(val nextActor: ActorRef = null) extends AbstractRequestHandlerActor {}
 
-class Worker() extends AbstractRequestHandlerActor {
-  override def receive: Actor.Receive = {
-    case req: RequestEvent => {
-      log info "uoohhh... workin'"
-      sender ! ResponseEvent(req)
-    }
-  }
-  def nextActor() = null
+class Worker(val nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
+//  override def receive: Actor.Receive = {
+//    case req: RequestEvent => {
+//      log info "uoohhh... workin'"
+//      sender ! ResponseEvent(req)
+//    }
+//  }
+ // def nextActor() = null
 }
