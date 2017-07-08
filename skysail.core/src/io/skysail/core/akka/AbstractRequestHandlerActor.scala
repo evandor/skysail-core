@@ -15,19 +15,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     case msg => log info s"unknown message of type '${msg.getClass.getName}' received"
   }
 
-  def handleRequest(nextActor: ActorRef, req: RequestEvent) = {
-    if (nextActor != null) {
-      nextActor ! RequestEvent(sender, req.request, req.response)
-    } else {
-      req.sender ! ResponseEvent(req)
-    }
-  }
-
-  def handleResponse(nextActor: ActorRef, re: ResponseEvent) = {
-    nextActor ! re
-  }
-
-  def nextActor(): ActorRef
+  def nextActorsProps(): Props
   def doRequest(req: RequestEvent): Unit = {}
   def doResponse(res: ResponseEvent): Unit = {}
 
@@ -35,8 +23,16 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     log info s"RequestEvent received"
     returnTo = sender
     doRequest(req)
-    handleRequest(nextActor(), req)
+    if (nextActorsProps != null) {
+      val a = context.actorOf(nextActorsProps(), nextActorsProps().actorClass().getSimpleName)
+      handleRequest(a, req)
+    } else {
+      req.sender ! ResponseEvent(req)
+    }
   }
+
+  private def handleRequest(next: ActorRef, req: RequestEvent) = next ! RequestEvent(sender, req.request, req.response)
+  private def handleResponse(next: ActorRef, res: ResponseEvent) = next ! res
 
   private def receivedResponseEvent(re: ResponseEvent) = {
     log info s"ResponseEvent received"
@@ -45,7 +41,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
   }
 }
 
-class Timer(val nextActor: ActorRef) extends AbstractRequestHandlerActor {
+class Timer(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
   var start: Long = System.currentTimeMillis()
   override def doRequest(req: RequestEvent) = {
     start = System.currentTimeMillis()
@@ -56,14 +52,6 @@ class Timer(val nextActor: ActorRef) extends AbstractRequestHandlerActor {
   }
 }
 
-class Delegator(val nextActor: ActorRef = null) extends AbstractRequestHandlerActor {}
+class Delegator(val nextActorsProps: Props = null) extends AbstractRequestHandlerActor
 
-class Worker(val nextActor: ActorRef = null) extends AbstractRequestHandlerActor {
-//  override def receive: Actor.Receive = {
-//    case req: RequestEvent => {
-//      log info "uoohhh... workin'"
-//      sender ! ResponseEvent(req)
-//    }
-//  }
- // def nextActor() = null
-}
+class Worker(val nextActorsProps: Props = null) extends AbstractRequestHandlerActor 

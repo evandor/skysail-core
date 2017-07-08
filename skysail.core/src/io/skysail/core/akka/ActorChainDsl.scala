@@ -26,14 +26,15 @@ object ActorChainDsl {
       val (last,rest) = (elems.reverse.head,elems.reverse.tail)
       
       //log info "new " + last.cls.getName + " => null"
-      var p:ActorRef = null// = system.actorOf(Props.apply(last.cls,null))
+      var p:Props = null 
+      // = system.actorOf(Props.apply(last.cls,null))
       elems.reverse.foreach(f => {
         //log info "new " + f.cls.getName + " => " + p.getClass.getName
-        val q = system.actorOf(Props.apply(f.cls,p), f.cls.getSimpleName)
+        val q = Props.apply(f.cls,p)
         p = q
       })
       
-      p
+      system.actorOf(p, "RequestProcessingActor")
     }
   }
 

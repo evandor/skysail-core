@@ -43,32 +43,32 @@ class Server3 extends DominoActivator {
     override def getActorSystemName(context: BundleContext): String = "SkysailActorSystem"
   }
 
-  whenBundleActive {
+  whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
-    //    services[ApplicationRoutesProvider] foreach { arp =>
-    //      routes ++= arp.routes()
-    //      restartServer(arp.routes())
-    //    }
-
     watchServices[ApplicationRoutesProvider] {
-      case AddingService(s, context) =>
-        if (s == null) {
-          log warn "service null"
-        } else {
-          log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
-          routes ++= s.routes()
-          restartServer(routes.toList)
-        }
-      case ModifiedService(s, _) =>
-        println("Service modified")
-      case RemovedService(s, _) =>
-        log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
-        routes --= s.routes()
-        restartServer(routes.toList)
+      case AddingService(s, context) => addService(s)
+      case ModifiedService(s, _) => println("Service modified")
+      case RemovedService(s, _) => removeService(s)
+    }
+  })
+
+  private def removeService(s: ApplicationRoutesProvider) = {
+    log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
+    routes --= s.routes()
+    restartServer(routes.toList)
+  }
+
+  private def addService(s: ApplicationRoutesProvider) = {
+    if (s == null) {
+      log warn "service null"
+    } else {
+      log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
+      routes ++= s.routes()
+      restartServer(routes.toList)
     }
   }
 
-  def restartServer(arg: List[Route]) = {
+  private def restartServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
     if (futureBinding != null) {
       implicit val executionContext = theSystem.dispatcher
@@ -87,11 +87,5 @@ class Server3 extends DominoActivator {
       case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)
       case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
     }
-
-    //implicit val executionContext = theSystem.dispatcher
-    //    if (arg.size == 0) {
-    //      log warn "no routes defined"
-    //      return
-    //    }
   }
 }

@@ -9,24 +9,15 @@ import akka.actor.Props
 import java.util.Date
 import akka.http.scaladsl.model.HttpRequest
 
-//object RequestProcessingActor {
-//  def then(nextActor: ActorRef) = Props(new RequestProcessingActor(nextActor))
-//  def then(cls: Class[_]) = {
-//    implicit val system = ActorSystem()
-//    val p = Props.apply(cls,null)
-//    val a = system.actorOf(p)
-//    Props(new RequestProcessingActor(a))
-//  }
-//}
-
-class RequestProcessingActor[T](nextActor: ActorRef) extends Actor with ActorLogging {
+class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
   implicit val system = ActorSystem()
   var returnTo:ActorRef = null
   def receive = {
     case req: HttpRequest => {
       returnTo = sender
       log info "starting Request Processing..."
-      nextActor ! RequestEvent(sender,req)
+      val a = context.actorOf(nextActor, nextActor.actorClass().getSimpleName)
+      a ! RequestEvent(sender,req)
     }
     case res: ResponseEvent => {
       log info "finishing Request Processing..."
