@@ -4,6 +4,6 @@ import akka.actor.ActorRef
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.HttpRequest
 
-case class RequestEvent(sender: ActorRef, request: HttpRequest, response: HttpResponse = HttpResponse(200))
+case class RequestEvent(request: HttpRequest, response: HttpResponse = HttpResponse(200))
 
 case class ResponseEvent(req: RequestEvent)
