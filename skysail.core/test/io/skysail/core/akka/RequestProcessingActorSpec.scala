@@ -15,6 +15,10 @@ import akka.pattern.ask
 import scala.concurrent.duration._
 
 import io.skysail.core.akka.ActorChainDsl._
+import akka.http.scaladsl.server.RequestContext
+
+import org.mockito.Mockito
+import org.mockito.Mockito._
 
 class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
     with WordSpecLike
@@ -32,7 +36,10 @@ class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
                     classOf[Delegator] ==> 
                     classOf[Worker]
 
-      val future = chain.build() ? HttpRequest()
+      val ctxMock = Mockito.mock(classOf[RequestContext])
+      Mockito.when(ctxMock.request).thenReturn(HttpRequest())
+                    
+      val future = chain.build() ? ctxMock//HttpRequest()
 
       future.onComplete {
         case Failure(_) => println("failure")

@@ -36,6 +36,7 @@ import io.skysail.core.model.ApplicationModel2
 import io.skysail.core.model.ApplicationModel2
 import io.skysail.core.app.resources.DefaultResource3
 import java.util.concurrent.atomic.AtomicInteger
+import io.skysail.core.app.resources.AkkaRedirectResource
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -87,6 +88,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
     var akkaModel = ApplicationModel2(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
     akkaModel.addResourceModel("first", classOf[DefaultResource2])
     akkaModel.addResourceModel("second", classOf[DefaultResource3])
+    akkaModel.addResourceModel("third", classOf[AkkaRedirectResource])
     val pathResourceTuple = akkaModel.getResourceModels().map {
       m =>
         {
@@ -134,7 +136,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   }
 
   private def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]) = {
-    val auction2 = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
+    val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
     path(appPath) {
       get { ctx =>
         {
@@ -146,8 +148,8 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
           //implicit val bidFormat = jsonFormat2(Bid)
           //implicit val bidsFormat = jsonFormat1(Bids)
 
-          val bids = (auction2 ? ctx.request).mapTo[String]
-
+          val bids = (routeRootActor ? ctx).mapTo[String]
+          
           ctx.complete(bids)
         }
       }

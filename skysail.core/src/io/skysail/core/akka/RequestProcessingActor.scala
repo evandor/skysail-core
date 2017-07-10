@@ -14,11 +14,11 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
   implicit val system = ActorSystem()
   var returnTo:ActorRef = null
   def receive = {
-    case req: HttpRequest => {
+    case ctx: RequestContext => {
       returnTo = sender
       log info "starting Request Processing... returnTo set to " + returnTo
       val a = context.actorOf(nextActor, nextActor.actorClass().getSimpleName)
-      a ! RequestEvent(req)
+      a ! RequestEvent(ctx)
     }
     case res: ResponseEvent => {
       log info "finishing Request Processing..."

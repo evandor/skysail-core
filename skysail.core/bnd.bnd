@@ -100,4 +100,6 @@ Export-Package: \
 	io.skysail.restlet.model,\
 	io.skysail.restlet.queries
 	
-Private-Package: io.skysail.core.akka
+Private-Package: \
+    io.skysail.core.akka,\
+    io.skysail.core.akka.actors

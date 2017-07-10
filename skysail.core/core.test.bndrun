@@ -8,8 +8,7 @@
 -runsystemcapabilities: ${native_capability}
 -runsystempackages: ${runsystempackages}
 -runtrace: false
--runproperties: ${runproperties},\
-    org.osgi.framework.bootdelegation=sun.misc
+-runproperties: ${runproperties}
 
 ########################################################################################
 ### --- run-file-specific settings ------------------------------------------------- ###
