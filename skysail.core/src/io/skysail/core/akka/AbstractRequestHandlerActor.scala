@@ -21,15 +21,15 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 
   private def receivedRequestEvent(req: RequestEvent) = {
     log info s"RequestEvent received"
-    log info s"setting returnTo to " + sender
+    //log info s"setting returnTo to " + sender
     returnTo = sender
     doRequest(req)
     if (nextActorsProps != null) {
       val a = context.actorOf(nextActorsProps(), nextActorsProps().actorClass().getSimpleName)
-      log info s"proceeding with " + a
+      //log info s"proceeding with " + a
       a ! RequestEvent(req.ctx, req.response)
     } else {
-      log info s"returning to " + returnTo
+      //log info s"returning to " + returnTo
       returnTo ! ResponseEvent(req)
     }
   }
@@ -37,7 +37,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
   private def receivedResponseEvent(res: ResponseEvent) = {
     log info s"ResponseEvent received"
     doResponse(res)
-    log info s"returning to $returnTo with $res"
+    //log info s"returning to $returnTo with $res"
     returnTo ! res
   }
   

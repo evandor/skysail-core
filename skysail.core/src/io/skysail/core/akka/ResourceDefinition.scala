@@ -12,38 +12,51 @@ import akka.actor.Props
 import java.util.Date
 
 case class Req(msg: String)
+
 case class Res(msg: String)
 
 
-
 abstract class ResourceDefinition[T] extends Actor with ActorLogging {
-  
+
   def getLinkRelation() = LinkRelation.CANONICAL
+
   def getVerbs(): Set[Method] = Set()
-  def linkedResourceClasses():List[Class[_ <: ResourceDefinition[_]]] = List()
-  
+
+  def linkedResourceClasses(): List[Class[_ <: ResourceDefinition[_]]] = List()
+
   val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceDefinition[_]]]]()
-  
+
   val chainRoot: ActorRef
-  
-  implicit val system = ActorSystem() 
-  val nextActor:ActorRef = null//context.actorOf(Props[DataExtractingActor])
+
+  implicit val system = ActorSystem()
+  val nextActor: ActorRef = null
+  //context.actorOf(Props[DataExtractingActor])
   val originalSender = sender
-  
+
   var sendBackTo: ActorRef = null
-  
-  def receive = {
+
+  def receive = in
+
+  import context._
+
+  def in: Receive = {
     case e => {
-      if (sendBackTo != null) {
-        println("out")
-        sendBackTo ! e
-        log info "stopping actor: " + chainRoot
-        context.stop(chainRoot)
-      } else {
-        println("in")
-        sendBackTo = sender
-        chainRoot ! e
-      }
+      println("in... " + e)
+      sendBackTo = sender
+      chainRoot ! e
+      become(out)
     }
   }
+
+  def out: Receive = {
+    case e => {
+      println("out... " + e)
+      sendBackTo ! e
+      log info "stopping actor: " + chainRoot
+      context.stop(chainRoot)
+      become(in)
+    }
+  }
+
+
 }

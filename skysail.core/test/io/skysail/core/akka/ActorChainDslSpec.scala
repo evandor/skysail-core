@@ -11,6 +11,7 @@ import org.junit.Assert._
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
 import akka.testkit.ImplicitSender
+import org.junit.Assert.assertThat
 
 //@RunWith(classOf[JUnitRunner])
 class ActorChainDslSpec extends TestKit(ActorSystem("testsystem"))
@@ -28,7 +29,7 @@ class ActorChainDslSpec extends TestKit(ActorSystem("testsystem"))
     "create the first actor with a reference to the second" in {
       val chain = classOf[RequestProcessingActor[_]] ==> classOf[Timer]
       val rootActor = chain.build()
-      assertThat(rootActor,is(notNullValue()))
+      assertTrue(rootActor != null)
     }
   }
 

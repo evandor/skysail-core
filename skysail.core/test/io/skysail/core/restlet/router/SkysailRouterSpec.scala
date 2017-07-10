@@ -3,9 +3,6 @@ package io.skysail.core.restlet.router
 import org.scalatest._
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
-import io.skysail.core.restlet.router.SkysailRouter
-import io.skysail.core.restlet.router.TestEntityListServerResource
-import io.skysail.core.restlet.router.TestEntityServerResource
 
 class SkysailRouterSpec extends FlatSpec {
 

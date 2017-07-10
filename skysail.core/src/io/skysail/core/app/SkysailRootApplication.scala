@@ -136,7 +136,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   }
 
   private def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]) = {
-    val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
+//    val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
     path(appPath) {
       get { ctx =>
         {
@@ -147,6 +147,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
           //implicit val bidFormat = jsonFormat2(Bid)
           //implicit val bidsFormat = jsonFormat1(Bids)
+          val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
 
           val bids = (routeRootActor ? ctx).mapTo[String]
           
