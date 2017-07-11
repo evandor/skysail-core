@@ -1,26 +1,20 @@
 package io.skysail.core.akka
 
-import akka.event.LogSource
 import akka.osgi.ActorSystemActivator
-import com.typesafe.config.Config
 import domino.DominoActivator
 import domino.capsule.Capsule
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationRoutesProvider
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
 import scala.concurrent.Future
 import domino.service_watching.ServiceWatcherEvent._
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpMethods._
-import akka.http.scaladsl.model._
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
 import org.slf4j.LoggerFactory
 
-class Server3 extends DominoActivator {
+class AkkaServer extends DominoActivator {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 
@@ -84,7 +78,7 @@ class Server3 extends DominoActivator {
     arg.size match {
       case 0 =>
         log warn "Akka HTTP Server not started as no routes are defined"; null
-      case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)
+      case 1 => Http(theSystem).bindAndHandle(arg.head, "localhost", 8080)
       case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
     }
   }

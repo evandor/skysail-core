@@ -41,6 +41,6 @@ Import-Package: \
 	
 
 #Bundle-Activator: io.skysail.core.akka.Activator3
-Bundle-Activator: io.skysail.core.akka.Server3
+Bundle-Activator: io.skysail.core.akka.AkkaServer
 
 Private-Package: io.skysail.core.akka
