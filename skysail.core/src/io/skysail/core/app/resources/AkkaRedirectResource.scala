@@ -9,8 +9,9 @@ import io.skysail.core.akka.ResourceDefinition
 import io.skysail.core.akka.RequestProcessingActor
 import akka.actor.Props
 import io.skysail.core.akka._
-import io.skysail.core.akka.ActorChainDsl._
+import io.skysail.core.akka.dsl.ActorChainDsl._
 import akka.actor.ActorRef
+import io.skysail.core.akka.actors.Timer
 
 class DefaultResource3 extends ResourceDefinition {
 

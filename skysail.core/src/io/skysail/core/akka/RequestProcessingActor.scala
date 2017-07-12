@@ -9,10 +9,13 @@ import akka.actor.Props
 import java.util.Date
 import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.server.RequestContext
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.ContentTypes
 
 class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
   implicit val system = ActorSystem()
-  var returnTo:ActorRef = null
+  var returnTo: ActorRef = null
   def receive = {
     case ctx: RequestContext => {
       returnTo = sender
@@ -23,9 +26,14 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
     case res: ResponseEvent => {
       log info "finishing Request Processing..."
       log info "returning msg hiXXX to " + returnTo
-      returnTo ! "hiXXX"
+
+      val res = HttpResponse(entity = HttpEntity(
+        ContentTypes.`text/html(UTF-8)`,
+        "<html><body>Hello world!</body></html>"))
+
+      returnTo ! "res"
     }
-    case any:Any => {
+    case any: Any => {
       log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()
     }
   }

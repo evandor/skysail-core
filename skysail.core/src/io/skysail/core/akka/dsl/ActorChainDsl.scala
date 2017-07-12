@@ -1,12 +1,11 @@
-package io.skysail.core.akka
+package io.skysail.core.akka.dsl
 
-import org.restlet.representation.StringRepresentation
-import org.restlet.representation.Representation
 import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import org.slf4j.LoggerFactory
+import akka.actor.Actor
 
 object ActorChainDsl {
 

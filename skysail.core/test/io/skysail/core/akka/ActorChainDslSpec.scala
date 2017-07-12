@@ -5,13 +5,14 @@ import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
-import io.skysail.core.akka.ActorChainDsl._
+import io.skysail.core.akka.dsl.ActorChainDsl._
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
 import akka.testkit.ImplicitSender
 import org.junit.Assert.assertThat
+import io.skysail.core.akka.actors.Timer
 
 //@RunWith(classOf[JUnitRunner])
 class ActorChainDslSpec extends TestKit(ActorSystem("testsystem"))

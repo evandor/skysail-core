@@ -14,11 +14,12 @@ import akka.http.scaladsl.model.HttpRequest
 import akka.pattern.ask
 import scala.concurrent.duration._
 
-import io.skysail.core.akka.ActorChainDsl._
+import io.skysail.core.akka.dsl.ActorChainDsl._
 import akka.http.scaladsl.server.RequestContext
 
 import org.mockito.Mockito
 import org.mockito.Mockito._
+import io.skysail.core.akka.actors.Timer
 
 class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
     with WordSpecLike

@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations._
 import org.osgi.service.cm.ManagedService
 import spray.json.DefaultJsonProtocol._
 import scala.concurrent.duration._
-import scala.concurrent.duration._
 import scala.concurrent.Future
 import scala.io.StdIn
 import io.skysail.core.akka.ResourceDefinition

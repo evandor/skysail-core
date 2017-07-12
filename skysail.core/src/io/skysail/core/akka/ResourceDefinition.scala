@@ -51,6 +51,7 @@ abstract class ResourceDefinition[T] extends Actor with ActorLogging {
   def out: Receive = {
     case e => {
       println("out... " + e)
+      println("sending to " + sendBackTo)
       sendBackTo ! e
       log info "stopping actor: " + chainRoot
       context.stop(chainRoot)

@@ -27,10 +27,12 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     if (nextActorsProps != null) {
       val a = context.actorOf(nextActorsProps(), nextActorsProps().actorClass().getSimpleName)
       //log info s"proceeding with " + a
-      a ! RequestEvent(req.ctx, req.response)
+      a ! RequestEvent(req.ctx)//, req.response)
     } else {
-      //log info s"returning to " + returnTo
-      returnTo ! ResponseEvent(req)
+      log info s"returning to " + returnTo
+      val res = ResponseEvent(req)
+      doResponse(res)
+      returnTo ! res
     }
   }
 
@@ -44,16 +46,6 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
   
 }
 
-class Timer(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
-  var start: Long = System.currentTimeMillis()
-  override def doRequest(req: RequestEvent) = {
-    start = System.currentTimeMillis()
-  }
-  override def doResponse(res: ResponseEvent) = {
-    val stop = System.currentTimeMillis()
-    log info s"execution took ${stop - start}ms"
-  }
-}
 
 class Delegator(val nextActorsProps: Props = null) extends AbstractRequestHandlerActor
 

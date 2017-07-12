@@ -9,9 +9,10 @@ import io.skysail.core.akka.ResourceDefinition
 import io.skysail.core.akka.RequestProcessingActor
 import akka.actor.Props
 import io.skysail.core.akka._
-import io.skysail.core.akka.ActorChainDsl._
+import io.skysail.core.akka.dsl.ActorChainDsl._
 import akka.actor.ActorRef
 import io.skysail.core.akka.actors.Redirector
+import io.skysail.core.akka.actors.Timer
 
 class AkkaRedirectResource extends ResourceDefinition {
 
@@ -20,22 +21,5 @@ class AkkaRedirectResource extends ResourceDefinition {
     classOf[Timer] ==>
     classOf[Redirector]).build()
 
-  /*val actorChainRoot = chain.build()
-
-  //override val nextActor = actorChainRoot
-  var sendBackTo: ActorRef = null
-  override def receive = {
-    case e => {
-      if (sendBackTo != null) {
-        println("out")
-        sendBackTo ! e
-        log info "stopping actor: " + actorChainRoot
-        context.stop(actorChainRoot)
-      } else {
-        println("in")
-        sendBackTo = sender
-        actorChainRoot ! e
-      }
-    }
-  }*/
+ 
 }
