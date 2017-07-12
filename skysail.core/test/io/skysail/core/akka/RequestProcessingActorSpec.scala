@@ -20,6 +20,8 @@ import akka.http.scaladsl.server.RequestContext
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import io.skysail.core.akka.actors.Timer
+import io.skysail.core.akka.actors.Delegator
+import io.skysail.core.akka.actors.Worker
 
 class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
     with WordSpecLike

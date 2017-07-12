@@ -27,11 +27,11 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
       log info "finishing Request Processing..."
       log info "returning msg hiXXX to " + returnTo
 
-      val res = HttpResponse(entity = HttpEntity(
-        ContentTypes.`text/html(UTF-8)`,
-        "<html><body>Hello world!</body></html>"))
+//      val res = HttpResponse(entity = HttpEntity(
+//        ContentTypes.`text/html(UTF-8)`,
+//        "<html><body>Hello world!</body></html>"))
 
-      returnTo ! "res"
+      returnTo ! res.httpResponse
     }
     case any: Any => {
       log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()

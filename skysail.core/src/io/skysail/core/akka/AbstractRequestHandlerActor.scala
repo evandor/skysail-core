@@ -47,6 +47,6 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 }
 
 
-class Delegator(val nextActorsProps: Props = null) extends AbstractRequestHandlerActor
 
-class Worker(val nextActorsProps: Props = null) extends AbstractRequestHandlerActor 
+
+

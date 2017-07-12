@@ -36,6 +36,7 @@ import io.skysail.core.model.ApplicationModel2
 import io.skysail.core.app.resources.DefaultResource3
 import java.util.concurrent.atomic.AtomicInteger
 import io.skysail.core.app.resources.AkkaRedirectResource
+import akka.http.scaladsl.model.HttpResponse
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -148,7 +149,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
           //implicit val bidsFormat = jsonFormat1(Bids)
           val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
 
-          val bids = (routeRootActor ? ctx).mapTo[String]
+          val bids = (routeRootActor ? ctx).mapTo[HttpResponse]
           
           ctx.complete(bids)
         }
