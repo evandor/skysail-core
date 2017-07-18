@@ -11,16 +11,15 @@ import akka.actor.Props
 import io.skysail.core.akka._
 import io.skysail.core.akka.dsl.ActorChainDsl._
 import akka.actor.ActorRef
+import io.skysail.core.akka.actors.Redirector
 import io.skysail.core.akka.actors.Timer
-import io.skysail.core.akka.actors.Delegator
-import io.skysail.core.akka.actors.Worker
 
-class DefaultResource3 extends ResourceDefinition {
+class AkkaRedirectResource extends ResourceDefinition {
 
   override val chainRoot = (
     classOf[RequestProcessingActor[_]] ==>
     classOf[Timer] ==>
-    classOf[Delegator] ==>
-    classOf[Worker]).build()
+    classOf[Redirector]).build()
 
+ 
 }
