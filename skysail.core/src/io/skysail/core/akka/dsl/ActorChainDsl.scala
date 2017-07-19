@@ -41,6 +41,7 @@ object ActorChainDsl {
 
   case class ActorChain0(elems: List[ActorPathElem]) extends ActorChain[ActorChain0] {
     def ==>(s: Class[_ <: Actor]): ActorChain1 = ActorChain1(elems :+ Static(s))
+    //def ==>(s: ActorChain[_]) = {???}
   }
 
   case class ActorChain1(elems: List[ActorPathElem]) extends ActorChain[ActorChain1] {
@@ -51,6 +52,14 @@ object ActorChainDsl {
     def ==>(s: Class[_ <: Actor]): ActorChain3 = ActorChain3(elems :+ Static(s))
   }
 
-  case class ActorChain3(elems: List[ActorPathElem]) extends ActorChain[ActorChain3] {}
+  case class ActorChain3(elems: List[ActorPathElem]) extends ActorChain[ActorChain3] {
+    def ==>(s: Class[_ <: Actor]): ActorChain4 = ActorChain4(elems :+ Static(s))
+  }
+
+  case class ActorChain4(elems: List[ActorPathElem]) extends ActorChain[ActorChain4] {
+    def ==>(s: Class[_ <: Actor]): ActorChain5 = ActorChain5(elems :+ Static(s))
+  }
+
+  case class ActorChain5(elems: List[ActorPathElem]) extends ActorChain[ActorChain5] {}
 
 }

@@ -14,12 +14,13 @@ import akka.actor.ActorRef
 import io.skysail.core.akka.actors.Redirector
 import io.skysail.core.akka.actors.Timer
 
-class AkkaLoginResource[String] extends RedirectResource[String] {
-  def get(): String = {
-    ???
-  }
+abstract class RedirectResource[String] extends ResourceActor[String] {
 
-  def redirectTo(): String = {
-    ???
-  }
+  override val chainRoot = (
+    classOf[RequestProcessingActor[_]] ==>
+    classOf[Timer] ==>
+    classOf[Redirector]).build()
+    
+  def redirectTo(): String
+
 }

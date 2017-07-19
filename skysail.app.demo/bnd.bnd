@@ -31,3 +31,4 @@ Bundle-Version: 0.1.0.${tstamp}
 	com.typesafe.akka.http.testkit;version=10.0,\
 	com.typesafe.akka.testkit;version=2.5
 	
+Private-Package: io.skysail.app.demo

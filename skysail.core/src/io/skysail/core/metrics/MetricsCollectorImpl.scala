@@ -2,7 +2,6 @@ package io.skysail.core.metrics
 
 import io.skysail.api.metrics._
 import org.osgi.service.component.annotations._
-import kamon.Kamon
 
 @Component(immediate = true)
 class MetricsCollectorImpl extends MetricsCollector {
@@ -12,14 +11,14 @@ class MetricsCollectorImpl extends MetricsCollector {
   private val timers = scala.collection.mutable.ListBuffer[TimerMetric]()
   private val meters = scala.collection.mutable.ListBuffer[MeterMetric]()
 
-  Kamon.start()
-
-  val someHistogram = Kamon.metrics.histogram("some-histogram")
-  val someCounter = Kamon.metrics.counter("some-counter")
-
-  someHistogram.record(42)
-  someHistogram.record(50)
-  someCounter.increment()
+//  Kamon.start()
+//
+//  val someHistogram = Kamon.metrics.histogram("some-histogram")
+//  val someCounter = Kamon.metrics.counter("some-counter")
+//
+//  someHistogram.record(42)
+//  someHistogram.record(50)
+//  someCounter.increment()
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MULTIPLE)
   def addMetricsImplementation(mi: Metrics): Unit = {

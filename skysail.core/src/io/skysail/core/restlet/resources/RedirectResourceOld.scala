@@ -6,7 +6,7 @@ import org.restlet.representation.Variant
 import io.skysail.core.restlet.responses.EntityResponse
 import org.restlet.data.Method
 
-abstract class RedirectResource[T] extends SkysailServerResource[T] {
+abstract class RedirectResourceOld[T] extends SkysailServerResource[T] {
 
   protected def redirectToResource(): SkysailServerResource[_]
 

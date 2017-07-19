@@ -15,12 +15,12 @@ import io.skysail.core.security.config.SecurityConfig
 import io.skysail.core.restlet.RouteBuilder
 import io.skysail.core.restlet.RolesPredicateAuthorizer
 import org.restlet.resource.ServerResource
-import io.skysail.core.akka.ResourceDefinition
+import io.skysail.core.akka.ResourceActor
 import io.skysail.core.restlet.utils.ScalaReflectionUtils
 
 object SkysailRouter {
   def getResourcesGenericType(resourceInstance: SkysailServerResource[_]) = resourceInstance.getParameterizedType()
-  def getResourcesGenericType(resourceInstance: ResourceDefinition[_]) = ScalaReflectionUtils.getParameterizedType(resourceInstance.getClass)
+  def getResourcesGenericType(resourceInstance: ResourceActor[_]) = ScalaReflectionUtils.getParameterizedType(resourceInstance.getClass)
 }
 
 class SkysailRouter(skysailApplication: SkysailApplication, apiVersion: ApiVersion) extends Router(skysailApplication.getContext()) {

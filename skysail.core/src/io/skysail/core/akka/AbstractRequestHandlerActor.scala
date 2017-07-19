@@ -27,7 +27,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     if (nextActorsProps != null) {
       val a = context.actorOf(nextActorsProps(), nextActorsProps().actorClass().getSimpleName)
       //log info s"proceeding with " + a
-      a ! RequestEvent(req.ctx)//, req.response)
+      a ! RequestEvent(req.ctx,req.resourceActor)//, req.response) // just "! req" ???
     } else {
       log info s"returning to " + returnTo
       val res = ResponseEvent(req)

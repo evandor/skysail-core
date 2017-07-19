@@ -5,7 +5,7 @@ import io.skysail.core.restlet.menu.MenuItemDescriptor
 import io.skysail.core.app.SkysailRootApplication
 import io.skysail.core.restlet.menu.MenuItem
 import io.skysail.core.restlet.resources.ListServerResource
-import io.skysail.core.akka.ResourceDefinition
+import io.skysail.core.akka.ResourceActor
 import akka.actor.Props
 import io.skysail.core.akka.RequestProcessingActor
 import akka.actor.ActorRef
@@ -17,7 +17,7 @@ object DefaultResource2 {
   case class GetListEvent(sender: ActorRef, response: Response)
 }
 
-class DefaultResource2 extends ResourceDefinition {
+class DefaultResource2[String] extends ResourceActor[String] {
   
   override val nextActor = context.actorOf(Props[DataExtractingActor])
   
@@ -27,6 +27,10 @@ class DefaultResource2 extends ResourceDefinition {
   }
 
   override val chainRoot: ActorRef = null
+
+  def get(): String = {
+    ???
+  }
 
 }
 

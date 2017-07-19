@@ -13,13 +13,8 @@ import io.skysail.core.akka.dsl.ActorChainDsl._
 import akka.actor.ActorRef
 import io.skysail.core.akka.actors.Redirector
 import io.skysail.core.akka.actors.Timer
+import io.skysail.core.akka.actors.ListResource
 
-class AkkaLoginResource[String] extends RedirectResource[String] {
-  def get(): String = {
-    ???
-  }
-
-  def redirectTo(): String = {
-    ???
-  }
+class AppListResource extends ListResource[String] {
+  override def get(): List[String] = List("hi","there")
 }

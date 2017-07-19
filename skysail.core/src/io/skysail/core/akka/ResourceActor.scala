@@ -10,40 +10,39 @@ import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import java.util.Date
+import akka.actor.ActorDSL
+import akka.actor.ActorDSL
+import io.skysail.core.akka.dsl.ActorChainDsl
+import io.skysail.core.akka.dsl.ActorChainDsl
+import io.skysail.core.akka.dsl.ActorChainDsl.ActorChain
 
-case class Req(msg: String)
-
-case class Res(msg: String)
-
-
-abstract class ResourceDefinition[T] extends Actor with ActorLogging {
+abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   def getLinkRelation() = LinkRelation.CANONICAL
-
   def getVerbs(): Set[Method] = Set()
-
-  def linkedResourceClasses(): List[Class[_ <: ResourceDefinition[_]]] = List()
-
-  val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceDefinition[_]]]]()
-
+  def linkedResourceClasses(): List[Class[_ <: ResourceActor[_]]] = List()
+  val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceActor[_]]]]()
   val chainRoot: ActorRef
+  //val chain: ActorChainDsl.ActorChain[_]
 
   implicit val system = ActorSystem()
   val nextActor: ActorRef = null
-  //context.actorOf(Props[DataExtractingActor])
   val originalSender = sender
-
   var sendBackTo: ActorRef = null
-
   def receive = in
 
   import context._
+  
+  def get(): T
 
   def in: Receive = {
     case e => {
       println("in... " + e)
       sendBackTo = sender
-      chainRoot ! e
+      import io.skysail.core.akka.dsl.ActorChainDsl._
+
+      //val chainRoot = classOf[RequestProcessingActor[_]] ==> chain
+      chainRoot ! (e, this)
       become(out)
     }
   }

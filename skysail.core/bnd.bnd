@@ -39,8 +39,7 @@ Bundle-Activator: io.skysail.core.akka.server.AkkaServer
 	${akka-compiletime},\
 	domino_2.11;version=1.1,\
 	com.typesafe.akka.http.testkit;version=10.0,\
-	com.typesafe.akka.testkit;version=2.5,\
-	io.skysail.bundled.kamon-core_2.11;version=0.6
+	com.typesafe.akka.testkit;version=2.5
 	
 	
 #	io.spray.json;version=1.3,\

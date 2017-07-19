@@ -14,12 +14,12 @@ import io.skysail.core.restlet.resources.PostEntityServerResource
 import io.skysail.core.restlet.resources.PutEntityServerResource
 import io.skysail.core.restlet.resources.ListServerResource
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.ResourceDefinition
+import io.skysail.core.akka.ResourceActor
 
 case class ResourceModel2(
     appModel: ApplicationModel2, 
     val pathMatcher: PathMatcher[Unit],
-    val targetResourceClass: Class[_ <: ResourceDefinition[_]]) {
+    val targetResourceClass: Class[_ <: ResourceActor[_]]) {
 
   require(pathMatcher != null, "A ResourceModel's pathMatcher must not be null")
   require(targetResourceClass != null, "A ResourceModel's target class must not be null")
@@ -27,7 +27,15 @@ case class ResourceModel2(
   private val log = LoggerFactory.getLogger(this.getClass())
   
   //val resource: ResourceDefinition[_] = targetResourceClass.newInstance().asInstanceOf[ResourceDefinition[_]]
-  val entityClass: Class[_] = ScalaReflectionUtils.getParameterizedType(targetResourceClass)//SkysailRouter.getResourcesGenericType(resource)
+  val entityClass: Class[_] = {
+    import scala.reflect.runtime.universe._
+    val tt = targetResourceClass.getTypeParameters
+    val str = tt.map(ttt => ttt.toString()).mkString(";")
+    println("*** " + targetResourceClass + ": " + str)
+    /*val p = ScalaReflectionUtils.getParameterizedType(targetResourceClass)//SkysailRouter.getResourcesGenericType(resource)
+    p*/
+    "s".getClass
+  }
  // lazy val pathVariables = getPathVariables(path)
 
   var linkModel: LinkModel2 = _

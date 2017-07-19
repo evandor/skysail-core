@@ -9,7 +9,7 @@ import scala.None
 import org.restlet.Request
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model._
-import io.skysail.core.akka.ResourceDefinition
+import io.skysail.core.akka.ResourceActor
 import akka.http.scaladsl.server.Directives._
 
 
@@ -28,7 +28,7 @@ import akka.http.scaladsl.server.Directives._
 case class ApplicationModel2(
     val name: String,
     apiVersion: ApiVersion,
-    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: ResourceDefinition[_]]]] = List()) {
+    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: ResourceActor[_]]]] = List()) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
@@ -43,7 +43,7 @@ case class ApplicationModel2(
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
 
-  def addResourceModel(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceDefinition[_]]): Option[Class[_]] = {
+  def addResourceModel(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]): Option[Class[_]] = {
     require(pathMatcher != null, "The resource's pathMatcher cannot be null")
     val resourceModel2 = new ResourceModel2(this, appRoute / pathMatcher, cls)
     if (resourceModels.filter(rm => rm.pathMatcher == resourceModel2.pathMatcher).headOption.isDefined) {
@@ -59,7 +59,7 @@ case class ApplicationModel2(
     Some(resourceModel2.entityClass)
   }
 
-  def resourceModelFor(cls: Class[_ <: ResourceDefinition[_]]) = {
+  def resourceModelFor(cls: Class[_ <: ResourceActor[_]]) = {
     resourceModels.filter { model => model.targetResourceClass == cls }.headOption
   }
   
@@ -69,7 +69,7 @@ case class ApplicationModel2(
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 
-  def entityModelFor(ssr: ResourceDefinition[_]): Option[EntityModel] = {
+  def entityModelFor(ssr: ResourceActor[_]): Option[EntityModel] = {
     val resModel = resourceModelFor(ssr.getClass)
     if (resModel.isEmpty) {
       None

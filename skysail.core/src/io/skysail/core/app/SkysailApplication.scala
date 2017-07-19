@@ -1,39 +1,57 @@
 package io.skysail.core.app
 
+import java.util.ArrayList
+import java.util.Collections
+import java.util.ResourceBundle
+import java.util.concurrent.atomic.AtomicInteger
+
+import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.concurrent.duration.DurationInt
+
+import org.osgi.framework.Bundle
+import org.osgi.framework.BundleContext
+import org.osgi.service.component.ComponentContext
+import org.osgi.service.component.annotations.Activate
+import org.osgi.service.component.annotations.Deactivate
+import org.restlet.Request
+import org.restlet.Restlet
+import org.restlet.data.LocalReference
+import org.restlet.data.MediaType
+import org.restlet.data.Protocol
+import org.restlet.resource.ServerResource
+import org.restlet.routing.Router
+import org.slf4j.LoggerFactory
+
+import akka.actor.ActorSystem
+import akka.actor.Props
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.Directives.get
+import akka.http.scaladsl.server.Directives.path
+import akka.http.scaladsl.server.PathMatcher
+import akka.http.scaladsl.server.Route
+import akka.pattern.ask
+import akka.stream.ActorMaterializer
+import akka.util.Timeout
 import io.skysail.api.text.Translation
-import io.skysail.api.um._
+import io.skysail.api.um.AuthenticationMode
+import io.skysail.api.um.AuthenticationService
 import io.skysail.core.ApiVersion
-import io.skysail.core.security.config.SecurityConfigBuilder
-import io.skysail.core.model._
 import io.skysail.core.app.resources.ModelResource
 import io.skysail.core.domain.repo.ScalaDbRepository
-import io.skysail.core.restlet.router.SkysailRouter
-import io.skysail.core.restlet.utils.ScalaTranslationUtils
-import io.skysail.core.restlet.services._
+import io.skysail.core.model.ApplicationModel
+import io.skysail.core.model.ResourceAssociationType
 import io.skysail.core.restlet.RouteBuilder
-import io.skysail.core.restlet.utils._
 import io.skysail.core.restlet.filter.OriginalRequestFilter
 import io.skysail.core.restlet.menu.MenuItem
-import io.skysail.core.restlet.SkysailServerResource
-import java.util.ResourceBundle
-import java.util.Collections
-import java.util.ArrayList
-import org.osgi.service.component.ComponentContext
-import org.osgi.framework._
-import org.osgi.service.component.annotations._
-import org.restlet.Request
-import org.restlet.routing.Router
-import org.restlet.resource.ServerResource
-import org.restlet.Restlet
-import org.restlet.data._
-import org.slf4j.LoggerFactory
-import scala.collection.JavaConverters._
+import io.skysail.core.restlet.router.SkysailRouter
 import io.skysail.core.restlet.services.ResourceBundleProvider
 import io.skysail.core.restlet.utils.ClassLoaderDirectory
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.restlet.utils.CompositeClassLoader
-import akka.http.scaladsl.server.Route
-import io.skysail.core.model.ApplicationModel
+import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.restlet.utils.ScalaTranslationUtils
+import io.skysail.core.security.config.SecurityConfigBuilder
+import io.skysail.core.akka.ResourceActor
+import io.skysail.core.restlet.SkysailServerResource
 
 object SkysailApplication {
   var serviceListProvider: ScalaServiceListProvider = null
@@ -67,6 +85,10 @@ abstract class SkysailApplication(
   var host = "localhost"
   def getHost = host
 
+  var appRoutes: List[Route] = _
+  var system: ActorSystem = _
+  val cnt = new AtomicInteger(0)
+
   val stringContextMap = new java.util.HashMap[ApplicationContextId, String]()
 
   setName(name);
@@ -76,7 +98,7 @@ abstract class SkysailApplication(
   applicationModel = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
 
   def this(name: String) = this(name, new ApiVersion(1))
-  
+
   def routes(): List[Route] = List()
 
   def getResourceBundles() = List[ResourceBundle]()
@@ -291,5 +313,22 @@ abstract class SkysailApplication(
   }
 
   private def attachModel() = router.attach(new RouteBuilder("/_model", classOf[ModelResource]));
+
+  protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
+    path(appPath) {
+      get { ctx =>
+        {
+          implicit val timeout: Timeout = 5.seconds
+          implicit val system = ActorSystem()
+          implicit val executionContext = system.dispatcher
+          implicit val materializer = ActorMaterializer()
+
+          val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
+          val bids = (routeRootActor ? ctx).mapTo[HttpResponse]
+          ctx.complete(bids)
+        }
+      }
+    }
+  }
 
 }
