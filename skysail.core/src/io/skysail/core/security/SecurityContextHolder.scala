@@ -1,26 +1,26 @@
-package io.skysail.core.security
-
-final object SecurityContextHolder {
-  
-  val  contextHolder = new ThreadLocal[SecurityContext]() 
-
-	def clearContext() = contextHolder.remove()
+//package io.skysail.core.security
 //
-//	public static SecurityContext getContext() {
-//		SecurityContext ctx = contextHolder.get();
+//final object SecurityContextHolder {
+//  
+//  val  contextHolder = new ThreadLocal[SecurityContext]() 
 //
-//		if (ctx == null) {
-//			ctx = createEmptyContext();
-//			contextHolder.set(ctx);
-//		}
+//	def clearContext() = contextHolder.remove()
+////
+////	public static SecurityContext getContext() {
+////		SecurityContext ctx = contextHolder.get();
+////
+////		if (ctx == null) {
+////			ctx = createEmptyContext();
+////			contextHolder.set(ctx);
+////		}
+////
+////		return ctx;
+////	}
+//	
+//	def setContext(context: SecurityContext) = contextHolder.set(context)
 //
-//		return ctx;
-//	}
-	
-	def setContext(context: SecurityContext) = contextHolder.set(context)
-
-//	public static SecurityContext createEmptyContext() {
-//		return new SecurityContext();
-//	}
-
-}
+////	public static SecurityContext createEmptyContext() {
+////		return new SecurityContext();
+////	}
+//
+//}

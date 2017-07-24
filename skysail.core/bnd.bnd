@@ -17,12 +17,11 @@ Bundle-Activator: io.skysail.core.akka.server.AkkaServer
 	${osgi},\
 	org.osgi.service.event;version=1.3,\
 	${testlibs},\
-	${restlet},\
 	${logging},\
 	${commons},\
 	${javax},\
 	${fasterxml},\
-	skysail.api;version=0.1.0,\
+	skysail.api;version=latest,\
 	com.thoughtworks.paranamer;version=2.8,\
 	com.google.guava;version='[16.0,16.1)',\
 	io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
@@ -66,6 +65,8 @@ Export-Package: \
 	io.skysail.core,\
 	io.skysail.core.app,\
 	io.skysail.core.app.resources,\
+	io.skysail.core.akka,\
+	io.skysail.core.akka.actors,\
 	io.skysail.core.domain,\
 	io.skysail.core.domain.repo,\
 	io.skysail.core.model.resource,\
@@ -96,7 +97,5 @@ Export-Package: \
 	io.skysail.restlet.queries
 	
 Private-Package: \
-    io.skysail.core.akka,\
-    io.skysail.core.akka.dsl,\
-    io.skysail.core.akka.actors,\
-    io.skysail.core.akka.server
+	io.skysail.core.akka.dsl,\
+	io.skysail.core.akka.server

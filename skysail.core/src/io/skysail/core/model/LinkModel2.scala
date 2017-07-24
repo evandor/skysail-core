@@ -1,7 +1,5 @@
 package io.skysail.core.model
 
-import org.restlet.data.Method
-import io.skysail.core.restlet.SkysailServerResource
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
 import io.skysail.core.restlet.ResourceContextId
@@ -9,27 +7,27 @@ import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceActor
 
 object LinkModel2 {
-  def fromLinkheader(l: String): LinkModel = {
-    require(l != null, "the linkheader string must not be empty")
-    val parts = l.split(";")
-    val uriPart = parts(0).trim().replace("<","").replace(">", "")
-    val linkModel = new LinkModel(context = "", path = uriPart, resource = null)
-    parts.foreach { part => parsePart(part, linkModel) }
-    linkModel
-  }
-
-  def parsePart(part: String, linkModel: LinkModel):Unit = {
-    val keyValue = part.split("=");
-    if (keyValue.length != 2) {
-      return
-      //throw new IllegalArgumentException();
-    }
-    keyValue(0).trim() match {
-      case "title" =>  linkModel.setTitle(keyValue(1).replace("\"", ""))
-      case "refId" =>  linkModel.setRefId(keyValue(1).replace("\"", ""))
-      case _ => 
-    }
-  }
+//  def fromLinkheader(l: String): LinkModel = {
+//    require(l != null, "the linkheader string must not be empty")
+//    val parts = l.split(";")
+//    val uriPart = parts(0).trim().replace("<","").replace(">", "")
+//    val linkModel = new LinkModel(context = "", path = uriPart, resource = null)
+//    parts.foreach { part => parsePart(part, linkModel) }
+//    linkModel
+//  }
+//
+//  def parsePart(part: String, linkModel: LinkModel):Unit = {
+//    val keyValue = part.split("=");
+//    if (keyValue.length != 2) {
+//      return
+//      //throw new IllegalArgumentException();
+//    }
+//    keyValue(0).trim() match {
+//      case "title" =>  linkModel.setTitle(keyValue(1).replace("\"", ""))
+//      case "refId" =>  linkModel.setRefId(keyValue(1).replace("\"", ""))
+//      case _ => 
+//    }
+//  }
 }
 
 case class LinkModel2(

@@ -57,7 +57,7 @@ class AkkaServer extends DominoActivator {
     if (s == null) {
       log warn "service null"
     } else {
-      log info s"Adding routes ${s.routes().map { r => r.toString() }.mkString(",")} from ${s.getClass.getName}"
+      log info s"Adding routes from ${s.getClass.getName}"
       routes ++= s.routes()
       restartServer(routes.toList)
     }

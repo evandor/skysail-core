@@ -1,11 +1,10 @@
 package io.skysail.core.forms
 
 import scala.annotation.meta._
-import io.skysail.core.restlet.SkysailServerResource
 
 @getter @setter @beanGetter @beanSetter
 class ListView(
-    val link: Class[SkysailServerResource[_]] = classOf[SkysailServerResource[_]],
+    val link: Class[_] = null,
     val truncate:Int = -1,
     val hide:Boolean = false,
     val prefix: String = "",

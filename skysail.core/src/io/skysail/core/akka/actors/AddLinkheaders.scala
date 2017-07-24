@@ -38,13 +38,13 @@ class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerA
   
   final class LinkHeader(v: String) extends ModeledCustomHeader[LinkHeader] {
     override def renderInRequests = false
-    override def renderInResponses = false
+    override def renderInResponses = true
     override val companion = LinkHeader
     override def value: String = v
   }
   
   object LinkHeader extends ModeledCustomHeaderCompanion[LinkHeader] {
-    override val name = "X-Duration"
+    override val name = "Link"
     override def parse(value: String) = Try(new LinkHeader(value))
   }
 

@@ -3,10 +3,8 @@ package io.skysail.core.model
 import scala.collection.mutable.LinkedHashMap
 import org.slf4j.LoggerFactory
 import scala.collection.mutable.HashMap
-import io.skysail.core.restlet.SkysailServerResource
 import io.skysail.core.ApiVersion
 import scala.None
-import org.restlet.Request
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model._
 import io.skysail.core.akka.ResourceActor
@@ -35,7 +33,10 @@ case class ApplicationModel2(
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
   
-  private val appRoute = if (apiVersion == null) PathMatcher(name) else name / apiVersion.versionNr.toString()
+  private val appRoute = {
+    log info s"attaching ${name} with apiVersion ${apiVersion}"
+    if (apiVersion == null) PathMatcher(name) else name / apiVersion.toString()
+  }
 
   /** The list of resourceModels of this applicationModel. */
   private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel2]()
@@ -54,6 +55,8 @@ case class ApplicationModel2(
     if (!entityModelsMap.get(entityClass.getName).isDefined) {
       entityModelsMap += entityClass.getName -> EntityModel(entityClass)
     }
+    //log info s"creating route for ${akkaModel.name}/${m.pathMatcher}"
+
     resourceModels += resourceModel2
     build()
     Some(resourceModel2.entityClass)
@@ -86,15 +89,15 @@ case class ApplicationModel2(
    */
   def appPath() = "/" + name + (if (apiVersion != null) apiVersion.getVersionPath() else "")
 
-  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel2] = {
-//    val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
-//    if (r.isDefined) r.get.linkModels else List()
-    List()
-  }
+//  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel2] = {
+////    val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption
+////    if (r.isDefined) r.get.linkModels else List()
+//    List()
+//  }
 
-  def toHtml(request: Request) = s"""<b>${this.getClass.getSimpleName}</b>("$name","$apiVersion")<br><br>
-    &nbsp;&nbsp;&nbsp;<u>Entities</u>: <ul>${printHtmlMap(entityModelsMap)}</ul>
-    &nbsp;&nbsp;&nbsp;<u>Resources</u>: <ul>${resourceModels.map { v => "<li>" + v.toHtml(name, apiVersion, request) + "</li>" }.mkString("")}</ul>"""
+//  def toHtml(request: Request) = s"""<b>${this.getClass.getSimpleName}</b>("$name","$apiVersion")<br><br>
+//    &nbsp;&nbsp;&nbsp;<u>Entities</u>: <ul>${printHtmlMap(entityModelsMap)}</ul>
+//    &nbsp;&nbsp;&nbsp;<u>Resources</u>: <ul>${resourceModels.map { v => "<li>" + v.toHtml(name, apiVersion, request) + "</li>" }.mkString("")}</ul>"""
 
   override def toString() = s"""${this.getClass.getSimpleName}("$name","$apiVersion")
     Resources: ${resourceModels.map { v => sys.props("line.separator") + " " * 6 + " - " + v }.mkString("")}
