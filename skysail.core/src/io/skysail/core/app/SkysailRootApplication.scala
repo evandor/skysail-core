@@ -78,18 +78,18 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
-  override def routes(): List[Route] = {
-    var akkaModel = ApplicationModel(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
-    akkaModel.addResourceModel("first", classOf[DefaultResource2[String]])
-    akkaModel.addResourceModel("second", classOf[DefaultResource3[String]])
-    akkaModel.addResourceModel("login", classOf[AkkaLoginResource[String]])
-    akkaModel.addResourceModel("appList", classOf[AppListResource])
-    akkaModel.addResourceModel("app", classOf[AppResource])
-    val pathResourceTuple = akkaModel.getResourceModels().map {
-      m => (m.pathMatcher, m.targetResourceClass)
-    }
-    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
-  }
+//  override def routes(): List[Route] = {
+//    var akkaModel = ApplicationModel(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
+//    akkaModel.addResourceModel("first", classOf[DefaultResource2[String]])
+//    akkaModel.addResourceModel("second", classOf[DefaultResource3[String]])
+//    akkaModel.addResourceModel("login", classOf[AkkaLoginResource[String]])
+//    akkaModel.addResourceModel("appList", classOf[AppListResource])
+//    akkaModel.addResourceModel("app", classOf[AppResource])
+//    val pathResourceTuple = akkaModel.getResourceModels().map {
+//      m => (m.pathMatcher, m.targetResourceClass)
+//    }
+//    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
+//  }
 
   //  def eventsRoute =
   //    pathPrefix("events") {

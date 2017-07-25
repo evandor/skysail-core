@@ -61,6 +61,18 @@ abstract class SkysailApplication(
 
   def routesMappings: List[(String, Class[_ <: ResourceActor[_]])]
 
+  val routes: List[Route] = {
+    routesMappings.foreach(m => {
+      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
+      appModel.addResourceModel(m._1, m._2)
+    })
+
+    val pathResourceTuple = appModel.getResourceModels().map {
+      m => (m.pathMatcher, m.targetResourceClass)
+    }
+    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
+  }
+
   //val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]]()
 
   var componentContext: ComponentContext = null
@@ -85,8 +97,6 @@ abstract class SkysailApplication(
   //getEncoderService().setEnabled(true);
   log.debug("Instanciating new Skysail ApplicationModel '{}'", this.getClass().getSimpleName());
   //applicationModel = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
-
-  def routes(): List[Route] = List()
 
   def getResourceBundles() = List[ResourceBundle]()
 

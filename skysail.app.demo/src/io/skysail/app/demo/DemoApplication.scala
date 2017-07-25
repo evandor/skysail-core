@@ -23,14 +23,14 @@ object DemoApplication {
 @Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationRoutesProvider]))
 class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationRoutesProvider {
 
-  override def routes(): List[Route] = {
-    var akkaModel = ApplicationModel(APPLICATION_NAME, API_VERSION)
-    akkaModel.addResourceModel("apps", classOf[AppsResource])
-    val pathResourceTuple = akkaModel.getResourceModels().map {
-      m => (m.pathMatcher, m.targetResourceClass)
-    }
-    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
-  }
+//  override def routes(): List[Route] = {
+//    var akkaModel = ApplicationModel(APPLICATION_NAME, API_VERSION)
+//    akkaModel.addResourceModel("apps", classOf[AppsResource])
+//    val pathResourceTuple = akkaModel.getResourceModels().map {
+//      m => (m.pathMatcher, m.targetResourceClass)
+//    }
+//    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
+//  }
 
   @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
   def setActorSystem(as: ActorSystem) = this.system = as
