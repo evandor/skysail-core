@@ -1,11 +1,10 @@
-package io.skysail.core.akka.server
+package io.skysail.core.server
 
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationRoutesProvider
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
-
 import scala.concurrent.Future
 import domino.service_watching.ServiceWatcherEvent._
 import akka.http.scaladsl.Http
@@ -14,6 +13,8 @@ import akka.http.scaladsl.server.Directives._
 import domino.DominoActivator
 import domino.capsule.Capsule
 import org.slf4j.LoggerFactory
+import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
+import scala.reflect.api.materializeTypeTag
 
 class AkkaServer extends DominoActivator {
 

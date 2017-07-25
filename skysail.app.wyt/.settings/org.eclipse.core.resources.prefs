@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/io/skysail/app/wyt/WytApplication.scala=UTF-8
+encoding//src/io/skysail/app/wyt/domain.scala=UTF-8
+encoding//src/io/skysail/app/wyt/resources.scala=UTF-8
+encoding//src/io/skysail/app/wyt/services.scala=UTF-8
+encoding/bnd.bnd=UTF-8
+encoding/build.gradle=UTF-8
+encoding/wyt.test.bndrun=UTF-8

@@ -12,39 +12,19 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.Route
 import akka.actor.ActorSystem
 import io.skysail.core.app._
-import io.skysail.core.model.ApplicationModel2
-import io.skysail.core.ApiVersion
 import io.skysail.app.demo.DemoApplication._
+import io.skysail.core.model.ApplicationModel
 
 object DemoApplication {
   val APPLICATION_NAME = "demo"
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(
-  immediate = true,
-  property = { Array("service.pid=demo") },
-  service = Array( classOf[ApplicationRoutesProvider]))
-class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION)
-    //with ApplicationProvider
-    with ApplicationRoutesProvider {
-  
-  //var properties: Dictionary[String, _] = null
-
-  @Activate
-  override def activate(componentContext: ComponentContext) = {
-    log info s"activating ${this.getClass.getName}"
-  }
-
-  @Deactivate
-  override def deactivate(componentContext: ComponentContext) = {
-    log info s"deactivating ${this.getClass.getName}"
-  }
-
-  //def updated(props: Dictionary[String, _]): Unit = this.properties = props
+@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationRoutesProvider]))
+class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationRoutesProvider {
 
   override def routes(): List[Route] = {
-    var akkaModel = ApplicationModel2(APPLICATION_NAME, API_VERSION)
+    var akkaModel = ApplicationModel(APPLICATION_NAME, API_VERSION)
     akkaModel.addResourceModel("apps", classOf[AppsResource])
     val pathResourceTuple = akkaModel.getResourceModels().map {
       m => (m.pathMatcher, m.targetResourceClass)
@@ -56,10 +36,7 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION)
   def setActorSystem(as: ActorSystem) = this.system = as
   def unsetActorSystem(as: ActorSystem) = this.system = null
 
-//  override def defineSecurityConfig(securityConfigBuilder: SecurityConfigBuilder) = {
-//    securityConfigBuilder.authorizeRequests().startsWithMatcher("").permitAll()
-//  }
-
- 
+  override def routesMappings = List(
+    "apps" -> classOf[AppsResource])
 
 }

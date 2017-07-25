@@ -5,12 +5,12 @@ import java.lang.reflect.Field
 import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.restlet.resources._
 import org.slf4j.LoggerFactory
-import io.skysail.core.ApiVersion
+import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceActor
 
 case class ResourceModel2(
-    appModel: ApplicationModel2, 
+    appModel: ApplicationModel, 
     val pathMatcher: PathMatcher[Unit],
     val targetResourceClass: Class[_ <: ResourceActor[_]]) {
 

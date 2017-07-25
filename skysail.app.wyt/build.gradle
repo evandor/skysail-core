@@ -1,0 +1,30 @@
+apply plugin: 'scala'
+apply plugin: 'java'
+apply plugin: 'org.scoverage'
+
+repositories {
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.8'
+    compile 'org.scala-lang:scala-reflect:2.11.8'
+    scoverage 'org.scoverage:scalac-scoverage-plugin_2.11:1.1.0', 'org.scoverage:scalac-scoverage-runtime_2.11:1.1.0'
+}
+
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src']
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['test']
+        }
+    }
+}
