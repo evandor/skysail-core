@@ -40,7 +40,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
       sendBackTo = sender
       import io.skysail.core.akka.dsl.ActorChainDsl._
 
-      //val chainRoot = classOf[RequestProcessingActor[_]] ==> chain
+      // log info s"MESSAGE: ${chainRoot} ! (${e},${this}"
       chainRoot ! (e, this)
       become(out)
     }

@@ -1,39 +1,18 @@
 package io.skysail.core.app
 
-import io.skysail.core.restlet.services.ResourceBundleProvider
-import io.skysail.core.restlet.resources.GetBids
-import io.skysail.core.restlet.resources.Bid
-import io.skysail.core.app.resources.DefaultResource2
-import io.skysail.core.restlet.resources.Bids
-import io.skysail.core.restlet.resources.Auction
 import java.util.Dictionary
-import org.osgi.service.component._
-import org.osgi.service.component.annotations._
+
 import org.osgi.service.cm.ManagedService
-import spray.json.DefaultJsonProtocol._
-import scala.concurrent.duration._
-import scala.concurrent.Future
-import scala.io.StdIn
-import io.skysail.core.akka.ResourceActor
-import io.skysail.core.model.ApplicationModel
-import io.skysail.core.app.resources.DefaultResource3
-import java.util.concurrent.atomic.AtomicInteger
-import akka.http.scaladsl.model.HttpResponse
-import io.skysail.core.app.resources.AkkaLoginResource
-import akka.http.scaladsl.server.Route
+import org.osgi.service.component.ComponentContext
+import org.osgi.service.component.annotations._
+
 import akka.actor.ActorSystem
+import io.skysail.core.app.resources.AkkaLoginResource
 import io.skysail.core.app.resources.AppListResource
 import io.skysail.core.app.resources.AppResource
-
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server._
-import io.skysail.core.akka.BoxOffice
-import io.skysail.core.akka.TicketSeller
-
-import akka.actor._
-import akka.pattern.ask
-import akka.util.Timeout
-import scala.concurrent.ExecutionContext
+import io.skysail.core.app.resources.DefaultResource2
+import io.skysail.core.app.resources.DefaultResource3
+import io.skysail.core.restlet.services.ResourceBundleProvider
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -134,33 +113,3 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
 }
 
-trait BoxOfficeApi {
-  import BoxOffice._
-
-  def createBoxOffice(): ActorRef
-
-  implicit def executionContext: ExecutionContext
-  implicit def requestTimeout: Timeout
-
-  lazy val boxOffice = createBoxOffice()
-
-  def createEvent(event: String, nrOfTickets: Int) =
-    boxOffice.ask(CreateEvent(event, nrOfTickets))
-      .mapTo[EventResponse]
-
-  def getEvents() =
-    boxOffice.ask(GetEvents).mapTo[Events]
-
-  def getEvent(event: String) =
-    boxOffice.ask(GetEvent(event))
-      .mapTo[Option[Event]]
-
-  def cancelEvent(event: String) =
-    boxOffice.ask(CancelEvent(event))
-      .mapTo[Option[Event]]
-
-  def requestTickets(event: String, tickets: Int) =
-    boxOffice.ask(GetTickets(event, tickets))
-      .mapTo[TicketSeller.Tickets]
-}
-//

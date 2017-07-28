@@ -8,15 +8,9 @@ abstract class ListResource[T] extends ResourceActor[List[T]] {
 
   override val chainRoot = (
     classOf[RequestProcessingActor[_]] ==>
-    classOf[Timer] ==>
+    //classOf[Timer] ==>
     classOf[ListRetriever] ==> 
-    classOf[AddLinkheaders] ==>
+    //classOf[AddLinkheaders] ==>
     classOf[Redirector]).build()
-    
-//    val chain = 
-//      classOf[Timer] ==> 
-//      classOf[ListRetriever] ==> 
-//      classOf[AddLinkheaders] ==>
-//      classOf[Redirector]
 
 }

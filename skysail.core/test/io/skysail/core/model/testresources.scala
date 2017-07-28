@@ -1,16 +1,16 @@
-//package io.skysail.core.model
-//
-//import io.skysail.core.restlet.ResourceContextId
-//import io.skysail.core.restlet.resources.ListServerResource
-//import io.skysail.core.restlet.resources.EntityServerResource
-//import io.skysail.core.restlet.resources.PostEntityServerResource
-//import io.skysail.core.restlet.resources.PutEntityServerResource
-//
-//class TestEntitiesResource extends ListServerResource[List[TestEntity]](classOf[TestEntityResource]) { 
-//  def getEntity() = List(TestEntity(Some("23"),"hi", "content"))
-//  override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
-//}
-//
+package io.skysail.core.model
+
+import io.skysail.core.akka.actors._
+
+class TestEntitiesResource extends ListResource[String] {  
+  def get() = List("hi", "content")
+  //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
+}
+
+class TestResource extends EntityResource[String] {
+  def get() = "test"
+}
+
 //class TestEntityResource extends EntityServerResource[TestEntity] { 
 //  override def linkedResourceClasses() = List(classOf[PutTestEntityResource])
 //
@@ -19,14 +19,15 @@
 //  }
 //}
 //
-//class PostTestEntityResource extends PostEntityServerResource[TestEntity] {
+class PostTestEntityResource extends PostResource[String] {
+  def get() = "test"
 //  addToContext(ResourceContextId.LINK_TITLE, "create TestEntity");
 //  def createEntityTemplate() = TestEntity(Some("1"), "hi", "content")
 //  override def getEntity() = TestEntity(None, "","").asInstanceOf[Nothing]
 //  def addEntity(entity: TestEntity): TestEntity = { null }
 //  override def redirectTo() = super.redirectTo(classOf[TestEntitiesResource])
-//}
-//
+}
+
 //class PutTestEntityResource extends PutEntityServerResource[TestEntity] {
 //  def updateEntity(entity: TestEntity): TestEntity = {
 //    ???

@@ -2,8 +2,6 @@ package io.skysail.api.text;
 
 import java.util.*;
 
-import org.restlet.resource.Resource;
-
 public class MessageArguments {
 
     public class ArgumentDesc {
@@ -21,11 +19,6 @@ public class MessageArguments {
 
     private Map<String, ArgumentDesc> arguments = new HashMap<>();
     private ArgumentDesc argument;
-
-    public MessageArguments(Class<? extends Resource> cls) {
-        argument = new ArgumentDesc();
-        arguments.put(cls.getName() + ".message", argument);
-    }
 
     public MessageArguments add(String description, Object value) {
         argument.add(description, value);

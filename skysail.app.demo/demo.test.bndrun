@@ -8,7 +8,11 @@
 -runsystemcapabilities: ${native_capability}
 -runsystempackages: ${runsystempackages}
 -runtrace: false
--runproperties: ${runproperties}
+-runproperties: ${runproperties},\
+    config.file=config/application.conf
+
+-runvm: -Xmx256M
+
 
 ########################################################################################
 ### --- run-file-specific settings ------------------------------------------------- ###
@@ -76,9 +80,12 @@ skysail.server.um:
 	domino_2.11;version=1.1.2,\
 	osgi.enterprise;version=5.0,\
 	joda-time;version=2.9.3
+	
+#	,\
+#	io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
+#	io.skysail.bundled.kamon-jmx_2.11;version=0.6.7
 
 
-#	io.skysail.bundled.kamon-core_2.11;version=0.6.7
-				
 #	com.typesafe.akka.http.spray.json.experimental;version=2.4,\
 #	skysail.ext.config;version=latest,\
+

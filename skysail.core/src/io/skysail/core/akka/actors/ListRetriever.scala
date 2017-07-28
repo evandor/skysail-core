@@ -18,15 +18,10 @@ class ListRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerAc
   
   override def doRequest(req: RequestEvent) = {
     val entity = req.resourceActor.get()
-    println(entity)
-    //req.ctx.request = req.ctx.request.copy(entity = entity)
-    //req.httpResponse = res.httpResponse.copy(entity = "hi2")
   }
   
   override def doResponse(res: ResponseEvent) = {
     val e = res.req.resourceActor.get()
-    println("==>" + e)
-    //val xxx = res.httpResponse.entity.
     res.httpResponse = res.httpResponse.copy(entity = e.toString())
   }
 

@@ -15,6 +15,9 @@ import domino.capsule.Capsule
 import org.slf4j.LoggerFactory
 import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 import scala.reflect.api.materializeTypeTag
+import io.skysail.core.akka.actors.CounterActor
+import akka.actor.Props
+import akka.actor.ActorRef
 
 class AkkaServer extends DominoActivator {
 
@@ -23,6 +26,7 @@ class AkkaServer extends DominoActivator {
   implicit var theSystem: ActorSystem = _
   var routes = scala.collection.mutable.ListBuffer[Route]()
   var futureBinding: Future[Http.ServerBinding] = _
+  var applicationsActor: ActorRef = _
 
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
@@ -34,6 +38,8 @@ class AkkaServer extends DominoActivator {
       registerService(osgiContext, system)
       log info s"ActorSystem [${system.name}] initialized."
       theSystem = system
+      // counterActor = system.actorOf(Props[CounterActor], "Counter")
+      applicationsActor = system.actorOf(Props[ApplicationsActor], classOf[ApplicationsActor].getSimpleName)
     }
 
     override def getActorSystemName(context: BundleContext): String = "SkysailActorSystem"
@@ -43,7 +49,7 @@ class AkkaServer extends DominoActivator {
     addCapsule(new AkkaCapsule(bundleContext))
     watchServices[ApplicationRoutesProvider] {
       case AddingService(s, context) => addService(s)
-      case ModifiedService(s, _) => println("Service modified")
+      case ModifiedService(s, _) => log info s"Service '$s' modified"
       case RemovedService(s, _) => removeService(s)
     }
   })

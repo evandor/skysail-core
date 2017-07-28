@@ -1,15 +1,10 @@
 package io.skysail.core.app.resources
 
-import io.skysail.core.restlet.resources._
-import io.skysail.core.restlet.menu.MenuItemDescriptor
-import io.skysail.core.app.SkysailRootApplication
-import io.skysail.core.restlet.menu.MenuItem
-import io.skysail.core.akka.ResourceActor
-import akka.actor.Props
-import io.skysail.core.akka.RequestProcessingActor
-import akka.actor.ActorRef
-import io.skysail.core.app.resources.DefaultResource2._
 import akka.actor.Actor
+import akka.actor.ActorRef
+import akka.actor.Props
+import io.skysail.core.akka.ResourceActor
+import io.skysail.core.app.resources.DefaultResource2._
 
 object DefaultResource2 {
   case class Response(msg: String = "")

@@ -6,7 +6,6 @@ import org.osgi.service.component.annotations._
 import akka.actor.ActorSystem
 import io.skysail.app.wyt.WytApplication._
 import io.skysail.core.app._
-import io.skysail.core.ApiVersion
 
 object WytApplication {
   val APPLICATION_NAME = "wyt"

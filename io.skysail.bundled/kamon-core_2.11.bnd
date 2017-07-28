@@ -9,6 +9,7 @@ Export-Package: \
 Bundle-Name: kamon-core_2.11.jar
 
 Import-Package: \
+    !org.aspectj.*,\
     *
 
 

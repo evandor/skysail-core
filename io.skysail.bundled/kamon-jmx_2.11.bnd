@@ -1,0 +1,13 @@
+Bundle-Version: 0.6.7.${tstamp}
+
+-classpath: jar/kamon-jmx_2.11-0.6.7.jar
+
+Export-Package: \
+    kamon.*;version=0.6.7
+    
+Bundle-Name: kamon-jmx_2.11.jar
+
+Import-Package: \
+    *
+
+

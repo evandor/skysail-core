@@ -1,11 +1,12 @@
 package io.skysail.core.akka.actors
 
 import akka.actor.{Actor, ActorIdentity, ActorRef, ActorSystem, Identify}
-import akka.util.Timeout
 import io.skysail.core.akka.actors.CounterActor._
+import scala.concurrent.duration.FiniteDuration
+import akka.util.Timeout
 
 object CounterActor {
-  case class CountRequest(requestId : String, timeout : Timeout)
+  case class CountRequest(requestId : String, timeout : FiniteDuration /*Timeout*/)
   case class FinishCounting(requestId : String, originalSender : ActorRef)
   case class CountResponse(requestId : String, count : Int)
 }
