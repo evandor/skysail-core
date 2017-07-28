@@ -6,7 +6,7 @@ import io.skysail.core.app.ApplicationRoutesProvider
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent._
+import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -40,6 +40,7 @@ class AkkaServer extends DominoActivator {
       theSystem = system
       // counterActor = system.actorOf(Props[CounterActor], "Counter")
       applicationsActor = system.actorOf(Props[ApplicationsActor], classOf[ApplicationsActor].getSimpleName)
+      log info s"created ApplicationsActor with path ${applicationsActor.path}"
     }
 
     override def getActorSystemName(context: BundleContext): String = "SkysailActorSystem"
@@ -53,12 +54,10 @@ class AkkaServer extends DominoActivator {
       case RemovedService(s, _) => removeService(s)
     }
   })
-
-  private def removeService(s: ApplicationRoutesProvider) = {
-    log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
-    routes --= s.routes()
-    restartServer(routes.toList)
-  }
+  
+//  whenBundleStopped {
+//    
+//  }
 
   private def addService(s: ApplicationRoutesProvider) = {
     if (s == null) {
@@ -68,6 +67,12 @@ class AkkaServer extends DominoActivator {
       routes ++= s.routes()
       restartServer(routes.toList)
     }
+  }
+
+  private def removeService(s: ApplicationRoutesProvider) = {
+    log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
+    routes --= s.routes()
+    restartServer(routes.toList)
   }
 
   private def restartServer(arg: List[Route]) = {

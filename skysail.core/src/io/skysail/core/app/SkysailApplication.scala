@@ -39,19 +39,17 @@ import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
 import io.skysail.core.akka.actors.CounterActor
 import io.skysail.core.akka.PrivateMethodExposer
+import io.skysail.core.server.ApplicationsActor
+import scala.concurrent.Future
 
 object SkysailApplication {
   //  var serviceListProvider: ScalaServiceListProvider = null
   //  def setServiceListProvider(service: ScalaServiceListProvider) = this.serviceListProvider = service
   //  def unsetServiceListProvider(service: ScalaServiceListProvider) = this.serviceListProvider = null
+  case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceActor[_]])
 }
 
-abstract class SkysailApplication(
-  name: String,
-  val apiVersion: ApiVersion)
-    //extends org.restlet.Application
-    //with ApplicationProvider
-    extends ApplicationRoutesProvider
+abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) extends ApplicationRoutesProvider
     with ResourceBundleProvider {
 
   val log = LoggerFactory.getLogger(classOf[BackendApplication])
@@ -63,7 +61,7 @@ abstract class SkysailApplication(
   def routesMappings: List[(String, Class[_ <: ResourceActor[_]])]
 
   var actorRefsMap = Map.empty[String, ActorRef]
-  
+
   val routes: List[Route] = {
     routesMappings.foreach(m => {
       log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
@@ -161,29 +159,29 @@ abstract class SkysailApplication(
     repo.asInstanceOf[T]
   }
 
-  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
-    path(appPath) {
-      get { ctx =>
-        {
-          implicit val timeout: Timeout = 5.seconds
-          implicit val system = ActorSystem()
-          implicit val executionContext = system.dispatcher
-          implicit val materializer = ActorMaterializer()
-
-          val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
-
-          ctx.complete {
-            val bids = (routeRootActor ? ctx).mapTo[HttpResponse]
-            println("root: " + routeRootActor)
-            println("bids: " + bids)
-            println("bids: " + bids.getClass.getName)
-            bids
-            //HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>")
-          }
-        }
-      }
-    }
-  }
+  //  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
+  //    path(appPath) {
+  //      get { ctx =>
+  //        {
+  //          implicit val timeout: Timeout = 5.seconds
+  //          implicit val system = ActorSystem()
+  //          implicit val executionContext = system.dispatcher
+  //          implicit val materializer = ActorMaterializer()
+  //          
+  //          val routeRootActor = system.actorOf(Props.apply(cls), cls.getSimpleName + "-" + cnt.incrementAndGet())
+  //
+  //          ctx.complete {
+  //            val bids = (routeRootActor ? ctx).mapTo[HttpResponse]
+  //            println("root: " + routeRootActor)
+  //            println("bids: " + bids)
+  //            println("bids: " + bids.getClass.getName)
+  //            bids
+  //            //HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>")
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
 
   protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
     path(appPath) {
@@ -192,11 +190,35 @@ abstract class SkysailApplication(
           ctx =>
             {
               implicit val askTimeout: Timeout = 3.seconds
+              implicit val executionContext = system.dispatcher
+              
               val extracted = cls.getName + "-" + cnt.incrementAndGet()
               println(extracted)
-              
+
               val res = new PrivateMethodExposer(system)('printTree)()
               println(res)
+
+              val applicationsActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName
+              log info s"searching applicationsActor @ path '${applicationsActorPath}'"
+              val applicationsActor = system.actorSelection(applicationsActorPath)
+              println("hier: " + applicationsActor)
+              applicationsActor.resolveOne(2.seconds).onComplete {
+                aa => aa.get ! SkysailApplication.InitResourceActorChain(ctx, cls)
+              }
+
+//              onSuccess(
+//              applicationsActor.resolveOne(2.seconds).onComplete {
+//                aa => val result = (aa.get ? SkysailApplication.InitResourceActorChain(ctx, cls)).mapTo[HttpResponse] 
+//               // result.onSuccess(r => complete(r))
+//                //onSuccess(result => complete(result))
+//              }) {
+//                result => complete(result)
+//              }
+
+              val pf: PartialFunction[ActorRef,Future[HttpResponse]] = {
+                case aa: ActorRef => (aa ? SkysailApplication.InitResourceActorChain(ctx, cls)).mapTo[HttpResponse]
+              }
+              applicationsActor.resolveOne(2.seconds).onSuccess(pf)
               
               val actor = system.actorOf(Props.apply(cls), extracted)
               //val actor = getResourceActor(cls)
