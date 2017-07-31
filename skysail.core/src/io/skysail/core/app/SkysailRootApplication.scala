@@ -111,6 +111,6 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   //    //    router.attach(new RouteBuilder("/logs", classOf[LogsResource]))
   //  }
 
-  
+}  
 
 

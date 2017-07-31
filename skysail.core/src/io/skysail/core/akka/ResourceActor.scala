@@ -36,7 +36,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   def in: Receive = {
     case e => {
-      println("in... " + e)
+      log info "in... " + e
       sendBackTo = sender
       import io.skysail.core.akka.dsl.ActorChainDsl._
 
@@ -48,8 +48,8 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   def out: Receive = {
     case e => {
-      println("out... " + e)
-      println("sending to " + sendBackTo)
+      log info "out... " + e
+      log info "sending to " + sendBackTo
       sendBackTo ! e
       log info "stopping actor: " + chainRoot
       context.stop(chainRoot)

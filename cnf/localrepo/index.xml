@@ -772,25 +772,24 @@
 	at org.osgi.framework.Version.parseInt(Version.java:170)
 	at org.osgi.framework.Version.&lt;init&gt;(Version.java:126)
 	at org.osgi.service.indexer.impl.types.VersionRange.&lt;init&gt;(VersionRange.java:58)
-	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:348)
+	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:343)
 	at org.osgi.service.indexer.impl.BundleAnalyzer.analyzeResource(BundleAnalyzer.java:72)
-	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:271)
-	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:187)
+	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:259)
+	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:180)
 	at aQute.bnd.deployer.repository.providers.R5RepoContentProvider.generateIndex(R5RepoContentProvider.java:290)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:169)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:164)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.regenerateAllIndexes(LocalIndexedRepo.java:142)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:397)
-	at bndtools.RefreshReposHandler$1$1.run(RefreshReposHandler.java:49)
-	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
-	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2262)
-	at bndtools.RefreshReposHandler$1.run(RefreshReposHandler.java:41)
-	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:377)
+	at bndtools.central.Central.refreshPlugins(Central.java:438)
+	at bndtools.views.repository.RepositoriesView$9.runInWorkspace(RepositoriesView.java:465)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
 Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
 	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
 	at java.lang.Integer.parseInt(Integer.java:569)
 	at java.lang.Integer.parseInt(Integer.java:615)
 	at org.osgi.framework.Version.parseInt(Version.java:168)
-	... 15 more
+	... 14 more
  -->
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.testkit"/>

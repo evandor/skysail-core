@@ -24,7 +24,7 @@ case class ResourceModel2(
     import scala.reflect.runtime.universe._
     val tt = targetResourceClass.getTypeParameters
     val str = tt.map(ttt => ttt.toString()).mkString(";")
-    println("*** " + targetResourceClass + ": " + str)
+    //println("*** " + targetResourceClass + ": " + str)
     /*val p = ScalaReflectionUtils.getParameterizedType(targetResourceClass)//SkysailRouter.getResourcesGenericType(resource)
     p*/
     "s".getClass
