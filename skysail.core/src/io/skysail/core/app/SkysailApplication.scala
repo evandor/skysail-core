@@ -231,7 +231,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
               
               val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
               log info "appActorSelection: " + appActorSelection
-              appActorSelection ? "hi"
+              appActorSelection ! "hi"
 //              onComplete(appActorSelection ? "hi") { result => 
 //                log info "###1: "+result.toString()
 //                val r = complete(result.asInstanceOf[akka.http.scaladsl.marshalling.ToResponseMarshallable])
