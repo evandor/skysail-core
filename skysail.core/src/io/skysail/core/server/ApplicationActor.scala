@@ -21,7 +21,7 @@ class ApplicationActor extends Actor with ActorLogging {
     //case rac: InitResourceActorChain => handleInitResourceActorChain(rac)
     //case caa: CreateApplicationActor => createApplicationActor(caa)
     //case s: String =>  HttpResponse(200)
-    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"; HttpResponse(501)
+    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"; HttpResponse(200)
   }
 
   

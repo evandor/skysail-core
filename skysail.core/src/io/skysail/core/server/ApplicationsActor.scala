@@ -32,7 +32,7 @@ class ApplicationsActor extends Actor with ActorLogging {
     implicit val askTimeout: Timeout = 3.seconds
 
     val actor = context.actorOf(Props.apply(rac.cls), rac.cls.getSimpleName + "-"+cnt.incrementAndGet())
-    println("PATH: " + actor.path)
+    //println("PATH: " + actor.path)
     onSuccess((actor ? rac.requestContext).mapTo[HttpResponse]) { result =>
       val r = complete(result)
       //system.stop(actor)

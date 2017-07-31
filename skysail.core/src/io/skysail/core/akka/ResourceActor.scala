@@ -31,7 +31,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   def receive = in
 
   import context._
-  
+
   def get(): T
 
   def in: Receive = {
@@ -57,5 +57,8 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
     }
   }
 
+  override def preRestart(reason: Throwable, message: Option[Any]) {
+    log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
+  }
 
 }

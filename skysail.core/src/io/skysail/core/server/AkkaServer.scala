@@ -87,7 +87,7 @@ class AkkaServer extends DominoActivator {
 
   private def startServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
-    println(arg)
+    //println(arg)
     arg.size match {
       case 0 =>
         log warn "Akka HTTP Server not started as no routes are defined"; null
