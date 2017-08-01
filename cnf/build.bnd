@@ -1,11 +1,10 @@
-########################
-## BND BUILD SETTINGS ##
-########################
 
 javac.source:          1.8
 javac.target:          1.8
 
--baseline: *
+#junit: org.apache.servicemix.bundles.junit; version=4.12
+
+#-baseline: *
 
 copyright:              Copyright (c) twentyeleven.de (2011, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html:         Copyright &copy; twentyeleven.de (2011, ${tstamp;yyyy}). All Rights Reserved.

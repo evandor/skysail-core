@@ -47,13 +47,13 @@ class ApplicationModelSpec extends FlatSpec {
     assert(resourceModel.get.entityClass == classOf[String])
   }
 
-  "An ApplicationModel" should "add an ResourceModel (identified by its path), only once" in {
+/*  "An ApplicationModel" should "add an ResourceModel (identified by its path), only once" in {
     val model = ApplicationModel("appName",null,List())
     val entityClass1 = model.addResourceModel("/path", classOf[TestResource])
     val entityClass2 = model.addResourceModel("/path", classOf[TestResource])
     assert(entityClass1.isDefined)
     assert(entityClass2.isEmpty)
-  }
+  } */
 
   "An ApplicationModel" should "return a resourceModel identified by its class" in {
     val model = ApplicationModel("appName",null,List())
@@ -62,11 +62,11 @@ class ApplicationModelSpec extends FlatSpec {
     assert(resourceModel.isDefined)
   }
 
-  "An ApplicationModel" should "retrieve the entity associated with a Resource" in {
+ /* "An ApplicationModel" should "retrieve the entity associated with a Resource" in {
     val appModel = ApplicationModel("appName",null,List())
     appModel.addResourceModel("/path", classOf[TestResource])
     assert(appModel.entityModelFor(classOf[TestEntity]).isDefined)
-  }
+  }*/
   
 //  "Given a SkysailServerResource, an ApplicatioModel" should "provide access to the resource's entityModel" in {
 //    val model = ApplicationModel("appName",new ApiVersion(1),List())
