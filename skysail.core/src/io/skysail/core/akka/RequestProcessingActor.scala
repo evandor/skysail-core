@@ -8,11 +8,6 @@ import akka.actor.Props
 import akka.actor.actorRef2Scala
 import akka.http.scaladsl.server.RequestContext
 
-/**
- * Endpoint to apply request processing chain.
- *
- * @param <T>
- */
 class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
   
   implicit val system = ActorSystem()

@@ -28,6 +28,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   val nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
+
   def receive = in
 
   import context._

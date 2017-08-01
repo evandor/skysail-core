@@ -99,5 +99,4 @@ Export-Package: \
 	io.skysail.restlet.queries
 	
 Private-Package: \
-	io.skysail.core.akka.dsl,\
-	io.skysail.core.akka.server
+	io.skysail.core.akka.dsl

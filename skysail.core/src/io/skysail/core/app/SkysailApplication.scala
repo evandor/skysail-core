@@ -230,7 +230,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
               val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
               log info "appActorSelection: " + appActorSelection
-              val t = (appActorSelection ? ctx).mapTo[HttpResponse]
+              val t = (appActorSelection ? (ctx,cls)).mapTo[HttpResponse]
 ////              val q = t onComplete {
 //////                case Success(s:Any) => println("success")
 //////                case Failure(f) => println("failure")
