@@ -19,7 +19,7 @@ object ActorChainDsl {
 
   sealed trait ActorChain[Self] {
     def elems: List[ActorPathElem]
-    def build(): ActorRef = {
+    def build(): Props = {
       implicit val system = ActorSystem()
       
       val (last,rest) = (elems.reverse.head,elems.reverse.tail)
@@ -33,7 +33,8 @@ object ActorChainDsl {
         p = q
       })
       
-      system.actorOf(p, "RequestProcessingActor")
+      //system.actorOf(p, "RequestProcessingActor")
+      p
     }
   }
 

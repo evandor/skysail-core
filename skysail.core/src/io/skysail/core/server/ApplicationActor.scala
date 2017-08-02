@@ -36,10 +36,10 @@ class ApplicationActor extends Actor with ActorLogging {
 
   def in: Receive = {
     case (ctx:RequestContext,cls : Class[_])  => {
-      log info "in AppActor... got message ($ctx, $cls)"
+      log info s"in AppActor... got message ($ctx, $cls)"
       sendBackTo = sender
-      val a = context.actorOf(Props.apply(cls)) // ResourceActor
-      a ! (ctx, this)
+      val a = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
+      a ! ctx
       become(out)
     }
     case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"

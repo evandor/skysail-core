@@ -30,12 +30,12 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
-import akka.actor.Status.{Failure, Success}
+import akka.actor.Status.{ Failure, Success }
 import io.skysail.core.akka.actors.CounterActor
 import io.skysail.core.akka.PrivateMethodExposer
 import io.skysail.core.server.ApplicationsActor
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 import scala.util.Random
 import scala.concurrent.Future
 import scala.concurrent.Await
@@ -55,9 +55,9 @@ object SkysailApplication {
     val r = applicationsActorSelection.resolveOne(2.seconds)
     Await.result(r, 1.seconds)
   }
-  
+
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
-    val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/"+name
+    val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
     system.actorSelection(applicationActorPath)
   }
 }
@@ -103,7 +103,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   //  var applicationModel: ApplicationModel = null
   //  def getApplicationModel() = applicationModel
 
- // val repositories = new ArrayList[ScalaDbRepository]();
+  // val repositories = new ArrayList[ScalaDbRepository]();
 
   var host = "localhost"
   def getHost = host
@@ -158,9 +158,9 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     None
   }
 
-//  def addRepository(repository: ScalaDbRepository) = {
-//    this.repositories.add(repository);
-//  }
+  //  def addRepository(repository: ScalaDbRepository) = {
+  //    this.repositories.add(repository);
+  //  }
 
   def getSkysailApplication() = this
 
@@ -171,18 +171,18 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     return componentContext.getBundleContext().getBundle();
   }
 
-//  //Class<? extends Entity>
-//  def getRepository[T <: ScalaDbRepository](entityClass: Class[_]): T = {
-//    val repo = repositories.asScala.filter { r =>
-//      val entityType = ScalaReflectionUtils.getParameterizedType(r.getClass())
-//      entityClass.isAssignableFrom(entityType)
-//    }.headOption
-//      .getOrElse(
-//        //log.warn("no matching repository found for '{}'", entityClass.getName())
-//        //return new NoOpDbRepository[T]()
-//        throw new RuntimeException("no repo"))
-//    repo.asInstanceOf[T]
-//  }
+  //  //Class<? extends Entity>
+  //  def getRepository[T <: ScalaDbRepository](entityClass: Class[_]): T = {
+  //    val repo = repositories.asScala.filter { r =>
+  //      val entityType = ScalaReflectionUtils.getParameterizedType(r.getClass())
+  //      entityClass.isAssignableFrom(entityType)
+  //    }.headOption
+  //      .getOrElse(
+  //        //log.warn("no matching repository found for '{}'", entityClass.getName())
+  //        //return new NoOpDbRepository[T]()
+  //        throw new RuntimeException("no repo"))
+  //    repo.asInstanceOf[T]
+  //  }
 
   protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
     path(appPath) {
@@ -191,7 +191,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
           ctx =>
             {
               implicit val askTimeout: Timeout = 3.seconds
-             // implicit val executionContext = system.dispatcher
+              // implicit val executionContext = system.dispatcher
 
               val extracted = cls.getName + "-" + cnt.incrementAndGet()
 
@@ -226,54 +226,56 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
               //              }
               //              applicationsActor.resolveOne(2.seconds).onSuccess(pf)
               log info s"actorOf ${cls}"
-              val actor = system.actorOf(Props.apply(cls), extracted)
+              //val actor = system.actorOf(Props.apply(cls), extracted)
 
               val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
               log info "appActorSelection: " + appActorSelection
-              val t = (appActorSelection ? (ctx,cls)).mapTo[HttpResponse]
-////              val q = t onComplete {
-//////                case Success(s:Any) => println("success")
-//////                case Failure(f) => println("failure")
-////                e => println("hier: " + e)//; complete(e.get)
-////              }
-//              onSuccess(t) {
-//                result => println("hier:" + result); complete(result)
-//              }
-                val q = onSuccess(t) {
-                  x => println("### X: " + x + ",\\n ### T: " + t)
-                  complete(x)
-                }
-              println("### Q: " + q)
-//              val t = (actor ? ctx).mapTo[HttpResponse]
-////              val q = t onComplete {
-//////                case Success(s:Any) => println("success")
-//////                case Failure(f) => println("failure")
-////                e => println("hier: " + e)//; complete(e.get)
-////              }
-//              onSuccess(t) {
-//                result => println("hier:" + result); complete(result)
-//              }
-//
+              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
+              val q:RequestContext => Future[RouteResult] = onSuccess(t) {
+                x =>
+                  println("### X: " + x + ",\\n ### T: " + t)
+                  val r = complete(x)
+                  r
+              }
+              //println("### Q: " + q)
 
+              ////              val q = t onComplete {
+              //////                case Success(s:Any) => println("success")
+              //////                case Failure(f) => println("failure")
+              ////                e => println("hier: " + e)//; complete(e.get)
+              ////              }
+              //              onSuccess(t) {
+              //                result => println("hier:" + result); complete(result)
+              //              }
+
+              //              val t = (actor ? ctx).mapTo[HttpResponse]
+              ////              val q = t onComplete {
+              //////                case Success(s:Any) => println("success")
+              //////                case Failure(f) => println("failure")
+              ////                e => println("hier: " + e)//; complete(e.get)
+              ////              }
+              //              onSuccess(t) {
+              //                result => println("hier:" + result); complete(result)
+              //              }
+              //
 
               //val r = t.map(x => x.toString)
               //r.foreach( x => println("Hier: " + x))
-//              onSuccess(t.mapTo[Any]) { result =>
-//                log info "###1: "+result.toString()
-//                val r = complete(result.asInstanceOf[akka.http.scaladsl.marshalling.ToResponseMarshallable])
+              //              onSuccess(t.mapTo[Any]) { result =>
+              //                log info "###1: "+result.toString()
+              //                val r = complete(result.asInstanceOf[akka.http.scaladsl.marshalling.ToResponseMarshallable])
+              //                //system.stop(actor)
+              //                r
+              //              }
+
+//              val t2 = (actor ? ctx)
+//              val p:RequestContext => Future[RouteResult] = onSuccess(t2.mapTo[HttpResponse]) { result =>
+//                log info "###2: " + result.toString()
+//                val r = complete(result)
 //                //system.stop(actor)
 //                r
 //              }
-
-
-              val t2 = (actor ? ctx)
-              val p = onSuccess(t2.mapTo[HttpResponse]) { result =>
-                log info "###2: "+result.toString()
-                val r = complete(result)
-                //system.stop(actor)
-                r
-              }
-              p
+              q
             }
         }
       }

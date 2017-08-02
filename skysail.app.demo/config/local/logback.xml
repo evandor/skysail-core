@@ -2,6 +2,7 @@
 
 	<logger name="org.eclipse.jetty" level="WARN" />
 	<logger name="io.skysail.server.converter.impl" level="DEBUG" />
+	<logger name="akka.event.slf4j.Slf4jLogger" level="WARN" />
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -9,7 +10,7 @@
 		</filter>
 		<encoder>
 			<!--%d{mm:ss.SSS} [%thread] -->
-			<pattern>%date{"HH:mm:ss,SSS"} %-5level [%-45logger{40}] - %msg [%X{sourceThread}]/[%X{akkaSource}] %n</pattern>
+			<pattern>%date{"HH:mm:ss,SSS"} %-5level [%-30logger{30}] - %msg [%X{sourceThread}]/[%X{akkaSource}] %n</pattern>
 		</encoder>
 	</appender>
 

@@ -21,11 +21,11 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   //def getVerbs(): Set[Method] = Set()
   def linkedResourceClasses(): List[Class[_ <: ResourceActor[_]]] = List()
   val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceActor[_]]]]()
-  val chainRoot: ActorRef
+  val chainRoot: Props
   //val chain: ActorChainDsl.ActorChain[_]
 
   implicit val system = ActorSystem()
-  val nextActor: ActorRef = null
+  var nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
 
@@ -42,7 +42,8 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
       import io.skysail.core.akka.dsl.ActorChainDsl._
 
       // log info s"MESSAGE: ${chainRoot} ! (${e},${this}"
-      chainRoot ! (e, this)
+      nextActor = context.actorOf(chainRoot, "RequestProcessingActor")
+      nextActor ! (e, this)
       become(out)
     }
   }
@@ -53,7 +54,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
       log info "sending to " + sendBackTo
       sendBackTo ! e
       log info "stopping actor: " + chainRoot
-      context.stop(chainRoot)
+      context.stop(nextActor)
       become(in)
     }
   }
