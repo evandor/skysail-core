@@ -54,7 +54,7 @@ class ApplicationActor extends Actor with ActorLogging {
       //context.stop(chainRoot)
       become(in)
     }
-    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
+    //case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   
