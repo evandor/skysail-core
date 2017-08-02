@@ -128,6 +128,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   @Activate
   def activate(componentContext: ComponentContext) = {
+    log info s"activating ${this.getClass.getName}"
     this.componentContext = componentContext;
     val appsActor = SkysailApplication.getApplicationsActor(system)
     implicit val askTimeout: Timeout = 3.seconds
@@ -142,6 +143,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   @Deactivate
   def deactivate(componentContext: ComponentContext): Unit = {
+    log info s"deactivating ${this.getClass.getName}"
     this.componentContext = null;
     val appsActor = SkysailApplication.getApplicationsActor(system)
     implicit val askTimeout: Timeout = 3.seconds

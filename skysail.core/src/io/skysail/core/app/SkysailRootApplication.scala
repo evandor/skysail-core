@@ -12,6 +12,7 @@ import io.skysail.core.app.resources.AppListResource
 import io.skysail.core.app.resources.AppResource
 import io.skysail.core.app.resources.DefaultResource3
 import io.skysail.core.restlet.services.ResourceBundleProvider
+import io.skysail.core.app.resources.DefaultResource2
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -39,20 +40,20 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   var properties: Dictionary[String, _] = null
 
-  @Activate
-  override def activate(componentContext: ComponentContext) = {
-    log info s"activating ${this.getClass.getName}"
-    //    if (getContext() != null) {
-    //      setContext(getContext().createChildContext())
-    //    }
-    this.componentContext = componentContext
-  }
-
-  @Deactivate
-  override def deactivate(componentContext: ComponentContext) = {
-    log info s"deactivating ${this.getClass.getName}"
-    this.componentContext = null
-  }
+//  @Activate
+//  override def activate(componentContext: ComponentContext) = {
+//    log info s"activating ${this.getClass.getName}"
+//    //    if (getContext() != null) {
+//    //      setContext(getContext().createChildContext())
+//    //    }
+//    this.componentContext = componentContext
+//  }
+//
+//  @Deactivate
+//  override def deactivate(componentContext: ComponentContext) = {
+//    log info s"deactivating ${this.getClass.getName}"
+//    this.componentContext = null
+//  }
 
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
@@ -91,7 +92,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceActor[_]])] = {
     List(
-      //"first" -> classOf[DefaultResource2[String]],
+      "first" -> classOf[DefaultResource2],
       "second" -> classOf[DefaultResource3[String]],
       "login" -> classOf[AkkaLoginResource[String]],
       "appList" -> classOf[AppListResource],
