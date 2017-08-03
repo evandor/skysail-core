@@ -20,7 +20,7 @@ object ActorChainDsl {
   sealed trait ActorChain[Self] {
     def elems: List[ActorPathElem]
     def build(): Props = {
-      implicit val system = ActorSystem()
+      //implicit val system = ActorSystem()
       
       val (last,rest) = (elems.reverse.head,elems.reverse.tail)
       

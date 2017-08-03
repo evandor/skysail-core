@@ -31,7 +31,6 @@ import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
 import akka.actor.Status.{ Failure, Success }
-import io.skysail.core.akka.actors.CounterActor
 import io.skysail.core.akka.PrivateMethodExposer
 import io.skysail.core.server.ApplicationsActor
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,6 +39,8 @@ import scala.util.Random
 import scala.concurrent.Future
 import scala.concurrent.Await
 import io.skysail.core.app.SkysailApplication._
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.ContentTypes
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
@@ -83,19 +84,19 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   //    (appsActor ? CreateApplicationActor(this.getClass)).mapTo[ActorRef]
   //  }
 
-  val routes: List[Route] = {
-    routesMappings.foreach(m => {
-      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
-      appModel.addResourceModel(m._1, m._2)
-    })
+//  val routes: List[Route] = {
+//    routesMappings.foreach(m => {
+//      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
+//      appModel.addResourceModel(m._1, m._2)
+//    })
+//
+//    val pathResourceTuple = appModel.getResourceModels().map {
+//      m => (m.pathMatcher, m.targetResourceClass)
+//    }
+//    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
+//  }
 
-    val pathResourceTuple = appModel.getResourceModels().map {
-      m => (m.pathMatcher, m.targetResourceClass)
-    }
-    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
-  }
-
-   val routes2 = {
+  val routes2 = {
     routesMappings.foreach(m => {
       log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
       appModel.addResourceModel(m._1, m._2)
@@ -141,9 +142,9 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   def activate(componentContext: ComponentContext) = {
     log info s"activating ${this.getClass.getName}"
     this.componentContext = componentContext;
-//    val appsActor = SkysailApplication.getApplicationsActor(system)
-//    implicit val askTimeout: Timeout = 3.seconds
-//    appsActor ! CreateApplicationActor(this.getClass)
+    //    val appsActor = SkysailApplication.getApplicationsActor(system)
+    //    implicit val askTimeout: Timeout = 3.seconds
+    //    appsActor ! CreateApplicationActor(this.getClass)
   }
 
   @Activate
@@ -156,9 +157,9 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   def deactivate(componentContext: ComponentContext): Unit = {
     log info s"deactivating ${this.getClass.getName}"
     this.componentContext = null;
-//    val appsActor = SkysailApplication.getApplicationsActor(system)
-//    implicit val askTimeout: Timeout = 3.seconds
-//    appsActor ! DeleteApplicationActor(this.getClass)
+    //    val appsActor = SkysailApplication.getApplicationsActor(system)
+    //    implicit val askTimeout: Timeout = 3.seconds
+    //    appsActor ! DeleteApplicationActor(this.getClass)
   }
 
   def attach(): Unit = {
@@ -197,103 +198,40 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   //    repo.asInstanceOf[T]
   //  }
 
-  protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
-    path(appPath) {
-      get {
-        extractRequestContext {
-          ctx =>
-            {
-              implicit val askTimeout: Timeout = 3.seconds
-              // implicit val executionContext = system.dispatcher
-
-              val extracted = cls.getName + "-" + cnt.incrementAndGet()
-
-              val res = new PrivateMethodExposer(system)('printTree)()
-              println(res)
-
-              //              val applicationsActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName
-              //              log info s"searching applicationsActor @ path '${applicationsActorPath}'"
-              //              val applicationsActor = system.actorSelection(applicationsActorPath)
-
-              val applicationsActor = getApplicationsActor(system)
-
-              log info "applicationsActorSelection: " + applicationsActor
-              // println("applicationActor:  " + this.applicationActor)
-
-              //              println("hier: " + applicationsActor)
-              //              applicationsActor.resolveOne(2.seconds).onComplete {
-              //                aa => aa.get ! SkysailApplication.InitResourceActorChain(ctx, cls)
-              //              }
-
-              //              onSuccess(
-              //              applicationsActor.resolveOne(2.seconds).onComplete {
-              //                aa => val result = (aa.get ? SkysailApplication.InitResourceActorChain(ctx, cls)).mapTo[HttpResponse]
-              //               // result.onSuccess(r => complete(r))
-              //                //onSuccess(result => complete(result))
-              //              }) {
-              //                result => complete(result)
-              //              }
-
-              //              val pf: PartialFunction[ActorRef,Future[HttpResponse]] = {
-              //                case aa: ActorRef => (aa ? SkysailApplication.InitResourceActorChain(ctx, cls)).mapTo[HttpResponse]
-              //              }
-              //              applicationsActor.resolveOne(2.seconds).onSuccess(pf)
-              log info s"actorOf ${cls}"
-              //val actor = system.actorOf(Props.apply(cls), extracted)
-
-              val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
-              log info "appActorSelection: " + appActorSelection
-              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
-              val q:RequestContext => Future[RouteResult] = onSuccess(t) {
-                x =>
-                  println("### X: " + x + ",\\n ### T: " + t)
-                  val r = complete(x)
-                  r
-              }
-              //println("### Q: " + q)
-
-              ////              val q = t onComplete {
-              //////                case Success(s:Any) => println("success")
-              //////                case Failure(f) => println("failure")
-              ////                e => println("hier: " + e)//; complete(e.get)
-              ////              }
-              //              onSuccess(t) {
-              //                result => println("hier:" + result); complete(result)
-              //              }
-
-              //              val t = (actor ? ctx).mapTo[HttpResponse]
-              ////              val q = t onComplete {
-              //////                case Success(s:Any) => println("success")
-              //////                case Failure(f) => println("failure")
-              ////                e => println("hier: " + e)//; complete(e.get)
-              ////              }
-              //              onSuccess(t) {
-              //                result => println("hier:" + result); complete(result)
-              //              }
-              //
-
-              //val r = t.map(x => x.toString)
-              //r.foreach( x => println("Hier: " + x))
-              //              onSuccess(t.mapTo[Any]) { result =>
-              //                log info "###1: "+result.toString()
-              //                val r = complete(result.asInstanceOf[akka.http.scaladsl.marshalling.ToResponseMarshallable])
-              //                //system.stop(actor)
-              //                r
-              //              }
-
-//              val t2 = (actor ? ctx)
-//              val p:RequestContext => Future[RouteResult] = onSuccess(t2.mapTo[HttpResponse]) { result =>
-//                log info "###2: " + result.toString()
-//                val r = complete(result)
-//                //system.stop(actor)
-//                r
+//  protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
+//    path(appPath) {
+//      get {
+//        extractRequestContext {
+//          ctx =>
+//            {
+//              implicit val askTimeout: Timeout = 3.seconds
+//              // implicit val executionContext = system.dispatcher
+//
+//              val extracted = cls.getName + "-" + cnt.incrementAndGet()
+//
+//              val res = new PrivateMethodExposer(system)('printTree)()
+//              println(res)
+//
+//              val applicationsActor = getApplicationsActor(system)
+//
+//              log info "applicationsActorSelection: " + applicationsActor
+//              log info s"actorOf ${cls}"
+//
+//              val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
+//              log info "appActorSelection: " + appActorSelection
+//              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
+//              val q: RequestContext => Future[RouteResult] = onSuccess(t) {
+//                x =>
+//                  println("### X: " + x + ",\\n ### T: " + t)
+//                  val r = complete(x)
+//                  r
 //              }
-              q
-            }
-        }
-      }
-    }
-  }
+//              q
+//            }
+//        }
+//      }
+//    }
+//  }
 
   private def getResourceActor(cls: Class[_ <: ResourceActor[_]]) = actorRefsMap get cls.getName getOrElse {
     log info s"creating new actor for ${cls.getName}"

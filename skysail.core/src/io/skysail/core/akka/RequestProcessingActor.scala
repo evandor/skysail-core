@@ -10,7 +10,7 @@ import akka.http.scaladsl.server.RequestContext
 
 class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
   
-  implicit val system = ActorSystem()
+  //implicit val system = ActorSystem()
   var returnTo: ActorRef = null
   
   def receive = {

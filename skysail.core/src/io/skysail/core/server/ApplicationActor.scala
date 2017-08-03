@@ -1,6 +1,6 @@
 package io.skysail.core.server
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import io.skysail.core.app.SkysailApplication.InitResourceActorChain
 import akka.http.scaladsl.model.HttpResponse
 import akka.pattern.ask
@@ -25,7 +25,7 @@ class ApplicationActor extends Actor with ActorLogging {
 //    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"; HttpResponse(200)
 //  }
 
-  implicit val system = ActorSystem()
+  //implicit val system = ActorSystem()
   val nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null

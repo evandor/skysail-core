@@ -15,7 +15,6 @@ import domino.capsule.Capsule
 import org.slf4j.LoggerFactory
 import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 import scala.reflect.api.materializeTypeTag
-import io.skysail.core.akka.actors.CounterActor
 import akka.actor.Props
 import akka.actor.ActorRef
 import akka.http.scaladsl.server.PathMatcher
@@ -30,6 +29,9 @@ import io.skysail.core.server.AkkaServer._
 import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.app.resources.DefaultResource2
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.ContentTypes
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -61,6 +63,10 @@ class AkkaServer extends DominoActivator {
       // counterActor = system.actorOf(Props[CounterActor], "Counter")
       applicationsActor = system.actorOf(Props[ApplicationsActor], classOf[ApplicationsActor].getSimpleName)
       log info s"created ApplicationsActor with path ${applicationsActor.path}"
+
+      val route = createDummyRoute("first")
+      routes += route
+      restartServer(routes.toList)
     }
 
     override def getActorSystemName(context: BundleContext): String = "SkysailActorSystem"
@@ -74,10 +80,6 @@ class AkkaServer extends DominoActivator {
       case RemovedService(service, _) => removeService(service)
     }
   })
-
-  //  whenBundleStopped {
-  //    
-  //  }
 
   private def addService(s: ApplicationRoutesProvider) = {
     if (s == null) {
@@ -93,9 +95,13 @@ class AkkaServer extends DominoActivator {
       log info "========================================="
       val routes2 = s.routes2()
 
-      val r = routes2.map { prt => createRoute(prt._1, prt._2, s.getClass) }.toList
+      val r = routes2.map { prt => createRoute3(prt._1, prt._2, s.getClass) }.toList
 
       routes ++= r //s.routes()
+
+      val dummyPath = s.dummyPath("dummy")
+      routes += dummyPath
+
       restartServer(routes.toList)
     }
   }
@@ -156,6 +162,45 @@ class AkkaServer extends DominoActivator {
               q
             }
         }
+      }
+    }
+  }
+
+  protected def createRoute3(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]) = {
+    path(appPath) {
+      get {
+        extractRequestContext {
+          ctx =>
+            {
+              implicit val askTimeout: Timeout = 3.seconds
+
+              val res = new PrivateMethodExposer(theSystem)('printTree)()
+              println(res)
+
+              log info s"actorOf ${cls}, classname ${c.getName}"
+
+              val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
+              log info "appActorSelection: " + appActorSelection
+              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
+//              val q: RequestContext => Future[RouteResult] = onSuccess(t) {
+//                x =>
+//                  println("### X: " + x + ",\\n ### T: " + t)
+//                  val r = complete(x)
+//                  r
+//              }
+//              q
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http4</h1>"))
+            }
+        }
+      }
+    }
+
+  }
+
+  protected def createDummyRoute(appPath: String) = {
+    path(appPath) {
+      get {
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
       }
     }
   }

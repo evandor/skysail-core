@@ -24,7 +24,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   val chainRoot: Props
   //val chain: ActorChainDsl.ActorChain[_]
 
-  implicit val system = ActorSystem()
+  //implicit val system = ActorSystem()
   var nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
