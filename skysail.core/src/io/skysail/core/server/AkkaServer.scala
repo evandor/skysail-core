@@ -6,7 +6,7 @@ import io.skysail.core.app.ApplicationRoutesProvider
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
+import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,6 +18,25 @@ import scala.reflect.api.materializeTypeTag
 import io.skysail.core.akka.actors.CounterActor
 import akka.actor.Props
 import akka.actor.ActorRef
+import akka.http.scaladsl.server.PathMatcher
+import io.skysail.core.akka.ResourceActor
+import io.skysail.core.akka.PrivateMethodExposer
+import akka.util.Timeout
+import scala.concurrent.duration.DurationInt
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.RequestContext
+import akka.http.scaladsl.server.RouteResult
+import io.skysail.core.server.AkkaServer._
+import akka.pattern.ask
+import io.skysail.core.app.SkysailApplication
+import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+
+object AkkaServer {
+  def getApplicationActorSelection(system: ActorSystem, name: String) = {
+    val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
+    system.actorSelection(applicationActorPath)
+  }
+}
 
 class AkkaServer extends DominoActivator {
 
@@ -26,7 +45,8 @@ class AkkaServer extends DominoActivator {
   implicit var theSystem: ActorSystem = _
   var routes = scala.collection.mutable.ListBuffer[Route]()
   var futureBinding: Future[Http.ServerBinding] = _
-  var applicationsActor: ActorRef = _
+  var applicationsActor: ActorRef =
+    _
 
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
@@ -35,7 +55,7 @@ class AkkaServer extends DominoActivator {
 
     def configure(osgiContext: BundleContext, system: ActorSystem): Unit = {
       log info "Registering Actor System as Service."
-      registerService(osgiContext, system)
+      //registerService(osgiContext, system)
       log info s"ActorSystem [${system.name}] initialized."
       theSystem = system
       // counterActor = system.actorOf(Props[CounterActor], "Counter")
@@ -49,29 +69,44 @@ class AkkaServer extends DominoActivator {
   whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
     watchServices[ApplicationRoutesProvider] {
-      case AddingService(s, context) => addService(s)
-      case ModifiedService(s, _) => log info s"Service '$s' modified"
-      case RemovedService(s, _) => removeService(s)
+      case AddingService(service, context) => addService(service)
+      case ModifiedService(service, _) => log info s"Service '$service' modified"
+      case RemovedService(service, _) => removeService(service)
     }
   })
-  
-//  whenBundleStopped {
-//    
-//  }
+
+  //  whenBundleStopped {
+  //    
+  //  }
 
   private def addService(s: ApplicationRoutesProvider) = {
     if (s == null) {
       log warn "service null"
     } else {
+
+      val appsActor = SkysailApplication.getApplicationsActor(theSystem)
+      implicit val askTimeout: Timeout = 3.seconds
+      appsActor ! CreateApplicationActor(s.getClass.asInstanceOf[Class[SkysailApplication]])
+
+      log info "========================================="
       log info s"Adding routes from ${s.getClass.getName}"
-      routes ++= s.routes()
+      log info "========================================="
+      val routes2 = s.routes2()
+
+      val r = routes2.map { prt => createRoute(prt._1, prt._2, s.getClass) }.toList
+
+      routes ++= r //s.routes()
       restartServer(routes.toList)
     }
   }
 
   private def removeService(s: ApplicationRoutesProvider) = {
-    log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
-    routes --= s.routes()
+    val appsActor = SkysailApplication.getApplicationsActor(theSystem)
+    implicit val askTimeout: Timeout = 3.seconds
+    // appsActor ! DeleteApplicationActor(s.)
+
+    //log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
+    //routes --= s.routes()
     restartServer(routes.toList)
   }
 
@@ -95,4 +130,34 @@ class AkkaServer extends DominoActivator {
       case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
     }
   }
+
+  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]) = {
+    path(appPath) {
+      get {
+        extractRequestContext {
+          ctx =>
+            {
+              implicit val askTimeout: Timeout = 3.seconds
+
+              val res = new PrivateMethodExposer(theSystem)('printTree)()
+              println(res)
+
+              log info s"actorOf ${cls}"
+
+              val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
+              log info "appActorSelection: " + appActorSelection
+              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
+              val q: RequestContext => Future[RouteResult] = onSuccess(t) {
+                x =>
+                  println("### X: " + x + ",\\n ### T: " + t)
+                  val r = complete(x)
+                  r
+              }
+              q
+            }
+        }
+      }
+    }
+  }
+
 }

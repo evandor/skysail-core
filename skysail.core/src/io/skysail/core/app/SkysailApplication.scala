@@ -95,6 +95,17 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
   }
 
+   val routes2 = {
+    routesMappings.foreach(m => {
+      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
+      appModel.addResourceModel(m._1, m._2)
+    })
+
+    appModel.getResourceModels().map {
+      m => (m.pathMatcher, m.targetResourceClass)
+    }
+  }
+
   //val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]]()
 
   var componentContext: ComponentContext = null
@@ -130,9 +141,9 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   def activate(componentContext: ComponentContext) = {
     log info s"activating ${this.getClass.getName}"
     this.componentContext = componentContext;
-    val appsActor = SkysailApplication.getApplicationsActor(system)
-    implicit val askTimeout: Timeout = 3.seconds
-    appsActor ! CreateApplicationActor(this.getClass)
+//    val appsActor = SkysailApplication.getApplicationsActor(system)
+//    implicit val askTimeout: Timeout = 3.seconds
+//    appsActor ! CreateApplicationActor(this.getClass)
   }
 
   @Activate
@@ -145,9 +156,9 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   def deactivate(componentContext: ComponentContext): Unit = {
     log info s"deactivating ${this.getClass.getName}"
     this.componentContext = null;
-    val appsActor = SkysailApplication.getApplicationsActor(system)
-    implicit val askTimeout: Timeout = 3.seconds
-    appsActor ! DeleteApplicationActor(this.getClass)
+//    val appsActor = SkysailApplication.getApplicationsActor(system)
+//    implicit val askTimeout: Timeout = 3.seconds
+//    appsActor ! DeleteApplicationActor(this.getClass)
   }
 
   def attach(): Unit = {

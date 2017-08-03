@@ -86,9 +86,9 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   //
   //  def unsetApplicationListProvider(service: ScalaServiceListProvider) = SkysailApplication.unsetServiceListProvider(service)
 
-  @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
-  def setActorSystem(as: ActorSystem) = this.system = as
-  def unsetActorSystem(as: ActorSystem) = this.system = null
+//  @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
+//  def setActorSystem(as: ActorSystem) = this.system = as
+//  def unsetActorSystem(as: ActorSystem) = this.system = null
 
   def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceActor[_]])] = {
     List(
