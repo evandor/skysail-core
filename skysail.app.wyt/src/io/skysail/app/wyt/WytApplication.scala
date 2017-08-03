@@ -2,8 +2,10 @@ package io.skysail.app.wyt;
 
 import org.osgi.service.component._
 import org.osgi.service.component.annotations._
-
 import akka.actor.ActorSystem
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.http.scaladsl.server.Directives.{complete, get, path}
+import akka.http.scaladsl.server.Route
 import io.skysail.app.wyt.WytApplication._
 import io.skysail.core.app._
 
@@ -22,4 +24,12 @@ class WytApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) w
   override def routesMappings = List(
     "pacts" -> classOf[PactsResource])
 
+  def dummyPath(appPath: String): Route = {
+    path(appPath) {
+      get {
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http2</h1>"))
+      }
+    }
+
+  }
 }

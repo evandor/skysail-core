@@ -1,6 +1,6 @@
 package io.skysail.core.server
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import io.skysail.core.app.SkysailApplication.InitResourceActorChain
 import akka.http.scaladsl.model.HttpResponse
 import akka.pattern.ask
@@ -26,7 +26,7 @@ class ApplicationActor extends Actor with ActorLogging {
 //  }
 
   //implicit val system = ActorSystem()
-  val nextActor: ActorRef = null
+  var nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
 
@@ -38,8 +38,8 @@ class ApplicationActor extends Actor with ActorLogging {
     case (ctx:RequestContext,cls : Class[_])  => {
       log info s"in AppActor... got message ($ctx, $cls)"
       sendBackTo = sender
-      val a = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
-      a ! ctx
+      nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
+      nextActor ! ctx
       become(out)
     }
     case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
@@ -53,6 +53,7 @@ class ApplicationActor extends Actor with ActorLogging {
       //log info "stopping actor: " + chainRoot
       //context.stop(chainRoot)
       become(in)
+      nextActor ! PoisonPill
     }
     //case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
   }
