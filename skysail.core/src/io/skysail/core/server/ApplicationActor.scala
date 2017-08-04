@@ -13,19 +13,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.model.ApplicationModel
 
-class ApplicationActor extends Actor with ActorLogging {
+object ApplicationActor {
+  case class GetAppModel()
+}
+class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLogging {
   
   val cnt = new AtomicInteger(0)
 
-//  def receive: Actor.Receive = {
-//    //case rac: InitResourceActorChain => handleInitResourceActorChain(rac)
-//    //case caa: CreateApplicationActor => createApplicationActor(caa)
-//    //case s: String =>  HttpResponse(200)
-//    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"; HttpResponse(200)
-//  }
-
-  //implicit val system = ActorSystem()
   var nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
@@ -42,10 +38,12 @@ class ApplicationActor extends Actor with ActorLogging {
       nextActor ! ctx
       become(out)
     }
+    case _: ApplicationActor.GetAppModel => sender ! appModel
     case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   def out: Receive = {
+    case _: ApplicationActor.GetAppModel => sender ! appModel
     case e => {
       log info "out AppActor... " + e
       log info "sending to " + sendBackTo

@@ -23,7 +23,6 @@ import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import io.skysail.core.restlet.services.ResourceBundleProvider
 import io.skysail.core.restlet.utils.ScalaReflectionUtils
 import io.skysail.core.akka.ResourceActor
 import akka.http.scaladsl.server.Directives._
@@ -46,10 +45,10 @@ object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
   case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceActor[_]])
-  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication])
+  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel)
   case class DeleteApplicationActor(val cls: Class[_ <: SkysailApplication])
 
-  def getApplicationsActor(system: ActorSystem) = {
+  def getApplicationsActor(system: ActorSystem): ActorRef = {
     val applicationsActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName
     log info s"searching applicationsActor @ path '${applicationsActorPath}' in system ${system}"
     val applicationsActorSelection = system.actorSelection(applicationsActorPath)
@@ -63,8 +62,7 @@ object SkysailApplication {
   }
 }
 
-abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) extends ApplicationRoutesProvider
-    with ResourceBundleProvider {
+abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) extends ApplicationInfoProvider {
 
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
@@ -76,27 +74,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   var actorRefsMap = Map.empty[String, ActorRef]
 
-  //  lazy val applicationActor = {
-  //    val applicationsActorSelection = SkysailApplication.applicationsActorSelection(system)
-  //    val r = applicationsActorSelection.resolveOne(2.seconds)
-  //    val appsActor = Await.result(r, 2.seconds)
-  //    implicit val askTimeout: Timeout = 3.seconds
-  //    (appsActor ? CreateApplicationActor(this.getClass)).mapTo[ActorRef]
-  //  }
-
-//  val routes: List[Route] = {
-//    routesMappings.foreach(m => {
-//      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
-//      appModel.addResourceModel(m._1, m._2)
-//    })
-//
-//    val pathResourceTuple = appModel.getResourceModels().map {
-//      m => (m.pathMatcher, m.targetResourceClass)
-//    }
-//    pathResourceTuple.map { prt => createRoute2(prt._1, prt._2) }.toList
-//  }
-
-  val routes2 = {
+  val routes = {
     routesMappings.foreach(m => {
       log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
       appModel.addResourceModel(m._1, m._2)
@@ -112,11 +90,6 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   var componentContext: ComponentContext = null
   def getComponentContext() = componentContext
 
-  //  var applicationModel: ApplicationModel = null
-  //  def getApplicationModel() = applicationModel
-
-  // val repositories = new ArrayList[ScalaDbRepository]();
-
   var host = "localhost"
   def getHost = host
 
@@ -125,12 +98,6 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
   val cnt = new AtomicInteger(0)
 
   val stringContextMap = new java.util.HashMap[ApplicationContextId, String]()
-
-  //setName(name);
-  //getEncoderService().getIgnoredMediaTypes().add(SkysailApplication.SKYSAIL_SERVER_SENT_EVENTS);
-  //getEncoderService().setEnabled(true);
-  log.debug("Instanciating new Skysail ApplicationModel '{}'", this.getClass().getSimpleName());
-  //applicationModel = ApplicationModel(name, apiVersion, associatedResourceClasses.toList)
 
   def getResourceBundles() = List[ResourceBundle]()
 
@@ -172,10 +139,6 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     None
   }
 
-  //  def addRepository(repository: ScalaDbRepository) = {
-  //    this.repositories.add(repository);
-  //  }
-
   def getSkysailApplication() = this
 
   def getBundle(): Bundle = {
@@ -184,54 +147,6 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     }
     return componentContext.getBundleContext().getBundle();
   }
-
-  //  //Class<? extends Entity>
-  //  def getRepository[T <: ScalaDbRepository](entityClass: Class[_]): T = {
-  //    val repo = repositories.asScala.filter { r =>
-  //      val entityType = ScalaReflectionUtils.getParameterizedType(r.getClass())
-  //      entityClass.isAssignableFrom(entityType)
-  //    }.headOption
-  //      .getOrElse(
-  //        //log.warn("no matching repository found for '{}'", entityClass.getName())
-  //        //return new NoOpDbRepository[T]()
-  //        throw new RuntimeException("no repo"))
-  //    repo.asInstanceOf[T]
-  //  }
-
-//  protected def createRoute2(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]]) = {
-//    path(appPath) {
-//      get {
-//        extractRequestContext {
-//          ctx =>
-//            {
-//              implicit val askTimeout: Timeout = 3.seconds
-//              // implicit val executionContext = system.dispatcher
-//
-//              val extracted = cls.getName + "-" + cnt.incrementAndGet()
-//
-//              val res = new PrivateMethodExposer(system)('printTree)()
-//              println(res)
-//
-//              val applicationsActor = getApplicationsActor(system)
-//
-//              log info "applicationsActorSelection: " + applicationsActor
-//              log info s"actorOf ${cls}"
-//
-//              val appActorSelection = getApplicationActorSelection(system, this.getClass.getName)
-//              log info "appActorSelection: " + appActorSelection
-//              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
-//              val q: RequestContext => Future[RouteResult] = onSuccess(t) {
-//                x =>
-//                  println("### X: " + x + ",\\n ### T: " + t)
-//                  val r = complete(x)
-//                  r
-//              }
-//              q
-//            }
-//        }
-//      }
-//    }
-//  }
 
   private def getResourceActor(cls: Class[_ <: ResourceActor[_]]) = actorRefsMap get cls.getName getOrElse {
     log info s"creating new actor for ${cls.getName}"

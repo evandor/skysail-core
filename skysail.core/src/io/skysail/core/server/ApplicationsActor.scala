@@ -11,27 +11,32 @@ import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 import java.util.concurrent.atomic.AtomicInteger
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.{CreateApplicationActor,DeleteApplicationActor}
+import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
 import akka.actor.ActorRef
 import org.slf4j.LoggerFactory
+import io.skysail.core.app.resources.AppsResource.GetAllApplications
+import io.skysail.core.model.ApplicationModel
 
 class ApplicationsActor extends Actor with ActorLogging {
-  
+
   val cnt = new AtomicInteger(0)
-  
-  val appActors = scala.collection.mutable.Map[String,ActorRef]()
+
+  implicit val timeout = Timeout(1.seconds)
+
+  val appActors = scala.collection.mutable.Map[String, ActorRef]()
 
   def receive: Actor.Receive = {
     case rac: InitResourceActorChain => handleInitResourceActorChain(rac)
     case caa: CreateApplicationActor => createApplicationActor(caa)
     case daa: DeleteApplicationActor => deleteApplicationActor(daa)
-    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
+    case gaa: GetAllApplications => getAllApplications(gaa)
+    case msg: Any => log info s"received unknown message '$msg' of type '${msg.getClass().getName}' in ${this.getClass.getName}"
   }
 
   private def handleInitResourceActorChain(rac: InitResourceActorChain) = {
-    implicit val askTimeout: Timeout = 3.seconds
+    //implicit val askTimeout: Timeout = 3.seconds
 
-    val actor = context.actorOf(Props.apply(rac.cls), rac.cls.getSimpleName + "-"+cnt.incrementAndGet())
+    val actor = context.actorOf(Props.apply(rac.cls), rac.cls.getSimpleName + "-" + cnt.incrementAndGet())
     //println("PATH: " + actor.path)
     onSuccess((actor ? rac.requestContext).mapTo[HttpResponse]) { result =>
       val r = complete(result)
@@ -39,20 +44,29 @@ class ApplicationsActor extends Actor with ActorLogging {
       r
     }
   }
-  
+
   private def createApplicationActor(caa: CreateApplicationActor) = {
     log info s"creating ApplicationActor ${caa.cls.getName}..."
-    val a = context.actorOf(Props[ApplicationActor], caa.cls.getName)
+    val a = context.actorOf(Props.apply(classOf[ApplicationActor], caa.appModel), caa.cls.getName)
     appActors += caa.cls.getName -> a
     log info s"added new ${caa.cls.getName} actor to applicationsActors Map, size is now ${appActors.size}"
     a
   }
-  
+
   private def deleteApplicationActor(daa: DeleteApplicationActor) = {
     log info s"deleting ApplicationActor ${daa.cls.getName}..."
     val actor = appActors.remove(daa.cls.getName)
     log info s"deleted ${daa.cls.getName} actor from applicationsActors Map, size is now ${appActors.size}"
     log info s"stopping ${daa.cls.getName} actor"
     actor.map(context.stop(_))
+  }
+
+  def getAllApplications(gaa: GetAllApplications) = {
+    log info s"getting all Applications..."
+    context.children.map(appActor => {
+      val t = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
+      t
+    })
+    sender ! List("1", "2", "3")
   }
 }

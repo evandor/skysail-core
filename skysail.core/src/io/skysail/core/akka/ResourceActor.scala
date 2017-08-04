@@ -14,6 +14,7 @@ import akka.actor.ActorDSL
 import io.skysail.core.akka.dsl.ActorChainDsl
 import io.skysail.core.akka.dsl.ActorChainDsl
 import io.skysail.core.akka.dsl.ActorChainDsl.ActorChain
+import io.skysail.core.model.ApplicationModel
 
 abstract class ResourceActor[T] extends Actor with ActorLogging {
 

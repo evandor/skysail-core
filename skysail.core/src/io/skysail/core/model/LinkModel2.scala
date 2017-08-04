@@ -2,7 +2,6 @@ package io.skysail.core.model
 
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
-import io.skysail.core.restlet.ResourceContextId
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceActor
 

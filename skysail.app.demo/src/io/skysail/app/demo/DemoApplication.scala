@@ -24,18 +24,10 @@ object DemoApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationRoutesProvider]))
-class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationRoutesProvider {
+@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationInfoProvider]))
+class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationInfoProvider {
 
   override def routesMappings = List(
     "apps" -> classOf[AppsResource])
 
-  def dummyPath(appPath: String): Route = {
-    path(appPath) {
-      get {
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http2</h1>"))
-      }
-    }
-
-  }
 }

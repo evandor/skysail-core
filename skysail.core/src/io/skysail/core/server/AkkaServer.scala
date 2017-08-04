@@ -2,7 +2,7 @@ package io.skysail.core.server
 
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
-import io.skysail.core.app.ApplicationRoutesProvider
+import io.skysail.core.app.ApplicationInfoProvider
 import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 import akka.http.scaladsl.server.Route
 
@@ -71,26 +71,26 @@ class AkkaServer extends DominoActivator {
 
   whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
-    watchServices[ApplicationRoutesProvider] {
+    watchServices[ApplicationInfoProvider] {
       case AddingService(service, context) => addService(service)
       case ModifiedService(service, _) => log info s"Service '$service' modified"
       case RemovedService(service, _) => removeService(service)
     }
   })
 
-  private def addService(s: ApplicationRoutesProvider) = {
+  private def addService(s: ApplicationInfoProvider) = {
     if (s == null) {
       log warn "service null"
     } else {
 
       val appsActor = SkysailApplication.getApplicationsActor(theSystem)
       implicit val askTimeout: Timeout = 3.seconds
-      appsActor ! CreateApplicationActor(s.getClass.asInstanceOf[Class[SkysailApplication]])
+      appsActor ! CreateApplicationActor(s.getClass.asInstanceOf[Class[SkysailApplication]], s.appModel())
 
       log info "========================================="
       log info s"Adding routes from ${s.getClass.getName}"
       log info "========================================="
-      val routes2 = s.routes2()
+      val routes2 = s.routes()
 
       val r = routes2.map { prt => createRoute(prt._1, prt._2, s.getClass) }.toList
       routes ++= r //s.routes()
@@ -98,7 +98,7 @@ class AkkaServer extends DominoActivator {
     }
   }
 
-  private def removeService(s: ApplicationRoutesProvider) = {
+  private def removeService(s: ApplicationInfoProvider) = {
     val appsActor = SkysailApplication.getApplicationsActor(theSystem)
     implicit val askTimeout: Timeout = 3.seconds
     // appsActor ! DeleteApplicationActor(s.)
@@ -138,10 +138,10 @@ class AkkaServer extends DominoActivator {
               implicit val askTimeout: Timeout = 3.seconds
 
               val res = new PrivateMethodExposer(theSystem)('printTree)()
-              println(res)
-              log info s"actorOf ${cls}"
+//              println(res)
+//              log info s"actorOf ${cls}"
               val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-              log info "appActorSelection: " + appActorSelection
+//              log info "appActorSelection: " + appActorSelection
               val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
               onSuccess(t) {
                 x => complete(x)
