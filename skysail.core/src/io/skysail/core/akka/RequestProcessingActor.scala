@@ -18,14 +18,16 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
     case any: Any => log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()
   }
   
-  def receiveResponseEvent(res: ResponseEvent) = {
-    returnTo ! res.httpResponse
-  }
-  
   private def receiveRequestContext(ctx: RequestContext, resourceActor: ActorRef) = {
     returnTo = sender
     val a = context.actorOf(nextActor, nextActor.actorClass().getSimpleName)
     a ! RequestEvent(ctx,resourceActor)
   }
+
+  private def receiveResponseEvent(res: ResponseEvent) = {
+    returnTo ! res
+  }
+
+
 }
 

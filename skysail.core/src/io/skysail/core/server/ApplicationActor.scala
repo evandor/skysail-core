@@ -1,18 +1,10 @@
 package io.skysail.core.server
 
 import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
-import io.skysail.core.app.SkysailApplication.InitResourceActorChain
-import akka.http.scaladsl.model.HttpResponse
-import akka.pattern.ask
-import akka.http.scaladsl.server.Directives._
-import akka.util.Timeout
-
-import scala.concurrent.duration.DurationInt
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.RequestContext
-import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
 
 object ApplicationActor {
@@ -44,7 +36,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
 
   def out: Receive = {
     case _: ApplicationActor.GetAppModel => sender ! appModel
-    case e => {
+    case e: ResponseEvent => {
       log debug "out AppActor... " + e
       log debug "sending to " + sendBackTo
       sendBackTo ! e
@@ -53,7 +45,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
       become(in)
       nextActor ! PoisonPill
     }
-    //case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
+    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   

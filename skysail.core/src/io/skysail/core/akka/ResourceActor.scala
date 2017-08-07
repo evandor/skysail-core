@@ -9,6 +9,7 @@ import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import java.util.Date
+
 import akka.actor.ActorDSL
 import akka.actor.ActorDSL
 import io.skysail.core.akka.dsl.ActorChainDsl
@@ -16,6 +17,8 @@ import io.skysail.core.akka.dsl.ActorChainDsl
 import io.skysail.core.akka.dsl.ActorChainDsl.ActorChain
 import io.skysail.core.model.ApplicationModel
 import akka.event.LoggingReceive
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.RequestContext
 
 object ResourceActor {
   case class GetRequest()  
@@ -44,14 +47,14 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
       get()
       //nextActor ! 
     }
-    case e => {
-      log debug "in... " + e
+    case reqCtx: RequestContext => {
+      log debug "in... " + reqCtx
       sendBackTo = sender
       import io.skysail.core.akka.dsl.ActorChainDsl._
 
       // log info s"MESSAGE: ${chainRoot} ! (${e},${this}"
       chainRootActor = context.actorOf(chainRoot, "RequestProcessingActor")
-      chainRootActor ! (e, this.self)
+      chainRootActor ! (reqCtx, this.self)
       become(out)
     }
   }
@@ -59,13 +62,12 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   def out: Receive = LoggingReceive {
     case gr: ResourceActor.GetRequest => {
       log info s"got GET Request(2)"
-      get()
-      //nextActor ! 
+      sender ! get()
     }
-    case e => {
-      log debug "out... " + e
+    case res:ResponseEvent => {
+      log debug "out... " + res
       log debug "sending to " + sendBackTo
-      sendBackTo ! e
+      sendBackTo ! res
       log debug "stopping actor: " + chainRoot
       context.stop(chainRootActor)
       become(in)

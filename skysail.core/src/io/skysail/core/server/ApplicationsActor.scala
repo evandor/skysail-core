@@ -10,14 +10,10 @@ import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 import java.util.concurrent.atomic.AtomicInteger
-import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
 import akka.actor.ActorRef
-import org.slf4j.LoggerFactory
 import io.skysail.core.app.resources.AppsResource.GetAllApplications
 import io.skysail.core.model.ApplicationModel
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
 
 class ApplicationsActor extends Actor with ActorLogging {
 

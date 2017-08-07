@@ -17,7 +17,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 
   def nextActorsProps(): Props
   def doRequest(req: RequestEvent): Unit = {}
-  def doResponse(res: ResponseEvent): Unit = {}
+  def doResponse(res: ResponseEvent): ResponseEvent = { res }
 
   private def receivedRequestEvent(req: RequestEvent) = {
     log debug s"RequestEvent received"
@@ -30,17 +30,17 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
       a ! RequestEvent(req.ctx,req.resourceActor)//, req.response) // just "! req" ???
     } else {
       log debug s"returning to " + returnTo
-      val res = ResponseEvent(req)
-      doResponse(res)
-      returnTo ! res
+      val res = ResponseEvent(req,null)
+      //doResponse(res)
+      returnTo ! doResponse(res)
     }
   }
 
   private def receivedResponseEvent(res: ResponseEvent) = {
     log debug s"ResponseEvent received"
-    doResponse(res)
+    //doResponse(res)
     //log info s"returning to $returnTo with $res"
-    returnTo ! res
+    returnTo ! doResponse(res)
   }
   
   

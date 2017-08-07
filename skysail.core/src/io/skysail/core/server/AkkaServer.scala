@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
+import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
+import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,12 +18,11 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.ResourceActor
-import io.skysail.core.akka.PrivateMethodExposer
+import io.skysail.core.akka.{PrivateMethodExposer, ResourceActor, ResponseEvent}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
-import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, MediaTypes}
 import akka.http.scaladsl.server.RequestContext
 import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.server.AkkaServer._
@@ -31,9 +30,9 @@ import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
 import io.skysail.core.app.resources.DefaultResource2
-import akka.http.scaladsl.model.HttpEntity
-import akka.http.scaladsl.model.ContentTypes
 import java.util.concurrent.atomic.AtomicInteger
+
+import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -57,6 +56,7 @@ class AkkaServer extends DominoActivator {
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
     override def start(): Unit = start(bundleContext)
+
     override def stop(): Unit = stop(bundleContext)
 
     def configure(osgiContext: BundleContext, system: ActorSystem): Unit = {
@@ -133,19 +133,34 @@ class AkkaServer extends DominoActivator {
   }
 
   protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]) = {
+
+    path("hello") {
+      get {
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+      }
+    } ~
+      path("hello2") {
+        get {
+          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
+        }
+      } ~
     path(appPath) {
       get {
         extractRequestContext {
-          ctx =>
-            {
-              log info s"executing route#${counter.incrementAndGet()}"
-              implicit val askTimeout: Timeout = 3.seconds
-              //println(new PrivateMethodExposer(theSystem)('printTree)())
-              val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-              log debug "appActorSelection: " + appActorSelection
-              val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
-              onSuccess(t) { x => complete(x) }
+          ctx => {
+            log info s"executing route#${counter.incrementAndGet()}"
+            implicit val askTimeout: Timeout = 3.seconds
+            //println(new PrivateMethodExposer(theSystem)('printTree)())
+            val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
+            log debug "appActorSelection: " + appActorSelection
+            val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent]
+            onSuccess(t) { x =>
+              println("xxx: " + x)
+              println("xxx: " + x.httpResponse.entity)
+              println("xxx: " + x.resource)
+              complete(x.httpResponse)
             }
+          }
         }
       }
     }

@@ -20,6 +20,7 @@ class Timer(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
   override def doResponse(res: ResponseEvent) = {
     val stop = System.currentTimeMillis()
     res.httpResponse = res.httpResponse.copy(headers =  res.httpResponse.headers :+ DurationHeader(s"${stop - start}ms"))
+    res
   }
 
   final class DurationHeader(v: String) extends ModeledCustomHeader[DurationHeader] {

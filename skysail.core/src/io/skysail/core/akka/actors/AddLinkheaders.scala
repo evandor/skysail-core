@@ -34,6 +34,7 @@ class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerA
     val limitedLinks = "test"//links.map(l => l.asLinkheaderElement()).mkString(",")
     //val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse())
     res.httpResponse = res.httpResponse.copy(headers = res.httpResponse.headers :+ LinkHeader(limitedLinks))
+    res
   }
   
   final class LinkHeader(v: String) extends ModeledCustomHeader[LinkHeader] {
