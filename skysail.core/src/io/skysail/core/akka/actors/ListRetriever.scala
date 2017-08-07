@@ -19,10 +19,8 @@ class ListRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerAc
 
   override def doResponse(res: ResponseEvent) = {
     // TODO actually _call_ actors method? No tell, no ask?
-    val e = res.req.resourceActor.get()
-    res.httpResponse = res.httpResponse.copy(entity = e.toString())
-    
-    //self ! ResourceActor.GetRequest()
+    res.req.resourceActor ! ResourceActor.GetRequest()
+    res.httpResponse = res.httpResponse.copy(entity = "e.toString()")
   }
 
 }
