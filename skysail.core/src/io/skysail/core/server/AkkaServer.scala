@@ -33,6 +33,9 @@ import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
+import akka.http.scaladsl.model.ResponseEntity
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import io.skysail.core.akka.MyJsonService
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -41,7 +44,7 @@ object AkkaServer {
   }
 }
 
-class AkkaServer extends DominoActivator {
+class AkkaServer extends DominoActivator with SprayJsonSupport {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 
@@ -132,18 +135,20 @@ class AkkaServer extends DominoActivator {
     }
   }
 
-  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]) = {
+  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]): Route = {
 
+    new MyJsonService()
+      .route(getApplicationActorSelection(theSystem, c.getName), cls) ~
     path("hello") {
       get {
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
       }
     } ~
-      path("hello2") {
-        get {
-          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
-        }
-      } ~
+//      path("hello2") {
+//        get {
+//          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
+//        }
+//      } ~
     path(appPath) {
       get {
         extractRequestContext {
@@ -159,6 +164,8 @@ class AkkaServer extends DominoActivator {
               println("xxx: " + x.httpResponse.entity)
               println("xxx: " + x.resource)
               complete(x.httpResponse)
+              //complete(x.httpResponse.copy(entity = x.resource.asInstanceOf[ResponseEntity]))
+              //complete(x.resource.asInstanceOf[List[_]])
             }
           }
         }

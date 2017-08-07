@@ -24,8 +24,8 @@ class ListRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerAc
 //    res.httpResponse = res.httpResponse.copy(entity = "e.toString()")
     val t = Await.result(r, 1.seconds)
     //println("YYY: " + t)
-    val result = res.copy(resource = t)
-    res.httpResponse = res.httpResponse.copy(entity = "hier: " + t.toString)
+    val result = res.copy(resource = t, httpResponse = res.httpResponse.copy(entity = "dort: " + t.toString))
+    //res.httpResponse = res.httpResponse.copy(entity = "hier: " + t.toString)
     //println("YYY: " + result)
     result
   }
