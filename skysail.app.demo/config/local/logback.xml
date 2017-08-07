@@ -1,4 +1,4 @@
-<configuration scan="true" debug="true">
+<configuration scan="true" debug="false">
 
 	<logger name="org.eclipse.jetty" level="WARN" />
 	<logger name="io.skysail.server.converter.impl" level="DEBUG" />
@@ -6,11 +6,11 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>INFO</level>
+			<level>DEBUG</level>
 		</filter>
 		<encoder>
 			<!--%d{mm:ss.SSS} [%thread] -->
-			<pattern>%date{"HH:mm:ss,SSS"} %-5level [%-30logger{30}] - %msg [%X{sourceThread}]/[%X{akkaSource}] %n</pattern>
+			<pattern>%date{"mm:ss,SSS"} %-5level [%-30logger{30}] - %msg [%X{sourceThread}]/[%X{akkaSource}] %n</pattern>
 		</encoder>
 	</appender>
 

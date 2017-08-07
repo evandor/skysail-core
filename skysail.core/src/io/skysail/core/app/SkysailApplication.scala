@@ -50,7 +50,7 @@ object SkysailApplication {
 
   def getApplicationsActor(system: ActorSystem): ActorRef = {
     val applicationsActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName
-    log info s"searching applicationsActor @ path '${applicationsActorPath}' in system ${system}"
+    log debug s"searching applicationsActor @ path '${applicationsActorPath}' in system ${system}"
     val applicationsActorSelection = system.actorSelection(applicationsActorPath)
     val r = applicationsActorSelection.resolveOne(2.seconds)
     Await.result(r, 1.seconds)
@@ -76,7 +76,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   val routes = {
     routesMappings.foreach(m => {
-      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
+      log debug s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
       appModel.addResourceModel(m._1, m._2)
     })
 

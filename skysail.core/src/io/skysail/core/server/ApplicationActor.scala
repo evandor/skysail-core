@@ -32,7 +32,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
 
   def in: Receive = {
     case (ctx:RequestContext,cls : Class[_])  => {
-      log info s"in AppActor... got message ($ctx, $cls)"
+      log debug s"in AppActor... got message ($ctx, $cls)"
       sendBackTo = sender
       nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
       nextActor ! ctx
@@ -45,8 +45,8 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
   def out: Receive = {
     case _: ApplicationActor.GetAppModel => sender ! appModel
     case e => {
-      log info "out AppActor... " + e
-      log info "sending to " + sendBackTo
+      log debug "out AppActor... " + e
+      log debug "sending to " + sendBackTo
       sendBackTo ! e
       //log info "stopping actor: " + chainRoot
       //context.stop(chainRoot)

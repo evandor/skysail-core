@@ -15,17 +15,19 @@ import io.skysail.core.akka.dsl.ActorChainDsl
 import io.skysail.core.akka.dsl.ActorChainDsl
 import io.skysail.core.akka.dsl.ActorChainDsl.ActorChain
 import io.skysail.core.model.ApplicationModel
+import akka.event.LoggingReceive
+
+object ResourceActor {
+  case class GetRequest()  
+}
 
 abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   def getLinkRelation() = LinkRelation.CANONICAL
-  //def getVerbs(): Set[Method] = Set()
   def linkedResourceClasses(): List[Class[_ <: ResourceActor[_]]] = List()
   val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceActor[_]]]]()
   val chainRoot: Props
-  //val chain: ActorChainDsl.ActorChain[_]
 
-  //implicit val system = ActorSystem()
   var nextActor: ActorRef = null
   val originalSender = sender
   var sendBackTo: ActorRef = null
@@ -36,9 +38,14 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   def get(): T
 
-  def in: Receive = {
+  def in: Receive = LoggingReceive {
+//    case gr: ResourceActor.GetRequest => {
+//      log info s"got GET Request(1), nextActor is '${nextActor}'"
+//      get()
+//      //nextActor ! 
+//    }
     case e => {
-      log info "in... " + e
+      log debug "in... " + e
       sendBackTo = sender
       import io.skysail.core.akka.dsl.ActorChainDsl._
 
@@ -49,12 +56,17 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
     }
   }
 
-  def out: Receive = {
+  def out: Receive = LoggingReceive {
+//    case gr: ResourceActor.GetRequest => {
+//      log info s"got GET Request(2), nextActor is '${nextActor}'"
+//      get()
+//      //nextActor ! 
+//    }
     case e => {
-      log info "out... " + e
-      log info "sending to " + sendBackTo
+      log debug "out... " + e
+      log debug "sending to " + sendBackTo
       sendBackTo ! e
-      log info "stopping actor: " + chainRoot
+      log debug "stopping actor: " + chainRoot
       context.stop(nextActor)
       become(in)
     }

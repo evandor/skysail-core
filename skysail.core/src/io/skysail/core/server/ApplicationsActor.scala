@@ -16,6 +16,8 @@ import akka.actor.ActorRef
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.resources.AppsResource.GetAllApplications
 import io.skysail.core.model.ApplicationModel
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class ApplicationsActor extends Actor with ActorLogging {
 
@@ -63,10 +65,28 @@ class ApplicationsActor extends Actor with ActorLogging {
 
   def getAllApplications(gaa: GetAllApplications) = {
     log info s"getting all Applications..."
-    context.children.map(appActor => {
+    val p = context.children.map(appActor => {
       val t = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
       t
-    })
-    sender ! List("1", "2", "3")
+      //println ("AppActor: " + appActor)
+    }).toList
+    println(p)
+//    implicit val ec = context.system.dispatcher
+//    val q = Future.sequence(p)
+////    q.onSuccess(result => {
+////      case e:List[ApplicationModel] => 
+////      case _:Any =>
+////    })
+//    
+//    
+//    q onSuccess {
+//        case result => println(s"Success: $result")
+//        //sender ! List("1", "2", "3","4")
+//    }
+//    q onFailure {
+//        case t => println(s"Exception: ${t.getMessage}")
+//        //sender ! List()
+//    }
+    sender ! List("1", "2", "3","4")
   }
 }

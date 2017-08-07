@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
+import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -33,6 +33,7 @@ import io.skysail.core.app.SkysailApplication.CreateApplicationActor
 import io.skysail.core.app.resources.DefaultResource2
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
+import java.util.concurrent.atomic.AtomicInteger
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -50,6 +51,8 @@ class AkkaServer extends DominoActivator {
   var futureBinding: Future[Http.ServerBinding] = _
   var applicationsActor: ActorRef =
     _
+
+  val counter = new AtomicInteger(0)
 
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
@@ -135,17 +138,13 @@ class AkkaServer extends DominoActivator {
         extractRequestContext {
           ctx =>
             {
+              log info s"executing route#${counter.incrementAndGet()}"
               implicit val askTimeout: Timeout = 3.seconds
-
-              val res = new PrivateMethodExposer(theSystem)('printTree)()
-//              println(res)
-//              log info s"actorOf ${cls}"
+              //println(new PrivateMethodExposer(theSystem)('printTree)())
               val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-//              log info "appActorSelection: " + appActorSelection
+              log debug "appActorSelection: " + appActorSelection
               val t = (appActorSelection ? (ctx, cls)).mapTo[HttpResponse]
-              onSuccess(t) {
-                x => complete(x)
-              }
+              onSuccess(t) { x => complete(x) }
             }
         }
       }
