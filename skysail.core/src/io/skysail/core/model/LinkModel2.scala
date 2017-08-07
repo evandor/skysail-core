@@ -42,7 +42,7 @@ case class LinkModel2(
   @BeanProperty var title = determineTitle()
   @BeanProperty val alt: String = "-"
   @BeanProperty val needsAuth: Boolean = false
-  @BeanProperty val linkRole: LinkRole = LinkRole.DEFAULT
+  //@BeanProperty val linkRole: LinkRole = LinkRole.DEFAULT
   @BeanProperty var refId: String = _
   @BeanProperty var cls: Class[_] = _
 

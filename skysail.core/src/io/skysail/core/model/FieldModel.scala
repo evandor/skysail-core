@@ -11,7 +11,7 @@ case class FieldModel(val f: java.lang.reflect.Field) {
 
   val name = f.getName
   
-  def getInputType(): String = f.getAnnotation(classOf[io.skysail.core.html.Field]).inputType().name();
+  //def getInputType(): String = f.getAnnotation(classOf[io.skysail.core.html.Field]).inputType().name();
 
   def isMandatory(): Boolean = {
     val notNullAnnotation = f.getAnnotation(classOf[javax.validation.constraints.NotNull]);
@@ -27,7 +27,7 @@ case class FieldModel(val f: java.lang.reflect.Field) {
     return false;
   }
   
-  override def toString() = s"""${this.getClass.getSimpleName}(inputType: $getInputType, mandatory: $isMandatory)"""
+  //override def toString() = s"""${this.getClass.getSimpleName}(inputType: $getInputType, mandatory: $isMandatory)"""
 
   private def getEntityType() = {
     if (classOf[Collection[_]].isAssignableFrom(f.getType())) 

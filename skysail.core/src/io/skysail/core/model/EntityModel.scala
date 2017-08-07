@@ -16,7 +16,7 @@ case class EntityModel(entityClass: Class[_]) {
 
   private def deriveFields() = {
     ScalaReflectionUtils.getInheritedFields(entityClass)
-      .filter { filterFormFields(_) }
+      //.filter { filterFormFields(_) }
       .map { f => new FieldModel(f) }
       .map(m => m.name -> m)
       .toMap
@@ -28,7 +28,7 @@ case class EntityModel(entityClass: Class[_]) {
   override def toString() = s"""${this.getClass.getSimpleName}("$name")
         Fields: ${printMap(fields)}"""
   
-  private def filterFormFields(f: Field): Boolean = f.getAnnotation(classOf[io.skysail.core.html.Field]) != null
+  //private def filterFormFields(f: Field): Boolean = f.getAnnotation(classOf[io.skysail.core.html.Field]) != null
 
   private def printHtmlMap(map: Map[_, _]) = map.map(v => s"""
           <li>"${v._1}" -> ${v._2.toString()}</li>""").mkString("")

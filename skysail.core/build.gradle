@@ -1,7 +1,6 @@
 apply plugin: 'scala'
 apply plugin: 'java'
 apply plugin: 'org.scoverage'
-apply plugin: "jacoco"
 
 repositories {
     mavenCentral()
@@ -36,9 +35,5 @@ sourceSets {
             srcDirs = []
         }
     }
-}
-
-jacoco {
-    toolVersion = "0.7.1.201405082137"
 }
 
