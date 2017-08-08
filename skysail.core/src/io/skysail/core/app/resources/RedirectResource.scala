@@ -4,7 +4,7 @@ import io.skysail.core.akka._
 import io.skysail.core.akka.ResourceActor
 import io.skysail.core.akka.actors.Redirector
 import io.skysail.core.akka.actors.Timer
-import io.skysail.core.akka.dsl.ActorChainDsl._
+import io.skysail.core.dsl.ActorChainDsl._
 
 abstract class RedirectResource[String] extends ResourceActor[String] {
 

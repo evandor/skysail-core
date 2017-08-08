@@ -14,7 +14,7 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
   
   def receive = {
     case (ctx: RequestContext, actor: ActorRef) => receiveRequestContext(ctx, actor)
-    case res: ResponseEvent => receiveResponseEvent(res)
+    case res: ResponseEvent[_] => receiveResponseEvent(res)
     case any: Any => log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()
   }
   
@@ -24,7 +24,7 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
     a ! RequestEvent(ctx,resourceActor)
   }
 
-  private def receiveResponseEvent(res: ResponseEvent) = {
+  private def receiveResponseEvent(res: ResponseEvent[_]) = {
     returnTo ! res
   }
 

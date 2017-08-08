@@ -36,6 +36,7 @@ import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
 import akka.http.scaladsl.model.ResponseEntity
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import io.skysail.core.akka.MyJsonService
+import io.skysail.core.akka.JsonService
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -136,20 +137,20 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
   }
 
   protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]): Route = {
-
-    new MyJsonService()
-      .route(getApplicationActorSelection(theSystem, c.getName), cls) ~
-    path("hello") {
-      get {
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-      }
-    } ~
+    val appSelector = getApplicationActorSelection(theSystem, c.getName)
+    new MyJsonService().route(appSelector, cls) ~
+    new JsonService().route(appPath, appSelector, cls) ~
+//    path("hello") {
+//      get {
+//        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+//      }
+//    } ~
 //      path("hello2") {
 //        get {
 //          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
 //        }
 //      } ~
-    path(appPath) {
+    path(appPath / "old") {
       get {
         extractRequestContext {
           ctx => {
@@ -158,7 +159,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
             //println(new PrivateMethodExposer(theSystem)('printTree)())
             val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
             log debug "appActorSelection: " + appActorSelection
-            val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent]
+            val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
             onSuccess(t) { x =>
               println("xxx: " + x)
               println("xxx: " + x.httpResponse.entity)

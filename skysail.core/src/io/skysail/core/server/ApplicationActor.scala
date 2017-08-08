@@ -36,7 +36,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
 
   def out: Receive = {
     case _: ApplicationActor.GetAppModel => sender ! appModel
-    case e: ResponseEvent => {
+    case e: ResponseEvent[_] => {
       log debug "out AppActor... " + e
       log debug "sending to " + sendBackTo
       sendBackTo ! e

@@ -5,7 +5,7 @@ import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
-import io.skysail.core.akka.dsl.ActorChainDsl._
+import io.skysail.core.dsl.ActorChainDsl._
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
 import akka.testkit.TestKit

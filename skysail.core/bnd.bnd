@@ -99,6 +99,6 @@ Export-Package: \
 	io.skysail.restlet.queries
 	
 Private-Package: \
-	io.skysail.core.akka.dsl,\
+    io.skysail.core.dsl,\
 	io.skysail.core.app.services
 	

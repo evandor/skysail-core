@@ -1,10 +1,9 @@
-package io.skysail.core.akka.dsl
+package io.skysail.core.dsl
 
 import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
 import akka.actor.Props
 import org.slf4j.LoggerFactory
+import akka.actor.Actor
 import akka.actor.Actor
 
 object ActorChainDsl {

@@ -7,4 +7,4 @@ import akka.http.scaladsl.server.RequestContext
 
 case class RequestEvent(ctx: RequestContext,resourceActor: ActorRef)
 
-case class ResponseEvent(req: RequestEvent, val resource: Any, var httpResponse: HttpResponse = HttpResponse(200))
+case class ResponseEvent[T](req: RequestEvent, val resource: T, var httpResponse: HttpResponse = HttpResponse(200))

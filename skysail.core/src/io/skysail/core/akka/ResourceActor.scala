@@ -12,9 +12,9 @@ import java.util.Date
 
 import akka.actor.ActorDSL
 import akka.actor.ActorDSL
-import io.skysail.core.akka.dsl.ActorChainDsl
-import io.skysail.core.akka.dsl.ActorChainDsl
-import io.skysail.core.akka.dsl.ActorChainDsl.ActorChain
+import io.skysail.core.dsl.ActorChainDsl
+import io.skysail.core.dsl.ActorChainDsl
+import io.skysail.core.dsl.ActorChainDsl.ActorChain
 import io.skysail.core.model.ApplicationModel
 import akka.event.LoggingReceive
 import akka.http.scaladsl.model.HttpResponse
@@ -50,7 +50,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
     case reqCtx: RequestContext => {
       log debug "in... " + reqCtx
       sendBackTo = sender
-      import io.skysail.core.akka.dsl.ActorChainDsl._
+      import io.skysail.core.dsl.ActorChainDsl._
 
       // log info s"MESSAGE: ${chainRoot} ! (${e},${this}"
       chainRootActor = context.actorOf(chainRoot, "RequestProcessingActor")
@@ -64,7 +64,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
       log info s"got GET Request(2)"
       sender ! get()
     }
-    case res:ResponseEvent => {
+    case res:ResponseEvent[_] => {
       log debug "out... " + res
       log debug "sending to " + sendBackTo
       sendBackTo ! res

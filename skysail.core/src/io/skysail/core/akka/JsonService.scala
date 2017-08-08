@@ -9,35 +9,29 @@ import akka.actor.ActorSystem
 import io.skysail.core.server.ApplicationsActor
 import akka.actor.ActorSelection
 import akka.pattern.ask
+import akka.http.scaladsl.server.PathMatcher
 
-final case class Item(name: String, id: Long)
-final case class Order(items: List[Item])
+//final case class Item(name: String, id: Long)
+//final case class Order(items: List[Item])
 
-trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val itemFormat = jsonFormat2(Item)
-  implicit val orderFormat = jsonFormat1(Order) // contains List[Item]
-}
+//trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+//  implicit val itemFormat = jsonFormat2(Item)
+//  implicit val orderFormat = jsonFormat1(Order) // contains List[Item]
+//}
 
-object MyJsonService {
+object JsonService {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
     val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
     system.actorSelection(applicationActorPath)
   }
 }
 
-class MyJsonService extends Directives with JsonSupport {
+class JsonService extends Directives with SprayJsonSupport with DefaultJsonProtocol {
 
-  def route(appActorSelection: ActorSelection, cls: Class[_ <: ResourceActor[_]]) =
-    pathSingleSlash {
-      get {
-        extractRequestContext {
-          ctx => {
-            complete(Item("thing2", 42))
-          }
-        }  
-      }
-    } ~
-      path("home") {
+  implicit val itemFormat = jsonFormat2(Item)
+
+  def route(appPath: PathMatcher[Unit], appActorSelection: ActorSelection, cls: Class[_ <: ResourceActor[_]]) =
+      path(appPath) {
         get {
           extractRequestContext {
             ctx =>
@@ -60,13 +54,6 @@ class MyJsonService extends Directives with JsonSupport {
                 }
               }
           }
-        }
-      } ~
-      post {
-        entity(as[Order]) { order => // will unmarshal JSON to Order
-          val itemsCount = order.items.size
-          val itemNames = order.items.map(_.name).mkString(", ")
-          complete(s"Ordered $itemsCount items: $itemNames")
         }
       }
 }

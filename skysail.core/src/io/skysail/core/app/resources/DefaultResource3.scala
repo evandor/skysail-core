@@ -5,7 +5,7 @@ import io.skysail.core.akka.ResourceActor
 import io.skysail.core.akka.actors.Delegator
 import io.skysail.core.akka.actors.Timer
 import io.skysail.core.akka.actors.Worker
-import io.skysail.core.akka.dsl.ActorChainDsl._
+import io.skysail.core.dsl.ActorChainDsl._
 
 class DefaultResource3[String] extends ResourceActor[String] {
 

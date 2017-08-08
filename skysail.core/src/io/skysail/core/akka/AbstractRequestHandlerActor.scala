@@ -11,13 +11,13 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 
   def receive = {
     case req: RequestEvent => receivedRequestEvent(req)
-    case res: ResponseEvent => receivedResponseEvent(res)
+    case res: ResponseEvent[_] => receivedResponseEvent(res)
     case msg => log info s"unknown message of type '${msg.getClass.getName}' received"
   }
 
   def nextActorsProps(): Props
   def doRequest(req: RequestEvent): Unit = {}
-  def doResponse(res: ResponseEvent): ResponseEvent = { res }
+  def doResponse(res: ResponseEvent[_]): ResponseEvent = { res }
 
   private def receivedRequestEvent(req: RequestEvent) = {
     log debug s"RequestEvent received"
@@ -36,7 +36,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     }
   }
 
-  private def receivedResponseEvent(res: ResponseEvent) = {
+  private def receivedResponseEvent(res: ResponseEvent[_]) = {
     log debug s"ResponseEvent received"
     //doResponse(res)
     //log info s"returning to $returnTo with $res"
