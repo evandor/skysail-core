@@ -4,10 +4,12 @@ import akka.http.scaladsl.server.Directives
 import akka.http.scaladsl.marshallers.sprayjson._
 import spray.json.DefaultJsonProtocol
 import akka.util.Timeout
+
 import scala.concurrent.duration.DurationInt
 import akka.actor.ActorSystem
 import io.skysail.core.server.ApplicationsActor
 import akka.actor.ActorSelection
+import akka.http.scaladsl.marshalling.ToResponseMarshallable
 import akka.pattern.ask
 import akka.http.scaladsl.server.PathMatcher
 
@@ -47,7 +49,7 @@ class JsonService extends Directives with SprayJsonSupport with DefaultJsonProto
                   println("xxx: " + x)
                   println("xxx: " + x.httpResponse.entity)
                   println("xxx: " + x.resource)
-                  val list = x.resource.asInstanceOf[List[String]]
+                  val list = x.resource.asInstanceOf[ToResponseMarshallable]
                   complete(list)
                   //complete(x.httpResponse.copy(entity = x.resource.asInstanceOf[ResponseEntity]))
                   //complete(x.resource.asInstanceOf[List[_]])

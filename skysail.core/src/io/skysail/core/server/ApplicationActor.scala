@@ -31,7 +31,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
       become(out)
     }
     case _: ApplicationActor.GetAppModel => sender ! appModel
-    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
+    case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   def out: Receive = {
@@ -45,7 +45,7 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
       become(in)
       nextActor ! PoisonPill
     }
-    case msg: Any => log info s"received unknown message '$msg' in ${this.getClass.getName}"
+    case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   

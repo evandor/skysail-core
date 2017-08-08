@@ -7,10 +7,9 @@ import io.skysail.core.model.ApplicationModel
 abstract class ListResource[T] extends ResourceActor[List[T]] {
 
   override val chainRoot = (
-    classOf[RequestProcessingActor[_]] ==>
+    classOf[RequestProcessingActor[T]] ==>
     classOf[Timer] ==>
-    classOf[ListRetriever] ==> 
-    classOf[AddLinkheaders] ==>
-    classOf[Redirector]).build()
+    classOf[ListRetriever[T]] ==>
+    classOf[AddLinkheaders]).build()
 
 }

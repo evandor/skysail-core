@@ -22,7 +22,7 @@ import io.skysail.core.akka.{PrivateMethodExposer, ResourceActor, ResponseEvent}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, MediaTypes}
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.RequestContext
 import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.server.AkkaServer._
@@ -33,10 +33,11 @@ import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
-import akka.http.scaladsl.model.ResponseEntity
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import io.skysail.core.akka.MyJsonService
 import io.skysail.core.akka.JsonService
+import akka.http.scaladsl.model.headers.`Content-Type`
+import akka.http.scaladsl.model.ContentTypes._
 
 object AkkaServer {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
@@ -139,7 +140,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
   protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]): Route = {
     val appSelector = getApplicationActorSelection(theSystem, c.getName)
     new MyJsonService().route(appSelector, cls) ~
-    new JsonService().route(appPath, appSelector, cls) ~
+    new JsonService().route(appPath / "broken", appSelector, cls) ~
 //    path("hello") {
 //      get {
 //        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
@@ -150,7 +151,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
 //          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
 //        }
 //      } ~
-    path(appPath / "old") {
+    path(appPath) {
       get {
         extractRequestContext {
           ctx => {
@@ -165,6 +166,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
               println("xxx: " + x.httpResponse.entity)
               println("xxx: " + x.resource)
               complete(x.httpResponse)
+              //complete(StatusCodes.Created, List(`Content-Type`(`application/json`)), """{"bar": "foo"}""")
               //complete(x.httpResponse.copy(entity = x.resource.asInstanceOf[ResponseEntity]))
               //complete(x.resource.asInstanceOf[List[_]])
             }

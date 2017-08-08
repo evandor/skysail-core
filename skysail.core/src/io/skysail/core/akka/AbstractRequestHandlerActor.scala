@@ -17,7 +17,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
 
   def nextActorsProps(): Props
   def doRequest(req: RequestEvent): Unit = {}
-  def doResponse(res: ResponseEvent[_]): ResponseEvent = { res }
+  def doResponse(res: ResponseEvent[_]): ResponseEvent[_] = { res }
 
   private def receivedRequestEvent(req: RequestEvent) = {
     log debug s"RequestEvent received"

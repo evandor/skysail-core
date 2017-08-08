@@ -8,7 +8,7 @@ abstract class EntityResource[T] extends ResourceActor[T] {
   override val chainRoot = (
     classOf[RequestProcessingActor[_]] ==>
     classOf[Timer] ==>
-    classOf[ListRetriever] ==> 
+    classOf[ListRetriever[T]] ==>
     classOf[AddLinkheaders] ==>
     classOf[Redirector]).build()
 
