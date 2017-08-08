@@ -15,7 +15,7 @@ node {
    }   
    
    stage('coverage') {
-      sh './gradlew reportCoverage'   
+      sh './gradlew reportScoverage'   
    }   
 
    stage('publishHTML') {
