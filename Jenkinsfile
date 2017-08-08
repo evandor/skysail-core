@@ -23,6 +23,10 @@ node {
        allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
        reportDir: '', reportFiles: 'index.html', reportName: 'HTML Report'
      ])
+     publishHTML([
+       allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
+       reportDir: 'skysail.core/generated/reports/scoverage', reportFiles: 'index.html', reportName: 'Scoverage Report'
+     ])
    }
    
    /*stage('deployment.int') {
