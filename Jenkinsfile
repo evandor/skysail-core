@@ -14,8 +14,15 @@ node {
 	 //step([$class: 'CucumberReportPublisher', failedFeaturesNumber: 0, failedScenariosNumber: 0, failedStepsNumber: 0, fileExcludePattern: '', fileIncludePattern: '**/cucumber.json', jsonReportDirectory: '', parallelTesting: false, pendingStepsNumber: 0, skippedStepsNumber: 0, trendsLimit: 0, undefinedStepsNumber: 0])
    }   
    
+   stage('coverage') {
+      sh './gradlew reportCoverage'   
+   }   
+
    stage('publishHTML') {
-     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'index.html', reportName: 'HTML Report'])
+     publishHTML([
+       allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
+       reportDir: '', reportFiles: 'index.html', reportName: 'HTML Report'
+     ])
    }
    
    /*stage('deployment.int') {
