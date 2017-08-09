@@ -1,4 +1,5 @@
 package io.skysail.app.demo
 
-case class Application(name: String)
+case class Contact(name: String)
+
 

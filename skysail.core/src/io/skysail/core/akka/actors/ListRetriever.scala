@@ -1,7 +1,5 @@
 package io.skysail.core.akka.actors
 
-import javax.swing.text.AbstractDocument.Content
-
 import io.skysail.core.akka.AbstractRequestHandlerActor
 import akka.actor.Props
 import akka.http.scaladsl.marshalling.Marshal
@@ -39,7 +37,8 @@ class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandle
 
     //implicit val itemFormat = jsonFormat2(List)
     //val jsonAst = t.asInstanceOf[List[String]].toJson.toString()
-    val jsonAst = List("1","2").toJson.toString()
+    //new Application("hier")
+    val jsonAst = List("1","2","3").toJson.toString()
 
     val httpEntity = HttpEntity(ContentTypes.`application/json`, jsonAst)
     val result = res.copy(resource = t, httpResponse = res.httpResponse.copy(entity = httpEntity))

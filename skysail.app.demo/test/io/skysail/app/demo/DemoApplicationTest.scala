@@ -11,6 +11,10 @@ import spray.json.DefaultJsonProtocol
 
 class DemoApplicationTest extends FunSuite {
 
+  object MyJsonProtocol extends DefaultJsonProtocol {
+    implicit val appFormat = jsonFormat1(Contact)
+  }
+
   test("pop is invoked on a non-empty stack") {
 
     val stack = new Stack[Int]
@@ -32,10 +36,11 @@ class DemoApplicationTest extends FunSuite {
   }
 
   test("a") {
-    val app1 = new Item("hier",1)
-    val app2 = new Item("dort",2)
+    import MyJsonProtocol._
+    //implicit val itemFormat = jsonFormat1(Application)
+    val app1 = new Contact("hier")
+    val app2 = new Contact("dort")
     val l = List(app1, app2)
-    implicit val itemFormat = jsonFormat2(Item)
     val str = l.toJson.toString()
     println(str)
   }
