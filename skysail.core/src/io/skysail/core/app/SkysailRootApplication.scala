@@ -9,7 +9,6 @@ import org.osgi.service.component.annotations._
 import akka.actor.ActorSystem
 import io.skysail.core.app.resources.AkkaLoginResource
 import io.skysail.core.app.resources.AppResource
-import io.skysail.core.app.resources.DefaultResource3
 import io.skysail.core.app.resources.DefaultResource2
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.model.HttpEntity
@@ -49,7 +48,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceActor[_]])] = {
     List(
       "first" -> classOf[DefaultResource2],
-      "second" -> classOf[DefaultResource3[String]],
+//      "second" -> classOf[DefaultResource3[String]],
       "login" -> classOf[AkkaLoginResource[String]],
       "apps" -> classOf[AppsResource],
       "app" -> classOf[AppResource])

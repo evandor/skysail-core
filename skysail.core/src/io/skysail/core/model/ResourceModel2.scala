@@ -2,7 +2,7 @@ package io.skysail.core.model
 
 import scala.collection.JavaConverters._
 import java.lang.reflect.Field
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.ScalaReflectionUtils
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher

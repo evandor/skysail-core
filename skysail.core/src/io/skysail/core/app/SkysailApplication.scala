@@ -23,7 +23,7 @@ import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.ScalaReflectionUtils
 import io.skysail.core.akka.ResourceActor
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._

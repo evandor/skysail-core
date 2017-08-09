@@ -12,10 +12,12 @@ import akka.http.scaladsl.model.headers.ModeledCustomHeaderCompanion
 import scala.util.Try
 import akka.http.scaladsl.server.directives.RespondWithDirectives
 import io.skysail.core.model.LinkModel2
+import akka.actor.ActorRef
+import akka.pattern.ask
 
 class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
-  override def doResponse(res: ResponseEvent[_]) = {
+  override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) {
     val result = scala.collection.mutable.ListBuffer[LinkModel2]()
 //    val resourceModel = appModel.resourceModelFor(resource.getClass).get
 //    val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
@@ -34,7 +36,7 @@ class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerA
     val limitedLinks = "test"//links.map(l => l.asLinkheaderElement()).mkString(",")
     //val responseHeaders = ScalaHeadersUtils.getHeaders(resource.getResponse())
     res.httpResponse = res.httpResponse.copy(headers = res.httpResponse.headers :+ LinkHeader(limitedLinks))
-    res
+    nextActor ! res
   }
   
   final class LinkHeader(v: String) extends ModeledCustomHeader[LinkHeader] {

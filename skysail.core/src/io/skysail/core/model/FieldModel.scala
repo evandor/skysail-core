@@ -3,7 +3,7 @@ package io.skysail.core.model
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 import java.util.Collection
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.ScalaReflectionUtils
 
 case class FieldModel(val f: java.lang.reflect.Field) {
   

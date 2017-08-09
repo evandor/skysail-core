@@ -1,4 +1,4 @@
-package io.skysail.core.restlet.utils
+package io.skysail.core
 
 import scala.collection.mutable.ListBuffer
 import java.lang.reflect.ParameterizedType

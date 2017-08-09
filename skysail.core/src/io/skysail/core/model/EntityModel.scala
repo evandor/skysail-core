@@ -2,7 +2,7 @@ package io.skysail.core.model
 
 import scala.collection.JavaConverters._
 import java.lang.reflect.Field
-import io.skysail.core.restlet.utils.ScalaReflectionUtils
+import io.skysail.core.ScalaReflectionUtils
 
 case class EntityModel(entityClass: Class[_]) {
   

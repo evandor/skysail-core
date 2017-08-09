@@ -19,7 +19,7 @@ class AppsResource extends ListResource[Application] {
     log debug "got ApplicationsActor: " + appsActor
     //val l = (appsActor ? GetAllApplications()).mapTo[List[String]]
     //Await.result(l, 1.seconds)
-    List(Application("hier"))
+    List(Application("hier", "url"))
   }
   
 }

@@ -11,16 +11,17 @@ import akka.http.scaladsl.model.headers.ModeledCustomHeader
 import akka.http.scaladsl.model.headers.ModeledCustomHeaderCompanion
 import scala.util.Try
 import akka.http.scaladsl.server.directives.RespondWithDirectives
+import akka.actor.ActorRef
 
 class Timer(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
   var start: Long = System.currentTimeMillis()
   override def doRequest(req: RequestEvent) = {
     start = System.currentTimeMillis()
   }
-  override def doResponse(res: ResponseEvent[_]) = {
+  override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     val stop = System.currentTimeMillis()
     res.httpResponse = res.httpResponse.copy(headers =  res.httpResponse.headers :+ DurationHeader(s"${stop - start}ms"))
-    res
+    nextActor ! res
   }
 
   final class DurationHeader(v: String) extends ModeledCustomHeader[DurationHeader] {

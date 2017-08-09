@@ -21,7 +21,6 @@ import org.mockito.Mockito
 import org.mockito.Mockito._
 import io.skysail.core.akka.actors.Timer
 import io.skysail.core.akka.actors.Delegator
-import io.skysail.core.akka.actors.Worker
 
 class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
     with WordSpecLike
@@ -36,8 +35,7 @@ class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
       
       val chain = classOf[RequestProcessingActor[_]] ==> 
                     classOf[Timer] ==> 
-                    classOf[Delegator] ==> 
-                    classOf[Worker]
+                    classOf[Delegator]
 
       val ctxMock = Mockito.mock(classOf[RequestContext])
       Mockito.when(ctxMock.request).thenReturn(HttpRequest())
