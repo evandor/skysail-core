@@ -83,6 +83,7 @@ class ApplicationsActor extends Actor with ActorLogging {
 //        case t => println(s"Exception: ${t.getMessage}")
 //        //sender ! List()
 //    }
+    // List(new Application("a1"), new Application("a2"))
     sender ! List("1", "2", "3","4")
   }
 }

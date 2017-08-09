@@ -1,0 +1,13 @@
+Bundle-Version: 1.17.0.${tstamp}
+
+-classpath: jar/akka-http-json4s_2.11-1.17.0.jar
+
+Export-Package: \
+    de.heikoseeberger.*;version=1.17.0
+    
+Bundle-Name: akka-http-json4s_2.11.jar
+
+Import-Package: \
+    *
+
+
