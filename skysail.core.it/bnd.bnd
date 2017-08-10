@@ -1,0 +1,125 @@
+Bundle-Name: SKYSAIL :: core :: integrationtests
+
+Bundle-Version: 0.1.0.${tstamp}
+
+Bundle-Description: integration tests
+
+#Test-Cases: ${classes;CONCRETE;EXTENDS;io.skysail.core.it.ApplicationTests}
+Test-Cases: io.skysail.core.it.ApplicationTests3
+
+
+-buildpath: \
+    ${osgi},\
+    org.osgi.service.event;version=1.3,\
+    ${testlibs},\
+    ${logging},\
+    ${commons},\
+    ${javax},\
+    ${fasterxml},\
+    com.thoughtworks.paranamer;version=2.8,\
+    com.google.guava;version='[16.0,16.1)',\
+    io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
+    io.skysail.bundled.owasp-java-html-sanitizer;version='[20160422.1.0,20160422.1.1)',\
+    com.fasterxml.jackson.core.jackson-annotations;version=2.5,\
+    org.scalatest;version=3.0,\
+    org.scalactic;version=3.0,\
+    org.scala-lang.modules.scala-xml;version=1.0,\
+    org.assertj.core;version=3.5,\
+    de.twentyeleven.skysail.org.json-osgi;version=20080701.0,\
+    org.eclipse.jetty.server;version=9.2,\
+    org.eclipse.jetty.util;version=9.2,\
+    io.spray.json;version=1.3,\
+    ${akka-compiletime},\
+    domino_2.11;version=1.1,\
+    io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
+    com.typesafe.akka.http.testkit;version=10.0,\
+    com.typesafe.akka.testkit;version=2.5,\
+    io.skysail.bundled.akka-http-json4s_2.11;version=1.17
+
+#-buildpath: \
+#	${osgi},\
+#	${testlibs},\
+#	${restlet},\
+#	${fasterxml},\
+#	skysail.server;version=${skysail.server.version},\
+#	skysail.server.um.httpbasic;version=${skysail.server.um.httpbasic.version},\
+#	skysail.server.um.verifier.filebased;version=${skysail.server.um.verifier.filebased.version},\
+#	skysail.client.testsupport;version=${skysail.client.testsupport.version},\
+#	skysail.server.app.ref.fields;version=latest,\
+#	${logging},\
+#	org.assertj.core;version=3.5
+
+-runsystemcapabilities: ${native_capability}
+-runsystempackages: ${runsystempackages}
+-runfw: org.apache.felix.framework;version=5
+-runvm: -ea
+-runee: JavaSE-1.8
+-runproperties: ${runproperties},\
+    gosh.args=--nointeractive
+
+skysail.config.path            = config/integrationtest
+logback.configurationFile.path = config/integrationtest
+
+-runbundles: \
+    javax.persistence;version='[2.1.0,2.1.1)',\
+    javax.validation.api;version='[1.1.0,1.1.1)',\
+    org.apache.commons.beanutils;version='[1.9.2,1.9.3)',\
+    org.apache.commons.collections;version='[3.2.1,3.2.2)',\
+    org.apache.commons.configuration;version=1.10.0,\
+    org.apache.commons.io;version='[2.4.0,2.4.1)',\
+    org.apache.commons.lang;version='[2.6.0,2.6.1)',\
+    org.apache.commons.lang3;version='[3.3.0,3.4)',\
+    org.apache.commons.logging;version='[1.1.3,1.1.4)',\
+    org.apache.felix.configadmin;version='[1.8.0,1.8.1)',\
+    org.apache.felix.fileinstall;version='[3.4.0,3.4.1)',\
+    org.apache.felix.eventadmin;version=1.3.2,\
+    org.apache.felix.gogo.command;version='[0.16.0,0.16.1)',\
+    org.apache.felix.gogo.runtime;version='[0.16.2,0.16.3)',\
+    org.apache.felix.gogo.shell;version='[0.12.0,0.12.1)',\
+    org.apache.felix.log;version='[1.0.1,1.0.2)',\
+    org.apache.felix.scr;version=${org.apache.felix.scr.version},\
+    com.fasterxml.jackson.core.jackson-annotations;version=${com.fasterxml.jackson.version},\
+    com.fasterxml.jackson.core.jackson-core;version=${com.fasterxml.jackson.version},\
+    com.fasterxml.jackson.core.jackson-databind;version=${com.fasterxml.jackson.version},\
+    com.fasterxml.classmate;version='[1.3.1,2)',\
+    stax2-api;version=3.1.4,\
+    javassist;version='[3.18.1,3.18.2)',\
+    org.codehaus.jettison.jettison;version=1.3.7,\
+    com.googlecode.concurrentlinkedhashmap.lru;version='[1.4.0,1.4.1)',\
+    org.yaml.snakeyaml;version=1.17,\
+    de.twentyeleven.skysail.org.json-osgi;version=latest,\
+    com.google.guava;version='[16.0,16.1)',\
+    org.hibernate.validator;version=${org.hibernate.validator.version},\
+    ch.qos.logback.classic;version='[1.1.2,1.2)',\
+    ch.qos.logback.core;version='[1.1.2,1.2)',\
+    slf4j.api;version='[1.7.21,2)',\
+    org.jboss.logging.jboss-logging;version='[3.1.4,3.1.5)',\
+    io.skysail.bundled.owasp-java-html-sanitizer;version='[20160422.1.0,20160422.1.1)',\
+    de.twentyeleven.skysail.org.antlr.stringtemplate-osgi;version=4.0.8,\
+    io.skysail.bundled.orientdb-uber;version=${com.orientechnologies.orientdb.version},\
+    org.xerial.snappy.snappy-java;version='[1.1.1,1.1.2)',\
+    com.sun.jna;version=4.2,\
+    com.sun.jna.platform;version=4.2,\
+    io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
+    org.scala-lang.scala-library;version=2.11.8,\
+    org.scala-lang.scala-reflect;version=2.11.8,\
+    io.spray.json;version=1.3,\
+    ${akka-compiletime},\
+    com.typesafe.akka.slf4j;version=2.5.3,\
+    com.thoughtworks.paranamer;version=2.8.0,\
+    domino_2.11;version=1.1.2,\
+    osgi.enterprise;version=5.0,\
+    joda-time;version=2.9.3,\
+    io.skysail.bundled.akka-http-json4s_2.11,\
+    osgi.enroute.junit.wrapper;version=4.11,\
+    de.twentyeleven.skysail.org.hamcrest.hamcrest-all-osgi;version=1.3,\
+    skysail.core.it;version=latest
+
+#-runbundles: \
+#	org.apache.felix.shell.remote;version=latest,\
+#	org.jsoup;version=1.8,\
+#	osgi.enroute.junit.wrapper;version=4.11,\
+#	skysail.client.testsupport;version=${skysail.client.testsupport.version},\
+#	skysail.server.app.ref.fields.it;version=latest,\
+#	skysail.server.app.ref.fields;version=latest,\
+#	org.assertj.core;version=3.5.2
