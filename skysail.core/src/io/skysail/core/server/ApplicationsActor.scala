@@ -8,12 +8,19 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.pattern.ask
 import akka.http.scaladsl.server.Directives._
 import akka.util.Timeout
+
 import scala.concurrent.duration.DurationInt
 import java.util.concurrent.atomic.AtomicInteger
-import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
+
+import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
 import akka.actor.ActorRef
-import io.skysail.core.app.resources.AppsResource.GetAllApplications
+import io.skysail.core.app.domain.Application
 import io.skysail.core.model.ApplicationModel
+import io.skysail.core.server.ApplicationsActor.GetAllApplications
+
+object ApplicationsActor {
+  case class GetAllApplications()
+}
 
 class ApplicationsActor extends Actor with ActorLogging {
 
@@ -23,7 +30,7 @@ class ApplicationsActor extends Actor with ActorLogging {
 
   val appActors = scala.collection.mutable.Map[String, ActorRef]()
 
-  def receive: Actor.Receive = {
+  def receive = {
     case rac: InitResourceActorChain => handleInitResourceActorChain(rac)
     case caa: CreateApplicationActor => createApplicationActor(caa)
     case daa: DeleteApplicationActor => deleteApplicationActor(daa)
@@ -83,7 +90,6 @@ class ApplicationsActor extends Actor with ActorLogging {
 //        case t => println(s"Exception: ${t.getMessage}")
 //        //sender ! List()
 //    }
-    // List(new Application("a1"), new Application("a2"))
-    sender ! List("1", "2", "3","4")
+    sender ! List(new Application("root", "/root"), new Application("demo", "/demo/v1"))
   }
 }

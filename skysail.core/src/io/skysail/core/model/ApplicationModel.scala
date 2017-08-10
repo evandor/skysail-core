@@ -99,9 +99,10 @@ case class ApplicationModel(
 //    &nbsp;&nbsp;&nbsp;<u>Entities</u>: <ul>${printHtmlMap(entityModelsMap)}</ul>
 //    &nbsp;&nbsp;&nbsp;<u>Resources</u>: <ul>${resourceModels.map { v => "<li>" + v.toHtml(name, apiVersion, request) + "</li>" }.mkString("")}</ul>"""
 
-  override def toString() = s"""${this.getClass.getSimpleName}("$name","$apiVersion")
-    Resources: ${resourceModels.map { v => sys.props("line.separator") + " " * 6 + " - " + v }.mkString("")}
-    Entities: ${printMap(entityModelsMap)}"""
+  override def toString() = "xxx"
+//    s"""${this.getClass.getSimpleName}("$name","$apiVersion")
+//    Resources: ${resourceModels.map { v => sys.props("line.separator") + " " * 6 + " - " + v }.mkString("")}
+//    Entities: ${printMap(entityModelsMap)}"""
 
   private def printHtmlMap(map: scala.collection.mutable.Map[String, EntityModel]) = map.map(v => s"""
       <li>"${v._1}" -> ${v._2.toHtml}</li>""").mkString("")
