@@ -11,4 +11,10 @@ public class ApplicationTests3 {
       //assertThat(1 == 1);
         assertTrue(1 == 1);
     }
+
+    @Test
+    public void createsEntity_postingJSON2() {
+      //assertThat(1 == 1);
+        assertTrue(1 == 1);
+    }
 }

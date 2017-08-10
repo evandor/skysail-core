@@ -59,14 +59,14 @@ class ApplicationsActor extends Actor with ActorLogging {
     actor.map(context.stop(_))
   }
 
-  def getAllApplications(gaa: GetAllApplications) = {
+  private def getAllApplications(gaa: GetAllApplications) = {
     log info s"getting all Applications..."
     val p = context.children.map(appActor => {
       val t = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
       t
       //println ("AppActor: " + appActor)
     }).toList
-    println(p)
+    println("LLL" + p)
 //    implicit val ec = context.system.dispatcher
 //    val q = Future.sequence(p)
 ////    q.onSuccess(result => {

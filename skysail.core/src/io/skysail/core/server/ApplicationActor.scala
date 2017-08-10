@@ -40,8 +40,6 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
       log debug "out AppActor... " + e
       log debug "sending to " + sendBackTo
       sendBackTo ! e
-      //log info "stopping actor: " + chainRoot
-      //context.stop(chainRoot)
       become(in)
       nextActor ! PoisonPill
     }

@@ -22,6 +22,9 @@ import akka.http.scaladsl.server.RequestContext
 
 object ResourceActor {
   case class GetRequest()  
+  case class PostRequest()
+  case class PutRequest()
+  case class DeleteRequest()  
 }
 
 abstract class ResourceActor[T] extends Actor with ActorLogging {
@@ -45,14 +48,11 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
     case gr: ResourceActor.GetRequest => {
       log info s"got GET Request(1)"
       get()
-      //nextActor ! 
     }
     case reqCtx: RequestContext => {
       log debug "in... " + reqCtx
       sendBackTo = sender
       import io.skysail.core.dsl.ActorChainDsl._
-
-      // log info s"MESSAGE: ${chainRoot} ! (${e},${this}"
       chainRootActor = context.actorOf(chainRoot, "RequestProcessingActor")
       chainRootActor ! (reqCtx, this.self)
       become(out)
