@@ -30,8 +30,8 @@ class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandle
     val t = Await.result(r, 1.seconds)
     //println("YYY: " + t)
 
-    implicit val appFormat = jsonFormat2(Application)
-    val jsonAst = t.asInstanceOf[List[Application]].toJson.toString()
+//    implicit val appFormat = jsonFormat2(Application)
+//    val jsonAst = t.asInstanceOf[List[Application]].toJson.toString()
 
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization

@@ -1,0 +1,21 @@
+Bundle-Version: 3.0.3.${tstamp}
+
+-classpath: ,\
+    jar/rest-assured-3.0.3.jar,\
+    jar/rest-assured-common-3.0.3.jar,\
+    jar/json-path-3.0.3.jar,\
+    jar/xml-path-3.0.3.jar
+
+Export-Package: \
+    io.restassured.*;version=3.0.3
+    
+Bundle-Name: rest-assured.jar
+
+Import-Package: \
+    !com.github.scribejava.*,\
+    !org.ccil.cowan.tagsoup.*,\
+    !org.codehaus.*,\
+    !groovy.*,\
+    *
+
+

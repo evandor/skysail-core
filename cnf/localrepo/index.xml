@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1502378849000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1502430212000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.core"/>
@@ -779,9 +779,12 @@
 	at aQute.bnd.deployer.repository.providers.R5RepoContentProvider.generateIndex(R5RepoContentProvider.java:290)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:164)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.regenerateAllIndexes(LocalIndexedRepo.java:142)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:377)
-	at bndtools.central.Central.refreshPlugins(Central.java:438)
-	at bndtools.RefreshReposHandler$1.runInWorkspace(RefreshReposHandler.java:27)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.finishPut(LocalIndexedRepo.java:238)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.putArtifact(LocalIndexedRepo.java:311)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.put(LocalIndexedRepo.java:359)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard.performFinishAddFiles(AddFilesToRepositoryWizard.java:99)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard.access$100(AddFilesToRepositoryWizard.java:30)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard$2.runInWorkspace(AddFilesToRepositoryWizard.java:68)
 	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
 Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
@@ -789,7 +792,7 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
 	at java.lang.Integer.parseInt(Integer.java:569)
 	at java.lang.Integer.parseInt(Integer.java:615)
 	at org.osgi.framework.Version.parseInt(Version.java:168)
-	... 14 more
+	... 17 more
  -->
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.testkit"/>
@@ -2822,6 +2825,639 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
     </requirement>
     <requirement namespace="osgi.ee">
       <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.6))"/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="b243266bf0d9c993121e51b2639a8a062e6e71d8c0b48131a02ebe481557d6f3"/>
+      <attribute name="url" value="io.skysail.bundled.rest-assured/io.skysail.bundled.rest-assured-3.0.3.jar"/>
+      <attribute name="size" type="Long" value="777290"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,io.restassured.filter,io.restassured.filter.log,io.restassured.http,io.restassured.mapper,io.restassured.parsing,io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.assertion"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.config,io.restassured.http,io.restassured.internal,io.restassured.internal.assertion,io.restassured.response,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.authentication"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.config,io.restassured.filter.log,io.restassured.internal.http,org.apache.http.conn.ssl"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.builder"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,io.restassured.filter,io.restassured.filter.log,io.restassured.http,io.restassured.mapper,io.restassured.parsing,io.restassured.response,io.restassured.specification,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.config"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter.log,io.restassured.http,io.restassured.mapper,io.restassured.mapper.factory,io.restassured.path.json.config,org.apache.http.client,org.apache.http.conn.ssl,org.apache.http.entity.mime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.exception"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.filter"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.filter.cookie"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter,io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.filter.log"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter,io.restassured.response,io.restassured.specification,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.filter.session"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter,io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.filter.time"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter,io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.function"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.http"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.internal"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,io.restassured.filter,io.restassured.filter.log,io.restassured.function,io.restassured.http,io.restassured.internal.http,io.restassured.internal.log,io.restassured.internal.multipart,io.restassured.internal.support,io.restassured.mapper,io.restassured.matcher,io.restassured.parsing,io.restassured.path.json,io.restassured.path.json.config,io.restassured.path.xml,io.restassured.path.xml.config,io.restassured.response,io.restassured.specification,org.apache.http,org.apache.http.client,org.apache.http.client.methods,org.apache.http.conn.ssl,org.apache.http.entity,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.assertion"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.classpath"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.filter"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,io.restassured.filter,io.restassured.response,io.restassured.specification,io.restassured.spi"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.http"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,org.apache.commons.logging,org.apache.http,org.apache.http.client,org.apache.http.client.entity,org.apache.http.client.methods,org.apache.http.conn.ssl,org.apache.http.entity,org.apache.http.impl.client,org.apache.http.params,org.apache.http.protocol"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.log"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.mapper"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.mapping"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.config,io.restassured.internal.mapper,io.restassured.mapper,io.restassured.mapper.factory,io.restassured.response"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.matcher.xml"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="org.hamcrest,org.w3c.dom.ls"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.multipart"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.specification,org.apache.http,org.apache.http.entity.mime,org.apache.http.entity.mime.content"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.path"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.path.json"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.internal.assertion,io.restassured.path.json.config"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.path.json.mapping"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper,io.restassured.mapper.factory,io.restassured.path.json.config,io.restassured.path.json.mapping"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.path.xml"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.path.xml.element"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.path.xml.mapping"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper,io.restassured.mapper.factory,io.restassured.path.xml.config,io.restassured.path.xml.mapping"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.print"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter.log,io.restassured.response,io.restassured.specification"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.proxy"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.specification,org.apache.http,org.apache.http.conn.scheme,org.apache.http.impl.conn,org.apache.http.protocol"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.serialization"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.support"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.config,io.restassured.parsing,io.restassured.response,io.restassured.specification,org.apache.http.conn"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.internal.util"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.mapper"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.mapper.factory"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="com.fasterxml.jackson.databind,com.google.gson,javax.xml.bind"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.mapper.resolver"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.matcher"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.internal.matcher.xml,io.restassured.response,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.parsing"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.json"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper.factory,io.restassured.path.json.config"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.json.config"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper.factory,io.restassured.path.json.mapping"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.json.exception"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.exception"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.json.mapping"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.xml"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper.factory,io.restassured.path.xml.config,io.restassured.path.xml.element,org.xml.sax"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.xml.config"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper.factory,io.restassured.path.xml.mapping"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.xml.element"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.xml.exception"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.exception"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.path.xml.mapping"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.mapper"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.response"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter.log,io.restassured.function,io.restassured.http,io.restassured.mapper,io.restassured.matcher,io.restassured.parsing,io.restassured.path.json,io.restassured.path.json.config,io.restassured.path.xml,io.restassured.path.xml.config,io.restassured.specification,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.specification"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.authentication,io.restassured.config,io.restassured.filter,io.restassured.filter.log,io.restassured.function,io.restassured.http,io.restassured.mapper,io.restassured.parsing,io.restassured.response,org.apache.http.client,org.hamcrest"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="io.restassured.spi"/>
+      <attribute name="version" type="Version" value="3.0.3"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.rest-assured"/>
+      <attribute name="bundle-version" type="Version" value="3.0.3.201708110543"/>
+      <directive name="uses" value="io.restassured.filter"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=com.fasterxml.jackson.core)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=com.fasterxml.jackson.databind)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=com.google.gson)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.assertion)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.authentication)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.builder)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.config)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.exception)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.filter)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.filter.log)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.filter.session)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.filter.time)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.function)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.http)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.assertion)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.classpath)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.filter)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.http)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.log)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.mapper)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.mapping)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.matcher.xml)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.multipart)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.path)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.path.json)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.path.json.mapping)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.path.xml)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.path.xml.mapping)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.print)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.proxy)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.serialization)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.support)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.internal.util)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.mapper)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.mapper.factory)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.mapper.resolver)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.matcher)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.parsing)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.json)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.json.config)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.json.exception)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.json.mapping)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.xml)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.xml.config)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.xml.element)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.xml.exception)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.path.xml.mapping)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.response)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.specification)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=io.restassured.spi)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.net.ssl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.bind)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.bind.annotation)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.parsers)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.transform)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.transform.dom)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.transform.stream)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=javax.xml.validation)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.commons.lang3)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.commons.lang3.math)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.commons.lang3.text.translate)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.commons.logging)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.auth)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.client)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.client.entity)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.client.methods)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.client.params)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.client.utils)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.conn)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.conn.scheme)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.conn.ssl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.entity)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.entity.mime)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.entity.mime.content)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.impl.client)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.impl.conn)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.message)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.params)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.protocol)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.apache.http.util)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.hamcrest)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.hamcrest.core)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.hamcrest.xml)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.w3c.dom)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.w3c.dom.ls)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=org.xml.sax)"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.5))"/>
     </requirement>
   </resource>
   <resource>
