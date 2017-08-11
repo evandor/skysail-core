@@ -1,10 +1,8 @@
 package io.skysail.core.it;
 
+import static io.restassured.RestAssured.get;
+import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertTrue;
-
-//import static io.restassured.RestAssured.get;
-//import static org.hamcrest.Matchers.hasItems;
-//import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -22,11 +20,11 @@ public class ApplicationTests3 {
 //        body("price", is(new BigDecimal(12.12));
     }
 
-//    @Test
-//    //@Ignore
-//    public void createsEntity_postingJSON2() {
-//        get("/root/apps")
-//            .then()
-//        .body("name", hasItems("root","demo"));
-//    }
+    @Test
+    //@Ignore
+    public void createsEntity_postingJSON2() {
+        get("/root/apps")
+            .then()
+        .body("name", hasItems("root","demo"));
+    }
 }
