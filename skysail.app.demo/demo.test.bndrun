@@ -80,11 +80,3 @@ skysail.server.um:
 	joda-time;version=2.9.3,\
 	io.skysail.bundled.akka-http-json4s_2.11
 	
-#	,\
-#	io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
-#	io.skysail.bundled.kamon-jmx_2.11;version=0.6.7
-
-
-#	com.typesafe.akka.http.spray.json.experimental;version=2.4,\
-#	skysail.ext.config;version=latest,\
-

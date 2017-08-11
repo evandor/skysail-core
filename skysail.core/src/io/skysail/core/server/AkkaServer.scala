@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
+import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{PrivateMethodExposer, ResourceActor, ResponseEvent}
+import io.skysail.core.akka.{ PrivateMethodExposer, ResourceActor, ResponseEvent }
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -137,38 +137,30 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
 
   protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]): Route = {
     val appSelector = getApplicationActorSelection(theSystem, c.getName)
-//    new MyJsonService().route(appSelector, cls) ~
-//    new JsonService().route(appPath / "broken", appSelector, cls) ~
-//    path("hello") {
-//      get {
-//        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-//      }
-//    } ~
-//      path("hello2") {
-//        get {
-//          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
-//        }
-//      } ~
+    //    new MyJsonService().route(appSelector, cls) ~
+    //    new JsonService().route(appPath / "broken", appSelector, cls) ~
+    //    path("hello") {
+    //      get {
+    //        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+    //      }
+    //    } ~
+    //      path("hello2") {
+    //        get {
+    //          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
+    //        }
+    //      } ~
     path(appPath) {
       get {
         extractRequestContext {
-          ctx => {
-            log info s"executing route#${counter.incrementAndGet()}"
-            implicit val askTimeout: Timeout = 3.seconds
-            //println(new PrivateMethodExposer(theSystem)('printTree)())
-            val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-            log debug "appActorSelection: " + appActorSelection
-            val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
-            onSuccess(t) { x =>
-              println("xxx: " + x)
-              println("xxx: " + x.httpResponse.entity)
-              println("xxx: " + x.resource)
-              complete(x.httpResponse)
-              //complete(StatusCodes.Created, List(`Content-Type`(`application/json`)), """{"bar": "foo"}""")
-              //complete(x.httpResponse.copy(entity = x.resource.asInstanceOf[ResponseEntity]))
-              //complete(x.resource.asInstanceOf[List[_]])
+          ctx =>
+            {
+              log info s"executing route#${counter.incrementAndGet()}"
+              implicit val askTimeout: Timeout = 3.seconds
+              //println(new PrivateMethodExposer(theSystem)('printTree)())
+              val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
+              val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
+              onSuccess(t) { x => complete(x.httpResponse) }
             }
-          }
         }
       }
     }
