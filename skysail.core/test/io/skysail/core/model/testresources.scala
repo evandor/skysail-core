@@ -1,17 +1,22 @@
 package io.skysail.core.model
 
+import akka.actor.ActorRef
 import io.skysail.core.akka.actors._
 
-class TestEntitiesResource extends ListResource[String] {  
-  def get() = List("hi", "content")
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.reflect.ClassTag
+
+class TestEntitiesResource extends ListResource[String] {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
 class TestResource extends EntityResource[String] {
-  def get() = "test"
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
 }
 
-//class TestEntityResource extends EntityServerResource[TestEntity] { 
+//class TestEntityResource extends EntityServerResource[TestEntity] {
 //  override def linkedResourceClasses() = List(classOf[PutTestEntityResource])
 //
 //  def getEntity(): TestEntity = {
@@ -20,7 +25,7 @@ class TestResource extends EntityResource[String] {
 //}
 //
 class PostTestEntityResource extends PostResource[String] {
-  def get() = "test"
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
 //  addToContext(ResourceContextId.LINK_TITLE, "create TestEntity");
 //  def createEntityTemplate() = TestEntity(Some("1"), "hi", "content")
 //  override def getEntity() = TestEntity(None, "","").asInstanceOf[Nothing]

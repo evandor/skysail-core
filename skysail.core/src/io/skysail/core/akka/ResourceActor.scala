@@ -1,24 +1,14 @@
 package io.skysail.core.akka
 
-import io.skysail.core.model.LinkRelation
-import io.skysail.core.model.ResourceAssociationType
-import akka.actor.ActorLogging
-import akka.actor.Actor
-import akka.actor.Actor._
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
-import java.util.Date
-
-import akka.actor.ActorDSL
-import akka.actor.ActorDSL
-import io.skysail.core.dsl.ActorChainDsl
-import io.skysail.core.dsl.ActorChainDsl
-import io.skysail.core.dsl.ActorChainDsl.ActorChain
-import io.skysail.core.model.ApplicationModel
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
+import akka.util.Timeout
+import io.skysail.core.model.{LinkRelation, ResourceAssociationType}
+
+import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.reflect.ClassTag
 
 object ResourceActor {
   case class GetRequest()  
@@ -29,30 +19,25 @@ object ResourceActor {
 
 abstract class ResourceActor[T] extends Actor with ActorLogging {
 
-  def getLinkRelation() = LinkRelation.CANONICAL
-  def linkedResourceClasses(): List[Class[_ <: ResourceActor[_]]] = List()
-  val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: ResourceActor[_]]]]()
-  val chainRoot: Props
+  implicit val askTimeout: Timeout = 1.seconds
 
-  var chainRootActor: ActorRef = null
+  val chainRoot: Props
   val originalSender = sender
   var sendBackTo: ActorRef = null
+
+  var chainRootActor: ActorRef = null
 
   def receive = in
 
   import context._
 
-  protected def get(): T
+  protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit
 
   def in: Receive = LoggingReceive {
-    case gr: ResourceActor.GetRequest => {
-      log info s"got GET Request(1)"
-      get()
-    }
+    case gr: ResourceActor.GetRequest => get(sender)
     case reqCtx: RequestContext => {
       log debug "in... " + reqCtx
       sendBackTo = sender
-      import io.skysail.core.dsl.ActorChainDsl._
       chainRootActor = context.actorOf(chainRoot, "RequestProcessingActor")
       chainRootActor ! (reqCtx, this.self)
       become(out)
@@ -60,15 +45,9 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   }
 
   def out: Receive = LoggingReceive {
-    case gr: ResourceActor.GetRequest => {
-      log info s"got GET Request(2)"
-      sender ! get()
-    }
+    case gr: ResourceActor.GetRequest => get(sender)
     case res:ResponseEvent[_] => {
-      log debug "out... " + res
-      log debug "sending to " + sendBackTo
       sendBackTo ! res
-      log debug "stopping actor: " + chainRoot
       context.stop(chainRootActor)
       become(in)
     }

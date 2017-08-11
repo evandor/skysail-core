@@ -1,11 +1,18 @@
 package io.skysail.app.demo
 
+import akka.actor.ActorRef
 import io.skysail.core.akka.actors._
 
+import scala.concurrent.Future
+import scala.reflect.ClassTag
 
-class ContactsResource extends ListResource[Contact] {  
+
+class ContactsResource extends ListResource[Contact] {
   val appService = new ContactService()
-  override def get(): List[Contact] = appService.getApplications().toList
+
+  //override def get(): List[Contact] = appService.getApplications().toList
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+  }
 }
 
 //class AppResource extends EntityResource[Application] {

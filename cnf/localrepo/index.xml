@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1502435298000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1502436805227" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.core"/>
@@ -768,28 +768,41 @@
     </requirement>
   </resource>
   <resource>
-    <!-- Error calling analyzer "org.osgi.service.indexer.impl.BundleAnalyzer" on resource /Users/carsten/git/skysail-core/cnf/localrepo/com.typesafe.akka.http.testkit/com.typesafe.akka.http.testkit-10.0.7.jar with message java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}" and stack: java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}"
+    <!-- Error calling analyzer "org.osgi.service.indexer.impl.BundleAnalyzer" on resource C:/git/skysail-core/cnf/localrepo/com.typesafe.akka.http.testkit/com.typesafe.akka.http.testkit-10.0.7.jar with message java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}" and stack: java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}"
 	at org.osgi.framework.Version.parseInt(Version.java:170)
 	at org.osgi.framework.Version.&lt;init&gt;(Version.java:126)
 	at org.osgi.service.indexer.impl.types.VersionRange.&lt;init&gt;(VersionRange.java:58)
-	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:343)
+	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:348)
 	at org.osgi.service.indexer.impl.BundleAnalyzer.analyzeResource(BundleAnalyzer.java:72)
-	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:259)
-	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:180)
+	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:271)
+	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:187)
 	at aQute.bnd.deployer.repository.providers.R5RepoContentProvider.generateIndex(R5RepoContentProvider.java:290)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:164)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:169)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.regenerateAllIndexes(LocalIndexedRepo.java:142)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:377)
-	at bndtools.central.Central.refreshPlugins(Central.java:438)
-	at bndtools.RefreshReposHandler$1.runInWorkspace(RefreshReposHandler.java:27)
-	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:397)
+	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.refreshRepositories(BndProjectImporter.java:666)
+	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.doReimportWorkspace(BndProjectImporter.java:584)
+	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.access$300(BndProjectImporter.java:77)
+	at org.jetbrains.osgi.bnd.imp.BndProjectImporter$3.run(BndProjectImporter.java:566)
+	at com.intellij.openapi.progress.impl.CoreProgressManager$TaskRunnable.run(CoreProgressManager.java:726)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.a(CoreProgressManager.java:176)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.a(CoreProgressManager.java:556)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:501)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:66)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:163)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl$1.run(ProgressManagerImpl.java:137)
+	at com.intellij.openapi.application.impl.ApplicationImpl$2.run(ApplicationImpl.java:334)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
 Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
 	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
 	at java.lang.Integer.parseInt(Integer.java:569)
 	at java.lang.Integer.parseInt(Integer.java:615)
 	at org.osgi.framework.Version.parseInt(Version.java:168)
-	... 14 more
+	... 27 more
  -->
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.testkit"/>
