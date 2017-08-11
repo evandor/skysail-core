@@ -6,8 +6,6 @@ import akka.pattern.ask
 import akka.util.Timeout
 import io.skysail.core.akka.{ AbstractRequestHandlerActor, ResourceActor, ResponseEvent }
 import io.skysail.core.app.domain.Application
-import spray.json.DefaultJsonProtocol._
-import spray.json._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt

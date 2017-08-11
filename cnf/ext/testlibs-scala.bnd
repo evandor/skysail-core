@@ -1,0 +1,3 @@
+testlibs-scala:\
+    org.scalatest;version=3.0,\
+    org.scalactic;version=3.0
