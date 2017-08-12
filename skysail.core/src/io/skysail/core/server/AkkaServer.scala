@@ -121,23 +121,26 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
 
   private def restartServer(routes: List[Route]) = {
     implicit val materializer = ActorMaterializer()
-    log info s"(re)starting server @ port 8080 with #${routes.size} routes."
+    val binding = "0.0.0.0";
+    val port = 8080;
+
+    log info s"(re)starting server with binding ${binding}:${port} with #${routes.size} routes."
     if (futureBinding != null) {
       implicit val executionContext = theSystem.dispatcher
-      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(routes) }
+      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(routes, binding, port) }
     } else {
-      futureBinding = startServer(routes)
+      futureBinding = startServer(routes,binding, port)
     }
   }
 
-  private def startServer(arg: List[Route]) = {
+  private def startServer(arg: List[Route], binding: String, port: Integer) = {
     implicit val materializer = ActorMaterializer()
     //println(arg)
     arg.size match {
       case 0 =>
         log warn "Akka HTTP Server not started as no routes are defined"; null
-      case 1 => Http(theSystem).bindAndHandle(arg(0), "0.0.0.0", 8080)
-      case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
+      case 1 => Http(theSystem).bindAndHandle(arg(0), binding, port)
+      case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), binding, port)
     }
   }
 
