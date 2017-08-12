@@ -1,0 +1,2 @@
+akka-runtime: \
+    com.typesafe.akka.slf4j;version=${akka.version}

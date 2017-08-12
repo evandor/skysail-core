@@ -6,7 +6,6 @@ Bundle-Version: 0.1.0.${tstamp}
 	${osgi},\
 	org.osgi.service.event;version=1.3,\
 	${testlibs},\
-	${restlet},\
 	${logging},\
 	${commons},\
 	${javax},\

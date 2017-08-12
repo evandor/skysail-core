@@ -15,24 +15,19 @@ Bundle-Activator: io.skysail.core.server.AkkaServer
 
 -buildpath: \
 	${osgi},\
+	${scala},\
 	${testlibs},\
 	${testlibs-scala},\
 	${logging},\
 	${commons},\
 	${javax},\
 	${fasterxml},\
-	com.thoughtworks.paranamer;version=2.8,\
-	io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
-	org.scala-lang.modules.scala-xml;version=1.0,\
-	org.assertj.core;version=3.5,\
-	de.twentyeleven.skysail.org.json-osgi;version=20080701.0,\
-	io.spray.json;version=1.3,\
 	${akka-compiletime},\
-	domino_2.11;version=1.1,\
-	io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
-	com.typesafe.akka.http.testkit;version=10.0,\
-	com.typesafe.akka.testkit;version=2.5,\
-	io.skysail.bundled.akka-http-json4s_2.11;version=1.17
+    ${akka-test},\
+    ${json},\
+	domino_2.11;version=1.1
+
+#   io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
 		
 Export-Package: \
 	io.skysail.api.doc,\
@@ -54,17 +49,6 @@ Export-Package: \
 	io.skysail.core.model.resource,\
 	io.skysail.core.osgi.services,\
 	io.skysail.core.resources,\
-	io.skysail.core.restlet,\
-	io.skysail.core.restlet.filter,\
-	io.skysail.core.restlet.menu,\
-	io.skysail.core.restlet.queries,\
-	io.skysail.core.restlet.queries.impl,\
-	io.skysail.core.restlet.resources,\
-	io.skysail.core.restlet.responses,\
-	io.skysail.core.restlet.router,\
-	io.skysail.core.restlet.services,\
-	io.skysail.core.restlet.transformations,\
-	io.skysail.core.restlet.utils,\
 	io.skysail.core.server,\
 	io.skysail.core.security,\
 	io.skysail.core.security.config,\
@@ -72,12 +56,7 @@ Export-Package: \
 	io.skysail.core.um.domain,\
 	io.skysail.core.html,\
 	io.skysail.core.model,\
-	io.skysail.core.metrics,\
-	io.skysail.core.utils,\
-	io.skysail.core.forms,\
-	io.skysail.core.text,\
-	io.skysail.restlet.model,\
-	io.skysail.restlet.queries
+	io.skysail.core.metrics
 	
 Private-Package: \
     io.skysail.core.dsl,\
