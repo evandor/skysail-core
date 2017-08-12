@@ -29,5 +29,5 @@ function execute {
 } 
 
 execute deploy.sh
-#execute startService.sh
+execute startService.sh
 
