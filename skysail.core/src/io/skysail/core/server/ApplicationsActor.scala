@@ -12,11 +12,12 @@ import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 import java.util.concurrent.atomic.AtomicInteger
 
-import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
+import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
 import akka.actor.ActorRef
 import io.skysail.core.app.domain.Application
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.server.ApplicationsActor.GetAllApplications
+import scala.concurrent.Future
 
 object ApplicationsActor {
   case class GetAllApplications()
@@ -67,29 +68,16 @@ class ApplicationsActor extends Actor with ActorLogging {
   }
 
   private def getAllApplications(gaa: GetAllApplications) = {
-    log info s"getting all Applications..."
+    val originalSender = sender
     val p = context.children.map(appActor => {
-      val t = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
-      t
-      //println ("AppActor: " + appActor)
+      (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
     }).toList
     println("LLL" + p)
-//    implicit val ec = context.system.dispatcher
-//    val q = Future.sequence(p)
-////    q.onSuccess(result => {
-////      case e:List[ApplicationModel] => 
-////      case _:Any =>
-////    })
-//    
-//    
-//    q onSuccess {
-//        case result => println(s"Success: $result")
-//        //sender ! List("1", "2", "3","4")
-//    }
-//    q onFailure {
-//        case t => println(s"Exception: ${t.getMessage}")
-//        //sender ! List()
-//    }
-    sender ! List(new Application("root", "/root"), new Application("demo", "/demo/v1"))
+    implicit val ec = context.system.dispatcher
+    val q = Future.sequence(p)
+
+    q onSuccess {
+      case result => originalSender ! result.map(appModel => Application(appModel.name, appModel.appPath)).toList
+    }
   }
 }
