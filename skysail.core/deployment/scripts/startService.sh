@@ -32,7 +32,7 @@ echo "cd $JOB_DIR/generated/distributions/executable"
 cd $JOB_DIR/generated/distributions/executable
 
 echo "copying $APPNAME.int.jar to $PRODUCT_DIR/bin/$APPNAME.jar"
-cp $APPNAME.jar $PRODUCT_DIR/bin/$APPNAMEjar
+cp $APPNAME.int.jar $PRODUCT_DIR/bin/$APPNAME.jar
 
 cd $JOB_DIR
 echo "copying deployment/service/* to $PRODUCT_DIR"
