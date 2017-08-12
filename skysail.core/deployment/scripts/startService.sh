@@ -31,8 +31,8 @@ echo "------------------"
 echo "cd $JOB_DIR/generated/distributions/executable"
 cd $JOB_DIR/generated/distributions/executable
 
-echo "copying $APPNAME.jar to $PRODUCT_DIR/bin/$APPNAME.jar"
-cp $APPNAME.jar $PRODUCT_DIR/bin/$APPNAME.jar
+echo "copying $APPNAME.int.jar to $PRODUCT_DIR/bin/$APPNAME.jar"
+cp $APPNAME.jar $PRODUCT_DIR/bin/$APPNAMEjar
 
 cd $JOB_DIR
 echo "copying deployment/service/* to $PRODUCT_DIR"
@@ -45,12 +45,12 @@ echo "copying config/$STAGE/* to $PRODUCT_DIR/bin/config/$STAGE"
 cp config/$STAGE/* $PRODUCT_DIR/bin/config/$STAGE
 
 ### UPDATING CONFIG FROM SVN REP #########################################
-echo ""
-echo "Updating config from SVN:"
-echo "-------------------------"
+#echo ""
+#echo "Updating config from SVN:"
+#echo "-------------------------"
 
 cd $PRODUCT_DIR/bin/config
-svn export --force https://85.25.22.125/repos/skysale/skysailconfigs/$APPNAME/$STAGE/
+#svn export --force https://85.25.22.125/repos/skysale/skysailconfigs/$APPNAME/$STAGE/
 cp $STAGE/* .
 
 ### STARTING SERVICE #####################################################
