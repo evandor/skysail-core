@@ -136,7 +136,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     arg.size match {
       case 0 =>
         log warn "Akka HTTP Server not started as no routes are defined"; null
-      case 1 => Http(theSystem).bindAndHandle(arg(0), "localhost", 8080)
+      case 1 => Http(theSystem).bindAndHandle(arg(0), "0.0.0.0", 8080)
       case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), "localhost", 8080)
     }
   }
