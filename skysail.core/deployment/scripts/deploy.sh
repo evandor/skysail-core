@@ -21,7 +21,6 @@ rm -rf $PRODUCT_DIR/bin/config
 mkdir -p $PRODUCT_DIR/bin/config/$STAGE
 mkdir -p $PRODUCT_DIR/bin/config/common
 
-exit()
 
 echo "clearing jars in dir $PRODUCT_DIR/bin/jar"
 rm -rf $PRODUCT_DIR/bin/jar
@@ -29,6 +28,8 @@ mkdir -p $PRODUCT_DIR/bin/jar
 
 echo "creating dir $PRODUCT_DIR/lib if not existent"
 mkdir -p $PRODUCT_DIR/lib
+
+exit()
 
 echo "moving old wrapper logfile"
 if [ -e "$PRODUCT_DIR/bin/wrapper.log" ]
