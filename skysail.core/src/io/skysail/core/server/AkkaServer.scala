@@ -36,9 +36,12 @@ import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.headers.`Content-Type`
 import akka.http.scaladsl.model.ContentTypes._
+import akka.actor.ActorSelection
+
+case class ServerConfig(val port: Integer, val binding: String)
 
 object AkkaServer {
-  def getApplicationActorSelection(system: ActorSystem, name: String) = {
+  def getApplicationActorSelection(system: ActorSystem, name: String): ActorSelection = {
     val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
     system.actorSelection(applicationActorPath)
   }
@@ -53,6 +56,10 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
   var futureBinding: Future[Http.ServerBinding] = _
   var applicationsActor: ActorRef =
     _
+    
+  val defaultPort = 8080
+  val defaultBinding = "localhost"
+  var serverConfig = new ServerConfig(defaultPort, defaultBinding)
 
   val counter = new AtomicInteger(0)
 
@@ -76,11 +83,20 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
   }
 
   whenBundleActive({
+    
     addCapsule(new AkkaCapsule(bundleContext))
+    
     watchServices[ApplicationInfoProvider] {
       case AddingService(service, context) => addService(service)
       case ModifiedService(service, _) => log info s"Service '$service' modified"
       case RemovedService(service, _) => removeService(service)
+    }
+    
+    whenConfigurationActive("server") { conf =>
+      println ("received configuration for 'server': " + conf);
+      val port = Integer.parseInt(conf.getOrElse("port", defaultPort).asInstanceOf[String])
+      var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
+      serverConfig = new ServerConfig(port, binding)
     }
   })
 
@@ -121,26 +137,22 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
 
   private def restartServer(routes: List[Route]) = {
     implicit val materializer = ActorMaterializer()
-    val binding = "0.0.0.0";
-    val port = 8080;
-
-    log info s"(re)starting server with binding ${binding}:${port} with #${routes.size} routes."
     if (futureBinding != null) {
       implicit val executionContext = theSystem.dispatcher
-      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(routes, binding, port) }
+      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(routes) }
     } else {
-      futureBinding = startServer(routes,binding, port)
+      futureBinding = startServer(routes)
     }
   }
 
-  private def startServer(arg: List[Route], binding: String, port: Integer) = {
+  private def startServer(arg: List[Route]) = {
     implicit val materializer = ActorMaterializer()
-    //println(arg)
+    log info s"(re)starting server with binding ${serverConfig.binding}:${serverConfig.port} with #${routes.size} routes."
     arg.size match {
       case 0 =>
         log warn "Akka HTTP Server not started as no routes are defined"; null
-      case 1 => Http(theSystem).bindAndHandle(arg(0), binding, port)
-      case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), binding, port)
+      case 1 => Http(theSystem).bindAndHandle(arg(0), serverConfig.binding, serverConfig.port)
+      case _ => Http(theSystem).bindAndHandle(arg.reduce((a, b) => a ~ b), serverConfig.binding, serverConfig.port)
     }
   }
 
@@ -148,16 +160,6 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     val appSelector = getApplicationActorSelection(theSystem, c.getName)
     //    new MyJsonService().route(appSelector, cls) ~
     //    new JsonService().route(appPath / "broken", appSelector, cls) ~
-    //    path("hello") {
-    //      get {
-    //        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
-    //      }
-    //    } ~
-    //      path("hello2") {
-    //        get {
-    //          complete(HttpResponse(entity = HttpEntity(ContentType(MediaTypes.`application/json`), """{"id":"1"}""")))
-    //        }
-    //      } ~
     path(appPath) {
       get {
         extractRequestContext {
