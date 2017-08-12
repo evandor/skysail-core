@@ -14,8 +14,8 @@ echo ""
 echo "PWD: $CURRENT_DIR"
 echo ""
 
-PROJECTNAME="skysail.app.notes"
-APPNAME="notes"
+PROJECTNAME="skysail.core"
+APPNAME="core"
 STAGE="int"
 #MAIN_DEPLOY_SCRIPT_PATH=/home/carsten/.hudson/jobs/skysail.pipeline/workspace/skysail.server/deployment/scripts
 MAIN_DEPLOY_SCRIPT_PATH=.
@@ -29,5 +29,5 @@ function execute {
 } 
 
 execute deploy.sh
-execute startService.sh
+#execute startService.sh
 
