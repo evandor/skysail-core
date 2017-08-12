@@ -23,8 +23,8 @@ echo "------------------"
 
 cd $JOB_DIR/generated/distributions/executable
 
-echo "copying skysail.$APPNAME.jar to $PRODUCT_DIR/bin/skysail.$APPNAME.jar"
-cp skysail.$APPNAME.jar $PRODUCT_DIR/bin/skysail.$APPNAME.jar
+echo "copying $APPNAME.jar to $PRODUCT_DIR/bin/$APPNAME.jar"
+cp $APPNAME.jar $PRODUCT_DIR/bin/$APPNAME.jar
 
 cd $JOB_DIR
 echo "copying deployment/service/* to $PRODUCT_DIR"
@@ -52,8 +52,8 @@ echo "-----------------"
 
 echo "changing directory to $PRODUCT_DIR/bin/"
 cd $PRODUCT_DIR/bin/
-echo "unzipping skysail.$APPNAME.jar"
-unzip -o skysail.$APPNAME.jar
+echo "unzipping $APPNAME.jar"
+unzip -o $APPNAME.jar
 echo "chmod 755 on $SERVICENAME"
 chmod 755 $SERVICENAME
 echo "running ./$SERVICENAME start"
