@@ -9,7 +9,7 @@
 -runsystempackages: ${runsystempackages}
 -runtrace: false
 -runproperties: ${runproperties},\
-    config.file=config/application.conf
+    config.file=config/common/application.conf
 
 -runvm: -Xmx256M
 
