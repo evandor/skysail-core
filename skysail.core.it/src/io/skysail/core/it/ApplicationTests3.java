@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -55,10 +56,18 @@ public class ApplicationTests3 {
     }
 
     @Test
+    //@Ignore // maybe test https://github.com/dpishchukhin/org.knowhowlab.osgi.testing
     public void stopping_and_starting_demo_bundle_does_not_break_anything() throws Exception {
         stopAndStartBundle("skysail.app.demo");
+        Thread.sleep(2000);
         String responseBody = get("http://localhost:8080/root/apps");
         assertTrue(responseBody.contains("{\"name\":\"root\",\"context\":\"/root\"}"));
+    }
+
+    @Test
+    @Ignore
+    public void stopping_and_starting_demo_bundle_does_not_change_number_of_routes() throws Exception {
+        stopAndStartBundle("skysail.app.demo");
     }
 
     private void stopAndStartBundle(String symbolicName) throws BundleException {
@@ -67,10 +76,7 @@ public class ApplicationTests3 {
                 .filter(b -> symbolicName.equals(b.getSymbolicName()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
-
-        log.info("stopping bundle " + bundle.getSymbolicName());
         bundle.stop();
-        log.info("starting bundle " + bundle.getSymbolicName());
         bundle.start();
     }
 

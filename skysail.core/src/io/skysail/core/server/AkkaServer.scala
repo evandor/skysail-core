@@ -28,7 +28,7 @@ import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.server.AkkaServer._
 import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
 import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -84,43 +84,49 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     }
   })
 
-  private def addService(s: ApplicationInfoProvider) = {
-    if (s == null) {
-      log warn "service null"
-    } else {
+  private def addService(appInfoProvider: ApplicationInfoProvider) = {
+    implicit val askTimeout: Timeout = 3.seconds
+    //    if (appInfoProvider == null) {
+    //      log warn "service null"
+    //    } else {
 
-      val appsActor = SkysailApplication.getApplicationsActor(theSystem)
-      implicit val askTimeout: Timeout = 3.seconds
-      appsActor ! CreateApplicationActor(s.getClass.asInstanceOf[Class[SkysailApplication]], s.appModel())
+    val appsActor = SkysailApplication.getApplicationsActor(theSystem)
+    appsActor ! CreateApplicationActor(appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]], appInfoProvider.appModel())
 
-      log info "========================================="
-      log info s"Adding routes from ${s.getClass.getName}"
-      log info "========================================="
-      val routes2 = s.routes()
+    log info "========================================="
+    log info s"Adding routes from ${appInfoProvider.getClass.getName}"
+    log info "========================================="
 
-      val r = routes2.map { prt => createRoute(prt._1, prt._2, s.getClass) }.toList
-      routes ++= r //s.routes()
-      restartServer(routes.toList)
-    }
+    val routesFromProvider = appInfoProvider.routes()
+    routes ++= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.getClass) }.toList
+    restartServer(routes.toList)
+    //    }
   }
 
-  private def removeService(s: ApplicationInfoProvider) = {
+  private def removeService(appInfoProvider: ApplicationInfoProvider) = {
     val appsActor = SkysailApplication.getApplicationsActor(theSystem)
-    implicit val askTimeout: Timeout = 3.seconds
-    // appsActor ! DeleteApplicationActor(s.)
+    appsActor ! DeleteApplicationActor(appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]])
 
+    log info "========================================="
+    log info s"Removing routes from ${appInfoProvider.getClass.getName}"
+    log info "========================================="
     //log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
     //routes --= s.routes()
+    // TODO need to fix that, routes are not removed
+    val routesFromProvider = appInfoProvider.routes()
+    routes --= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.getClass) }.toList
+
     restartServer(routes.toList)
   }
 
-  private def restartServer(arg: List[Route]) = {
+  private def restartServer(routes: List[Route]) = {
     implicit val materializer = ActorMaterializer()
+    log info s"(re)starting server @ port 8080 with #${routes.size} routes."
     if (futureBinding != null) {
       implicit val executionContext = theSystem.dispatcher
-      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(arg) }
+      futureBinding.flatMap(_.unbind()).onComplete { _ => futureBinding = startServer(routes) }
     } else {
-      futureBinding = startServer(arg)
+      futureBinding = startServer(routes)
     }
   }
 
