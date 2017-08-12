@@ -29,8 +29,6 @@ mkdir -p $PRODUCT_DIR/bin/jar
 echo "creating dir $PRODUCT_DIR/lib if not existent"
 mkdir -p $PRODUCT_DIR/lib
 
-exit()
-
 echo "moving old wrapper logfile"
 if [ -e "$PRODUCT_DIR/bin/wrapper.log" ]
 then
@@ -38,11 +36,11 @@ then
 fi
 
 ### ZIP ARCHIVE ##########################################################
-echo ""
-echo "Creating ZIP Archive:"
-echo "--------------------"
+#echo ""
+#echo "Creating ZIP Archive:"
+#echo "--------------------"
 
-cd $JOB_DIR/generated/distributions/executable
-cp $APPNAME.$STAGE.jar skysail.$APPNAME.jar
+#cd $JOB_DIR/generated/distributions/executable
+#cp $APPNAME.$STAGE.jar skysail.$APPNAME.jar
 
-zip -r skysail.$APPNAME.zip ../../../config/$STAGE skysail.$APPNAME.jar
+#zip -r skysail.$APPNAME.zip ../../../config/$STAGE skysail.$APPNAME.jar
