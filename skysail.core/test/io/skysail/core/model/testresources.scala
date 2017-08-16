@@ -7,7 +7,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 
-class TestEntitiesResource extends ListResource[String] {
+class TestEntitiesResource extends ListResourceController[String] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }

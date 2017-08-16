@@ -17,34 +17,31 @@ import org.json4s.{ jackson, native, DefaultFormats }
 import scala.util.Success
 import scala.util.Failure
 import akka.actor.ActorRef
+import java.nio.file.{ Files, Paths }
+import akka.http.scaladsl.model._
 
-class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class AssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = context.system.dispatcher
-    val r = (res.req.resourceActor ? ResourceController.GetRequest()).mapTo[List[T]]
 
-    val t = Await.result(r, 1.seconds)
-    //println("YYY: " + t)
+    val fullPath = Paths.get("/Users/carsten/git/tmp/pline/tsconfig.json")
+    println(fullPath)
+    val ext = getExtensions(fullPath.getFileName.toString)
+    val x = MediaTypes.forExtension(ext)
+    val c: ContentType = ContentTypes.`application/json` // ContentType(MediaTypes.forExtension(ext))// .getOrElse(MediaTypes.`text/plain`))
+    val byteArray = Files.readAllBytes(fullPath)
 
-    implicit val formats = DefaultFormats
-    implicit val serialization = jackson.Serialization
-
-    val m = Marshal(t).to[RequestEntity]
-    
-    m.onSuccess{
-      case value => 
-        //println(s"Got the callback, meaning = $value")
-        //val httpEntity = HttpEntity(ContentTypes.`application/json`, jsonAst)
-        nextActor ! res.copy(resource = t, httpResponse = res.httpResponse.copy(entity = value))
-    }
-    
-//    m.onComplete {
-//      case Success(value) => println(s"Got the callback, meaning = $value")
-//      case Failure(e) => e.printStackTrace
-//    }
-
+    nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(c, byteArray)))
   }
 
+  private def getExtensions(fileName: String): String = {
+
+    val index = fileName.lastIndexOf('.')
+    if (index != 0) {
+      fileName.drop(index + 1)
+    } else
+      ""
+  }
 }

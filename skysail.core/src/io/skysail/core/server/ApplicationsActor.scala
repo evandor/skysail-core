@@ -72,11 +72,8 @@ class ApplicationsActor extends Actor with ActorLogging {
     val p = context.children.map(appActor => {
       (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
     }).toList
-    println("LLL" + p)
     implicit val ec = context.system.dispatcher
-    val q = Future.sequence(p)
-
-    q onSuccess {
+    Future.sequence(p) onSuccess {
       case result => originalSender ! result.map(appModel => Application(appModel.name, appModel.appPath)).toList
     }
   }

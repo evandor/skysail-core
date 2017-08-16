@@ -3,7 +3,7 @@ package io.skysail.core.akka.actors
 import io.skysail.core.akka._
 import io.skysail.core.dsl.ActorChainDsl._
 
-abstract class EntityResource[T] extends ResourceActor[T] {
+abstract class EntityResource[T] extends ResourceController[T] {
 
   override val chainRoot = (
     classOf[RequestProcessingActor[_]] ==>

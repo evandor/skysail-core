@@ -6,12 +6,12 @@ import io.skysail.core.ScalaReflectionUtils
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.ResourceActor
+import io.skysail.core.akka.ResourceController
 
 case class ResourceModel2(
     appModel: ApplicationModel, 
     val pathMatcher: PathMatcher[Unit],
-    val targetResourceClass: Class[_ <: ResourceActor[_]]) {
+    val targetResourceClass: Class[_ <: ResourceController[_]]) {
 
   require(pathMatcher != null, "A ResourceModel's pathMatcher must not be null")
   require(targetResourceClass != null, "A ResourceModel's target class must not be null")

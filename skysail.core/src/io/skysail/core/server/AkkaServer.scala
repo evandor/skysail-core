@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{ PrivateMethodExposer, ResourceActor, ResponseEvent }
+import io.skysail.core.akka.{ PrivateMethodExposer, ResourceController, ResponseEvent }
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -156,16 +156,26 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     }
   }
 
-  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceActor[_]], c: Class[_]): Route = {
+  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], c: Class[_]): Route = {
     val appSelector = getApplicationActorSelection(theSystem, c.getName)
     //    new MyJsonService().route(appSelector, cls) ~
     //    new JsonService().route(appPath / "broken", appSelector, cls) ~
+    
+    val staticResources =
+    (get & pathPrefix("admin")){
+      (pathEndOrSingleSlash) {// & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
+        getFromResource("admin/index.html")
+      } ~  {
+        getFromResourceDirectory("admin")
+      }
+    }
+    
     path(appPath) {
       get {
         extractRequestContext {
           ctx =>
             {
-              log info s"executing route#${counter.incrementAndGet()}"
+              log debug s"executing route#${counter.incrementAndGet()}"
               implicit val askTimeout: Timeout = 3.seconds
               //println(new PrivateMethodExposer(theSystem)('printTree)())
               val appActorSelection = getApplicationActorSelection(theSystem, c.getName)

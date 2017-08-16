@@ -6,5 +6,5 @@ import io.skysail.core.model.ApplicationModel
 
 trait ApplicationInfoProvider {
   def appModel(): ApplicationModel
-  def routes(): List[(PathMatcher[Unit], Class[_ <: io.skysail.core.akka.ResourceActor[_]])]
+  def routes(): List[(PathMatcher[Unit], Class[_ <: io.skysail.core.akka.ResourceController[_]])]
 }

@@ -10,14 +10,14 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
 
-object ResourceActor {
+object ResourceController {
   case class GetRequest()  
   case class PostRequest()
   case class PutRequest()
   case class DeleteRequest()  
 }
 
-abstract class ResourceActor[T] extends Actor with ActorLogging {
+abstract class ResourceController[T] extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
 
@@ -31,10 +31,11 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
 
   import context._
 
+  // TODO move down to subcontrollers? Not needed on AssetsController for example
   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit
 
   def in: Receive = LoggingReceive {
-    case gr: ResourceActor.GetRequest => get(sender)
+    case gr: ResourceController.GetRequest => get(sender)
     case reqCtx: RequestContext => {
       log debug "in... " + reqCtx
       sendBackTo = sender
@@ -45,7 +46,7 @@ abstract class ResourceActor[T] extends Actor with ActorLogging {
   }
 
   def out: Receive = LoggingReceive {
-    case gr: ResourceActor.GetRequest => get(sender)
+    case gr: ResourceController.GetRequest => get(sender)
     case res:ResponseEvent[_] => {
       sendBackTo ! res
       context.stop(chainRootActor)

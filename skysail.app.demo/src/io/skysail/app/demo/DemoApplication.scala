@@ -28,6 +28,6 @@ object DemoApplication {
 class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationInfoProvider {
 
   override def routesMappings = List(
-    "contacts" -> classOf[ContactsResource])
+    "contacts" -> classOf[ContactsController])
 
 }

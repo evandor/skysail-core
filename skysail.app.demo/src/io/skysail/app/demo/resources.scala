@@ -7,7 +7,7 @@ import scala.concurrent.Future
 import scala.reflect.ClassTag
 
 
-class ContactsResource extends ListResource[Contact] {
+class ContactsController extends ListResourceController[Contact] {
   val appService = new ContactService()
 
   //override def get(): List[Contact] = appService.getApplications().toList

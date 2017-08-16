@@ -24,7 +24,7 @@ import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import io.skysail.core.ScalaReflectionUtils
-import io.skysail.core.akka.ResourceActor
+import io.skysail.core.akka.ResourceController
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
@@ -44,7 +44,7 @@ import akka.http.scaladsl.model.ContentTypes
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
-  case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceActor[_]])
+  case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceController[_]])
   case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel)
   case class DeleteApplicationActor(val cls: Class[_ <: SkysailApplication])
 
@@ -70,7 +70,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   val appModel = ApplicationModel(name, apiVersion)
 
-  def routesMappings: List[(String, Class[_ <: ResourceActor[_]])]
+  def routesMappings: List[(String, Class[_ <: ResourceController[_]])]
 
   var actorRefsMap = Map.empty[String, ActorRef]
 
@@ -142,7 +142,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
     return componentContext.getBundleContext().getBundle();
   }
 
-  private def getResourceActor(cls: Class[_ <: ResourceActor[_]]) = actorRefsMap get cls.getName getOrElse {
+  private def getResourceActor(cls: Class[_ <: ResourceController[_]]) = actorRefsMap get cls.getName getOrElse {
     log info s"creating new actor for ${cls.getName}"
     val c = system.actorOf(Props.apply(cls), cls.getName)
     actorRefsMap += cls.getName -> c

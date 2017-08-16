@@ -3,7 +3,7 @@ package io.skysail.core.model
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.ResourceActor
+import io.skysail.core.akka.ResourceController
 
 object LinkModel2 {
 //  def fromLinkheader(l: String): LinkModel = {
