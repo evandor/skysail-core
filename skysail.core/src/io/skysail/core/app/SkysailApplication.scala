@@ -29,11 +29,12 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
-import akka.actor.Status.{ Failure, Success }
+import akka.actor.Status.{Failure, Success}
 import io.skysail.core.akka.PrivateMethodExposer
-import io.skysail.core.server.ApplicationsActor
+import io.skysail.core.server.{ApplicationsActor, BundlesActor}
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 import scala.util.Random
 import scala.concurrent.Future
 import scala.concurrent.Await
@@ -59,6 +60,10 @@ object SkysailApplication {
   def getApplicationActorSelection(system: ActorSystem, name: String) = {
     val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
     system.actorSelection(applicationActorPath)
+  }
+
+  def getBundlesActor(system: ActorSystem) = {
+    system.actorSelection("/user/" + classOf[BundlesActor].getSimpleName)
   }
 }
 

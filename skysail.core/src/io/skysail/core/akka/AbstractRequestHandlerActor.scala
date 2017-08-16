@@ -19,7 +19,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
   def doRequest(req: RequestEvent): Unit = {}
   def doResponse(nextActor: ActorRef, res: ResponseEvent[_]): Unit = {  }
 
-  private def receivedRequestEvent(req: RequestEvent) = {
+  protected def receivedRequestEvent(req: RequestEvent) = {
     log debug s"RequestEvent received"
     //log info s"setting returnTo to " + sender
     returnTo = sender
@@ -36,7 +36,7 @@ abstract class AbstractRequestHandlerActor extends Actor with ActorLogging {
     }
   }
 
-  private def receivedResponseEvent(res: ResponseEvent[_]) = {
+  protected def receivedResponseEvent(res: ResponseEvent[_]) = {
     log debug s"ResponseEvent received"
     //log info s"returning to $returnTo with $res"
     /*returnTo ! */doResponse(returnTo, res)

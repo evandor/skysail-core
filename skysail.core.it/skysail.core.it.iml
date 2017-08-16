@@ -27,6 +27,7 @@
     <orderEntry type="library" name="bnd:de.twentyeleven.skysail.org.hamcrest.hamcrest-all-osgi:1.3.0.1" level="project" />
     <orderEntry type="library" name="bnd:com.springsource.org.junit:4.11.0" level="project" />
     <orderEntry type="library" name="bnd:org.mockito.mockito-all:1.10.19" level="project" />
+    <orderEntry type="library" name="bnd:org.assertj.core:3.5.2" level="project" />
     <orderEntry type="library" name="bnd:ch.qos.logback.classic:1.1.9" level="project" />
     <orderEntry type="library" name="bnd:ch.qos.logback.core:1.1.9" level="project" />
     <orderEntry type="library" name="bnd:slf4j.api:1.7.21" level="project" />
@@ -47,7 +48,6 @@
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.core.jackson-databind:2.8.5" level="project" />
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.dataformat.jackson-dataformat-xml:2.8.5" level="project" />
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.dataformat.jackson-dataformat-smile:2.8.5" level="project" />
-    <orderEntry type="library" name="bnd:com.fasterxml.jackson.dataformat.jackson-dataformat-yaml:2.8.5" level="project" />
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.dataformat.jackson-dataformat-csv:2.8.5" level="project" />
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.dataformat.jackson-dataformat-cbor:2.8.5" level="project" />
     <orderEntry type="library" name="bnd:com.fasterxml.jackson.module.jackson-module-jaxb-annotations:2.8.5" level="project" />
@@ -61,7 +61,6 @@
     <orderEntry type="library" name="bnd:org.scalatest:3.0.1" level="project" />
     <orderEntry type="library" name="bnd:org.scalactic:3.0.1" level="project" />
     <orderEntry type="library" name="bnd:org.scala-lang.modules.scala-xml:1.0.6" level="project" />
-    <orderEntry type="library" name="bnd:org.assertj.core:3.5.2" level="project" />
     <orderEntry type="library" name="bnd:de.twentyeleven.skysail.org.json-osgi:20080701.0.0" level="project" />
     <orderEntry type="library" name="bnd:org.eclipse.jetty.server:9.2.11.v20150529" level="project" />
     <orderEntry type="library" name="bnd:org.eclipse.jetty.util:9.2.11.v20150529" level="project" />
