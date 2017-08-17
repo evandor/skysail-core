@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
+import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{PrivateMethodExposer, ResourceController, ResponseEvent}
+import io.skysail.core.akka.{ PrivateMethodExposer, ResourceController, ResponseEvent }
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -28,7 +28,7 @@ import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.server.AkkaServer._
 import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
+import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
 import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -55,7 +55,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
   var routes = scala.collection.mutable.ListBuffer[Route]()
   var futureBinding: Future[Http.ServerBinding] = _
   var applicationsActor: ActorRef = _
-  var bundlesActor:ActorRef = _
+  var bundlesActor: ActorRef = _
 
   val defaultPort = 8080
   val defaultBinding = "localhost"
@@ -165,29 +165,28 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     //    new JsonService().route(appPath / "broken", appSelector, cls) ~
 
     val staticResources =
-      (get & pathPrefix("admin")) {
-        (pathEndOrSingleSlash) {
-          // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
-          getFromResource("admin/index.html")
-        } ~ {
-          getFromResourceDirectory("admin")
+      path("static") {
+        get {
+            // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
+            getFromResource("application.conf")
         }
       }
-
-    path(appPath) {
-      get {
-        extractRequestContext {
-          ctx => {
-            log debug s"executing route#${counter.incrementAndGet()}"
-            implicit val askTimeout: Timeout = 3.seconds
-            //println(new PrivateMethodExposer(theSystem)('printTree)())
-            val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-            val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
-            onSuccess(t) { x => complete(x.httpResponse) }
+    staticResources ~
+      path(appPath) {
+        get {
+          extractRequestContext {
+            ctx =>
+              {
+                log debug s"executing route#${counter.incrementAndGet()}"
+                implicit val askTimeout: Timeout = 3.seconds
+                //println(new PrivateMethodExposer(theSystem)('printTree)())
+                val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
+                val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
+                onSuccess(t) { x => complete(x.httpResponse) }
+              }
           }
         }
       }
-    }
   }
 
 }

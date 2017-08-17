@@ -14,7 +14,7 @@ class AppsController extends ListResourceController[Application] {
 
   val appsActor = SkysailApplication.getApplicationsActor(context.system)
 
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]) {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     (appsActor ? GetAllApplications())
       .mapTo[List[Application]]
       .onSuccess { case r => sender ! r }

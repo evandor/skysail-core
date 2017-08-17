@@ -81,7 +81,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) exte
 
   val routes = {
     routesMappings.foreach(m => {
-      log debug s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
+      log info s"mapping '${appModel.appPath()}/${m._1}' to '${m._2}'"
       appModel.addResourceModel(m._1, m._2)
     })
 

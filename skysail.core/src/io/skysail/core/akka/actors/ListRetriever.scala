@@ -26,7 +26,6 @@ class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandle
     val r = (res.req.resourceActor ? ResourceController.GetRequest()).mapTo[List[T]]
 
     val t = Await.result(r, 1.seconds)
-    //println("YYY: " + t)
 
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
@@ -35,8 +34,6 @@ class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandle
     
     m.onSuccess{
       case value => 
-        //println(s"Got the callback, meaning = $value")
-        //val httpEntity = HttpEntity(ContentTypes.`application/json`, jsonAst)
         nextActor ! res.copy(resource = t, httpResponse = res.httpResponse.copy(entity = value))
     }
     
