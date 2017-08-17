@@ -168,7 +168,8 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
       path("static") {
         get {
             // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
-            getFromResource("application.conf")
+            implicit val classloader = classOf[AkkaServer].getClassLoader
+            getFromResource("application.conf", ContentTypes.`application/json`, classloader)
         }
       }
     staticResources ~
