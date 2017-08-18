@@ -171,6 +171,13 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
             implicit val classloader = classOf[AkkaServer].getClassLoader
             getFromResource("application.conf", ContentTypes.`application/json`, classloader)
         }
+      } ~
+      pathPrefix("client") {
+        get {
+          val classloader = classOf[AkkaServer].getClassLoader
+          //getFromDirectory("client")
+          getFromResourceDirectory("client", classloader)
+        }
       }
     staticResources ~
       path(appPath) {
@@ -186,6 +193,13 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
                 onSuccess(t) { x => complete(x.httpResponse) }
               }
           }
+        }
+      } ~
+      pathPrefix("") {
+        get {
+          val classloader = classOf[AkkaServer].getClassLoader
+          //getFromDirectory("client")
+          getFromResourceDirectory("client", classloader)
         }
       }
   }

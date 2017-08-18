@@ -6,7 +6,7 @@ Import-Package: \
     io.skysail.api.weaving,\
     *
     
--includeresource: OSGI-OPT/src=src/,resources
+-includeresource: OSGI-OPT/src=src/,resources,client=client/dist
 
 Bundle-Activator: io.skysail.core.server.AkkaServer
     
