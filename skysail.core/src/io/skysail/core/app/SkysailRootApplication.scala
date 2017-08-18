@@ -18,8 +18,9 @@ import akka.http.scaladsl.server._
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
-import io.skysail.core.app.resources.AppsController
+import io.skysail.core.app.resources._
 import io.skysail.core.akka.actors.AssetsController
+import io.skysail.core.app.resources.BundlesController
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -48,10 +49,9 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceController[_]])] = {
     List(
-      "first" -> classOf[DefaultResource2],
-//      "second" -> classOf[DefaultResource3[String]],
       "login" -> classOf[AkkaLoginResource[String]],
       "apps" -> classOf[AppsController],
+      "bundles" -> classOf[BundlesController],
       "app" -> classOf[AppResource],
       "assets" -> classOf[AssetsController])
   }

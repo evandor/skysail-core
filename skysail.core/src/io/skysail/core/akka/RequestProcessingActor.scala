@@ -41,8 +41,12 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
     implicit val ec = context.system.dispatcher
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
+    
+//    println("RR: " + response.resource)
+//    println("RR: " + response.resource.getClass().getName)
 
-//    val m = Marshal(response.resource).to[RequestEntity]
+//    val x = Marshal(response.resource.asInstanceOf[List[T]])
+//    val m = x.to[RequestEntity]
 //    
 //     m.onSuccess{
 //      case value => 
