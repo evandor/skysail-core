@@ -21,7 +21,7 @@ class BundlesController extends ListResourceController[BundleDescriptor] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     (bundlesActor ? BundlesActor.GetBundles())
       .mapTo[List[Bundle]]
-      .onSuccess { case r => sender ! r.map (b => new BundleDescriptor(b)).toList }
+      .onSuccess { case r => sender ! r.map (b => BundleDescriptor(b)).toList }
   }
-  
+
 }

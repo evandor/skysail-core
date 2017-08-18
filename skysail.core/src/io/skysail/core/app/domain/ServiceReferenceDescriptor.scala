@@ -3,33 +3,28 @@ package io.skysail.core.app.domain
 import org.osgi.framework.ServiceReference
 
 object ServiceReferenceDescriptor {
- def apply(ref: ServiceReference[_]) = {
-   
-   var id = "theid"
-   
-//   ref.getPropertyKeys.foreach(key => {
-//     case "service.id" => id = ref.getProperty("service.id").toString
-//     //case "objectClass" => if (ref.getProperty("objectClass") != null) ref.getProperty("objectClass").toString()
-//   })
-   new ServiceReferenceDescriptor(id)
- }
+
+  private final val OBJECT_CLASS = "objectClass"
+  private final val SERVICE_ID = "service.id"
+  private final val BUNDLE_ID = "service.bundleid"
+
+  def apply(ref: ServiceReference[_]): ServiceReferenceDescriptor = {
+
+    var id, bundleId, objectClass = ""
+    val properties = scala.collection.mutable.Map[String, String]()
+
+    ref.getPropertyKeys.foreach(key => {
+      key match {
+        case SERVICE_ID => id = ref.getProperty(SERVICE_ID).toString
+        case BUNDLE_ID => bundleId = ref.getProperty(BUNDLE_ID).toString
+        case OBJECT_CLASS => if (ref.getProperty(OBJECT_CLASS) != null) {
+          objectClass = ref.getProperty(OBJECT_CLASS).asInstanceOf[Array[String]].mkString(",")
+        }
+        case key: Any => properties.put(key, ref.getProperty(key).toString());
+      }
+    })
+    new ServiceReferenceDescriptor(id, objectClass, bundleId, properties.toMap)
+  }
 }
 
-case class ServiceReferenceDescriptor(id: String) {
-          
-        
-//                Arrays.stream(serviceRef.getPropertyKeys()).forEach(key -> {
-//            if ("service.id".equals(key)) {
-//                this.id = serviceRef.getProperty(key).toString();
-//            } else if ("objectClass".equals(key) && serviceRef.getProperty(key) != null) {
-//                this.objectClass = Arrays.stream((String[]) serviceRef.getProperty(key))
-//                        .collect(Collectors.joining(","));
-//            } else if ("service.bundleid".equals(key)) {
-//                this.bundleId = serviceRef.getProperty(key).toString();
-//            } else {
-//                properties.put(key, serviceRef.getProperty(key).toString());
-//            }
-//        });
-
-  
-}
+case class ServiceReferenceDescriptor(id: String, objectClass: String, bundleId: String, properties: Map[String, String])
