@@ -5,9 +5,7 @@ node {
    }
    
    stage('ng build') {
-      sh 'cd skysail.core/client'
-      sh 'ng build --prod'
-      sh 'cd ../../'   
+      sh '(cd skysail.core/client && ng build --prod)'
    }
    
    stage('gradle build') {
