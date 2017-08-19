@@ -4,7 +4,13 @@ node {
       git 'https://github.com/evandor/skysail-core.git'
    }
    
-   stage('build') {
+   stage('ng build') {
+      sh 'cd skysail.core/client'
+      sh 'ng build --prod'
+      sh 'cd ../../'   
+   }
+   
+   stage('gradle build') {
       //buildCode()
       sh './gradlew clean build'
    }
