@@ -4,7 +4,7 @@ import { AppsComponent}     from './apps/apps.component';
 import { BundlesComponent } from './bundles/bundles.component'
  
 const routes: Routes = [
-  { path: '', redirectTo: '/services', pathMatch: 'full' },
+  { path: '', redirectTo: '/bundles', pathMatch: 'full' },
   { path: 'bundles', component: BundlesComponent },
   { path: 'services', component: AppsComponent }
 ];
