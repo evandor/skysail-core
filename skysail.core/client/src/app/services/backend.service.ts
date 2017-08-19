@@ -17,7 +17,7 @@ export class BackendService {
   }
 
   getBundles(): Observable<Bundle[]> {
-    return this._http.get(/*this.config.endpoint + */'http://localhost:8080/root/bundles', { headers: this.headers })
+    return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
       .map(res => res.json());
   }
 }
