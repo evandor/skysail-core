@@ -1,6 +1,6 @@
 clean angular-cli installation
 
-new project
+new project "client"
 
 https://medium.com/@beeman/tutorial-add-bootstrap-to-angular-cli-apps-b0a652f2eb2
 ---------------------------------------------------------------------------------
