@@ -17,7 +17,7 @@ import { Bundle } from '../domain/bundle';
 export class BundlesComponent implements OnInit {
 
   bundles: Bundle[];
-  searchId: string = "";
+  searchId = "";
   public searchName: string = '';
   filteredCount: number = 0;
 
