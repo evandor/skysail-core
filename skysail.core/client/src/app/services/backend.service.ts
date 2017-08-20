@@ -20,4 +20,9 @@ export class BackendService {
     return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
       .map(res => res.json());
   }
+
+  getApps(): Observable<Object[]> {
+    return this._http.get(/*this.config.endpoint + */'/root/apps', { headers: this.headers })
+    .map(res => res.json());
+  }
 }

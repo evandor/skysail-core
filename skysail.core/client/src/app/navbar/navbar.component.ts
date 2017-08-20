@@ -17,12 +17,17 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Bundles',
         icon: 'fa-th-large',
-        url: '/client/bundles'
+        url: 'bundles'
       },
       {
         label: 'Services',
         icon: 'fa-play-circle',
-        url: '/client/services'
+        url: 'services'
+      },
+      {
+        label: 'Apps',
+        icon: 'fa-play-circle',
+        url: 'apps'
       }
     ];
   }

@@ -5,6 +5,7 @@ import { BundlesComponent } from './bundles/bundles.component'
  
 const routes: Routes = [
   { path: '', redirectTo: '/bundles', pathMatch: 'full' },
+  { path: 'apps', component: AppsComponent },
   { path: 'bundles', component: BundlesComponent },
   { path: 'services', component: AppsComponent }
 ];
