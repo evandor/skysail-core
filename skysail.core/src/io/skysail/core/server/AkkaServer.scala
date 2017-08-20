@@ -195,7 +195,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
           }
         }
       } ~
-      pathPrefix("") {
+      pathPrefix("client") {
         get {
           val classloader = classOf[AkkaServer].getClassLoader
           //getFromDirectory("client")
