@@ -37,6 +37,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.headers.`Content-Type`
 import akka.http.scaladsl.model.ContentTypes._
 import akka.actor.ActorSelection
+import akka.http.scaladsl.server.directives.ContentTypeResolver
 
 case class ServerConfig(val port: Integer, val binding: String)
 
@@ -197,9 +198,8 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
       } ~
       pathPrefix("client") {
         get {
-          val classloader = classOf[AkkaServer].getClassLoader
-          //getFromDirectory("client")
-          getFromResourceDirectory("client", classloader)
+          //getFromResourceDirectory("client", classOf[AkkaServer].getClassLoader)
+          getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
         }
       }
   }
