@@ -21,6 +21,7 @@ import akka.http.scaladsl.Http
 import io.skysail.core.app.resources._
 import io.skysail.core.akka.actors.AssetsController
 import io.skysail.core.app.resources.BundlesController
+import io.skysail.core.akka.actors.BackendIndexController
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -53,7 +54,10 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       "apps" -> classOf[AppsController],
       "bundles" -> classOf[BundlesController],
       "app" -> classOf[AppResource],
-      "assets" -> classOf[AssetsController])
+      "assets" -> classOf[AssetsController],
+      "" -> classOf[BackendIndexController]
+        
+    )
   }
 
 }  

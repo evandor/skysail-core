@@ -1,0 +1,27 @@
+package io.skysail.core.akka.actors
+
+import io.skysail.core.akka._
+import io.skysail.core.dsl.ActorChainDsl._
+import io.skysail.core.model.ApplicationModel
+import akka.actor.ActorRef
+import scala.reflect.ClassTag
+import io.skysail.core.app.SkysailApplication
+import io.skysail.core.app.domain.Application
+import akka.pattern.ask
+import io.skysail.core.server.ApplicationsActor.GetAllApplications
+
+class BackendIndexController extends EntityResourceController[String] {
+
+  val appsActor = SkysailApplication.getApplicationsActor(context.system)
+
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
+  }
+
+//  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    (appsActor ? GetAllApplications())
+//      .mapTo[List[Application]]
+//      .onSuccess { case r => sender ! r }
+//  }
+
+}

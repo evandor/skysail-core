@@ -201,6 +201,12 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
           //getFromResourceDirectory("client", classOf[AkkaServer].getClassLoader)
           getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
         }
+      } ~
+      path("") {
+        get {
+          getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
+        }
+        
       }
   }
 
