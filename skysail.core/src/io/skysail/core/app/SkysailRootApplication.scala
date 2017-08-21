@@ -55,7 +55,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       "bundles" -> classOf[BundlesController],
       "app" -> classOf[AppResource],
       "assets" -> classOf[AssetsController],
-      "" -> classOf[BackendIndexController]
+      "test" -> classOf[BackendIndexController]
         
     )
   }

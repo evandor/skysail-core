@@ -6,10 +6,16 @@ import io.skysail.core.dsl.ActorChainDsl._
 abstract class EntityResourceController[T] extends ResourceController[T] {
 
   override val chainRoot = (
-    classOf[RequestProcessingActor[_]] ==>
-    classOf[Timer] ==>
-    classOf[ListRetriever[T]] ==>
-    classOf[AddLinkheaders] ==>
-    classOf[Redirector]).build()
+    classOf[RequestProcessingActor[T]] ==>
+      classOf[Timer] ==>
+      classOf[EntityRetriever[T]] ==>
+      classOf[AddLinkheaders]).build()
+
+//  override val chainRoot = (
+//    classOf[RequestProcessingActor[_]] ==>
+//    classOf[Timer] ==>
+//    classOf[ListRetriever[T]] ==>
+//    classOf[AddLinkheaders] ==>
+//    classOf[Redirector]).build()
 
 }

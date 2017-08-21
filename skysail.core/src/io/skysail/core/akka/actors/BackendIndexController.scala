@@ -12,10 +12,10 @@ import io.skysail.core.server.ApplicationsActor.GetAllApplications
 
 class BackendIndexController extends EntityResourceController[String] {
 
-  val appsActor = SkysailApplication.getApplicationsActor(context.system)
+  //val appsActor = SkysailApplication.getApplicationsActor(context.system)
 
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    ???
+
   }
 
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
