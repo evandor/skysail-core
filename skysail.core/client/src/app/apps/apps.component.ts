@@ -52,4 +52,9 @@ export class AppsComponent implements OnInit {
     //return new Array("name", "context")
   }
 
+  getField(col) {
+    console.log("WWW",col);
+    return col;
+  }
+
 }
