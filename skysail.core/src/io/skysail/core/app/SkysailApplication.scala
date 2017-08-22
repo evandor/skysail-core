@@ -67,13 +67,13 @@ object SkysailApplication {
   }
 }
 
-abstract class SkysailApplication(name: String, val apiVersion: ApiVersion) extends ApplicationInfoProvider {
+abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, description: String) extends ApplicationInfoProvider {
 
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
-  def this(name: String) = this(name, new ApiVersion(1))
+  def this(name: String, description:String) = this(name, new ApiVersion(1), description)
 
-  val appModel = ApplicationModel(name, apiVersion)
+  val appModel = ApplicationModel(name, apiVersion, description)
 
   def routesMappings: List[(String, Class[_ <: ResourceController[_]])]
 

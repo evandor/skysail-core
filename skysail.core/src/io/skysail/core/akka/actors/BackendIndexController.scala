@@ -10,12 +10,13 @@ import io.skysail.core.app.domain.Application
 import akka.pattern.ask
 import io.skysail.core.server.ApplicationsActor.GetAllApplications
 
-class BackendIndexController extends EntityResourceController[String] {
+class BackendIndexController extends ListResourceController[String] {
 
   //val appsActor = SkysailApplication.getApplicationsActor(context.system)
 
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-
+    //context.
+    sender ! List("root")
   }
 
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {

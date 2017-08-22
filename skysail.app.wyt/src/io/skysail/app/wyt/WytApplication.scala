@@ -15,7 +15,7 @@ object WytApplication {
 }
 
 @Component(immediate = true, property = { Array("service.pid=wyt") }, service = Array(classOf[ApplicationInfoProvider]))
-class WytApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationInfoProvider {
+class WytApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Wait-your-turn backend") with ApplicationInfoProvider {
 
   override def routesMappings = List(
     "pacts" -> classOf[PactsResource])

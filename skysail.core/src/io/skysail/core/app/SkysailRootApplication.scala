@@ -41,7 +41,7 @@ object SkysailRootApplication {
   immediate = true,
   property = { Array("service.pid=landingpages") },
   service = Array(classOf[ApplicationInfoProvider], classOf[ManagedService]))
-class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null)
+class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null, "backend root")
     with ApplicationInfoProvider
     with ManagedService {
 
@@ -55,7 +55,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       "bundles" -> classOf[BundlesController],
       "app" -> classOf[AppResource],
       "assets" -> classOf[AssetsController],
-      "test" -> classOf[BackendIndexController]
+      "" -> classOf[BackendIndexController]
         
     )
   }

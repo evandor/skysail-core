@@ -26,13 +26,14 @@ import akka.http.scaladsl.server.Directives._
 case class ApplicationModel(
     val name: String,
     apiVersion: ApiVersion,
+    val description: String,
     associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: ResourceController[_]]]] = List()) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
-  
+
   private val appRoute = {
     log info s"attaching ${name} with apiVersion ${apiVersion}"
     if (apiVersion == null) PathMatcher(name) else name / apiVersion.toString()

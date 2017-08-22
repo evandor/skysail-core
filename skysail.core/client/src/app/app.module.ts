@@ -10,13 +10,15 @@ import { BundlesComponent } from './bundles/bundles.component';
 
 import { AccordionModule, TabViewModule, MenuModule, MenubarModule,DataTableModule,SharedModule } from 'primeng/primeng';
 import { HttpModule } from '@angular/http';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     AppsComponent,
-    BundlesComponent
+    BundlesComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

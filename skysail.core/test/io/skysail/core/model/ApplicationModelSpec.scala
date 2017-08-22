@@ -11,22 +11,22 @@ import io.skysail.core.app.ApiVersion
 class ApplicationModelSpec extends FlatSpec {
 
   "An ApplicationModel" should "not accept a null value as its name" in {
-    assertThrows[IllegalArgumentException] { new ApplicationModel(null,ApiVersion(1)) }
+    assertThrows[IllegalArgumentException] { new ApplicationModel(null,ApiVersion(1),"desc") }
   }
 
   "An ApplicationModel" should "not accept an empty value as its name" in {
-    assertThrows[IllegalArgumentException] { new ApplicationModel("",ApiVersion(1)) }
-    assertThrows[IllegalArgumentException] { new ApplicationModel(" ",ApiVersion(1)) }
+    assertThrows[IllegalArgumentException] { new ApplicationModel("",ApiVersion(1),"desc") }
+    assertThrows[IllegalArgumentException] { new ApplicationModel(" ",ApiVersion(1),"desc") }
   }
 
   "An empty ApplicationModel" should "be created successfully for a given name" in {
-    val model = ApplicationModel("appName",ApiVersion(1))
+    val model = ApplicationModel("appName",ApiVersion(1),"desc")
     assert(model != null)
     assert(model.name == "appName")
   }
 
   "An ApplicationModel" should "create links without API version if no apiVersion is provided" in {
-    val model = ApplicationModel("appName",null)
+    val model = ApplicationModel("appName",null, "desc")
     model.addResourceModel("/list", classOf[TestEntitiesResource])
     model.addResourceModel("/list/", classOf[PostTestEntityResource])
 //    val links = model.linksFor(classOf[TestEntitiesResource])//.filter { l => l. }
@@ -35,7 +35,7 @@ class ApplicationModelSpec extends FlatSpec {
   }
 
   "An ApplicationModel" should "add a new minimal ResourceModel" in {
-    val appModel = ApplicationModel("appName",null)
+    val appModel = ApplicationModel("appName",null, "desc")
 
     appModel.addResourceModel("/path", classOf[TestResource])
 
@@ -56,7 +56,7 @@ class ApplicationModelSpec extends FlatSpec {
   } */
 
   "An ApplicationModel" should "return a resourceModel identified by its class" in {
-    val model = ApplicationModel("appName",null,List())
+    val model = ApplicationModel("appName",null,"desc",List())
     model.addResourceModel("/path", classOf[TestResource])
     val resourceModel = model.resourceModelFor(classOf[TestResource])
     assert(resourceModel.isDefined)

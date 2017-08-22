@@ -14,13 +14,25 @@ import akka.http.scaladsl.server.directives.RespondWithDirectives
 import io.skysail.core.model.LinkModel2
 import akka.actor.ActorRef
 import akka.pattern.ask
+import io.skysail.core.app.SkysailApplication
+import io.skysail.core.app.SkysailRootApplication
+import io.skysail.core.server.ApplicationActor
+import io.skysail.core.model.ApplicationModel
 
 class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) {
     val result = scala.collection.mutable.ListBuffer[LinkModel2]()
-//    val resourceModel = appModel.resourceModelFor(resource.getClass).get
-//    val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
+    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[SkysailRootApplication].getName)
+    val r = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
+    
+    r onSuccess {
+      case value => println("XXX"+value)
+    }
+    
+    //val resourceModel = appModel.resourceModelFor(resource.getClass).get
+
+    //    val listEntities = resource.getEntity().asInstanceOf[List[ScalaEntity[_]]]
 //    for (link <- appModel.linksFor(resource.getClass)) {
 //      val pathVariables = getPathVariables(link.getUri())
 //      if (pathVariables.size == 0) {

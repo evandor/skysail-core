@@ -21,8 +21,6 @@ import akka.actor.ActorRef
 class ListRetriever[T](val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
-    implicit val askTimeout: Timeout = 1.seconds
-    implicit val ec = context.system.dispatcher
     val r = (res.req.resourceActor ? ResourceController.GetRequest()).mapTo[List[T]]
 
     val t = Await.result(r, 1.seconds)

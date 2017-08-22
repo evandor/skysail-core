@@ -25,7 +25,7 @@ object DemoApplication {
 }
 
 @Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationInfoProvider]))
-class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION) with ApplicationInfoProvider {
+class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Demo Application") with ApplicationInfoProvider {
 
   override def routesMappings = List(
     "contacts" -> classOf[ContactsController])
