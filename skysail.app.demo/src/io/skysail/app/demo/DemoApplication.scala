@@ -29,6 +29,9 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
 
   override def routesMappings = List(
     "" -> classOf[ContactsController],
-    "contacts" -> classOf[ContactsController])
+    "indices" -> classOf[IndicesController],
+    "contacts" -> classOf[ContactsController]
+
+  )
 
 }

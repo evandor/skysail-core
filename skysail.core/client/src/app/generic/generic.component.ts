@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendService } from '../services/backend.service';
+import { Router, ActivatedRoute } from "@angular/router";
+import { Observable } from 'rxjs/Observable';
 
 class DummyApp {
   name: String;
@@ -17,26 +19,29 @@ class DummyApp {
 })
 export class GenericComponent implements OnInit {
 
-
   apps: Object[]
+  path: Observable<string>
 
-  constructor(/*private router: Router, */private _backend: BackendService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private _backend: BackendService) {
+    console.log("routes");
+    console.log(activatedRoute); // array of states
+    console.log(activatedRoute.snapshot.pathFromRoot); // array of states
+    console.log(activatedRoute.snapshot.url); // array of states
+    this.path = activatedRoute.url.map(segments => segments.join('/'));
+  }
 
   ngOnInit() {
-    this._backend.getApps()
-      .subscribe(res => {
-        this.apps = res;
-        console.log("XXX", res);
-        console.log("YYY", res[0]);
-        console.log("ZZZ", Object.getOwnPropertyNames(res[0]));
-        /*this.apps.forEach(bundle => {
-          this.bundleIdList.push(bundle.id);
-        });*/
-      }, error => {
-        console.log("adding error to alertsService...");
-        this.apps = new Array();
-        this.apps.push(new DummyApp('root', '/root'))
-      });
+    this.path.subscribe(
+      value => {
+        this._backend.getGeneric("/" + value + "/")
+        .subscribe(res => {
+          this.apps = res;
+        }, error => {
+          console.log("adding error to alertsService...");
+        });
+      },
+      error => console.log(error)
+    );
   }
 
   getColumns() {

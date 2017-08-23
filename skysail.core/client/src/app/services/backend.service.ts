@@ -25,4 +25,10 @@ export class BackendService {
     return this._http.get(/*this.config.endpoint + */'/root/apps', { headers: this.headers })
     .map(res => res.json());
   }
+
+  getGeneric(path: string): Observable<Object[]> {
+    console.log("Backend Call to path: ", path)
+    return this._http.get(path, { headers: this.headers })
+    .map(res => res.json());
+  }
 }
