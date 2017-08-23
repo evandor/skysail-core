@@ -88,7 +88,7 @@ case class ApplicationModel(
   /**
    * @return the context path of the application, e.g. "/testapp/v2" or "/appwithoutversion".
    */
-  def appPath() = "/" + name + (if (apiVersion != null) apiVersion.toString else "")
+  def appPath() = "/" + name + (if (apiVersion != null) "/" + apiVersion.toString else "")
 
 //  def linksFor(resourceClass: Class[_ <: io.skysail.core.restlet.SkysailServerResource[_]]): List[LinkModel2] = {
 ////    val r = resourceModels.filter { resourceModel => resourceModel.resource.getClass == resourceClass }.headOption

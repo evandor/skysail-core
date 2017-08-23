@@ -208,7 +208,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/apps/apps.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Apps:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\"></p-column>\n  </ng-template>\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\">\n      <ng-template let-c let-car=\"getColumns()\" pTemplate=\"body\">\n        <span>1{{c}}</span><span>2{{car}}</span>\n      </ng-template>\n    </p-column>\n  </ng-template>\n  <p-column field=\"color\" header=\"Color\">\n    <ng-template let-col let-car=\"rowData\" pTemplate=\"body\">\n      <span [style.color]=\"car[col.field]\">{{car[col.field]}}</span>\n    </ng-template>\n  </p-column>\n  <p-column styleClass=\"col-button\">\n    <ng-template pTemplate=\"header\">\n      <button type=\"button\" pButton icon=\"fa-refresh\"></button>\n    </ng-template>\n    <ng-template let-car=\"rowData\" pTemplate=\"body\">\n      <button type=\"button\" pButton (click)=\"selectCar(car)\" icon=\"fa-search\"></button>\n    </ng-template>\n  </p-column>\n</p-dataTable>"
+module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Apps:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <!--<ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\"></p-column>\n  </ng-template>-->\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\">\n      <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n        <span><a href='/client{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n      </ng-template>\n    </p-column>\n  </ng-template>\n  <p-column field=\"name\" header=\"Raw\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='/root{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n  <!--<p-column field=\"color\" header=\"Color\">\n    <ng-template let-col let-car=\"rowData\" pTemplate=\"body\">\n      <span [style.color]=\"car[col.field]\">{{car[col.field]}}</span>\n    </ng-template>\n  </p-column>\n  <p-column styleClass=\"col-button\">\n    <ng-template pTemplate=\"header\">\n      <button type=\"button\" pButton icon=\"fa-refresh\"></button>\n    </ng-template>\n    <ng-template let-car=\"rowData\" pTemplate=\"body\">\n      <button type=\"button\" pButton (click)=\"selectCar(car)\" icon=\"fa-search\"></button>\n    </ng-template>\n  </p-column>-->\n</p-dataTable>"
 
 /***/ }),
 
@@ -412,7 +412,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Apps:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <p-column field=\"name\" header=\"Name\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n  <p-column field=\"context\" header=\"Context\"></p-column>\n  <p-column field=\"description\" header=\"Description\"></p-column>\n</p-dataTable>"
+module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Dashboard:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <p-column field=\"name\" header=\"Name\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='/client{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n  <p-column field=\"context\" header=\"Context\"></p-column>\n  <p-column field=\"description\" header=\"Description\"></p-column>\n</p-dataTable>"
 
 /***/ }),
 
@@ -533,6 +533,11 @@ var NavbarComponent = (function () {
     }
     NavbarComponent.prototype.ngOnInit = function () {
         this.items = [
+            {
+                label: 'Dashboard',
+                icon: 'fa-th-box',
+                url: 'dashboard'
+            },
             {
                 label: 'Bundles',
                 icon: 'fa-th-large',
