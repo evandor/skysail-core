@@ -12,6 +12,7 @@ class ContactsController extends ListResourceController[Contact] {
 
   //override def get(): List[Contact] = appService.getApplications().toList
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    sender ! List(Contact("Mira"),Contact("carsten"))
   }
 }
 

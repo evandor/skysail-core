@@ -23,6 +23,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_gendir lazy recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__apps_apps_component__ = __webpack_require__("../../../../../src/app/apps/apps.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bundles_bundles_component__ = __webpack_require__("../../../../../src/app/bundles/bundles.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__generic_generic_component__ = __webpack_require__("../../../../../src/app/generic/generic.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -34,12 +35,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_4__dashboard_dashboard_component__["a" /* DashboardComponent */] },
     { path: 'apps', component: __WEBPACK_IMPORTED_MODULE_2__apps_apps_component__["a" /* AppsComponent */] },
     { path: 'bundles', component: __WEBPACK_IMPORTED_MODULE_3__bundles_bundles_component__["a" /* BundlesComponent */] },
-    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_2__apps_apps_component__["a" /* AppsComponent */] }
+    { path: 'services', component: __WEBPACK_IMPORTED_MODULE_2__apps_apps_component__["a" /* AppsComponent */] },
+    { path: '**', component: __WEBPACK_IMPORTED_MODULE_5__generic_generic_component__["a" /* GenericComponent */] }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -133,12 +136,14 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_primeng_primeng___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_primeng_primeng__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__generic_generic_component__ = __webpack_require__("../../../../../src/app/generic/generic.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -162,7 +167,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__navbar_navbar_component__["a" /* NavbarComponent */],
             __WEBPACK_IMPORTED_MODULE_4__apps_apps_component__["a" /* AppsComponent */],
             __WEBPACK_IMPORTED_MODULE_7__bundles_bundles_component__["a" /* BundlesComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__dashboard_dashboard_component__["a" /* DashboardComponent */]
+            __WEBPACK_IMPORTED_MODULE_10__dashboard_dashboard_component__["a" /* DashboardComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__generic_generic_component__["a" /* GenericComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -208,7 +214,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/apps/apps.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Apps:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <!--<ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\"></p-column>\n  </ng-template>-->\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\">\n      <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n        <span><a href='/client{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n      </ng-template>\n    </p-column>\n  </ng-template>\n  <p-column field=\"name\" header=\"Raw\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='/root{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n  <!--<p-column field=\"color\" header=\"Color\">\n    <ng-template let-col let-car=\"rowData\" pTemplate=\"body\">\n      <span [style.color]=\"car[col.field]\">{{car[col.field]}}</span>\n    </ng-template>\n  </p-column>\n  <p-column styleClass=\"col-button\">\n    <ng-template pTemplate=\"header\">\n      <button type=\"button\" pButton icon=\"fa-refresh\"></button>\n    </ng-template>\n    <ng-template let-car=\"rowData\" pTemplate=\"body\">\n      <button type=\"button\" pButton (click)=\"selectCar(car)\" icon=\"fa-search\"></button>\n    </ng-template>\n  </p-column>-->\n</p-dataTable>"
+module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Apps:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <!--<ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\"></p-column>\n  </ng-template>-->\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\">\n      <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n        <span><a href='/client{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n      </ng-template>\n    </p-column>\n  </ng-template>\n  <p-column field=\"name\" header=\"Raw\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='/root{{car[\"context\"]}}/'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n  <!--<p-column field=\"color\" header=\"Color\">\n    <ng-template let-col let-car=\"rowData\" pTemplate=\"body\">\n      <span [style.color]=\"car[col.field]\">{{car[col.field]}}</span>\n    </ng-template>\n  </p-column>\n  <p-column styleClass=\"col-button\">\n    <ng-template pTemplate=\"header\">\n      <button type=\"button\" pButton icon=\"fa-refresh\"></button>\n    </ng-template>\n    <ng-template let-car=\"rowData\" pTemplate=\"body\">\n      <button type=\"button\" pButton (click)=\"selectCar(car)\" icon=\"fa-search\"></button>\n    </ng-template>\n  </p-column>-->\n</p-dataTable>"
 
 /***/ }),
 
@@ -484,6 +490,109 @@ DashboardComponent = __decorate([
 
 var _a;
 //# sourceMappingURL=dashboard.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/generic/generic.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/generic/generic.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h2><i class=\"fa fa-th-large\" aria-hidden=\"true\" style=\"color: green\"></i> Generic:</h2>\n\n<p-dataTable [value]=\"apps\" [rows]=\"20\" [paginator]=\"true\" [pageLinks]=\"5\" [rowsPerPageOptions]=\"[10,20,50,100]\">\n  <ng-template ngFor let-col [ngForOf]=\"getColumns()\">\n    <p-column [field]=\"col\" [header]=\"col\">\n      <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n        <span><a href='/client{{car[\"context\"]}}'>{{car[col.field]}}</a></span>\n      </ng-template>\n    </p-column>\n  </ng-template>\n  <p-column field=\"name\" header=\"Raw\">\n    <ng-template let-col let-car=\"rowData\" let-ri=\"rowIndex\" pTemplate=\"body\">\n      <span><a href='/root{{car[\"context\"]}}/'>{{car[col.field]}}</a></span>\n    </ng-template>\n  </p-column>\n</p-dataTable>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/generic/generic.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GenericComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_backend_service__ = __webpack_require__("../../../../../src/app/services/backend.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var DummyApp = (function () {
+    function DummyApp(n, c) {
+        this.name = n;
+        this.context = c;
+    }
+    return DummyApp;
+}());
+var GenericComponent = (function () {
+    function GenericComponent(/*private router: Router, */ _backend) {
+        this._backend = _backend;
+    }
+    GenericComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._backend.getApps()
+            .subscribe(function (res) {
+            _this.apps = res;
+            console.log("XXX", res);
+            console.log("YYY", res[0]);
+            console.log("ZZZ", Object.getOwnPropertyNames(res[0]));
+            /*this.apps.forEach(bundle => {
+              this.bundleIdList.push(bundle.id);
+            });*/
+        }, function (error) {
+            console.log("adding error to alertsService...");
+            _this.apps = new Array();
+            _this.apps.push(new DummyApp('root', '/root'));
+        });
+    };
+    GenericComponent.prototype.getColumns = function () {
+        var columns = new Set();
+        if (this.apps == null) {
+            return columns;
+        }
+        this.apps.forEach(function (app) {
+            var cols = Object.getOwnPropertyNames(app);
+            cols.forEach(function (c) { return columns.add(c); });
+        });
+        return columns;
+        //return new Array("name", "context")
+    };
+    GenericComponent.prototype.getField = function (col) {
+        console.log("WWW", col);
+        return col;
+    };
+    return GenericComponent;
+}());
+GenericComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-generic',
+        template: __webpack_require__("../../../../../src/app/generic/generic.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/generic/generic.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_backend_service__["a" /* BackendService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_backend_service__["a" /* BackendService */]) === "function" && _a || Object])
+], GenericComponent);
+
+var _a;
+//# sourceMappingURL=generic.component.js.map
 
 /***/ }),
 

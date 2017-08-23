@@ -11,6 +11,7 @@ import { BundlesComponent } from './bundles/bundles.component';
 import { AccordionModule, TabViewModule, MenuModule, MenubarModule,DataTableModule,SharedModule } from 'primeng/primeng';
 import { HttpModule } from '@angular/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { GenericComponent } from './generic/generic.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     NavbarComponent,
     AppsComponent,
     BundlesComponent,
-    DashboardComponent
+    DashboardComponent,
+    GenericComponent
   ],
   imports: [
     BrowserModule,
