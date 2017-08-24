@@ -23,17 +23,13 @@ export class GenericComponent implements OnInit {
   path: Observable<string>
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private _backend: BackendService) {
-    console.log("routes");
-    console.log(activatedRoute); // array of states
-    console.log(activatedRoute.snapshot.pathFromRoot); // array of states
-    console.log(activatedRoute.snapshot.url); // array of states
     this.path = activatedRoute.url.map(segments => segments.join('/'));
   }
 
   ngOnInit() {
     this.path.subscribe(
       value => {
-        this._backend.getGeneric("/" + value + "/")
+        this._backend.getGeneric("/" + value)
         .subscribe(res => {
           this.apps = res;
         }, error => {

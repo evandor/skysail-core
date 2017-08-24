@@ -27,7 +27,7 @@ class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerA
     val r = (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
     
     r onSuccess {
-      case value => println("XXX"+value)
+      case value => //println("XXX"+value)
     }
     
     //val resourceModel = appModel.resourceModelFor(resource.getClass).get
