@@ -18,6 +18,6 @@ object WytApplication {
 class WytApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Wait-your-turn backend") with ApplicationInfoProvider {
 
   override def routesMappings = List(
-    "pacts" -> classOf[PactsResource])
+    "/pacts" -> classOf[PactsResource])
 
 }

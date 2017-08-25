@@ -27,6 +27,13 @@ class ContactsController extends ListResourceController[Contact] {
   }
 }
 
+class EsController extends ListResourceController[DemoRoot] {
+  
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    sender ! List(DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"))
+  }
+}
+
 class IndicesController extends ListResourceController[EsIndex] {
 
   private val httpclient = HttpClients.createDefault
@@ -48,6 +55,10 @@ class IndicesController extends ListResourceController[EsIndex] {
       case value => {
         sender ! value
       }
+    }
+    
+    u onFailure {
+      case failure => println("FAILURE: " + failure)
     }
   }
 
@@ -76,6 +87,47 @@ class IndicesController extends ListResourceController[EsIndex] {
   }
 }
 
+class MappingController extends ListResourceController[Mapping] {
+
+  private val httpclient = HttpClients.createDefault
+
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    implicit val formats = DefaultFormats
+    implicit val serialization = jackson.Serialization
+    implicit val materializer = ActorMaterializer()
+
+    val res = get("http://localhost:9200/logstash-2016.10.25/_mappings")
+    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
+    val x = Unmarshal(v)
+    val u = x.to[List[EsIndex]]
+
+    u onSuccess {
+      case value => {
+        sender ! value
+      }
+    }
+    
+    u onFailure {
+      case failure => println("FAILURE: " + failure)
+    }
+  }
+  
+   def get(path: String) = {
+    val httpget = new HttpGet(path)
+    val responseHandler = new ResponseHandler[String]() {
+      override def handleResponse(response: HttpResponse): String = {
+        val status = response.getStatusLine.getStatusCode
+        if (status >= 200 && status < 300) {
+          val entity = response.getEntity
+          if (entity != null) EntityUtils.toString(entity)
+          else null
+        } else throw new ClientProtocolException("Unexpected response status: " + status)
+      }
+    }
+    httpclient.execute(httpget, responseHandler)
+  }
+
+}
 //class AppResource extends EntityResource[Application] {
 //  val appService = new ApplicationService()
 //  override def get(): Application = Application("hi")

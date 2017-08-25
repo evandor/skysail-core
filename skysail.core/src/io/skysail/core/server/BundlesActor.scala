@@ -19,6 +19,7 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   }
 
   def getResource(gr: GetResource): Unit = {
+    log info s"getting asset '${gr.path}' from ${bundleContext.getBundle.getSymbolicName}"
     sender ! bundleContext.getBundle.getResource(gr.path)
   }
 

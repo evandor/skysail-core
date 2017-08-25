@@ -50,11 +50,11 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceController[_]])] = {
     List(
-      "login" -> classOf[AkkaLoginResource[String]],
-      "apps" -> classOf[AppsController],
-      "bundles" -> classOf[BundlesController],
-      "app" -> classOf[AppResource],
-      "assets" -> classOf[AssetsController],
+      "/login" -> classOf[AkkaLoginResource[String]],
+      "/apps" -> classOf[AppsController],
+      "/bundles" -> classOf[BundlesController],
+      "/app" -> classOf[AppResource],
+      "/assets" -> classOf[AssetsController],
       "" -> classOf[BackendIndexController]
         
     )
