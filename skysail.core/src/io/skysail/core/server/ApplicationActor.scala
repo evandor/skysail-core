@@ -1,17 +1,19 @@
 package io.skysail.core.server
 
-import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
+import akka.actor.{ Actor, ActorLogging, ActorRef, PoisonPill, Props }
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
+import org.osgi.framework.BundleContext
 
 object ApplicationActor {
   case class GetAppModel()
+  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, bundleContext: Option[BundleContext])
 }
-class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLogging {
-  
+class ApplicationActor(appModel: ApplicationModel, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
+
   val cnt = new AtomicInteger(0)
 
   var nextActor: ActorRef = null
@@ -23,11 +25,11 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
   import context._
 
   def in: Receive = {
-    case (ctx:RequestContext,cls : Class[_])  => {
+    case (ctx: RequestContext, cls: Class[_]) => {
       log debug s"in AppActor... got message ($ctx, $cls)"
       sendBackTo = sender
       nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
-      nextActor ! ctx
+      nextActor ! ApplicationActor.SkysailContext(ctx,appModel,bundleContext)
       become(out)
     }
     case _: ApplicationActor.GetAppModel => sender ! appModel
@@ -46,5 +48,4 @@ class ApplicationActor(appModel: ApplicationModel) extends Actor with ActorLoggi
     case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
-  
 }

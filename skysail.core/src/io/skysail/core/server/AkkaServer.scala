@@ -38,6 +38,9 @@ import akka.http.scaladsl.model.headers.`Content-Type`
 import akka.http.scaladsl.model.ContentTypes._
 import akka.actor.ActorSelection
 import akka.http.scaladsl.server.directives.ContentTypeResolver
+import domino.bundle_watching.BundleWatcherEvent.AddingBundle
+import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
+import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
 
 case class ServerConfig(val port: Integer, val binding: String)
 
@@ -102,16 +105,30 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
       var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
       serverConfig = new ServerConfig(port, binding)
     }
+
+    watchBundles {
+      case AddingBundle(b, context) =>
+        //println("Adding bundle " + b + " of class " +b.getClass.getName)
+        //val bundleTracker = context.tracker
+        bundlesActor ! BundlesActor.CreateBundleActor(b)
+
+      case ModifiedBundle(b, _) =>
+        println("Bundle modified")
+
+      case RemovedBundle(b, _) =>
+        println("Bundle removed")
+    }
   })
 
   private def addService(appInfoProvider: ApplicationInfoProvider) = {
-    implicit val askTimeout: Timeout = 3.seconds
-    //    if (appInfoProvider == null) {
-    //      log warn "service null"
-    //    } else {
-
+    implicit val askTimeout: Timeout = 1.seconds
     val appsActor = SkysailApplication.getApplicationsActor(theSystem)
-    appsActor ! CreateApplicationActor(appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]], appInfoProvider.appModel())
+    val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
+    val appModel = appInfoProvider.appModel()
+    val optionalBundleContext = appInfoProvider.getBundleContext()
+    
+    appsActor ! CreateApplicationActor(appClass, appModel, optionalBundleContext)
+    
 
     log info "========================================="
     log info s"Adding routes from ${appInfoProvider.getClass.getName}"
@@ -120,7 +137,6 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     val routesFromProvider = appInfoProvider.routes()
     routes ++= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.getClass) }.toList
     restartServer(routes.toList)
-    //    }
   }
 
   private def removeService(appInfoProvider: ApplicationInfoProvider) = {
@@ -168,18 +184,18 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     val staticResources =
       path("static") {
         get {
-            // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
-            implicit val classloader = classOf[AkkaServer].getClassLoader
-            getFromResource("application.conf", ContentTypes.`application/json`, classloader)
+          // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
+          implicit val classloader = classOf[AkkaServer].getClassLoader
+          getFromResource("application.conf", ContentTypes.`application/json`, classloader)
         }
       } ~
-      pathPrefix("client") {
-        get {
-          val classloader = classOf[AkkaServer].getClassLoader
-          //getFromDirectory("client")
-          getFromResourceDirectory("client", classloader)
+        pathPrefix("client") {
+          get {
+            val classloader = classOf[AkkaServer].getClassLoader
+            //getFromDirectory("client")
+            getFromResourceDirectory("client", classloader)
+          }
         }
-      }
     staticResources ~
       path(appPath) {
         get {
@@ -188,7 +204,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
               {
                 log debug s"executing route#${counter.incrementAndGet()}"
                 implicit val askTimeout: Timeout = 3.seconds
-                //println(new PrivateMethodExposer(theSystem)('printTree)())
+                println(new PrivateMethodExposer(theSystem)('printTree)())
                 val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
                 val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
                 onSuccess(t) { x => complete(x.httpResponse) }
@@ -206,7 +222,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
         get {
           getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
         }
-        
+
       }
   }
 

@@ -1,4 +1,4 @@
-package io.skysail.core.akka.actors
+package io.skysail.app.demo
 
 import java.net.URL
 
@@ -26,30 +26,25 @@ import io.skysail.core.app.SkysailApplication
 import io.skysail.core.server.BundlesActor
 import org.osgi.framework.Bundle
 import scala.io.Source
+import io.skysail.core.server.BundleActor
 
-class AssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
-
-//  override def receive = {
-//    // TODO https://wojciechszela.com/blog/2014/10/01/stackable-actor-traits-with-akka-and-scala-explained/
-//    case req: RequestEvent => super.receivedRequestEvent(req)
-//    case res: ResponseEvent[_] => super.receivedResponseEvent(res)
-//    case e: URL => {
-//      println("URL" + e)
-//      val is = e.openConnection().getInputStream()
-//      val ba = Source.fromInputStream(is).map(_.toByte).toArray
-//      println(ba)
-//    }
-//  }
+class MyAssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = context.system.dispatcher
-    val bA = SkysailApplication.getBundlesActor(context.system)
-    val q = (bA ? BundlesActor.GetResource("application.conf")).mapTo[URL]
+            
+    val bundle = res.req.ctx.bundleContext.get.getBundle
+    println("BUNDLE: " + bundle)
+
+    val bundleId = bundle.getBundleId
+    println("BUNDLE: " + bundleId)
+    val bA = SkysailApplication.getBundleActor(context.system, bundleId)
+    val q = (bA ? BundleActor.GetResource("application.conf")).mapTo[URL]
 
     val ext = getExtension("application.conf")
     val x = MediaTypes.forExtension(ext)
-
+    
     q onSuccess {
       case value => {
         println("URL: " + value)
@@ -59,16 +54,6 @@ class AssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerA
         nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba)))
       }
     }
-
-//    val fullPath = Paths.get("/Users/carsten/git/tmp/pline/tsconfig.json")
-//    println(fullPath)
-//    val ext = getExtensions(fullPath.getFileName.toString)
-//    val x = MediaTypes.forExtension(ext)
-//    val c: ContentType = ContentTypes.`application/json` // ContentType(MediaTypes.forExtension(ext))// .getOrElse(MediaTypes.`text/plain`))
-//    val byteArray = Files.readAllBytes(fullPath)
-//
-//    nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(c, byteArray)))
-//    //nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = "hi"))
   }
 
   private def getExtension(fileName: String) = {

@@ -17,6 +17,8 @@ import akka.http.scaladsl.model.ResponseEntity
 import akka.stream.ActorMaterializer
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import scala.concurrent.ExecutionContext.Implicits.global
+import io.skysail.core.akka.ResourceController
+import io.skysail.core.akka.RequestProcessingActor
 
 class ContactsController extends ListResourceController[Contact] {
   val appService = new ContactService()
@@ -128,6 +130,19 @@ class MappingController extends ListResourceController[Mapping] {
   }
 
 }
+
+//class AssetsController extends ResourceController[Any] {
+//
+//  override val chainRoot = (
+//    classOf[RequestProcessingActor[Any]] ==>
+//    classOf[Timer] ==>
+//    classOf[AssetRetriever]).build()
+//
+//  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    ???
+//  }
+//
+//}
 //class AppResource extends EntityResource[Application] {
 //  val appService = new ApplicationService()
 //  override def get(): Application = Application("hi")

@@ -32,6 +32,7 @@ Bundle-Activator: io.skysail.core.server.AkkaServer
 Export-Package: \
 	io.skysail.api.doc,\
 	io.skysail.api.links,\
+	io.skysail.core.dsl,\
 	io.skysail.api.metrics,\
 	io.skysail.api.text,\
 	io.skysail.api.responses,\
@@ -59,7 +60,6 @@ Export-Package: \
 	io.skysail.core.metrics
 	
 Private-Package: \
-    io.skysail.core.dsl,\
-    io.skysail.core.app.domain,\
+	io.skysail.core.app.domain,\
 	io.skysail.core.app.services
 	

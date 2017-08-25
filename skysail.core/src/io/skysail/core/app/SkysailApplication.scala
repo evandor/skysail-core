@@ -29,24 +29,26 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
-import akka.actor.Status.{Failure, Success}
+import akka.actor.Status.{ Failure, Success }
 import io.skysail.core.akka.PrivateMethodExposer
-import io.skysail.core.server.{ApplicationsActor, BundlesActor}
+import io.skysail.core.server.{ ApplicationsActor, BundlesActor }
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 import scala.util.Random
 import scala.concurrent.Future
 import scala.concurrent.Await
 import io.skysail.core.app.SkysailApplication._
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
+import io.skysail.core.server.BundleActor
+import akka.actor.ActorSelection
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
   case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceController[_]])
-  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel)
+  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel, bundleContext: Option[BundleContext])
   case class DeleteApplicationActor(val cls: Class[_ <: SkysailApplication])
 
   def getApplicationsActor(system: ActorSystem): ActorRef = {
@@ -57,21 +59,29 @@ object SkysailApplication {
     Await.result(r, 1.seconds)
   }
 
-  def getApplicationActorSelection(system: ActorSystem, name: String) = {
+  def getApplicationActorSelection(system: ActorSystem, name: String): ActorSelection = {
     val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
     system.actorSelection(applicationActorPath)
   }
 
-  def getBundlesActor(system: ActorSystem) = {
+  def getBundlesActor(system: ActorSystem): ActorSelection = {
     system.actorSelection("/user/" + classOf[BundlesActor].getSimpleName)
   }
+
+  def getBundleActor(system: ActorSystem, bundleId: Long): ActorSelection = {
+    //println(new PrivateMethodExposer(theSystem)('printTree)())
+    val actorSelection = "/user/" + classOf[BundlesActor].getSimpleName + "/" + bundleId.toString
+    println("searching for actorSelection " + actorSelection)
+    system.actorSelection(actorSelection)
+  }
+
 }
 
 abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, description: String) extends ApplicationInfoProvider {
 
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
-  def this(name: String, description:String) = this(name, new ApiVersion(1), description)
+  def this(name: String, description: String) = this(name, new ApiVersion(1), description)
 
   val appModel = ApplicationModel(name, apiVersion, description)
 
@@ -125,9 +135,6 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
   def deactivate(componentContext: ComponentContext): Unit = {
     log info s"deactivating ${this.getClass.getName}"
     this.componentContext = null;
-  }
-
-  def attach(): Unit = {
   }
 
   def getBundleContext(): Option[BundleContext] = {

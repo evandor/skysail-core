@@ -9,6 +9,7 @@ import io.skysail.core.model.{LinkRelation, ResourceAssociationType}
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
+import io.skysail.core.server.ApplicationActor.SkysailContext
 
 object ResourceController {
   case class GetRequest()  
@@ -36,11 +37,12 @@ abstract class ResourceController[T] extends Actor with ActorLogging {
 
   def in: Receive = LoggingReceive {
     case gr: ResourceController.GetRequest => get(sender)
-    case reqCtx: RequestContext => {
-      log debug "in... " + reqCtx
+    //case reqCtx: RequestContext => {
+    case skysailContext: SkysailContext => {
+      log debug "in... " + skysailContext.ctx
       sendBackTo = sender
       chainRootActor = context.actorOf(chainRoot, "RequestProcessingActor")
-      chainRootActor ! (reqCtx, this.self)
+      chainRootActor ! (skysailContext, this.self)
       become(out)
     }
   }

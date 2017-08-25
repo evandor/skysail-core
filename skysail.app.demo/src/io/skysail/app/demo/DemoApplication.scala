@@ -11,13 +11,14 @@ import scala.concurrent.duration._
 import scala.concurrent.Future
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
 import akka.http.scaladsl.server.Route
 import akka.actor.ActorSystem
-import akka.http.scaladsl.server.Directives.{complete, get, path}
+import akka.http.scaladsl.server.Directives.{ complete, get, path }
 import io.skysail.core.app._
 import io.skysail.app.demo.DemoApplication._
 import io.skysail.core.model.ApplicationModel
+import io.skysail.core.akka.actors.AssetsController
 
 object DemoApplication {
   val APPLICATION_NAME = "demo"
@@ -33,8 +34,7 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
     "/indices" -> classOf[IndicesController],
     "/indices/" -> classOf[IndicesController],
     "/mappings" -> classOf[MappingController],
-    "/contacts" -> classOf[ContactsController]
-
-  )
+    "/assets" -> classOf[MyAssetsController],
+    "/contacts" -> classOf[ContactsController])
 
 }

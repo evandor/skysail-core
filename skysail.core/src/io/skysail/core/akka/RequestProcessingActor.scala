@@ -19,18 +19,19 @@ import akka.actor.ActorRef
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.http.scaladsl.server.RequestContext
+import io.skysail.core.server.ApplicationActor.SkysailContext
 
 class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
 
   var returnTo: ActorRef = null
 
   def receive = {
-    case (ctx: RequestContext, actor: ActorRef) => receiveRequestContext(ctx, actor)
+    case (ctx: SkysailContext, actor: ActorRef) => receiveRequestContext(ctx, actor)
     case res: ResponseEvent[T] => receiveResponseEvent(res)
     case any: Any => log error "??? received msg of type " + any.getClass().getName + " with value " + any.toString()
   }
 
-  private def receiveRequestContext(ctx: RequestContext, resourceActor: ActorRef) = {
+  private def receiveRequestContext(ctx: SkysailContext, resourceActor: ActorRef) = {
     returnTo = sender
     val actor = context.actorOf(nextActor, nextActor.actorClass().getSimpleName)
     actor ! RequestEvent(ctx, resourceActor)
@@ -42,19 +43,6 @@ class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLoggin
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     
-//    println("RR: " + response.resource)
-//    println("RR: " + response.resource.getClass().getName)
-
-//    val x = Marshal(response.resource.asInstanceOf[List[T]])
-//    val m = x.to[RequestEntity]
-//    
-//     m.onSuccess{
-//      case value => 
-//        returnTo ! res.copy(httpResponse = res.httpResponse.copy(entity = value))
-//    }
-    
-    //         nextActor ! res.copy(resource = t, httpResponse = res.httpResponse.copy(entity = value))
-    //returnTo ! response.copy(httpResponse = response.httpResponse.copy(entity = value))
     returnTo ! response
   }
 
