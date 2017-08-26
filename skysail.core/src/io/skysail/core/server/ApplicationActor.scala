@@ -7,10 +7,11 @@ import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.BundleContext
+import akka.http.scaladsl.model.Uri
 
 object ApplicationActor {
   case class GetAppModel()
-  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, bundleContext: Option[BundleContext])
+  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, bundleContext: Option[BundleContext], unmatchedPath: Uri.Path)
 }
 class ApplicationActor(appModel: ApplicationModel, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
 
@@ -25,11 +26,12 @@ class ApplicationActor(appModel: ApplicationModel, bundleContext: Option[BundleC
   import context._
 
   def in: Receive = {
-    case (ctx: RequestContext, cls: Class[_]) => {
+    case (ctx: RequestContext, cls: Class[_], unmatchedPath: Uri.Path) => {
       log debug s"in AppActor... got message ($ctx, $cls)"
+      log debug s"in AppActor... unmatched path: (${unmatchedPath})"
       sendBackTo = sender
       nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
-      nextActor ! ApplicationActor.SkysailContext(ctx,appModel,bundleContext)
+      nextActor ! ApplicationActor.SkysailContext(ctx, appModel, bundleContext, unmatchedPath)
       become(out)
     }
     case _: ApplicationActor.GetAppModel => sender ! appModel

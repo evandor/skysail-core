@@ -35,6 +35,7 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
     "/indices/" -> classOf[IndicesController],
     "/mappings" -> classOf[MappingController],
     "/assets" -> classOf[MyAssetsController],
+    "/allassets/*" -> classOf[MyAssetsController2],
     "/contacts" -> classOf[ContactsController])
 
 }

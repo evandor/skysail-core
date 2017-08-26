@@ -131,19 +131,3 @@ class MappingController extends ListResourceController[Mapping] {
 
 }
 
-//class AssetsController extends ResourceController[Any] {
-//
-//  override val chainRoot = (
-//    classOf[RequestProcessingActor[Any]] ==>
-//    classOf[Timer] ==>
-//    classOf[AssetRetriever]).build()
-//
-//  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-//    ???
-//  }
-//
-//}
-//class AppResource extends EntityResource[Application] {
-//  val appService = new ApplicationService()
-//  override def get(): Application = Application("hi")
-//}

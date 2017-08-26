@@ -10,7 +10,7 @@ import io.skysail.core.akka.ResourceController
 
 case class ResourceModel2(
     appModel: ApplicationModel, 
-    val pathMatcher: PathMatcher[Unit],
+    val pathMatcher: String/*PathMatcher[Unit]*/,
     val targetResourceClass: Class[_ <: ResourceController[_]]) {
 
   require(pathMatcher != null, "A ResourceModel's pathMatcher must not be null")

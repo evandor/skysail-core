@@ -33,7 +33,7 @@ case class ApplicationModel(
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
 
-  private val appRoute = {
+  val appRoute = {
     log info s"attaching ${name} with apiVersion ${apiVersion}"
     if (apiVersion == null) PathMatcher(name) else name / apiVersion.toString()
   }
@@ -49,14 +49,15 @@ case class ApplicationModel(
 
     log info s"mapping '${appPath()}${path}' to '${cls}'"
 
-    val resourceModel2 =
+    /*val resourceModel2 =
       path.trim() match {
         case "" => new ResourceModel2(this, appRoute, cls)
         case "/" => new ResourceModel2(this, appRoute / , cls)
+        //case x if (x.endsWith("*")) => new ResourceModel2(this, pathPrefix(appRoute) , cls)
         case _ => new ResourceModel2(this, appRoute / getMatcher(path), cls)
-      }
+      }*/
 
-    //val resourceModel2 = new ResourceModel2(this, appRoute / pathMatcher, cls)
+    val resourceModel2 = new ResourceModel2(this, /*appRoute / */path, cls)
     if (resourceModels.filter(rm => rm.pathMatcher == resourceModel2.pathMatcher).headOption.isDefined) {
       log.info(s"trying to add entity ${resourceModel2.pathMatcher} again, ignoring...")
       return None
@@ -151,9 +152,5 @@ case class ApplicationModel(
     }
   }
   
-  private def getMatcher(path: String) = {
-    val trimmed = path.trim();
-    if(trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
-  }
 
 }

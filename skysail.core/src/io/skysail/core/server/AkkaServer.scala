@@ -41,6 +41,7 @@ import akka.http.scaladsl.server.directives.ContentTypeResolver
 import domino.bundle_watching.BundleWatcherEvent.AddingBundle
 import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
 import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
+import io.skysail.core.model.ApplicationModel
 
 case class ServerConfig(val port: Integer, val binding: String)
 
@@ -126,16 +127,15 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
     val appModel = appInfoProvider.appModel()
     val optionalBundleContext = appInfoProvider.getBundleContext()
-    
+
     appsActor ! CreateApplicationActor(appClass, appModel, optionalBundleContext)
-    
 
     log info "========================================="
     log info s"Adding routes from ${appInfoProvider.getClass.getName}"
     log info "========================================="
 
     val routesFromProvider = appInfoProvider.routes()
-    routes ++= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.getClass) }.toList
+    routes ++= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.appModel(), appInfoProvider.getClass) }.toList
     restartServer(routes.toList)
   }
 
@@ -150,7 +150,7 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     //routes --= s.routes()
     // TODO need to fix that, routes are not removed
     val routesFromProvider = appInfoProvider.routes()
-    routes --= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.getClass) }.toList
+    routes --= routesFromProvider.map { prt => createRoute(prt._1, prt._2, appInfoProvider.appModel(), appInfoProvider.getClass) }.toList
 
     restartServer(routes.toList)
   }
@@ -176,54 +176,84 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     }
   }
 
-  protected def createRoute(appPath: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], c: Class[_]): Route = {
-    val appSelector = getApplicationActorSelection(theSystem, c.getName)
-    //    new MyJsonService().route(appSelector, cls) ~
-    //    new JsonService().route(appPath / "broken", appSelector, cls) ~
+  private def createRoute(appPath: String, cls: Class[_ <: ResourceController[_]], appModel: ApplicationModel, c: Class[_]): Route = {
 
-    val staticResources =
-      path("static") {
-        get {
-          // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
-          implicit val classloader = classOf[AkkaServer].getClassLoader
-          getFromResource("application.conf", ContentTypes.`application/json`, classloader)
-        }
-      } ~
-        pathPrefix("client") {
-          get {
-            val classloader = classOf[AkkaServer].getClassLoader
-            //getFromDirectory("client")
-            getFromResourceDirectory("client", classloader)
-          }
-        }
-    staticResources ~
-      path(appPath) {
-        get {
-          extractRequestContext {
-            ctx =>
-              {
-                log debug s"executing route#${counter.incrementAndGet()}"
-                implicit val askTimeout: Timeout = 3.seconds
-                println(new PrivateMethodExposer(theSystem)('printTree)())
-                val appActorSelection = getApplicationActorSelection(theSystem, c.getName)
-                val t = (appActorSelection ? (ctx, cls)).mapTo[ResponseEvent[_]]
-                onSuccess(t) { x => complete(x.httpResponse) }
-              }
-          }
-        }
-      } ~
+    val appRoute = appModel.appRoute
+
+    log info s"creating route from [${appModel.appPath()}]${appPath}"
+
+    val pathMatcher =
+      appPath.trim() match {
+        case "" => appRoute ~ PathEnd
+        case "/" => appRoute / PathEnd
+        case p if (p.endsWith("/*")) =>
+          println("matching " + p.substring(1, p.length() - 2)); appRoute / PathMatcher(p.substring(1, p.length() - 2))
+        case any => appRoute / getMatcher(any) ~ PathEnd
+      }
+
+    val appSelector = getApplicationActorSelection(theSystem, c.getName)
+
+    staticResources() ~ matcher(pathMatcher, cls, c.getName) ~ clientPath() ~ indexPath()
+
+  }
+
+  private def indexPath(): Route = {
+    path("") {
+      get {
+        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
+      }
+    }
+  }
+
+  private def clientPath(): Route = {
+    pathPrefix("client") {
+      get {
+        getFromResourceDirectory("client", classOf[AkkaServer].getClassLoader)
+        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
+      }
+    }
+  }
+
+  private def staticResources(): Route = {
+    path("static") {
+      get {
+        // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
+        implicit val classloader = classOf[AkkaServer].getClassLoader
+        getFromResource("application.conf", ContentTypes.`application/json`, classloader)
+      }
+    } ~
       pathPrefix("client") {
         get {
-          //getFromResourceDirectory("client", classOf[AkkaServer].getClassLoader)
-          getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
+          val classloader = classOf[AkkaServer].getClassLoader
+          //getFromDirectory("client")
+          getFromResourceDirectory("client", classloader)
         }
-      } ~
-      path("") {
-        get {
-          getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, classOf[AkkaServer].getClassLoader)
-        }
-
       }
+  }
+
+  private def getMatcher(path: String) = {
+    val trimmed = path.trim();
+    if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
+  }
+
+  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String):Route = {
+    pathPrefix(pathMatcher) {
+      get {
+        extractRequestContext {
+          ctx =>
+            {
+              extractUnmatchedPath { unmatchedPath =>
+                log debug s"executing route#${counter.incrementAndGet()}"
+                implicit val askTimeout: Timeout = 3.seconds
+                //println(new PrivateMethodExposer(theSystem)('printTree)())
+                val appActorSelection = getApplicationActorSelection(theSystem, name)
+                val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
+                onSuccess(t) { x => complete(x.httpResponse) }
+              }
+            }
+        }
+      }
+    }
   }
 
 }

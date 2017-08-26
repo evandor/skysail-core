@@ -28,28 +28,27 @@ import org.osgi.framework.Bundle
 import scala.io.Source
 import io.skysail.core.server.BundleActor
 
-class MyAssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class MyAssetRetriever2(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = context.system.dispatcher
-            
+
     val bundle = res.req.ctx.bundleContext.get.getBundle
     println("BUNDLE: " + bundle)
 
     val bundleId = bundle.getBundleId
     println("BUNDLE: " + bundleId)
-    
+
     val file = res.req.ctx.unmatchedPath.toString()
     println("FILE:   " + file)
-    
-    
-    val bA = SkysailApplication.getBundleActor(context.system, bundleId)
-    val q = (bA ? BundleActor.GetResource("/application.conf")).mapTo[URL]
 
-    val ext = getExtension("application.conf")
+    val bA = SkysailApplication.getBundleActor(context.system, bundleId)
+    val q = (bA ? BundleActor.GetResource(file)).mapTo[URL]
+
+    val ext = getExtension(file)
     val x = MediaTypes.forExtension(ext)
-    
+
     q onSuccess {
       case value => {
         println("URL: " + value)
@@ -58,6 +57,10 @@ class MyAssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandle
         //println(ba)
         nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba)))
       }
+    }
+    
+    q onFailure {
+      case failure => println(failure)
     }
   }
 
