@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
+import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
+import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{ PrivateMethodExposer, ResourceController, ResponseEvent }
+import io.skysail.core.akka.{PrivateMethodExposer, ResourceController, ResponseEvent}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -28,7 +28,7 @@ import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.server.AkkaServer._
 import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
+import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
 import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -43,6 +43,7 @@ import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
 import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
 import io.skysail.core.model.ApplicationModel
 import akka.http.scaladsl.server.directives.Credentials
+import io.skysail.core.server.directives.AuthenticateDirective
 
 case class ServerConfig(val port: Integer, val binding: String)
 
@@ -53,7 +54,7 @@ object AkkaServer {
   }
 }
 
-class AkkaServer extends DominoActivator with SprayJsonSupport {
+class AkkaServer extends DominoActivator with SprayJsonSupport with AuthenticateDirective {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 
@@ -239,17 +240,17 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
 
   def myUserPassAuthenticator(credentials: Credentials): Option[String] =
     credentials match {
-      case p @ Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
+      case p@Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
       case _ => None
     }
 
   private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
     pathPrefix(pathMatcher) {
-      authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
-        get {
-          extractRequestContext {
-            ctx =>
-              {
+      myauth("test") {
+        authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
+          get {
+            extractRequestContext {
+              ctx => {
                 extractUnmatchedPath { unmatchedPath =>
                   log debug s"executing route#${counter.incrementAndGet()}"
                   implicit val askTimeout: Timeout = 3.seconds
@@ -259,10 +260,12 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
                   onSuccess(t) { x => complete(x.httpResponse) }
                 }
               }
+            }
           }
         }
       }
     }
   }
+
 
 }
