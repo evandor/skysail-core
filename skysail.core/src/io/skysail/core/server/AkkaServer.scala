@@ -42,6 +42,7 @@ import domino.bundle_watching.BundleWatcherEvent.AddingBundle
 import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
 import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
 import io.skysail.core.model.ApplicationModel
+import akka.http.scaladsl.server.directives.Credentials
 
 case class ServerConfig(val port: Integer, val binding: String)
 
@@ -236,21 +237,29 @@ class AkkaServer extends DominoActivator with SprayJsonSupport {
     if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
   }
 
-  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String):Route = {
+  def myUserPassAuthenticator(credentials: Credentials): Option[String] =
+    credentials match {
+      case p @ Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
+      case _ => None
+    }
+
+  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
     pathPrefix(pathMatcher) {
-      get {
-        extractRequestContext {
-          ctx =>
-            {
-              extractUnmatchedPath { unmatchedPath =>
-                log debug s"executing route#${counter.incrementAndGet()}"
-                implicit val askTimeout: Timeout = 3.seconds
-                //println(new PrivateMethodExposer(theSystem)('printTree)())
-                val appActorSelection = getApplicationActorSelection(theSystem, name)
-                val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
-                onSuccess(t) { x => complete(x.httpResponse) }
+      authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
+        get {
+          extractRequestContext {
+            ctx =>
+              {
+                extractUnmatchedPath { unmatchedPath =>
+                  log debug s"executing route#${counter.incrementAndGet()}"
+                  implicit val askTimeout: Timeout = 3.seconds
+                  //println(new PrivateMethodExposer(theSystem)('printTree)())
+                  val appActorSelection = getApplicationActorSelection(theSystem, name)
+                  val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
+                  onSuccess(t) { x => complete(x.httpResponse) }
+                }
               }
-            }
+          }
         }
       }
     }

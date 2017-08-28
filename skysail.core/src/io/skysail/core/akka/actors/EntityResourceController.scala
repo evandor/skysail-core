@@ -11,14 +11,8 @@ abstract class EntityResourceController[T:ClassTag] extends ResourceController[T
   override val chainRoot = (
     classOf[RequestProcessingActor[T]] ==>
       classOf[Timer] ==>
-     // classOf[EntityRetriever[T]] ==>
+      classOf[EntityRetriever[T]] ==>
       classOf[AddLinkheaders]).build(xxx)
 
-//  override val chainRoot = (
-//    classOf[RequestProcessingActor[_]] ==>
-//    classOf[Timer] ==>
-//    classOf[ListRetriever[T]] ==>
-//    classOf[AddLinkheaders] ==>
-//    classOf[Redirector]).build()
 
 }
