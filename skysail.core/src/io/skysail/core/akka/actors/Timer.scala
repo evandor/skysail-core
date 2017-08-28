@@ -13,7 +13,7 @@ import scala.util.Try
 import akka.http.scaladsl.server.directives.RespondWithDirectives
 import akka.actor.ActorRef
 
-class Timer(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class Timer(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
   var start: Long = System.currentTimeMillis()
   override def doRequest(req: RequestEvent) = {
     start = System.currentTimeMillis()

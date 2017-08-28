@@ -29,7 +29,7 @@ class ActorChainDslSpec extends TestKit(ActorSystem("testsystem"))
 
     "create the first actor with a reference to the second" in {
       val chain = classOf[RequestProcessingActor[_]] ==> classOf[Timer]
-      val rootActor = chain.build()
+      val rootActor = chain.build(null)
       assertTrue(rootActor != null)
     }
   }

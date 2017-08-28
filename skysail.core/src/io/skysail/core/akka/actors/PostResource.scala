@@ -10,6 +10,6 @@ abstract class PostResource[T] extends ResourceController[T] {
     classOf[Timer] ==>
     //classOf[ListRetriever] ==> 
     classOf[AddLinkheaders] ==>
-    classOf[Redirector]).build()
+    classOf[Redirector]).build(null)
     
 }

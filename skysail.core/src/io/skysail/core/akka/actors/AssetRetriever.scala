@@ -27,7 +27,7 @@ import io.skysail.core.server.BundlesActor
 import org.osgi.framework.Bundle
 import scala.io.Source
 
-class AssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class AssetRetriever(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
 
 //  override def receive = {
 //    // TODO https://wojciechszela.com/blog/2014/10/01/stackable-actor-traits-with-akka-and-scala-explained/

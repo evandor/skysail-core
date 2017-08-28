@@ -19,7 +19,7 @@ import io.skysail.core.app.SkysailRootApplication
 import io.skysail.core.server.ApplicationActor
 import io.skysail.core.model.ApplicationModel
 
-class AddLinkheaders(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class AddLinkheaders(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) {
     val result = scala.collection.mutable.ListBuffer[LinkModel2]()

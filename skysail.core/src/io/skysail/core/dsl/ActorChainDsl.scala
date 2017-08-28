@@ -18,7 +18,7 @@ object ActorChainDsl {
 
   sealed trait ActorChain[Self] {
     def elems: List[ActorPathElem]
-    def build(): Props = {
+    def build(c: Class[_]): Props = {
       //implicit val system = ActorSystem()
       
       val (last,rest) = (elems.reverse.head,elems.reverse.tail)
@@ -28,7 +28,8 @@ object ActorChainDsl {
       // = system.actorOf(Props.apply(last.cls,null))
       elems.reverse.foreach(f => {
         //log info "new " + f.cls.getName + " => " + p.getClass.getName
-        val q = Props.apply(f.cls,p)
+        log info s"xxx ${c}"
+        val q = Props.apply(f.cls,p,c)
         p = q
       })
       

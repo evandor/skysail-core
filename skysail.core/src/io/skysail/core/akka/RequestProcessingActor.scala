@@ -21,7 +21,7 @@ import akka.actor.ActorLogging
 import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.server.ApplicationActor.SkysailContext
 
-class RequestProcessingActor[T](nextActor: Props) extends Actor with ActorLogging {
+class RequestProcessingActor[T](nextActor: Props, c: Class[_]) extends Actor with ActorLogging {
 
   var returnTo: ActorRef = null
 

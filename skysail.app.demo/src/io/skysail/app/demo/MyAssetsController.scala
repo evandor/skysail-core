@@ -12,7 +12,7 @@ class MyAssetsController extends ResourceController[Any] {
   override val chainRoot = (
     classOf[RequestProcessingActor[Any]] ==>
     classOf[Timer] ==>
-    classOf[MyAssetRetriever]).build()
+    classOf[MyAssetRetriever]).build(null)
 
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     ???

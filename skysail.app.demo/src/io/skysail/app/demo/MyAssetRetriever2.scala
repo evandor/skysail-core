@@ -28,7 +28,7 @@ import org.osgi.framework.Bundle
 import scala.io.Source
 import io.skysail.core.server.BundleActor
 
-class MyAssetRetriever2(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class MyAssetRetriever2(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     implicit val askTimeout: Timeout = 1.seconds

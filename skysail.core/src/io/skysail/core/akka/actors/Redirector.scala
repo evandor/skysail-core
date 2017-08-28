@@ -5,7 +5,7 @@ import akka.actor.Props
 import io.skysail.core.akka._
 import akka.http.scaladsl.model.{ StatusCodes, Uri }
 
-class Redirector(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
+class Redirector(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
 
 //  override def doResponse(res: ResponseEvent) = {
 //    //res.req.ctx.redirect("http://www.heise.de", StatusCodes.SeeOther)

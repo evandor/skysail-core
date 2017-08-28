@@ -40,7 +40,7 @@ class RequestProcessingActorSpec extends TestKit(ActorSystem("testsystem"))
       val ctxMock = Mockito.mock(classOf[RequestContext])
       Mockito.when(ctxMock.request).thenReturn(HttpRequest())
                     
-      val a = system.actorOf(chain.build())
+      val a = system.actorOf(chain.build(null))
       val future = a ? ctxMock//HttpRequest()
 
       future.onComplete {
