@@ -9,8 +9,6 @@ import io.skysail.core.app.ApplicationInfoProvider
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
 import io.skysail.core.app.SkysailApplication.DeleteApplicationActor
-import io.skysail.core.server.routes.RoutesCreator
-import io.skysail.core.server.routes.RoutesCreator._
 
 class RoutesTracker(system: ActorSystem, authentication: String) {
 

@@ -31,7 +31,7 @@ case class FieldModel(val f: java.lang.reflect.Field) {
 
   private def getEntityType() = {
     if (classOf[Collection[_]].isAssignableFrom(f.getType())) 
-      ScalaReflectionUtils.getParameterizedType(f);
+      null//ScalaReflectionUtils.getParameterizedType(f);
     else
       null
   }

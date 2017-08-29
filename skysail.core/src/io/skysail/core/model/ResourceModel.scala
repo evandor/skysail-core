@@ -8,7 +8,7 @@ import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceController
 
-case class ResourceModel2(
+case class ResourceModel(
     appModel: ApplicationModel, 
     val pathMatcher: String/*PathMatcher[Unit]*/,
     val targetResourceClass: Class[_ <: ResourceController[_]]) {
@@ -45,18 +45,6 @@ case class ResourceModel2(
 //    }
     LIST_RESOURCE
   }
-
-//  def toHtml(name: String, apiVersion: ApiVersion, request: Request) = {
-////    val contextAndPath = s"/${name}${apiVersion.getVersionPath()}$path"
-////    val isCurrentResource = request.getResourceRef.getPath == contextAndPath
-////    val style = if (isCurrentResource) "background-color: yellow" else ""
-////    s"""<font style="$style"><b>${targetResourceClass.getSimpleName}</b>[${entityClass.getSimpleName}]: (<a href='$contextAndPath'>"$path"</a>)</font><br>
-////        <br><u>Links</u>: <ul>${linkModels.map { v => "<li>" + v + "</li>"}.mkString("")}</ul><br>"""
-//    "to be done"
-//  }
-  
-//  override def toString() = s""""$path": ${targetResourceClass.getSimpleName}[${entityClass.getSimpleName}]
-//        Links: ${linkModels.map { v => sys.props("line.separator") + " " * 10 + v }.mkString("")}"""
 
   private def printList(list: List[_]) = list.map(v => v).mkString("")
 

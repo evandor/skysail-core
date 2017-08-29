@@ -3,22 +3,24 @@ package io.skysail.app.demo
 import akka.actor.ActorRef
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import io.skysail.core.akka.actors._
-import org.apache.http.{ HttpEntity, HttpResponse }
-import org.apache.http.client.{ ClientProtocolException, ResponseHandler }
+import org.apache.http.{HttpEntity, HttpResponse}
+import org.apache.http.client.{ClientProtocolException, ResponseHandler}
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.{ CloseableHttpClient, HttpClients }
+import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
 import org.apache.http.util.EntityUtils
 
 import scala.reflect.ClassTag
-import org.json4s.{ DefaultFormats, jackson, native }
+import org.json4s.{DefaultFormats, jackson, native}
 import akka.http.scaladsl.model.ContentTypes
 import akka.util.ByteString
 import akka.http.scaladsl.model.ResponseEntity
 import akka.stream.ActorMaterializer
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import io.skysail.core.akka.ResourceController
 import io.skysail.core.akka.RequestProcessingActor
+import io.skysail.core.security.AuthorizeByRole
 
 class ContactsController extends ListResourceController[Contact] {
   val appService = new ContactService()
@@ -42,6 +44,7 @@ class IndicesController extends ListResourceController[EsIndex] {
 
   val appService = new ContactService()
 
+  @AuthorizeByRole("esadmin")
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
 
     implicit val formats = DefaultFormats

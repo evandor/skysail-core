@@ -7,6 +7,24 @@ import java.lang.reflect.Field
 
 object ScalaReflectionUtils {
 
+  import scala.reflect.runtime.universe._
+
+//  def methodAnnotations[T: TypeTag]: Map[String, Map[String, Map[String, JavaArgument]]] = {
+//    val tpe = typeTag[T].tpe
+//    val methods = tpe.decls.collect { case m: MethodSymbol => m }
+//    methods.map { m =>
+//      val methodName = m.name.toString
+//      val annotations = m.annotations.map { a =>
+//        val annotationName = a.tpe.typeSymbol.name.toString
+//        val annotationArgs = a.javaArgs.map { case (name, value) =>
+//          name.toString -> value
+//        }
+//        annotationName -> annotationArgs
+//      }.toMap
+//      methodName -> annotations
+//    }.toMap
+//  }
+
   val inheritedFieldsCache = scala.collection.mutable.Map[Class[_], List[java.lang.reflect.Field]]()
 
   def getInheritedFields(theType: Class[_]): List[java.lang.reflect.Field] = {
@@ -31,51 +49,51 @@ object ScalaReflectionUtils {
     result.toList
   }
 
-  def getParameterizedType(cls: Class[_]): Class[_] = {
-    val parameterizedType = getParameterizedType1(cls)
-    if (parameterizedType == null) {
-      return classOf[Any]
-    }
-    val typeArgumentsSize = parameterizedType.getActualTypeArguments().size
-    val firstActualTypeArgument = parameterizedType.getActualTypeArguments()(0)
-    if (firstActualTypeArgument.getTypeName().startsWith("java.util.Map")) {
-      return classOf[Map[_, _]]
-    }
-    try {
-      val f = firstActualTypeArgument.getClass.getDeclaredField("actualTypeArguments")
-      //firstActualTypeArgument.
-      f.setAccessible(true)
-      val t = f.get(firstActualTypeArgument).asInstanceOf[Array[Type]]
-      return t(0).asInstanceOf[Class[_]]
-    } catch {
-      case e:Any =>
-    }
-    return firstActualTypeArgument.asInstanceOf[Class[_]]
-  }
+//  def getParameterizedType(cls: Class[_]): Class[_] = {
+//    val parameterizedType = getParameterizedType1(cls)
+//    if (parameterizedType == null) {
+//      return classOf[Any]
+//    }
+//    val typeArgumentsSize = parameterizedType.getActualTypeArguments().size
+//    val firstActualTypeArgument = parameterizedType.getActualTypeArguments()(0)
+//    if (firstActualTypeArgument.getTypeName().startsWith("java.util.Map")) {
+//      return classOf[Map[_, _]]
+//    }
+//    try {
+//      val f = firstActualTypeArgument.getClass.getDeclaredField("actualTypeArguments")
+//      //firstActualTypeArgument.
+//      f.setAccessible(true)
+//      val t = f.get(firstActualTypeArgument).asInstanceOf[Array[Type]]
+//      return t(0).asInstanceOf[Class[_]]
+//    } catch {
+//      case e:Any =>
+//    }
+//    return firstActualTypeArgument.asInstanceOf[Class[_]]
+//  }
 
-  private def getParameterizedType1(cls: Class[_]): ParameterizedType = {
-    val genericSuperclass = cls.getGenericSuperclass()
-    if (genericSuperclass == null) {
-      val genericInterfaces = cls.getGenericInterfaces()
-      val pt = genericInterfaces.filter(i => i.isInstanceOf[ParameterizedType]).headOption
-      if (pt.isDefined) {
-        return pt.get.asInstanceOf[ParameterizedType]
-      }
-      return null
-    }
-    if (genericSuperclass.isInstanceOf[ParameterizedType]) {
-      return genericSuperclass.asInstanceOf[ParameterizedType]
-    }
-    return getParameterizedType1(cls.getSuperclass())
-  }
-
-  def getParameterizedType(field: Field): Type = {
-    val theType = field.getGenericType()
-    if (theType.isInstanceOf[ParameterizedType]) {
-      val pType = theType.asInstanceOf[ParameterizedType]
-      return pType.getActualTypeArguments()(0)
-    }
-    return field.getType()
-  }
+//  private def getParameterizedType1(cls: Class[_]): ParameterizedType = {
+//    val genericSuperclass = cls.getGenericSuperclass()
+//    if (genericSuperclass == null) {
+//      val genericInterfaces = cls.getGenericInterfaces()
+//      val pt = genericInterfaces.filter(i => i.isInstanceOf[ParameterizedType]).headOption
+//      if (pt.isDefined) {
+//        return pt.get.asInstanceOf[ParameterizedType]
+//      }
+//      return null
+//    }
+//    if (genericSuperclass.isInstanceOf[ParameterizedType]) {
+//      return genericSuperclass.asInstanceOf[ParameterizedType]
+//    }
+//    return getParameterizedType1(cls.getSuperclass())
+//  }
+//
+//  def getParameterizedType(field: Field): Type = {
+//    val theType = field.getGenericType()
+//    if (theType.isInstanceOf[ParameterizedType]) {
+//      val pType = theType.asInstanceOf[ParameterizedType]
+//      return pType.getActualTypeArguments()(0)
+//    }
+//    return field.getType()
+//  }
 
 }

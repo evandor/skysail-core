@@ -1,30 +1,29 @@
 package io.skysail.core.server.routes
 
-import io.skysail.core.akka.ResourceController
-import io.skysail.core.model.ApplicationModel
-import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.PathMatcher
-import akka.http.scaladsl.server.Directives._
-import akka.actor.ActorSystem
-import io.skysail.core.server.AkkaServer
-import akka.http.scaladsl.model.ContentTypes
-import akka.util.Timeout
-import scala.concurrent.duration.DurationInt
-import akka.pattern.ask
-import org.slf4j.LoggerFactory
-import io.skysail.core.akka.ResponseEvent
-import akka.http.scaladsl.server.directives.Credentials
-import akka.actor.ActorSelection
-import io.skysail.core.server.actors.ApplicationsActor
-import io.skysail.core.server.routes.RoutesCreator._
+import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicInteger
-import io.skysail.core.server.directives.MyDirectives._
-import akka.http.scaladsl.model.StatusCode
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.util.Tuple
-import akka.http.scaladsl.server.RequestContext
+
+import akka.actor.{ActorRef, ActorSelection, ActorSystem}
+import akka.http.scaladsl.model.ContentTypes
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.{Directive1, PathMatcher, RequestContext, Route}
+import akka.http.scaladsl.server.directives.{AuthenticationDirective, Credentials}
+import akka.pattern.ask
+import akka.util.Timeout
+import com.fasterxml.jackson.databind.introspect.{AnnotatedClass, JacksonAnnotationIntrospector}
+import io.skysail.core.ScalaReflectionUtils
+import io.skysail.core.akka.{ResourceController, ResponseEvent}
 import io.skysail.core.app.ApplicationInfoProvider
-import akka.http.scaladsl.server.directives.AuthenticationDirective
+import io.skysail.core.app.resources.BundlesController
+import io.skysail.core.security.AuthorizeByRole
+import io.skysail.core.server.AkkaServer
+import io.skysail.core.server.actors.ApplicationsActor
+import io.skysail.core.server.directives.MyDirectives._
+import io.skysail.core.server.routes.RoutesCreator._
+import org.slf4j.LoggerFactory
+
+import scala.concurrent.duration.DurationInt
+import scala.reflect.ClassTag
 
 object RoutesCreator {
 
@@ -104,40 +103,42 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
 
   def myUserPassAuthenticator(credentials: Credentials): Option[String] =
     credentials match {
-      case p @ Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
+      case p@Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
       case _ => None
     }
 
-  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
-    pathPrefix(pathMatcher) {
-      test() {
-        authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
-          get {
-            extractRequestContext {
-              ctx =>
-                test1("") { f =>
-                  {
-                    extractUnmatchedPath { unmatchedPath =>
-                      log debug s"executing route#${counter.incrementAndGet()}"
-                      implicit val askTimeout: Timeout = 3.seconds
-                      //println(new PrivateMethodExposer(theSystem)('printTree)())
-                      val appActorSelection = getApplicationActorSelection(system, name)
-                      val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
-                      onSuccess(t) { x => complete(x.httpResponse) }
-                    }
-                  }
-                }
-            }
-          }
-        }
-      }
-    }
-  }
+  //  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
+  //    pathPrefix(pathMatcher) {
+  //      test() {
+  //        authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
+  //          get {
+  //            extractRequestContext {
+  //              ctx =>
+  //                test1("") { f => {
+  //                  extractUnmatchedPath { unmatchedPath =>
+  //                    log debug s"executing route#${counter.incrementAndGet()}"
+  //                    implicit val askTimeout: Timeout = 3.seconds
+  //                    //println(new PrivateMethodExposer(theSystem)('printTree)())
+  //                    val appActorSelection = getApplicationActorSelection(system, name)
+  //                    val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
+  //                    onSuccess(t) { x => complete(x.httpResponse) }
+  //                  }
+  //                }
+  //                }
+  //            }
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
 
   private def matcher2(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
+
+    val getAnnotation = requestAnnotationForGet(cls)
+
     pathPrefix(pathMatcher) {
       test() {
-        authenticationDirective() { username =>
+        authenticationDirective(authentication) { username =>
           get {
             extractRequestContext {
               ctx =>
@@ -152,13 +153,13 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
     }
   }
 
-//  val orderGetOrPutWithMethod =
-//    path("order" / IntNumber) & (get | put) & extractMethod
-//
-//  val route =
-//    orderGetOrPutWithMethod { (id, m) =>
-//      complete(s"Received ${m.name} request for order $id")
-//    }
+  //  val orderGetOrPutWithMethod =
+  //    path("order" / IntNumber) & (get | put) & extractMethod
+  //
+  //  val route =
+  //    orderGetOrPutWithMethod { (id, m) =>
+  //      complete(s"Received ${m.name} request for order $id")
+  //    }
 
   private def routeWithUnmatchedPath(ctx: RequestContext, cls: Class[_ <: ResourceController[_]], name: String): Route = {
     extractUnmatchedPath { unmatchedPath =>
@@ -170,8 +171,22 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
       onSuccess(t) { x => complete(x.httpResponse) }
     }
   }
-  
-  private def authenticationDirective(): AuthenticationDirective[String] = {
-    authenticateBasic(realm = "secure site", myUserPassAuthenticator) 
+
+  private def authenticationDirective(auth: String): Directive1[String] = {
+    auth match {
+      case "HTTP_BASIC" => authenticateBasic(realm = "secure site", myUserPassAuthenticator)
+      case _ => test1("hi")
+    }
   }
+
+  private def requestAnnotationForGet(cls: Class[_ <: ResourceController[_]]): Option[Annotation] = {
+    try {
+      val getMethod = cls.getMethod("get", classOf[ActorRef], classOf[ClassTag[_]])
+      Some(getMethod.getAnnotation(classOf[AuthorizeByRole]))
+    } catch {
+      case e: Throwable => None //log.error(e.getMessage(), e)
+    }
+  }
+
+
 }

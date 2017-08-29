@@ -80,14 +80,13 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       bundlesActor = system.actorOf(Props(new BundlesActor(bundleContext)), classOf[BundlesActor].getSimpleName)
       log info s"created BundlesActor with path ${bundlesActor.path}"
 
-      routesTracker = new RoutesTracker(system, serverConfig.authentication)
+      //routesTracker = new RoutesTracker(system, serverConfig.authentication)
     }
 
     override def getActorSystemName(context: BundleContext): String = "SkysailActorSystem"
   }
 
   whenBundleActive({
-
     addCapsule(new AkkaCapsule(bundleContext))
 
     watchServices[ApplicationInfoProvider] {
@@ -102,6 +101,7 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
       var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
       serverConfig = ServerConfig(port, binding, authentication)
+      routesTracker = new RoutesTracker(actorSystem, serverConfig.authentication)
     }
 
     watchBundles {
