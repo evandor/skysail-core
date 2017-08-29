@@ -10,6 +10,7 @@ import org.scalatest.WordSpecLike
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import io.skysail.core.server.actors.ApplicationActor
 
 class ApplicationActorTest  extends TestKit(ActorSystem("testsystem"))
   with WordSpecLike

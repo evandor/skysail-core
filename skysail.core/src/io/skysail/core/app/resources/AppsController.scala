@@ -5,7 +5,7 @@ import akka.pattern.ask
 import io.skysail.core.akka.actors.ListResourceController
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.domain.Application
-import io.skysail.core.server.ApplicationsActor.GetAllApplications
+import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag

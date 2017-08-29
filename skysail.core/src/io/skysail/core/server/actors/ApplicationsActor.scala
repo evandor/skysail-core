@@ -1,4 +1,4 @@
-package io.skysail.core.server
+package io.skysail.core.server.actors
 
 import akka.actor.ActorLogging
 import akka.actor.Actor
@@ -16,7 +16,7 @@ import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteAp
 import akka.actor.ActorRef
 import io.skysail.core.app.domain.Application
 import io.skysail.core.model.ApplicationModel
-import io.skysail.core.server.ApplicationsActor.GetAllApplications
+import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 import scala.concurrent.Future
 
 object ApplicationsActor {

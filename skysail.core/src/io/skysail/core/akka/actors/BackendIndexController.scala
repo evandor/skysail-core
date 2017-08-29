@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.domain.Application
 import akka.pattern.ask
-import io.skysail.core.server.ApplicationsActor.GetAllApplications
+import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 
 class BackendIndexController extends ListResourceController[String] {
 

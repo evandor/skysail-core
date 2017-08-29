@@ -4,7 +4,7 @@ import akka.actor.ActorRef
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.server.RequestContext
-import io.skysail.core.server.ApplicationActor.SkysailContext
+import io.skysail.core.server.actors.ApplicationActor.SkysailContext
 
 case class RequestEvent(ctx: SkysailContext,resourceActor: ActorRef)
 

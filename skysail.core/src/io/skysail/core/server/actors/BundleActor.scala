@@ -1,4 +1,4 @@
-package io.skysail.core.server
+package io.skysail.core.server.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import java.util.concurrent.atomic.AtomicInteger
@@ -7,7 +7,7 @@ import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.Bundle
-import io.skysail.core.server.BundleActor.GetResource
+import io.skysail.core.server.actors.BundleActor.GetResource
 
 object BundleActor {
   case class GetResource(val path: String)

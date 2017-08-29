@@ -1,11 +1,11 @@
-package io.skysail.core.server
+package io.skysail.core.server.actors
 
 import akka.actor.{ Actor, ActorLogging }
-import io.skysail.core.server.BundlesActor.GetResource
+import io.skysail.core.server.actors.BundlesActor.GetResource
 import org.osgi.framework.BundleContext
-import io.skysail.core.server.BundlesActor.GetBundles
+import io.skysail.core.server.actors.BundlesActor.GetBundles
 import org.osgi.framework.Bundle
-import io.skysail.core.server.BundlesActor.CreateBundleActor
+import io.skysail.core.server.actors.BundlesActor.CreateBundleActor
 import akka.actor.Props
 import akka.actor.ActorRef
 
@@ -38,10 +38,10 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   }
 
   def createBundleActor(cb: CreateBundleActor) = {
-    log debug s"creating BundleActor ${cb.b.getSymbolicName}..."
+    // log debug s"creating BundleActor ${cb.b.getSymbolicName}..."
     val a = context.actorOf(Props.apply(classOf[BundleActor], cb.b), cb.b.getBundleId.toString)
     bundleActors += cb.b.getBundleId.toString -> a
-    log info s"added new ${cb.b.getBundleId.toString} actor to bundlesActor Map, size is now ${bundleActors.size}"
+    //log info s"added new ${cb.b.getBundleId.toString} actor to bundlesActor Map, size is now ${bundleActors.size}"
     a
   }
 

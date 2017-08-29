@@ -16,7 +16,7 @@ import akka.actor.ActorRef
 import akka.pattern.ask
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailRootApplication
-import io.skysail.core.server.ApplicationActor
+import io.skysail.core.server.actors.ApplicationActor
 import io.skysail.core.model.ApplicationModel
 
 class AddLinkheaders(val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {

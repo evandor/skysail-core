@@ -1,4 +1,4 @@
-package io.skysail.core.server
+package io.skysail.core.server.actors
 
 import akka.actor.{ Actor, ActorLogging, ActorRef, PoisonPill, Props }
 import java.util.concurrent.atomic.AtomicInteger

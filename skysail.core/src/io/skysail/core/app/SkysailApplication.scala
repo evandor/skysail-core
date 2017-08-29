@@ -31,7 +31,7 @@ import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
 import akka.actor.Status.{ Failure, Success }
 import io.skysail.core.akka.PrivateMethodExposer
-import io.skysail.core.server.{ ApplicationsActor, BundlesActor }
+import io.skysail.core.server.actors.{ ApplicationsActor, BundlesActor, BundleActor }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{ Failure, Success }
@@ -41,7 +41,6 @@ import scala.concurrent.Await
 import io.skysail.core.app.SkysailApplication._
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
-import io.skysail.core.server.BundleActor
 import akka.actor.ActorSelection
 
 object SkysailApplication {

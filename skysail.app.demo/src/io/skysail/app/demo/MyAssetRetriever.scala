@@ -23,10 +23,10 @@ import java.nio.file.{ Files, Paths }
 
 import akka.http.scaladsl.model._
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.server.BundlesActor
+import io.skysail.core.server.actors.BundlesActor
 import org.osgi.framework.Bundle
 import scala.io.Source
-import io.skysail.core.server.BundleActor
+import io.skysail.core.server.actors.BundleActor
 
 class MyAssetRetriever(val nextActorsProps: Props) extends AbstractRequestHandlerActor {
 

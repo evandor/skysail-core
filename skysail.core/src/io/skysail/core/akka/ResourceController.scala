@@ -9,7 +9,7 @@ import io.skysail.core.model.{LinkRelation, ResourceAssociationType}
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
-import io.skysail.core.server.ApplicationActor.SkysailContext
+import io.skysail.core.server.actors.ApplicationActor.SkysailContext
 
 object ResourceController {
   case class GetRequest()  

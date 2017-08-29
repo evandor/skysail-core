@@ -51,7 +51,7 @@ Export-Package: \
 	io.skysail.core.osgi.services,\
 	io.skysail.core.resources,\
 	io.skysail.core.server,\
-	io.skysail.core.server.directives,\
+    io.skysail.core.server.actors,\
 	io.skysail.core.security,\
 	io.skysail.core.security.config,\
 	io.skysail.core.security.token,\
@@ -62,5 +62,7 @@ Export-Package: \
 	
 Private-Package: \
 	io.skysail.core.app.domain,\
-	io.skysail.core.app.services
+	io.skysail.core.app.services,\
+    io.skysail.core.server.directives,\
+    io.skysail.core.server.routes
 	
