@@ -131,6 +131,11 @@ class MappingController extends ListResourceController[Mapping] {
     }
     httpclient.execute(httpget, responseHandler)
   }
+}
 
+class ConfigsController extends ListResourceController[ConfigDetails] {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+
+  }
 }
 

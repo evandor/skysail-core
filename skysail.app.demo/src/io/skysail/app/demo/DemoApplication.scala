@@ -1,24 +1,9 @@
 package io.skysail.app.demo
 
-import java.util.Dictionary
-
-import org.osgi.service.component._
-import org.osgi.service.component.annotations._
-import org.osgi.service.cm.ManagedService
-import spray.json.DefaultJsonProtocol._
-
-import scala.concurrent.duration._
-import scala.concurrent.Future
-import java.util.concurrent.atomic.AtomicInteger
-
-import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
-import akka.http.scaladsl.server.Route
-import akka.actor.ActorSystem
-import akka.http.scaladsl.server.Directives.{ complete, get, path }
-import io.skysail.core.app._
 import io.skysail.app.demo.DemoApplication._
-import io.skysail.core.model.ApplicationModel
-import io.skysail.core.akka.actors.AssetsController
+import io.skysail.core.app._
+import org.osgi.service.cm.ConfigurationAdmin
+import org.osgi.service.component.annotations._
 
 object DemoApplication {
   val APPLICATION_NAME = "demo"
@@ -28,14 +13,20 @@ object DemoApplication {
 @Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationInfoProvider]))
 class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Demo Application") with ApplicationInfoProvider {
 
+  @Reference
+  var configAdmin: ConfigurationAdmin = null
+
   override def routesMappings = List(
     "" -> classOf[EsController],
     "/" -> classOf[ContactsController],
     "/indices" -> classOf[IndicesController],
     "/indices/" -> classOf[IndicesController],
+    "/configs" -> classOf[ConfigsController],
     "/mappings" -> classOf[MappingController],
     "/assets" -> classOf[MyAssetsController],
     "/allassets/*" -> classOf[MyAssetsController2],
     "/contacts" -> classOf[ContactsController])
 
+  def getConfigs() = configAdmin.listConfigurations(null).map(x => new ConfigDetails(x))
+  def getConfig(pid: String): ConfigDetails = new ConfigDetails(configAdmin.getConfiguration(pid))
 }
