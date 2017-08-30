@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class ResourceModelSpec extends FlatSpec with BeforeAndAfterEach {
+class ControllerModelSpec extends FlatSpec with BeforeAndAfterEach {
 
   "A ResourceModel" should "not accept a null value as its path" in {
     assertThrows[IllegalArgumentException] { new ControllerModel(null, null, null) }

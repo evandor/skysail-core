@@ -11,8 +11,8 @@ import io.skysail.core.akka.ResourceController
 import akka.http.scaladsl.server.Directives._
 
 /**
- * This is the root class of skysail's core domain, providing the  an application,
- * which aggregates controllers, their associated entities (together with the entities' fields), 
+ * This is the root class of skysail's core domain, providing models of "skysail applications",
+ * which aggregate controllers, their associated entities (together with the entities' fields), 
  * links between the resources and many more.
  * 
  * A real-life ApplictionModel is created by creating an instance and then adding controller models
