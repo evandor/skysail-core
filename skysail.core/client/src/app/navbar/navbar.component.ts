@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenubarModule, MenuItem } from 'primeng/primeng';
+import {ButtonModule} from 'primeng/primeng';
 
 @Component({
   selector: 'navbar',

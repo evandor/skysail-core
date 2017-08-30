@@ -27,46 +27,43 @@ class ApplicationModelSpec extends FlatSpec {
 
   "An ApplicationModel" should "create links without API version if no apiVersion is provided" in {
     val model = ApplicationModel("appName",null, "desc")
-    model.addResourceModel("/list", classOf[TestEntitiesResource])
-    model.addResourceModel("/list/", classOf[PostTestEntityResource])
+    model.addControllerModel("/list", classOf[TestEntitiesResource])
+    model.addControllerModel("/list/", classOf[PostTestEntityResource])
 //    val links = model.linksFor(classOf[TestEntitiesResource])//.filter { l => l. }
 //    assert(links.size == 1)
 //    assert(links.head.getUri == "/appName/list/")
   }
 
-  "An ApplicationModel" should "be able to add a new minimal ResourceModel" in {
+  "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
     val appModel = ApplicationModel("appName",null, "desc")
 
-    appModel.addResourceModel("/path", classOf[TestController])
+    val cls = appModel.addControllerModel("/path", classOf[TestStringEntityController])
+    
+    assert(cls.isDefined)
+    assert(cls.get == classOf[String])
+  }
+  
+  "An ApplicationModel" should "retrieve an already added controllerModel by its class name" in {
+    val appModel = ApplicationModel("appName",null, "desc")
+    appModel.addControllerModel("/path", classOf[TestStringEntityController])
+    
+    val resourceModel = appModel.controllerModelFor(classOf[TestStringEntityController])
 
-    val resourceModel = appModel.resourceModelFor(classOf[TestController])
     assert(resourceModel.isDefined)
-//    assert(resourceModel.get.path == "/path")
-//    assert(resourceModel.get.resource.isInstanceOf[TestResource])
-    assert(resourceModel.get.targetResourceClass == classOf[TestController])
+    /*assert(resourceModel.get.appModel == appModel)*/
     assert(resourceModel.get.entityClass == classOf[String])
+    assert(resourceModel.get.controllerClass == classOf[TestStringEntityController])
   }
 
-/*  "An ApplicationModel" should "add an ResourceModel (identified by its path), only once" in {
-    val model = ApplicationModel("appName",null,List())
-    val entityClass1 = model.addResourceModel("/path", classOf[TestResource])
-    val entityClass2 = model.addResourceModel("/path", classOf[TestResource])
+  "An ApplicationModel" should "add an ControllerModel (identified by its path) only once" in {
+    val model = ApplicationModel("appName",null,"desc")
+    
+    val entityClass1 = model.addControllerModel("/path", classOf[TestStringEntityController])
+    val entityClass2 = model.addControllerModel("/path", classOf[TestStringEntityController])
+    
     assert(entityClass1.isDefined)
     assert(entityClass2.isEmpty)
-  } */
-
-  "An ApplicationModel" should "return a resourceModel identified by its class" in {
-    val model = ApplicationModel("appName",null,"desc",List())
-    model.addResourceModel("/path", classOf[TestController])
-    val resourceModel = model.resourceModelFor(classOf[TestController])
-    assert(resourceModel.isDefined)
-  }
-
- /* "An ApplicationModel" should "retrieve the entity associated with a Resource" in {
-    val appModel = ApplicationModel("appName",null,List())
-    appModel.addResourceModel("/path", classOf[TestResource])
-    assert(appModel.entityModelFor(classOf[TestEntity]).isDefined)
-  }*/
+  } 
   
 //  "Given a SkysailServerResource, an ApplicatioModel" should "provide access to the resource's entityModel" in {
 //    val model = ApplicationModel("appName",new ApiVersion(1),List())

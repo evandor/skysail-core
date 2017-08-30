@@ -9,30 +9,30 @@ import org.scalatest.junit.JUnitRunner
 class ControllerModelSpec extends FlatSpec with BeforeAndAfterEach {
 
   "A ResourceModel" should "not accept a null value as its path" in {
-    assertThrows[IllegalArgumentException] { new ControllerModel(null, null, null) }
+    assertThrows[IllegalArgumentException] { new ControllerModel(null, null) }
   }
 
   "A ResourceModel" should "not accept a null value as its target class" in {
-    assertThrows[IllegalArgumentException] { new ControllerModel(null, "/path", null) }
+    assertThrows[IllegalArgumentException] { new ControllerModel("/path", null) }
   }
 
 //  "A ResourceModel" should "provide its path variables" in {
-//    val resourceModel = ResourceModel(null, "/path/{id}/subpath/{name}", classOf[TestController])
+//    val resourceModel = ControllerModel("/path/:id/subpath/:name", classOf[TestStringEntityController])
 //    assert(resourceModel.pathVariables == List("id","name"))
 //  }
 
-//  "A ResourceModel" should "provide access to the target resource" in {
-//    val model = ResourceModel(null, "/path", classOf[TestController])
-//    assert(model.resource.getClass.getName == classOf[TestController].getName)
-//  }
+  "A ResourceModel" should "provide access to the target resource" in {
+    val model = ControllerModel("/path", classOf[TestStringEntityController])
+    assert(model.controllerClass == classOf[TestStringEntityController])
+  }
 
-//  "A ResourceModel" should "provide access to the target entity" in {
-//    val model = ResourceModel(null, "/path", classOf[TestController])
-//    assert(model.entityClass.toString == "class io.skysail.core.model.TestEntity")
-//  }
+  "A ResourceModel" should "provide access to the target entity" in {
+    val model = ControllerModel("/path", classOf[TestEntityController])
+    assert(model.entityClass == classOf[TestEntity])
+  }
   
 //  "A ResourceModel" should "provide the resource type" in {
-//    val model = ResourceModel(null, "/path", classOf[TestController])
+//    val model = ControllerModel(null, "/path", classOf[TestController])
 //    assert(model.resourceType == UNSPECIFIED_RESOURCE)
 //  }
   
@@ -47,9 +47,9 @@ class ControllerModelSpec extends FlatSpec with BeforeAndAfterEach {
 //    assert(linkedResources.head.getName == "io.skysail.core.model.TestEntityResource")
 //  }
   
-  "An ResourceModel" should "provide a decent toString representation" in {
-    val model = new ControllerModel(null, "/path1", classOf[TestEntitiesResource])
-    println(model)
-  }
+//  "An ResourceModel" should "provide a decent toString representation" in {
+//    val model = new ControllerModel(null, "/path1", classOf[TestEntitiesResource])
+//    println(model)
+//  }
 
 }

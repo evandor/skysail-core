@@ -8,24 +8,30 @@ import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceController
 
+/**
+ * A ControllerModel connects a pathDefinition with a ResourceController class
+ * which will handle specific requests to this path. 
+ * 
+ * The HTTP verbs which will be handled depend on the concrete subclass of the ResourceController provided.
+ * 
+ *  @param pathDefinition e.g. "/somepath/:id". This will be mapped to an akka route.
+ *  @param controllerClass a concrete subclass of ResourceController which will handle the requests to the
+ *                         associated path.
+ */
 case class ControllerModel(
-    appModel: ApplicationModel, 
-    val pathMatcher: String,
-    val targetResourceClass: Class[_ <: ResourceController[_]]) {
+    //appModel: ApplicationModel, 
+    val pathDefinition: String,
+    val controllerClass: Class[_ <: ResourceController[_]]) {
 
-  require(pathMatcher != null, "A ResourceModel's pathMatcher must not be null")
-  require(targetResourceClass != null, "A ResourceModel's target class must not be null")
+  require(pathDefinition != null, "A ResourceModel's pathMatcher must not be null")
+  require(controllerClass != null, "A ResourceModel's target class must not be null")
 
   private val log = LoggerFactory.getLogger(this.getClass())
   
-  //val resource: ResourceDefinition[_] = targetResourceClass.newInstance().asInstanceOf[ResourceDefinition[_]]
   val entityClass: Class[_] = {
     import scala.reflect.runtime.universe._
-    val tt = targetResourceClass.getTypeParameters
+    val tt = controllerClass.getTypeParameters
     val str = tt.map(ttt => ttt.toString()).mkString(";")
-    //println("*** " + targetResourceClass + ": " + str)
-    /*val p = ScalaReflectionUtils.getParameterizedType(targetResourceClass)//SkysailRouter.getResourcesGenericType(resource)
-    p*/
     "s".getClass
   }
  // lazy val pathVariables = getPathVariables(path)

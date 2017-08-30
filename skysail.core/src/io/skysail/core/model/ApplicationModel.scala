@@ -39,8 +39,8 @@ case class ApplicationModel(
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
-  /** The list of resourceModels of this applicationModel. */
-  private val resourceModels = scala.collection.mutable.ListBuffer[ControllerModel]()
+  /** The list of controllerModels of this applicationModel. */
+  private val controllerModels = scala.collection.mutable.ListBuffer[ControllerModel]()
 
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
@@ -50,37 +50,44 @@ case class ApplicationModel(
     if (apiVersion == null) PathMatcher(name) else name / apiVersion.toString()
   }
 
-  def addResourceModel(path: String, cls: Class[_ <: ResourceController[_]]): Option[Class[_]] = {
+  /**
+    * Adds a controller model for a given path.
+    *
+    * @param path
+    * @param cls
+    * @return
+    */
+  def addControllerModel(path: String, cls: Class[_ <: ResourceController[_]]): Option[Class[_]] = {
     require(path != null, "The resource's path must not be null")
     require(cls != null, "The resource's controller class must not be null")
 
     log info s"mapping '${appPath()}${path}' to '${cls}'"
 
-    val resourceModel = new ControllerModel(this, path, cls)
+    val controllerModel = new ControllerModel(/*this, */path, cls)
 
-    if (resourceModels.filter(rm => rm.pathMatcher == resourceModel.pathMatcher).headOption.isDefined) {
-      log.info(s"trying to add entity ${resourceModel.pathMatcher} again, ignoring...")
+    if (controllerModels.filter(rm => rm.pathDefinition == controllerModel.pathDefinition).headOption.isDefined) {
+      log.info(s"trying to add entity ${controllerModel.pathDefinition} again, ignoring...")
       return None
     }
-    val entityClass = resourceModel.entityClass
+    val entityClass = controllerModel.entityClass
     if (!entityModelsMap.get(entityClass.getName).isDefined) {
       entityModelsMap += entityClass.getName -> EntityModel(entityClass)
     }
-    resourceModels += resourceModel
+    controllerModels += controllerModel
     build()
-    Some(resourceModel.entityClass)
+    Some(controllerModel.entityClass)
   }
 
-  def resourceModelFor(cls: Class[_ <: ResourceController[_]]) = {
-    resourceModels.filter { model => model.targetResourceClass == cls }.headOption
+  def controllerModelFor(cls: Class[_ <: ResourceController[_]]) = {
+    controllerModels.filter { model => model.controllerClass == cls }.headOption
   }
 
-  def getResourceModels(): List[ControllerModel] = resourceModels.toList
+  def getResourceModels(): List[ControllerModel] = controllerModels.toList
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 
   def entityModelFor(ssr: ResourceController[_]): Option[EntityModel] = {
-    val resModel = resourceModelFor(ssr.getClass)
+    val resModel = controllerModelFor(ssr.getClass)
     if (resModel.isEmpty) {
       None
     }
@@ -103,10 +110,10 @@ case class ApplicationModel(
       "${v._1}" -> ${v._2.toHtml}""").mkString("")
 
   private def build(): Unit = {
-    resourceModels.foreach {
+    controllerModels.foreach {
       resourceModel =>
         {
-          resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.pathMatcher, RESOURCE_SELF) //, resourceModel)//.resource, resourceModel.resource.getClass)
+          resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.pathDefinition, RESOURCE_SELF) //, resourceModel)//.resource, resourceModel.resource.getClass)
           var result = scala.collection.mutable.ListBuffer[LinkModel2]()
           resourceModel.linkModels = result.toList
         }

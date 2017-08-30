@@ -90,11 +90,11 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
 
   val routes = {
     routesMappings.foreach(m => {
-      appModel.addResourceModel(m._1, m._2)
+      appModel.addControllerModel(m._1, m._2)
     })
 
     appModel.getResourceModels().map {
-      m => (m.pathMatcher, m.targetResourceClass)
+      m => (m.pathDefinition, m.controllerClass)
     }
   }
   

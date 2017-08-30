@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BackendService } from './services/backend.service';
 import { BundlesComponent } from './bundles/bundles.component';
 
-import { AccordionModule, TabViewModule, MenuModule, MenubarModule, 
+import { AccordionModule, ButtonModule, TabViewModule, MenuModule, MenubarModule, 
          DataTableModule, SharedModule, BreadcrumbModule, PanelMenuModule } from 'primeng/primeng';
 
 import { HttpModule } from '@angular/http';
@@ -16,7 +16,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GenericComponent } from './generic/generic.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 
 @NgModule({
   declarations: [
@@ -29,6 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
+    ButtonModule,
     //    FormsModule,
     HttpModule,
     AccordionModule,

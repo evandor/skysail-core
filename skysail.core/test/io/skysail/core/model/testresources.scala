@@ -7,13 +7,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 
+case class TestEntity(val foo: String)
+
 class TestEntitiesResource extends ListResourceController[String] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
-class TestController extends EntityResourceController[String] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
+class TestStringEntityController extends EntityResourceController[String] {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 }
 
 //class TestEntityResource extends EntityServerResource[TestEntity] {
@@ -38,3 +40,7 @@ class PostTestEntityResource extends PostResource[String] {
 //    ???
 //  }
 //}
+
+class TestEntityController extends EntityResourceController[TestEntity] {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
+}
