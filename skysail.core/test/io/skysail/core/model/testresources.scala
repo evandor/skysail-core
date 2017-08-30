@@ -12,7 +12,7 @@ class TestEntitiesResource extends ListResourceController[String] {
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
-class TestResource extends EntityResourceController[String] {
+class TestController extends EntityResourceController[String] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
 }
 

@@ -10,8 +10,8 @@ object DemoApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationInfoProvider]))
-class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Demo Application") with ApplicationInfoProvider {
+@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationProvider]))
+class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Demo Application") with ApplicationProvider {
 
   @Reference
   var configAdmin: ConfigurationAdmin = null
@@ -27,6 +27,6 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
     "/allassets/*" -> classOf[MyAssetsController2],
     "/contacts" -> classOf[ContactsController])
 
-  def getConfigs() = configAdmin.listConfigurations(null).map(x => new ConfigDetails(x))
-  def getConfig(pid: String): ConfigDetails = new ConfigDetails(configAdmin.getConfiguration(pid))
+  def getConfigs() = configAdmin.listConfigurations(null).map(x => ConfigDetails(x)).toList
+  //def getConfig(pid: String): ConfigDetails = new ConfigDetails(configAdmin.getConfiguration(pid))
 }

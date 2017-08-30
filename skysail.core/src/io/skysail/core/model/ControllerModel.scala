@@ -8,9 +8,9 @@ import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.akka.ResourceController
 
-case class ResourceModel(
+case class ControllerModel(
     appModel: ApplicationModel, 
-    val pathMatcher: String/*PathMatcher[Unit]*/,
+    val pathMatcher: String,
     val targetResourceClass: Class[_ <: ResourceController[_]]) {
 
   require(pathMatcher != null, "A ResourceModel's pathMatcher must not be null")

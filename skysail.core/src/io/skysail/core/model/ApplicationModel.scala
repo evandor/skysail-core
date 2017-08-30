@@ -11,9 +11,15 @@ import io.skysail.core.akka.ResourceController
 import akka.http.scaladsl.server.Directives._
 
 /**
- * This is the root class of skysail's core domain, describing an application,
- * which aggregates resources, their associated entities (together with the entities' fields)
- * and, finally, links between the resources.
+ * This is the root class of skysail's core domain, providing the  an application,
+ * which aggregates controllers, their associated entities (together with the entities' fields), 
+ * links between the resources and many more.
+ * 
+ * A real-life ApplictionModel is created by creating an instance and then adding controller models
+ * together with their respective paths using "addControllerModel". A controller model describes the
+ * controller responsible for the associated path together with relations amongst controllers. Furthermore,
+ * it knows about the entity class related with the controller.
+ * 
  *
  *  @constructor create a new application model, identified by its name.
  *
@@ -34,7 +40,7 @@ case class ApplicationModel(
   private val log = LoggerFactory.getLogger(this.getClass())
 
   /** The list of resourceModels of this applicationModel. */
-  private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
+  private val resourceModels = scala.collection.mutable.ListBuffer[ControllerModel]()
 
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
@@ -46,10 +52,11 @@ case class ApplicationModel(
 
   def addResourceModel(path: String, cls: Class[_ <: ResourceController[_]]): Option[Class[_]] = {
     require(path != null, "The resource's path must not be null")
+    require(cls != null, "The resource's controller class must not be null")
 
     log info s"mapping '${appPath()}${path}' to '${cls}'"
 
-    val resourceModel = new ResourceModel(this, path, cls)
+    val resourceModel = new ControllerModel(this, path, cls)
 
     if (resourceModels.filter(rm => rm.pathMatcher == resourceModel.pathMatcher).headOption.isDefined) {
       log.info(s"trying to add entity ${resourceModel.pathMatcher} again, ignoring...")
@@ -68,7 +75,7 @@ case class ApplicationModel(
     resourceModels.filter { model => model.targetResourceClass == cls }.headOption
   }
 
-  def getResourceModels(): List[ResourceModel] = resourceModels.toList
+  def getResourceModels(): List[ControllerModel] = resourceModels.toList
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 

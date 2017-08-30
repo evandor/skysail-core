@@ -12,16 +12,19 @@ case class DemoRoot(link: String, context: String, description: String)
 
 case class Mapping()
 
-case class ConfigDetails(c: Configuration) {
-
-  import scala.collection.JavaConversions._
-
-  def getProperties(): String = c.getProperties.keys().map {
-    key =>
-      if (key.contains("password")) {
-        "<b>" + key + "</b>: ******"
-      } else {
-        "<b>" + key + "</b>: " + c.getProperties().get(key).toString()
-      }
-  }.mkString("<br>\n")
+object ConfigDetails {
+  def apply(c: Configuration): ConfigDetails = {
+    import scala.collection.JavaConversions._
+    val props: String = c.getProperties.keys().map {
+      key =>
+        if (key.contains("password")) {
+          "<b>" + key + "</b>: ******"
+        } else {
+          "<b>" + key + "</b>: " + c.getProperties().get(key).toString()
+        }
+    }.mkString("<br>\n")
+    ConfigDetails(props)
+  }
 }
+
+case class ConfigDetails(properties: String)

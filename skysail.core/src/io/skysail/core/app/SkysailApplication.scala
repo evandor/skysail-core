@@ -47,7 +47,7 @@ object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
   case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceController[_]])
-  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel, bundleContext: Option[BundleContext])
+  case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel, val application: SkysailApplication, bundleContext: Option[BundleContext])
   case class DeleteApplicationActor(val cls: Class[_ <: SkysailApplication])
 
   def getApplicationsActor(system: ActorSystem): ActorRef = {
@@ -76,7 +76,7 @@ object SkysailApplication {
 
 }
 
-abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, description: String) extends ApplicationInfoProvider {
+abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, description: String) extends ApplicationProvider {
 
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
@@ -97,6 +97,8 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
       m => (m.pathMatcher, m.targetResourceClass)
     }
   }
+  
+  def application():SkysailApplication = this
 
   //val associatedResourceClasses = scala.collection.mutable.ListBuffer[Tuple2[ResourceAssociationType, Class[_ <: SkysailServerResource[_]]]]()
 

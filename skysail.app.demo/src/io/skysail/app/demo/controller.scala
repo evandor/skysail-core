@@ -3,14 +3,14 @@ package io.skysail.app.demo
 import akka.actor.ActorRef
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import io.skysail.core.akka.actors._
-import org.apache.http.{HttpEntity, HttpResponse}
-import org.apache.http.client.{ClientProtocolException, ResponseHandler}
+import org.apache.http.{ HttpEntity, HttpResponse }
+import org.apache.http.client.{ ClientProtocolException, ResponseHandler }
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
+import org.apache.http.impl.client.{ CloseableHttpClient, HttpClients }
 import org.apache.http.util.EntityUtils
 
 import scala.reflect.ClassTag
-import org.json4s.{DefaultFormats, jackson, native}
+import org.json4s.{ DefaultFormats, jackson, native }
 import akka.http.scaladsl.model.ContentTypes
 import akka.util.ByteString
 import akka.http.scaladsl.model.ResponseEntity
@@ -21,6 +21,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import io.skysail.core.akka.ResourceController
 import io.skysail.core.akka.RequestProcessingActor
 import io.skysail.core.security.AuthorizeByRole
+import io.skysail.core.app.SkysailApplication
+import io.skysail.core.server.actors.ApplicationActor
+import akka.pattern.ask
+import scala.util.Success
+import scala.util.Failure
 
 class ContactsController extends ListResourceController[Contact] {
   val appService = new ContactService()
@@ -32,9 +37,11 @@ class ContactsController extends ListResourceController[Contact] {
 }
 
 class EsController extends ListResourceController[DemoRoot] {
-  
+
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    sender ! List(DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"))
+    sender ! List(
+      DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"),
+      DemoRoot("config", "/demo/v1/configs", "System Configuration"))
   }
 }
 
@@ -61,7 +68,7 @@ class IndicesController extends ListResourceController[EsIndex] {
         sender ! value
       }
     }
-    
+
     u onFailure {
       case failure => println("FAILURE: " + failure)
     }
@@ -111,13 +118,13 @@ class MappingController extends ListResourceController[Mapping] {
         sender ! value
       }
     }
-    
+
     u onFailure {
       case failure => println("FAILURE: " + failure)
     }
   }
-  
-   def get(path: String) = {
+
+  def get(path: String) = {
     val httpget = new HttpGet(path)
     val responseHandler = new ResponseHandler[String]() {
       override def handleResponse(response: HttpResponse): String = {
@@ -135,7 +142,12 @@ class MappingController extends ListResourceController[Mapping] {
 
 class ConfigsController extends ListResourceController[ConfigDetails] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-
+    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
+    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
+    r onComplete {
+      case Success(app) => sender ! app.getConfigs()
+      case Failure(failure) => log error s"$failure"
+    }
   }
 }
 

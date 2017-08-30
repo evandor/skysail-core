@@ -34,16 +34,16 @@ class ApplicationModelSpec extends FlatSpec {
 //    assert(links.head.getUri == "/appName/list/")
   }
 
-  "An ApplicationModel" should "add a new minimal ResourceModel" in {
+  "An ApplicationModel" should "be able to add a new minimal ResourceModel" in {
     val appModel = ApplicationModel("appName",null, "desc")
 
-    appModel.addResourceModel("/path", classOf[TestResource])
+    appModel.addResourceModel("/path", classOf[TestController])
 
-    val resourceModel = appModel.resourceModelFor(classOf[TestResource])
+    val resourceModel = appModel.resourceModelFor(classOf[TestController])
     assert(resourceModel.isDefined)
 //    assert(resourceModel.get.path == "/path")
 //    assert(resourceModel.get.resource.isInstanceOf[TestResource])
-    assert(resourceModel.get.targetResourceClass == classOf[TestResource])
+    assert(resourceModel.get.targetResourceClass == classOf[TestController])
     assert(resourceModel.get.entityClass == classOf[String])
   }
 
@@ -57,8 +57,8 @@ class ApplicationModelSpec extends FlatSpec {
 
   "An ApplicationModel" should "return a resourceModel identified by its class" in {
     val model = ApplicationModel("appName",null,"desc",List())
-    model.addResourceModel("/path", classOf[TestResource])
-    val resourceModel = model.resourceModelFor(classOf[TestResource])
+    model.addResourceModel("/path", classOf[TestController])
+    val resourceModel = model.resourceModelFor(classOf[TestController])
     assert(resourceModel.isDefined)
   }
 

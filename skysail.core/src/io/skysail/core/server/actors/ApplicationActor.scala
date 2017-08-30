@@ -8,12 +8,14 @@ import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.BundleContext
 import akka.http.scaladsl.model.Uri
+import io.skysail.core.app.SkysailApplication
 
 object ApplicationActor {
   case class GetAppModel()
+  case class GetApplication()
   case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, bundleContext: Option[BundleContext], unmatchedPath: Uri.Path)
 }
-class ApplicationActor(appModel: ApplicationModel, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
+class ApplicationActor(appModel: ApplicationModel, application: SkysailApplication, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
 
   val cnt = new AtomicInteger(0)
 
@@ -34,12 +36,14 @@ class ApplicationActor(appModel: ApplicationModel, bundleContext: Option[BundleC
       nextActor ! ApplicationActor.SkysailContext(ctx, appModel, bundleContext, unmatchedPath)
       become(out)
     }
+    case _: ApplicationActor.GetApplication => sender ! application
     case _: ApplicationActor.GetAppModel => sender ! appModel
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   def out: Receive = {
     case _: ApplicationActor.GetAppModel => sender ! appModel
+    case _: ApplicationActor.GetApplication => sender ! application
     case e: ResponseEvent[_] => {
       log debug "out AppActor... " + e
       log debug "sending to " + sendBackTo

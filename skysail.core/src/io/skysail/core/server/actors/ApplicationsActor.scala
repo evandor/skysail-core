@@ -53,7 +53,7 @@ class ApplicationsActor extends Actor with ActorLogging {
 
   private def createApplicationActor(caa: CreateApplicationActor) = {
     log info s"creating ApplicationActor ${caa.cls.getName}..."
-    val a = context.actorOf(Props.apply(classOf[ApplicationActor], caa.appModel, caa.bundleContext), caa.cls.getName)
+    val a = context.actorOf(Props.apply(classOf[ApplicationActor], caa.appModel, caa.application, caa.bundleContext), caa.cls.getName)
     appActors += caa.cls.getName -> a
     log info s"added new ${caa.cls.getName} actor to applicationsActors Map, size is now ${appActors.size}"
     a

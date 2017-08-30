@@ -2,7 +2,7 @@ package io.skysail.core.server
 
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
-import io.skysail.core.app.ApplicationInfoProvider
+import io.skysail.core.app.ApplicationProvider
 import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
 import akka.http.scaladsl.server.Route
 
@@ -45,6 +45,7 @@ import io.skysail.core.server.directives.AuthenticateDirective._
 import io.skysail.core.server.routes.RoutesTracker
 import io.skysail.core.server.actors.ApplicationsActor
 import io.skysail.core.server.actors.BundlesActor
+import io.skysail.core.app.ApplicationProvider
 
 case class ServerConfig(val port: Integer, val binding: String, val authentication: String)
 
@@ -89,10 +90,16 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
 
-    watchServices[ApplicationInfoProvider] {
-      case AddingService(service, context) => addService(service)
+    watchServices[ApplicationProvider] {
+      case AddingService(service, context) => addApplicationProvider(service)
       case ModifiedService(service, _) => log info s"Service '$service' modified"
-      case RemovedService(service, _) => removeService(service)
+      case RemovedService(service, _) => removeApplicationProvider(service)
+    }
+
+    watchBundles {
+      case AddingBundle(b, context) => bundlesActor ! BundlesActor.CreateBundleActor(b)
+      case ModifiedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} modified"
+      case RemovedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} removed"
     }
 
     whenConfigurationActive("server") { conf =>
@@ -104,19 +111,15 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       routesTracker = new RoutesTracker(actorSystem, serverConfig.authentication)
     }
 
-    watchBundles {
-      case AddingBundle(b, context) => bundlesActor ! BundlesActor.CreateBundleActor(b)
-      case ModifiedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} modified"
-      case RemovedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} removed"
-    }
   })
 
-  private def addService(appInfoProvider: ApplicationInfoProvider) = {
+  private def addApplicationProvider(appInfoProvider: ApplicationProvider) = {
+    createApplicationActor(appInfoProvider)
     routesTracker.addRoutesFor(appInfoProvider)
     restartServer(routesTracker.routes)
   }
 
-  private def removeService(appInfoProvider: ApplicationInfoProvider) = {
+  private def removeApplicationProvider(appInfoProvider: ApplicationProvider) = {
     routesTracker.removeRoutesFrom(appInfoProvider)
     restartServer(routesTracker.routes)
   }
@@ -140,6 +143,17 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
     } else {
       futureBinding = startServer(routes)
     }
+  }
+
+  def createApplicationActor(appInfoProvider: ApplicationProvider) = {
+    implicit val askTimeout: Timeout = 1.seconds
+    val appsActor = SkysailApplication.getApplicationsActor(actorSystem)
+    val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
+    val appModel = appInfoProvider.appModel()
+    val application = appInfoProvider.application()
+    val optionalBundleContext = appInfoProvider.getBundleContext()
+
+    appsActor ! CreateApplicationActor(appClass, appModel, application, optionalBundleContext)
   }
 
 }

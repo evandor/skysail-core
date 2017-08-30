@@ -13,7 +13,7 @@ import akka.util.Timeout
 import com.fasterxml.jackson.databind.introspect.{AnnotatedClass, JacksonAnnotationIntrospector}
 import io.skysail.core.ScalaReflectionUtils
 import io.skysail.core.akka.{ResourceController, ResponseEvent}
-import io.skysail.core.app.ApplicationInfoProvider
+import io.skysail.core.app.ApplicationProvider
 import io.skysail.core.app.resources.BundlesController
 import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.server.AkkaServer
@@ -41,7 +41,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
 
   private val counter = new AtomicInteger(0)
 
-  def createRoute(appPath: String, cls: Class[_ <: ResourceController[_]], appInfoProvider: ApplicationInfoProvider): Route = {
+  def createRoute(appPath: String, cls: Class[_ <: ResourceController[_]], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
 

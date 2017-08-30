@@ -39,9 +39,9 @@ object SkysailRootApplication {
 @Component(
   immediate = true,
   property = { Array("service.pid=landingpages") },
-  service = Array(classOf[ApplicationInfoProvider], classOf[ManagedService]))
+  service = Array(classOf[ApplicationProvider], classOf[ManagedService]))
 class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null, "backend root")
-    with ApplicationInfoProvider
+    with ApplicationProvider
     with ManagedService {
 
   var properties: Dictionary[String, _] = null

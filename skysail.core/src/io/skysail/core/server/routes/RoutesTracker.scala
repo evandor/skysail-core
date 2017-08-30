@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import akka.util.Timeout
-import io.skysail.core.app.ApplicationInfoProvider
+import io.skysail.core.app.ApplicationProvider
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
 import io.skysail.core.app.SkysailApplication.DeleteApplicationActor
+import io.skysail.core.app.ApplicationProvider
+import io.skysail.core.app.ApplicationProvider
 
 class RoutesTracker(system: ActorSystem, authentication: String) {
 
@@ -22,15 +24,15 @@ class RoutesTracker(system: ActorSystem, authentication: String) {
 
   def routes(): List[Route] = routesBuffer.toList
 
-  def addRoutesFor(appInfoProvider: ApplicationInfoProvider) = {
+  def addRoutesFor(appInfoProvider: ApplicationProvider) = {
 
-    implicit val askTimeout: Timeout = 1.seconds
-    val appsActor = SkysailApplication.getApplicationsActor(system)
-    val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
-    val appModel = appInfoProvider.appModel()
-    val optionalBundleContext = appInfoProvider.getBundleContext()
-
-    appsActor ! CreateApplicationActor(appClass, appModel, optionalBundleContext)
+//    implicit val askTimeout: Timeout = 1.seconds
+//    val appsActor = SkysailApplication.getApplicationsActor(system)
+//    val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
+//    val appModel = appInfoProvider.appModel()
+//    val optionalBundleContext = appInfoProvider.getBundleContext()
+    
+    //appsActor ! CreateApplicationActor(appClass, appModel, optionalBundleContext)
 
     log info "========================================="
     log info s"Adding routes from ${appInfoProvider.getClass.getName}"
@@ -40,7 +42,7 @@ class RoutesTracker(system: ActorSystem, authentication: String) {
     routesBuffer ++= routesFromProvider.map { prt => routesCreator.createRoute(prt._1, prt._2, appInfoProvider) }.toList
   }
 
-  def removeRoutesFrom(appInfoProvider: ApplicationInfoProvider) = {
+  def removeRoutesFrom(appInfoProvider: ApplicationProvider) = {
     val appsActor = SkysailApplication.getApplicationsActor(system)
     appsActor ! DeleteApplicationActor(appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]])
 
