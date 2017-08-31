@@ -12,11 +12,15 @@ import scala.reflect.ClassTag
 
 class AppsController extends ListResourceController[Application] {
 
-  val appsActor = SkysailApplication.getApplicationsActor(context.system)
-
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    (appsActor ? GetAllApplications())
-      .mapTo[List[Application]]
-      .onSuccess { case r => sender ! r }
+//  val appsActor = SkysailApplication.getApplicationsActor(context.system)
+//
+//  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    (appsActor ? GetAllApplications())
+//      .mapTo[List[Application]]
+//      .onSuccess { case r => sender ! r }
+//  }
+  
+    def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
   }
 }

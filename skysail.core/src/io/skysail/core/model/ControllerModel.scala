@@ -19,10 +19,10 @@ import scala.reflect.ClassTag
  *  @param controllerClass a concrete subclass of ResourceController which will handle the requests to the
  *                         associated path.
  */
-case class ControllerModel[T:ClassTag](
+case class ControllerModel(
     //appModel: ApplicationModel, 
     val pathDefinition: String,
-    val controllerClass: Class[_ <: ResourceController[T]]) {
+    val controllerClass: Class[_ <: ResourceController[_]]) {
 
   require(pathDefinition != null, "A ResourceModel's pathMatcher must not be null")
   require(controllerClass != null, "A ResourceModel's target class must not be null")
@@ -30,13 +30,13 @@ case class ControllerModel[T:ClassTag](
   private val log = LoggerFactory.getLogger(this.getClass())
 
   val entityClass: Class[_] = {
-    val ctag = implicitly[reflect.ClassTag[T]]
+//    val ctag = implicitly[reflect.ClassTag[T]]
     //val ctag = implicitly[reflect.ClassTag[String]]
     //val xxx = ctag.runtimeClass.asInstanceOf[Class[String]]
     
-    println(ctag)
-    val tp = ctag.runtimeClass.getTypeParameters
-    println("xxx" + tp(0))
+//    println(ctag)
+//    val tp = ctag.runtimeClass.getTypeParameters
+//    println("xxx" + tp(0))
 //    println(controllerClass.newInstance())
 //    println(controllerClass.newInstance().entityClass())
 //    controllerClass.newInstance().entityClass()

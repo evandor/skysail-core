@@ -17,11 +17,12 @@ import org.json4s.{ jackson, native, DefaultFormats }
 import scala.util.Success
 import scala.util.Failure
 import akka.actor.ActorRef
+import io.skysail.core.akka.ControllerActor
 
 class ListRetriever[T](val nextActorsProps: Props, c: Class[_]) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
-    val r = (res.req.resourceActor ? ResourceController.GetRequest()).mapTo[List[T]]
+    val r = (res.req.resourceActor ? ControllerActor.GetRequest()).mapTo[List[T]]
 
     val t = Await.result(r, 1.seconds)
 

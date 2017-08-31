@@ -15,14 +15,7 @@ import io.skysail.core.server.actors.BundlesActor
 import org.osgi.framework.Bundle
 
 class BundlesController extends ListResourceController[BundleDescriptor] {
-
-  private val bundlesActor = SkysailApplication.getBundlesActor(context.system)
-
-  @AuthorizeByRole("admin")
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    (bundlesActor ? BundlesActor.GetBundles())
-      .mapTo[List[Bundle]]
-      .onSuccess { case r => sender ! r.map (b => BundleDescriptor(b)).toList }
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
   }
-
 }

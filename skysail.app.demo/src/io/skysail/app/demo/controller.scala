@@ -50,29 +50,34 @@ class IndicesController extends ListResourceController[EsIndex] {
   private val httpclient = HttpClients.createDefault
 
   val appService = new ContactService()
-
-  @AuthorizeByRole("esadmin")
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-
-    implicit val formats = DefaultFormats
-    implicit val serialization = jackson.Serialization
-    implicit val materializer = ActorMaterializer()
-
-    val res = get("http://localhost:9200/_cat/indices?format=json")
-    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
-    val x = Unmarshal(v)
-    val u = x.to[List[EsIndex]]
-
-    u onSuccess {
-      case value => {
-        sender ! value
-      }
-    }
-
-    u onFailure {
-      case failure => println("FAILURE: " + failure)
-    }
+  
+  
+   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
   }
+
+//  @AuthorizeByRole("esadmin")
+//  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//
+//    implicit val formats = DefaultFormats
+//    implicit val serialization = jackson.Serialization
+//    implicit val materializer = ActorMaterializer()
+//
+//    val res = get("http://localhost:9200/_cat/indices?format=json")
+//    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
+//    val x = Unmarshal(v)
+//    val u = x.to[List[EsIndex]]
+//
+//    u onSuccess {
+//      case value => {
+//        sender ! value
+//      }
+//    }
+//
+//    u onFailure {
+//      case failure => println("FAILURE: " + failure)
+//    }
+//  }
 
   def get(path: String) /*(implicit system: ActorSystem = ActorSystem())*/ = {
     //    implicit val materializer = ActorMaterializer()
@@ -103,26 +108,26 @@ class MappingController extends ListResourceController[Mapping] {
 
   private val httpclient = HttpClients.createDefault
 
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    implicit val formats = DefaultFormats
-    implicit val serialization = jackson.Serialization
-    implicit val materializer = ActorMaterializer()
-
-    val res = get("http://localhost:9200/logstash-2016.10.25/_mappings")
-    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
-    val x = Unmarshal(v)
-    val u = x.to[List[EsIndex]]
-
-    u onSuccess {
-      case value => {
-        sender ! value
-      }
-    }
-
-    u onFailure {
-      case failure => println("FAILURE: " + failure)
-    }
-  }
+//  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    implicit val formats = DefaultFormats
+//    implicit val serialization = jackson.Serialization
+//    implicit val materializer = ActorMaterializer()
+//
+//    val res = get("http://localhost:9200/logstash-2016.10.25/_mappings")
+//    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
+//    val x = Unmarshal(v)
+//    val u = x.to[List[EsIndex]]
+//
+//    u onSuccess {
+//      case value => {
+//        sender ! value
+//      }
+//    }
+//
+//    u onFailure {
+//      case failure => println("FAILURE: " + failure)
+//    }
+//  }
 
   def get(path: String) = {
     val httpget = new HttpGet(path)
@@ -138,16 +143,24 @@ class MappingController extends ListResourceController[Mapping] {
     }
     httpclient.execute(httpget, responseHandler)
   }
-}
 
-class ConfigsController extends ListResourceController[ConfigDetails] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
-    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
-    r onComplete {
-      case Success(app) => sender ! app.getConfigs()
-      case Failure(failure) => log error s"$failure"
-    }
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
   }
 }
 
+class ConfigsController extends ListResourceController[ConfigDetails] {
+//  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
+//    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
+//    r onComplete {
+//      case Success(app) => sender ! app.getConfigs()
+//      case Failure(failure) => log error s"$failure"
+//    }
+//  }
+//}
+  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+    ???
+  }
+
+}

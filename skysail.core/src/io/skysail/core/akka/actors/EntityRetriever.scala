@@ -12,13 +12,14 @@ import org.json4s.{DefaultFormats, jackson}
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
+import io.skysail.core.akka.ControllerActor
 
 class EntityRetriever[T](val nextActorsProps: Props, entityClass: Class[_]) extends AbstractRequestHandlerActor {
 
   override def doResponse(nextActor: ActorRef, res: ResponseEvent[_]) = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = context.system.dispatcher
-    val r = (res.req.resourceActor ? ResourceController.GetRequest()).mapTo[List[T]]
+    val r = (res.req.resourceActor ? ControllerActor.GetRequest()).mapTo[List[T]]
     println("RRR" + r)
     //r.mapTo(ClassTag])
 

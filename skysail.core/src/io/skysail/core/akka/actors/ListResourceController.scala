@@ -14,9 +14,9 @@ abstract class ListResourceController[T: ClassTag] extends ResourceController[Li
     classOf[ListRetriever[T]] ==>
     classOf[AddLinkheaders]).build(entityClass())
 
-//  override def entityClass(): Class[_] = {
-//    val ctag = implicitly[reflect.ClassTag[T]]
-//    ctag.runtimeClass.asInstanceOf[Class[T]]
-//  }
+  def entityClass(): Class[_] = {
+    val ctag = implicitly[reflect.ClassTag[T]]
+    ctag.runtimeClass.asInstanceOf[Class[T]]
+  }
 
 }
