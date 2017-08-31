@@ -23,4 +23,6 @@ class AppsController extends ListResourceController[Application] {
     def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     ???
   }
+
+  override def get() = ???
 }

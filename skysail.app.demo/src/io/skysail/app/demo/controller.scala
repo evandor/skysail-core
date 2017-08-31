@@ -31,9 +31,11 @@ class ContactsController extends ListResourceController[Contact] {
   val appService = new ContactService()
 
   //override def get(): List[Contact] = appService.getApplications().toList
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+  protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     sender ! List(Contact("Mira"), Contact("carsten"))
   }
+
+  override def get() = ???
 }
 
 class EsController extends ListResourceController[DemoRoot] {
@@ -43,6 +45,8 @@ class EsController extends ListResourceController[DemoRoot] {
       DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"),
       DemoRoot("config", "/demo/v1/configs", "System Configuration"))
   }
+
+  override def get() = ???
 }
 
 class IndicesController extends ListResourceController[EsIndex] {
@@ -55,6 +59,8 @@ class IndicesController extends ListResourceController[EsIndex] {
    def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     ???
   }
+
+  override def get() = ???
 
 //  @AuthorizeByRole("esadmin")
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
@@ -129,6 +135,8 @@ class MappingController extends ListResourceController[Mapping] {
 //    }
 //  }
 
+  override def get() = ???
+
   def get(path: String) = {
     val httpget = new HttpGet(path)
     val responseHandler = new ResponseHandler[String]() {
@@ -162,5 +170,7 @@ class ConfigsController extends ListResourceController[ConfigDetails] {
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     ???
   }
+
+  override def get() = ???
 
 }

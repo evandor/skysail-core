@@ -14,15 +14,15 @@ class BackendIndexController extends ListResourceController[String] {
 
   //val appsActor = SkysailApplication.getApplicationsActor(context.system)
 
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    //context.
-    sender ! List("root")
-  }
+//  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+//    //context.
+//    sender ! List("root")
+//  }
 
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
 //    (appsActor ? GetAllApplications())
 //      .mapTo[List[Application]]
 //      .onSuccess { case r => sender ! r }
 //  }
-
+  override def get() = ???
 }

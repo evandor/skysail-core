@@ -14,8 +14,6 @@ class MyAssetsController extends ResourceController[Any] {
     classOf[Timer] ==>
     classOf[MyAssetRetriever]).build(null)
 
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    ???
-  }
+  override def get() = ???
 
 }

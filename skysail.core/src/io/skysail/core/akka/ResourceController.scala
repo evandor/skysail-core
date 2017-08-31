@@ -33,7 +33,7 @@ abstract class ResourceController[T] { //extends Actor with ActorLogging {
  // import context._
 
   // TODO move down to subcontrollers? Not needed on AssetsController for example
-  protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit
+  def get(): T
 
 //  def in: Receive = LoggingReceive {
 //    case gr: ResourceController.GetRequest => get(sender)
