@@ -2,8 +2,9 @@ package io.skysail.core.akka.actors
 
 import io.skysail.core.akka._
 import io.skysail.core.dsl.ActorChainDsl._
+import scala.reflect.ClassTag
 
-abstract class PostResource[T] extends ResourceController[T] {
+abstract class PostResource[T:ClassTag] extends ResourceController[T] {
 
   override val chainRoot = (
     classOf[RequestProcessingActor[_]] ==>

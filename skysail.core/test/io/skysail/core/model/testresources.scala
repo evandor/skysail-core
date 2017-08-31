@@ -44,3 +44,7 @@ class PostTestEntityResource extends PostResource[String] {
 class TestEntityController extends EntityResourceController[TestEntity] {
   override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 }
+
+class TestEntityListController extends ListResourceController[TestEntity] {
+  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List(TestEntity("hi"), TestEntity("content"))
+}

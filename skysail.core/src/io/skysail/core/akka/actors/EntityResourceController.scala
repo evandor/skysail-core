@@ -4,7 +4,7 @@ import io.skysail.core.akka._
 import io.skysail.core.dsl.ActorChainDsl._
 import scala.reflect.ClassTag
 
-abstract class EntityResourceController[T:ClassTag] extends ResourceController[T] {
+abstract class EntityResourceController[T: ClassTag] extends ResourceController[T] {
 
    val ctag = implicitly[reflect.ClassTag[T]]
   val xxx = ctag.runtimeClass.asInstanceOf[Class[T]]
