@@ -6,13 +6,13 @@ import io.skysail.core.model.ApplicationModel
 import scala.reflect.runtime.universe._
 import scala.reflect.ClassTag
 
-abstract class ListResourceController[T: ClassTag] extends ResourceController[List[T]] {
+abstract class ListResourceController[T: ClassTag] extends Resource[List[T]] {
 
-  override val chainRoot = (
-    classOf[RequestProcessingActor[T]] ==>
-    classOf[Timer] ==>
-    classOf[ListRetriever[T]] ==>
-    classOf[AddLinkheaders]).build(entityClass())
+//  override val chainRoot = (
+//    classOf[RequestProcessingActor[T]] ==>
+//    classOf[Timer] ==>
+//    classOf[ListRetriever[T]] ==>
+//    classOf[AddLinkheaders]).build(entityClass())
 
   def entityClass(): Class[_] = {
     val ctag = implicitly[reflect.ClassTag[T]]

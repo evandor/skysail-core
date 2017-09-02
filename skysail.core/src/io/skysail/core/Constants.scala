@@ -1,6 +1,10 @@
 package io.skysail.core
 
 object Constants {
+  
+  val APPLICATIONS_ACTOR_NAME = "applications"
+  val BUNDLES_ACTOR_NAME = "bundles"
+  
   val SKYSAIL_WEBCONSOLE_PATH = "webconsolePath";
   val COOKIE_NAME_MAINPAGE = "mainpage";
   val COOKIE_NAME_INSTALLATIONS = "peer";

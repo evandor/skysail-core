@@ -14,5 +14,5 @@ class CurrentUserController extends EntityResourceController[User] {
     sender ! List(currentUser) 
   }
 
-  override def get() = ???
+  def get() = ???
 }

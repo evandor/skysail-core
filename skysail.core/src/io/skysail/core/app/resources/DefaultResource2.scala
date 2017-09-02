@@ -12,5 +12,5 @@ class DefaultResource2 extends ListResourceController[String] {
   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
   }
 
-  override def get() = ???
+  def get() = ???
 }

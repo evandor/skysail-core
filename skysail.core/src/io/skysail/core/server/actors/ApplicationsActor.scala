@@ -18,6 +18,8 @@ import io.skysail.core.app.domain.Application
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 import scala.concurrent.Future
+import scala.util.{ Success, Failure }
+import akka.event.LoggingReceive
 
 object ApplicationsActor {
   case class GetAllApplications()
@@ -31,7 +33,7 @@ class ApplicationsActor extends Actor with ActorLogging {
 
   val appActors = scala.collection.mutable.Map[String, ActorRef]()
 
-  def receive = {
+  def receive = LoggingReceive {
     case rac: InitResourceActorChain => handleInitResourceActorChain(rac)
     case caa: CreateApplicationActor => createApplicationActor(caa)
     case daa: DeleteApplicationActor => deleteApplicationActor(daa)
@@ -68,13 +70,18 @@ class ApplicationsActor extends Actor with ActorLogging {
   }
 
   private def getAllApplications(gaa: GetAllApplications) = {
+    log debug s"self:   ${self}"
+    log debug s"sender: ${sender}"
+    log debug ""
     val originalSender = sender
     val p = context.children.map(appActor => {
       (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
     }).toList
+    println("Hier4" + p)
     implicit val ec = context.system.dispatcher
-    Future.sequence(p) onSuccess {
-      case result => originalSender ! result.map(appModel => Application(appModel)).toList
+    Future.sequence(p) onComplete {
+      case Success(result) => originalSender ! result.map(appModel => Application(appModel)).toList
+      case Failure(failure) => log error s"Failure: ${failure}"
     }
   }
 }

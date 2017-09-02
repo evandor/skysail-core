@@ -7,13 +7,13 @@ import akka.actor.ActorRef
 import scala.reflect.ClassTag
 import io.skysail.core.akka.actors.Timer
 
-class MyAssetsController extends ResourceController[Any] {
+class MyAssetsController extends Resource[Any] {
 
-  override val chainRoot = (
-    classOf[RequestProcessingActor[Any]] ==>
-    classOf[Timer] ==>
-    classOf[MyAssetRetriever]).build(null)
+//  override val chainRoot = (
+//    classOf[RequestProcessingActor[Any]] ==>
+//    classOf[Timer] ==>
+//    classOf[MyAssetRetriever]).build(null)
 
-  override def get() = ???
+   def get() = ???
 
 }

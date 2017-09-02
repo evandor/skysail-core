@@ -13,6 +13,6 @@ class PactsResource extends ListResourceController[Pact] {
     sender ! pactsService.getPacts().toList
   }
 
-  override def get() = ???
+   def get() = ???
 }
 

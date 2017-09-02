@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{ PrivateMethodExposer, ResourceController, ResponseEvent }
+import io.skysail.core.akka.{ PrivateMethodExposer, Resource, ResponseEvent }
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -46,6 +46,7 @@ import io.skysail.core.server.routes.RoutesTracker
 import io.skysail.core.server.actors.ApplicationsActor
 import io.skysail.core.server.actors.BundlesActor
 import io.skysail.core.app.ApplicationProvider
+import io.skysail.core.Constants
 
 case class ServerConfig(val port: Integer, val binding: String, val authentication: String)
 
@@ -75,10 +76,10 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       //registerService(osgiContext, system)
       log info s"ActorSystem [${system.name}] initialized."
       actorSystem = system
-      applicationsActor = system.actorOf(Props[ApplicationsActor], classOf[ApplicationsActor].getSimpleName)
+      applicationsActor = system.actorOf(Props[ApplicationsActor], Constants.APPLICATIONS_ACTOR_NAME)
       log info s"created ApplicationsActor with path ${applicationsActor.path}"
 
-      bundlesActor = system.actorOf(Props(new BundlesActor(bundleContext)), classOf[BundlesActor].getSimpleName)
+      bundlesActor = system.actorOf(Props(new BundlesActor(bundleContext)), Constants.BUNDLES_ACTOR_NAME)
       log info s"created BundlesActor with path ${bundlesActor.path}"
 
       //routesTracker = new RoutesTracker(system, serverConfig.authentication)

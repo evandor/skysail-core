@@ -12,7 +12,7 @@ trait MyDirectives {
   def test():Directive0 = Directive.Empty
   
   def test1(s: String): AuthenticateDirective = {
-    println(s)
+    //println(s)
     AuthenticateDirective
   }
   
@@ -29,7 +29,7 @@ trait AuthenticateDirective extends Directive1[String] {
   //def myauth(s:String):Directive1[String] = AuthenticateDirective.this
 
   override def tapply(f: (Tuple1[String]) => Route) = {
-    println("xxx")
+    //println("xxx")
     val t = Tuple1("ttt")
     f(t)
   }

@@ -24,7 +24,7 @@ import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import io.skysail.core.ScalaReflectionUtils
-import io.skysail.core.akka.ResourceController
+import io.skysail.core.akka.Resource
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
@@ -42,34 +42,35 @@ import io.skysail.core.app.SkysailApplication._
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
 import akka.actor.ActorSelection
+import io.skysail.core.Constants
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
 
-  case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: ResourceController[_]])
+  case class InitResourceActorChain(val requestContext: RequestContext, val cls: Class[_ <: Resource[_]])
   case class CreateApplicationActor(val cls: Class[_ <: SkysailApplication], val appModel: ApplicationModel, val application: SkysailApplication, bundleContext: Option[BundleContext])
   case class DeleteApplicationActor(val cls: Class[_ <: SkysailApplication])
 
   def getApplicationsActor(system: ActorSystem): ActorRef = {
-    val applicationsActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName
-    log debug s"searching applicationsActor @ path '${applicationsActorPath}' in system ${system}"
+    val applicationsActorPath = "/user/" + Constants.APPLICATIONS_ACTOR_NAME
+    //log debug s"searching applicationsActor @ path '${applicationsActorPath}' in system ${system}"
     val applicationsActorSelection = system.actorSelection(applicationsActorPath)
     val r = applicationsActorSelection.resolveOne(2.seconds)
     Await.result(r, 1.seconds)
   }
 
   def getApplicationActorSelection(system: ActorSystem, name: String): ActorSelection = {
-    val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
+    val applicationActorPath = "/user/" + Constants.APPLICATIONS_ACTOR_NAME + "/" + name
     system.actorSelection(applicationActorPath)
   }
 
   def getBundlesActor(system: ActorSystem): ActorSelection = {
-    system.actorSelection("/user/" + classOf[BundlesActor].getSimpleName)
+    system.actorSelection("/user/" + Constants.BUNDLES_ACTOR_NAME)
   }
 
   def getBundleActor(system: ActorSystem, bundleId: Long): ActorSelection = {
     //println(new PrivateMethodExposer(theSystem)('printTree)())
-    val actorSelection = "/user/" + classOf[BundlesActor].getSimpleName + "/" + bundleId.toString
+    val actorSelection = "/user/" + Constants.BUNDLES_ACTOR_NAME + "/" + bundleId.toString
     println("searching for actorSelection " + actorSelection)
     system.actorSelection(actorSelection)
   }
@@ -84,7 +85,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
 
   val appModel = ApplicationModel(name, apiVersion, description)
 
-  def routesMappings: List[(String, Class[_ <: ResourceController[_]])]
+  def routesMappings: List[(String, Class[_ <: Resource[_]])]
 
   var actorRefsMap = Map.empty[String, ActorRef]
 
@@ -154,7 +155,7 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
     return componentContext.getBundleContext().getBundle();
   }
 
-  private def getResourceActor(cls: Class[_ <: ResourceController[_]]) = actorRefsMap get cls.getName getOrElse {
+  private def getResourceActor(cls: Class[_ <: Resource[_]]) = actorRefsMap get cls.getName getOrElse {
     log info s"creating new actor for ${cls.getName}"
     val c = system.actorOf(Props.apply(cls), cls.getName)
     actorRefsMap += cls.getName -> c

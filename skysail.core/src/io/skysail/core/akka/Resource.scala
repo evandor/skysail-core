@@ -18,22 +18,22 @@ import io.skysail.core.server.actors.ApplicationActor.SkysailContext
 //  case class DeleteRequest()  
 //}
 
-abstract class ResourceController[T] { //extends Actor with ActorLogging {
+abstract class Resource[T] { //extends Actor with ActorLogging {
 
   //implicit val askTimeout: Timeout = 1.seconds
 
-  val chainRoot: Props
+  //val chainRoot: Props
  // val originalSender = sender
   var sendBackTo: ActorRef = null
 
-  var chainRootActor: ActorRef = null
+ // var chainRootActor: ActorRef = null
 
  // def receive = in
 
  // import context._
 
   // TODO move down to subcontrollers? Not needed on AssetsController for example
-  def get(): T
+  //def get(): T
 
 //  def in: Receive = LoggingReceive {
 //    case gr: ResourceController.GetRequest => get(sender)

@@ -19,7 +19,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
 import io.skysail.core.app.resources._
 import io.skysail.core.akka.actors.AssetsController
-import io.skysail.core.app.resources.BundlesController
+import io.skysail.core.app.resources.BundlesResource
 import io.skysail.core.akka.actors.BackendIndexController
 
 object SkysailRootApplication {
@@ -47,11 +47,11 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   var properties: Dictionary[String, _] = null
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
-  def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.ResourceController[_]])] = {
+  def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.Resource[_]])] = {
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
-      "/apps" -> classOf[AppsController],
-      "/bundles" -> classOf[BundlesController],
+      "/apps" -> classOf[AppsResource],
+      "/bundles" -> classOf[BundlesResource],
       "/app" -> classOf[AppResource],
       "/assets" -> classOf[AssetsController],
       "/user" -> classOf[CurrentUserController],

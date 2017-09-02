@@ -7,7 +7,7 @@ import io.skysail.core.app.ApiVersion
 import scala.None
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model._
-import io.skysail.core.akka.ResourceController
+import io.skysail.core.akka.Resource
 import akka.http.scaladsl.server.Directives._
 
 /**
@@ -32,7 +32,7 @@ case class ApplicationModel(
     val name: String,
     apiVersion: ApiVersion,
     val description: String,
-    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: ResourceController[_]]]] = List()) {
+    associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: Resource[_]]]] = List()) {
 
   require(name != null, "The application's name should be unique and must not be null")
   require(name.trim().length() > 0, "The application's name must not be empty")
@@ -57,7 +57,7 @@ case class ApplicationModel(
     * @param cls
     * @return
     */
-  def addControllerModel(path: String, cls: Class[_ <: ResourceController[_]]): Option[Class[_]] = {
+  def addControllerModel(path: String, cls: Class[_ <: Resource[_]]): Option[Class[_]] = {
     require(path != null, "The resource's path must not be null")
     require(cls != null, "The resource's controller class must not be null")
 
@@ -78,7 +78,7 @@ case class ApplicationModel(
     Some(controllerModel.entityClass)
   }
 
-  def controllerModelFor(cls: Class[_ <: ResourceController[_]]) = {
+  def controllerModelFor(cls: Class[_ <: Resource[_]]) = {
     controllerModels.filter { model => model.controllerClass == cls }.headOption
   }
 
@@ -86,7 +86,7 @@ case class ApplicationModel(
 
   def entityModelFor(cls: Class[_]) = entityModelsMap.get(cls.getName)
 
-  def entityModelFor(ssr: ResourceController[_]): Option[EntityModel] = {
+  def entityModelFor(ssr: Resource[_]): Option[EntityModel] = {
     val resModel = controllerModelFor(ssr.getClass)
     if (resModel.isEmpty) {
       None

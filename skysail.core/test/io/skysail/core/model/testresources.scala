@@ -10,12 +10,12 @@ import scala.reflect.ClassTag
 case class TestEntity(val foo: String)
 
 class TestEntitiesResource extends ListResourceController[String] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
+   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
 class TestStringEntityController extends EntityResourceController[String] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
+   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 }
 
 //class TestEntityResource extends EntityServerResource[TestEntity] {
@@ -27,7 +27,7 @@ class TestStringEntityController extends EntityResourceController[String] {
 //}
 //
 class PostTestEntityResource extends PostResource[String] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
+   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = "test"
 //  addToContext(ResourceContextId.LINK_TITLE, "create TestEntity");
 //  def createEntityTemplate() = TestEntity(Some("1"), "hi", "content")
 //  override def getEntity() = TestEntity(None, "","").asInstanceOf[Nothing]
@@ -42,9 +42,9 @@ class PostTestEntityResource extends PostResource[String] {
 //}
 
 class TestEntityController extends EntityResourceController[TestEntity] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
+   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 }
 
 class TestEntityListController extends ListResourceController[TestEntity] {
-  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List(TestEntity("hi"), TestEntity("content"))
+   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List(TestEntity("hi"), TestEntity("content"))
 }

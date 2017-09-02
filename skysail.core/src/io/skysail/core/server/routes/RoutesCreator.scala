@@ -12,9 +12,9 @@ import akka.pattern.ask
 import akka.util.Timeout
 import com.fasterxml.jackson.databind.introspect.{AnnotatedClass, JacksonAnnotationIntrospector}
 import io.skysail.core.ScalaReflectionUtils
-import io.skysail.core.akka.{ResourceController, ResponseEvent}
+import io.skysail.core.akka.{Resource, ResponseEvent}
 import io.skysail.core.app.ApplicationProvider
-import io.skysail.core.app.resources.BundlesController
+import io.skysail.core.app.resources.BundlesResource
 import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.server.AkkaServer
 import io.skysail.core.server.actors.ApplicationsActor
@@ -24,13 +24,18 @@ import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
+import akka.dispatch.OnFailure
+import scala.util.{Success, Failure}
+import io.skysail.core.akka.PrivateMethodExposer
+import io.skysail.core.Constants
+import akka.http.scaladsl.model.StatusCodes
 
 object RoutesCreator {
 
   def apply(system: ActorSystem, authentication: String): RoutesCreator = new RoutesCreator(system, authentication)
 
   def getApplicationActorSelection(system: ActorSystem, name: String): ActorSelection = {
-    val applicationActorPath = "/user/" + classOf[ApplicationsActor].getSimpleName + "/" + name
+    val applicationActorPath = "/user/" + Constants.APPLICATIONS_ACTOR_NAME + "/" + name
     system.actorSelection(applicationActorPath)
   }
 }
@@ -41,7 +46,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
 
   private val counter = new AtomicInteger(0)
 
-  def createRoute(appPath: String, cls: Class[_ <: ResourceController[_]], appInfoProvider: ApplicationProvider): Route = {
+  def createRoute(appPath: String, cls: Class[_ <: Resource[_]], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
 
@@ -132,7 +137,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
   //    }
   //  }
 
-  private def matcher2(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
+  private def matcher2(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
 
     val getAnnotation = requestAnnotationForGet(cls)
 
@@ -161,25 +166,31 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
   //      complete(s"Received ${m.name} request for order $id")
   //    }
 
-  private def routeWithUnmatchedPath(ctx: RequestContext, cls: Class[_ <: ResourceController[_]], name: String): Route = {
+  private def routeWithUnmatchedPath(ctx: RequestContext, cls: Class[_ <: Resource[_]], name: String): Route = {
     extractUnmatchedPath { unmatchedPath =>
-      log debug s"executing route#${counter.incrementAndGet()}"
-      implicit val askTimeout: Timeout = 3.seconds
-      //println(new PrivateMethodExposer(theSystem)('printTree)())
-      val appActorSelection = getApplicationActorSelection(system, name)
-      val t = (appActorSelection ? Tuple3(ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
-      onSuccess(t) { x => complete(x.httpResponse) }
+      implicit val askTimeout: Timeout = 2.seconds
+      val applicationActor = getApplicationActorSelection(system, name)
+      log debug s"executing route#${counter.incrementAndGet()}: ${applicationActor.pathString} ! Tuple3(ctx, cls, unmatchedPath):"
+      
+      //println(new PrivateMethodExposer(system)('printTree)())
+      
+      val t = (applicationActor ? Tuple3(ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
+      //onSuccess(t) { x => complete(x.httpResponse) }
+      onComplete(t) {
+        case Success(result) => complete(result.httpResponse)
+        case Failure(failure) => log error s"Failure ${failure}"; complete(StatusCodes.BadRequest, failure)
+      }
     }
   }
 
   private def authenticationDirective(auth: String): Directive1[String] = {
     auth match {
       case "HTTP_BASIC" => authenticateBasic(realm = "secure site", myUserPassAuthenticator)
-      case _ => test1("hi")
+      case _ => test1("no auth")
     }
   }
 
-  private def requestAnnotationForGet(cls: Class[_ <: ResourceController[_]]): Option[Annotation] = {
+  private def requestAnnotationForGet(cls: Class[_ <: Resource[_]]): Option[Annotation] = {
     try {
       val getMethod = cls.getMethod("get", classOf[ActorRef], classOf[ClassTag[_]])
       Some(getMethod.getAnnotation(classOf[AuthorizeByRole]))

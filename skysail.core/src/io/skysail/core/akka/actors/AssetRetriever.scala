@@ -6,7 +6,7 @@ import akka.actor.Props
 import akka.http.scaladsl.model.{ ContentTypes, HttpEntity }
 import akka.pattern.ask
 import akka.util.Timeout
-import io.skysail.core.akka.{ AbstractRequestHandlerActor, RequestEvent, ResourceController, ResponseEvent }
+import io.skysail.core.akka.{ AbstractRequestHandlerActor, RequestEvent, Resource, ResponseEvent }
 import io.skysail.core.app.domain.Application
 
 import scala.concurrent.Await

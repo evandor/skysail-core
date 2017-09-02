@@ -8,6 +8,7 @@ import org.osgi.framework.Bundle
 import io.skysail.core.server.actors.BundlesActor.CreateBundleActor
 import akka.actor.Props
 import akka.actor.ActorRef
+import akka.event.LoggingReceive
 
 object BundlesActor {
   case class GetResource(val path: String)
@@ -19,7 +20,7 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
 
   val bundleActors = scala.collection.mutable.Map[String, ActorRef]()
 
-  override def receive: Receive = {
+  override def receive: Receive = LoggingReceive {
     case gr: GetResource => getResource(gr)
     case gb: GetBundles => getBundles(gb)
     case cb: CreateBundleActor => createBundleActor(cb)
@@ -32,6 +33,10 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   }
 
   def getBundles(gb: GetBundles) = {
+    log debug s"self:   ${self}"
+    log debug s"sender: ${sender}"
+    log debug ""
+
     val bundles = bundleContext.getBundles.toList
     //println("getting bundles: " + bundles)
     sender ! bundles

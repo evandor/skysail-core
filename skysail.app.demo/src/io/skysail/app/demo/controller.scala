@@ -18,7 +18,7 @@ import akka.stream.ActorMaterializer
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import io.skysail.core.akka.ResourceController
+import io.skysail.core.akka.Resource
 import io.skysail.core.akka.RequestProcessingActor
 import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.app.SkysailApplication
@@ -35,7 +35,7 @@ class ContactsController extends ListResourceController[Contact] {
     sender ! List(Contact("Mira"), Contact("carsten"))
   }
 
-  override def get() = ???
+   def get() = ???
 }
 
 class EsController extends ListResourceController[DemoRoot] {
@@ -46,7 +46,7 @@ class EsController extends ListResourceController[DemoRoot] {
       DemoRoot("config", "/demo/v1/configs", "System Configuration"))
   }
 
-  override def get() = ???
+   def get() = ???
 }
 
 class IndicesController extends ListResourceController[EsIndex] {
@@ -60,7 +60,7 @@ class IndicesController extends ListResourceController[EsIndex] {
     ???
   }
 
-  override def get() = ???
+   def get() = ???
 
 //  @AuthorizeByRole("esadmin")
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
@@ -135,7 +135,7 @@ class MappingController extends ListResourceController[Mapping] {
 //    }
 //  }
 
-  override def get() = ???
+   def get() = ???
 
   def get(path: String) = {
     val httpget = new HttpGet(path)
@@ -171,6 +171,6 @@ class ConfigsController extends ListResourceController[ConfigDetails] {
     ???
   }
 
-  override def get() = ???
+   def get() = ???
 
 }

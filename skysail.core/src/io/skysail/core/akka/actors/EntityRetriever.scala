@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.RequestEntity
 import akka.pattern.ask
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
-import io.skysail.core.akka.{AbstractRequestHandlerActor, ResourceController, ResponseEvent}
+import io.skysail.core.akka.{AbstractRequestHandlerActor, Resource, ResponseEvent}
 import org.json4s.{DefaultFormats, jackson}
 
 import scala.concurrent.Await

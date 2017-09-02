@@ -24,5 +24,5 @@ class BackendIndexController extends ListResourceController[String] {
 //      .mapTo[List[Application]]
 //      .onSuccess { case r => sender ! r }
 //  }
-  override def get() = ???
+  def get() = ???
 }

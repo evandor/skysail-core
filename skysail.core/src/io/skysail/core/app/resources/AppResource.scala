@@ -11,5 +11,5 @@ class AppResource extends EntityResourceController[String] {
   //override def get() = { "Gi".asInstanceOf[String] }
 //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
 //  }
-  override def get() = ???
+   def get() = ???
 }
