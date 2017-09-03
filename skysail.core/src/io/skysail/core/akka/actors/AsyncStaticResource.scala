@@ -12,7 +12,7 @@ import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 import akka.actor.ActorContext
 
-abstract class AsyncStaticResource extends Resource[Any] with ActorContextAware {
+abstract class AsyncListResource[T: ClassTag] extends Resource[List[T]] with ActorContextAware {
 
   def get(sendBackTo: ActorRef): Unit
 

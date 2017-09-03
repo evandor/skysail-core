@@ -21,7 +21,7 @@ import akka.event.LoggingReceive
 object ApplicationActor {
   case class GetAppModel()
   case class GetApplication()
-  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
+  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
     override def toString() = {
       s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
     }
@@ -52,11 +52,12 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
       log debug ""
 
       val theClass = cls.newInstance()
-      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]], theClass), "controllerActor$" + cnt.getAndIncrement)
+      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]]/*, theClass*/), "controllerActor$" + cnt.getAndIncrement)
 
-      val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
+      val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, theClass, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
       r onComplete {
-        case Success(value) => log debug s"backto: ${sendBackTo} ! ${value}"; sendBackTo ! value
+        case Success(value) =>
+          log debug s"backto: ${sendBackTo} ! ${value}"; sendBackTo ! value
         case Failure(failure) => log error s"$failure"
       }
     }
@@ -67,6 +68,10 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
       log debug ""
       sender ! appModel
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
+  }
+
+  override def preRestart(reason: Throwable, message: Option[Any]) {
+    log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
 
 }

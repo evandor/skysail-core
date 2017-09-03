@@ -14,8 +14,12 @@ class TestEntitiesResource extends ListResourceController[String] {
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
 }
 
-class TestStringEntityController extends EntityResourceController[String] {
+class TestStringEntityController extends AsyncEntityResource[String] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
+
+  def get(sendBackTo: ActorRef): Unit = {
+     ???
+   }
 }
 
 //class TestEntityResource extends EntityServerResource[TestEntity] {
@@ -41,8 +45,12 @@ class PostTestEntityResource extends PostResource[String] {
 //  }
 //}
 
-class TestEntityController extends EntityResourceController[TestEntity] {
+class TestEntityController extends AsyncEntityResource[TestEntity] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
+
+  def get(sendBackTo: ActorRef): Unit = {
+     ???
+   }
 }
 
 class TestEntityListController extends ListResourceController[TestEntity] {

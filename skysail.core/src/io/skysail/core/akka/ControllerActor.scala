@@ -20,19 +20,30 @@ import akka.http.scaladsl.model.RequestEntity
 import org.json4s.{ jackson, native, DefaultFormats }
 import scala.util.Success
 import scala.util.Failure
+import akka.http.scaladsl.server.RequestContext
+import akka.http.scaladsl.model.Uri
+import io.skysail.core.model.ApplicationModel
+import org.osgi.framework.BundleContext
+import io.skysail.core.app.resources.ActorContextAware
+import io.skysail.core.akka.actors.AsyncStaticResource
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.ResponseEntity
+import io.skysail.core.akka.RequestEvent
+import io.skysail.core.akka.actors.AsyncEntityResource
 
 object ControllerActor {
   case class GetRequest()
   case class PostRequest()
   case class PutRequest()
   case class DeleteRequest()
+  case class MyResponseEntity(val entity: ResponseEntity)
 }
 
-class ControllerActor[T](resource: Resource[_]) extends Actor with ActorLogging {
+class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
 
-  log debug s"new ControllerActor created -> Resource('${resource}')"
+  // log debug s"new ControllerActor created -> Resource('${resource}')"
 
   val originalSender = sender
   var sendBackTo: ActorRef = null
@@ -43,19 +54,19 @@ class ControllerActor[T](resource: Resource[_]) extends Actor with ActorLogging 
 
   def in: Receive = LoggingReceive {
     // case gr: ControllerActor.GetRequest => get(sender)
-    //case reqCtx: RequestContext => {
-    case skysailContext: SkysailContext => {
+    //case skysailContext: SkysailContext
+    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncListResource[T], _: Option[BundleContext], _: Uri.Path) => {
       log debug s"IN - self:   ${self}"
       log debug s"IN - sender: ${sender}"
       log debug ""
       sendBackTo = sender
 
-      val asrc = resource.asInstanceOf[AsyncListResource[T]]
-      asrc.setActorContext(context)
+      //val asrc = resource.asInstanceOf[AsyncListResource[T]]
+      resource.setActorContext(context)
       //log info s"calling ${asrc} with sender '${self}'"
-      log debug s"delegating to ${asrc.getClass.getSimpleName}#get('${self}')"
+      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
       log debug s""
-      asrc.get(self)
+      resource.get(self)
 
       become(out)
       //      val t = resourceController.get().asInstanceOf[List[T]]
@@ -76,6 +87,31 @@ class ControllerActor[T](resource: Resource[_]) extends Actor with ActorLogging 
       //      }
 
     }
+    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncEntityResource[_], _: Option[BundleContext], _: Uri.Path) => {
+      log debug s"IN - self:   ${self}"
+      log debug s"IN - sender: ${sender}"
+      log debug ""
+      sendBackTo = sender
+
+      resource.setActorContext(context)
+      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
+      log debug s""
+      resource.get(self)
+      become(out)
+    }
+    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
+      log debug s"IN - self:   ${self}"
+      log debug s"IN - sender: ${sender}"
+      log debug ""
+      sendBackTo = sender
+
+      resource.setActorContext(context)
+      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
+      log debug s""
+      resource.get(self)
+      become(out)
+    }
+
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
@@ -92,9 +128,14 @@ class ControllerActor[T](resource: Resource[_]) extends Actor with ActorLogging 
         case value =>
           val reqEvent = RequestEvent(null, null)
           val resEvent = ResponseEvent(reqEvent, null)
-          log debug s"backto: ${sendBackTo} ! ${resEvent}"; 
+          log debug s"backto: ${sendBackTo} ! ${resEvent}";
           sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
       }
+    }
+    case msg: ControllerActor.MyResponseEntity => {
+      val reqEvent = RequestEvent(null, null)
+      val resEvent = ResponseEvent(reqEvent, null)
+      sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
     case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
   }

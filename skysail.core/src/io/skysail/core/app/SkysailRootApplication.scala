@@ -18,7 +18,7 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
 import io.skysail.core.app.resources._
-import io.skysail.core.akka.actors.AssetsController
+import io.skysail.core.akka.actors.AssetsResource
 import io.skysail.core.app.resources.BundlesResource
 import io.skysail.core.akka.actors.BackendIndexController
 
@@ -53,7 +53,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       "/apps" -> classOf[AppsResource],
       "/bundles" -> classOf[BundlesResource],
       "/app" -> classOf[AppResource],
-      "/assets" -> classOf[AssetsController],
+      "/assets" -> classOf[AssetsResource],
       "/user" -> classOf[CurrentUserController],
       "" -> classOf[BackendIndexController]
         

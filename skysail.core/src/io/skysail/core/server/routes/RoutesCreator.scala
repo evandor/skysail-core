@@ -112,31 +112,6 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
       case _ => None
     }
 
-  //  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: ResourceController[_]], name: String): Route = {
-  //    pathPrefix(pathMatcher) {
-  //      test() {
-  //        authenticateBasic(realm = "secure site", myUserPassAuthenticator) { username =>
-  //          get {
-  //            extractRequestContext {
-  //              ctx =>
-  //                test1("") { f => {
-  //                  extractUnmatchedPath { unmatchedPath =>
-  //                    log debug s"executing route#${counter.incrementAndGet()}"
-  //                    implicit val askTimeout: Timeout = 3.seconds
-  //                    //println(new PrivateMethodExposer(theSystem)('printTree)())
-  //                    val appActorSelection = getApplicationActorSelection(system, name)
-  //                    val t = (appActorSelection ? (ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
-  //                    onSuccess(t) { x => complete(x.httpResponse) }
-  //                  }
-  //                }
-  //                }
-  //            }
-  //          }
-  //        }
-  //      }
-  //    }
-  //  }
-
   private def matcher2(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
 
     val getAnnotation = requestAnnotationForGet(cls)
@@ -158,14 +133,6 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
     }
   }
 
-  //  val orderGetOrPutWithMethod =
-  //    path("order" / IntNumber) & (get | put) & extractMethod
-  //
-  //  val route =
-  //    orderGetOrPutWithMethod { (id, m) =>
-  //      complete(s"Received ${m.name} request for order $id")
-  //    }
-
   private def routeWithUnmatchedPath(ctx: RequestContext, cls: Class[_ <: Resource[_]], name: String): Route = {
     extractUnmatchedPath { unmatchedPath =>
       implicit val askTimeout: Timeout = 2.seconds
@@ -175,7 +142,6 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
       //println(new PrivateMethodExposer(system)('printTree)())
       
       val t = (applicationActor ? Tuple3(ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
-      //onSuccess(t) { x => complete(x.httpResponse) }
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
         case Failure(failure) => log error s"Failure ${failure}"; complete(StatusCodes.BadRequest, failure)
