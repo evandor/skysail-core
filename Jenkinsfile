@@ -23,6 +23,12 @@ node {
    stage('coverage') {
       sh './gradlew reportScoverage'   
    }   
+   
+   stage('deploy') {
+       parallel (
+           server_int: { build 'skysail-core.export.int'}
+       )
+   }
 
    stage('publishHTML') {
      publishHTML([
