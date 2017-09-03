@@ -1,7 +1,7 @@
 package io.skysail.core.app.resources
 
 import akka.actor.ActorRef
-import io.skysail.core.akka.actors.AsyncEntityResource
+import io.skysail.core.resources.AsyncEntityResource
 
 import scala.concurrent.Future
 import scala.reflect.ClassTag

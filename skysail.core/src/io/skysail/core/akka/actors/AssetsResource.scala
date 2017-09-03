@@ -1,7 +1,6 @@
 package io.skysail.core.akka.actors
 
 import io.skysail.core.akka._
-import io.skysail.core.dsl.ActorChainDsl._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
 import scala.reflect.ClassTag
@@ -16,6 +15,7 @@ import akka.pattern.ask
 import scala.io.Source
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.model.HttpEntity
+import io.skysail.core.resources.AsyncStaticResource
 
 class AssetsResource extends AsyncStaticResource with ActorContextAware {
 

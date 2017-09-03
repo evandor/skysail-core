@@ -26,11 +26,11 @@ class ControllerModelSpec extends FlatSpec with BeforeAndAfterEach {
     assert(model.controllerClass == classOf[TestStringEntityController])
   }
 
-  "A ResourceModel" should "provide access to the target entity" in {
-    val model = ControllerModel("/path", classOf[TestEntityListController])
-    assert(model.entityClass == classOf[TestEntity])
-  }
-  
+//  "A ResourceModel" should "provide access to the target entity" in {
+//    val model = ControllerModel("/path", classOf[TestEntityListController])
+//    assert(model.entityClass == classOf[TestEntity])
+//  }
+//  
 //  "A ResourceModel" should "provide the resource type" in {
 //    val model = ControllerModel(null, "/path", classOf[TestController])
 //    assert(model.resourceType == UNSPECIFIED_RESOURCE)

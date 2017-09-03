@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext
 
 trait ApplicationProvider {
   def appModel(): ApplicationModel
-  def routes(): List[(String, Class[_ <: io.skysail.core.akka.Resource[_]])]
+  def routes(): List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])]
   def getBundleContext(): Option[BundleContext] 
   def application(): SkysailApplication
 }

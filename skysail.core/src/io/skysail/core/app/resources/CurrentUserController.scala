@@ -3,7 +3,7 @@ package io.skysail.core.app.resources
 import akka.actor.ActorRef
 import scala.reflect.ClassTag
 import io.skysail.core.app.domain.User
-import io.skysail.core.akka.actors.AsyncEntityResource
+import io.skysail.core.resources.AsyncEntityResource
 
 class CurrentUserController extends AsyncEntityResource[User] {
   

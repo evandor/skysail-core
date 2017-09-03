@@ -15,7 +15,7 @@ import io.skysail.core.server.actors.BundlesActor
 import org.osgi.framework.Bundle
 import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
-import io.skysail.core.akka.actors.AsyncListResource
+import io.skysail.core.resources.AsyncListResource
 import scala.util.Success
 import scala.util.Failure
 import org.slf4j.LoggerFactory

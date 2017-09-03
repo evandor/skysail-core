@@ -7,7 +7,7 @@ import io.skysail.core.app.ApiVersion
 import scala.None
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model._
-import io.skysail.core.akka.Resource
+import io.skysail.core.resources.Resource
 import akka.http.scaladsl.server.Directives._
 
 /**

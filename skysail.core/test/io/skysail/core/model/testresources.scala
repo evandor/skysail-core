@@ -6,6 +6,7 @@ import io.skysail.core.akka.actors._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.ClassTag
+import io.skysail.core.resources.AsyncEntityResource
 
 case class TestEntity(val foo: String)
 

@@ -24,7 +24,6 @@ import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import io.skysail.core.ScalaReflectionUtils
-import io.skysail.core.akka.Resource
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import io.skysail.core.model.ApplicationModel
@@ -43,6 +42,7 @@ import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
 import akka.actor.ActorSelection
 import io.skysail.core.Constants
+import io.skysail.core.resources.Resource
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])

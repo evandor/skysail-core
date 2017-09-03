@@ -47,7 +47,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   var properties: Dictionary[String, _] = null
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
-  def routesMappings: List[(String, Class[_ <: io.skysail.core.akka.Resource[_]])] = {
+  def routesMappings: List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])] = {
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
       "/apps" -> classOf[AppsResource],

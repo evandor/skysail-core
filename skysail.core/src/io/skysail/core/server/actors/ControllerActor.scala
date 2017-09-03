@@ -13,7 +13,7 @@ import scala.reflect.ClassTag
 import io.skysail.core.server.actors.ApplicationActor.SkysailContext
 import org.json4s.{ DefaultFormats, jackson }
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
-import io.skysail.core.akka.actors.AsyncListResource
+import io.skysail.core.resources.AsyncListResource
 
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model.RequestEntity
@@ -25,11 +25,11 @@ import akka.http.scaladsl.model.Uri
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.resources.ActorContextAware
-import io.skysail.core.akka.actors.AsyncStaticResource
+import io.skysail.core.resources.AsyncStaticResource
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ResponseEntity
 import io.skysail.core.akka.RequestEvent
-import io.skysail.core.akka.actors.AsyncEntityResource
+import io.skysail.core.resources.AsyncEntityResource
 
 object ControllerActor {
   case class GetRequest()
@@ -88,26 +88,14 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
 
     }
     case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncEntityResource[_], _: Option[BundleContext], _: Uri.Path) => {
-      log debug s"IN - self:   ${self}"
-      log debug s"IN - sender: ${sender}"
-      log debug ""
       sendBackTo = sender
-
       resource.setActorContext(context)
-      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
-      log debug s""
       resource.get(self)
       become(out)
     }
     case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
-      log debug s"IN - self:   ${self}"
-      log debug s"IN - sender: ${sender}"
-      log debug ""
       sendBackTo = sender
-
       resource.setActorContext(context)
-      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
-      log debug s""
       resource.get(self)
       become(out)
     }

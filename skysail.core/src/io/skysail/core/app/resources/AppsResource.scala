@@ -9,7 +9,7 @@ import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
-import io.skysail.core.akka.actors.AsyncListResource
+import io.skysail.core.resources.AsyncListResource
 import io.skysail.core.server.actors.ApplicationsActor
 import scala.util.{ Success, Failure }
 import org.slf4j.LoggerFactory

@@ -12,7 +12,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import com.fasterxml.jackson.databind.introspect.{AnnotatedClass, JacksonAnnotationIntrospector}
 import io.skysail.core.ScalaReflectionUtils
-import io.skysail.core.akka.{Resource, ResponseEvent}
+import io.skysail.core.akka.{ResponseEvent}
 import io.skysail.core.app.ApplicationProvider
 import io.skysail.core.app.resources.BundlesResource
 import io.skysail.core.security.AuthorizeByRole
@@ -29,6 +29,7 @@ import scala.util.{Success, Failure}
 import io.skysail.core.akka.PrivateMethodExposer
 import io.skysail.core.Constants
 import akka.http.scaladsl.model.StatusCodes
+import io.skysail.core.resources.Resource
 
 object RoutesCreator {
 

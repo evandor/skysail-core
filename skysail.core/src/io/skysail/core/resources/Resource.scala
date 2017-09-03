@@ -1,4 +1,4 @@
-package io.skysail.core.akka
+package io.skysail.core.resources
 
 import akka.actor.{ Actor, ActorLogging, ActorRef, Props }
 import akka.event.LoggingReceive

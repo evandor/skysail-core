@@ -1,18 +1,13 @@
 package io.skysail.app.demo
 
 import io.skysail.core.akka._
-import io.skysail.core.dsl.ActorChainDsl._
 import io.skysail.core.model.ApplicationModel
 import akka.actor.ActorRef
 import scala.reflect.ClassTag
-import io.skysail.core.akka.actors.Timer
+import io.skysail.core.resources.Resource
 
 class MyAssetsController2 extends Resource[Any] {
 
-//  override val chainRoot = (
-//    classOf[RequestProcessingActor[Any]] ==>
-//    classOf[Timer] ==>
-//    classOf[MyAssetRetriever2]).build(null)
 
    def get() = ???
 

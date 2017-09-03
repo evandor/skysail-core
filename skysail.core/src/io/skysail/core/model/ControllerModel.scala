@@ -6,7 +6,7 @@ import io.skysail.core.ScalaReflectionUtils
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.Resource
+import io.skysail.core.resources.Resource
 import scala.reflect.ClassTag
 
 /**

@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext
 import akka.http.scaladsl.model.Uri
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.akka.ControllerActor
-import io.skysail.core.akka.Resource
+import io.skysail.core.resources.Resource
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
@@ -22,9 +22,9 @@ object ApplicationActor {
   case class GetAppModel()
   case class GetApplication()
   case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
-    override def toString() = {
-      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
-    }
+//    override def toString() = {
+//      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
+//    }
   }
 }
 
