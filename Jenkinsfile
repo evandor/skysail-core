@@ -12,7 +12,7 @@ node {
    
    stage('gradle build') {
       //buildCode()
-      sh './gradlew clean build'
+      sh './gradlew build'
    }
 
    stage('cucumber') {
