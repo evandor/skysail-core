@@ -25,14 +25,14 @@ class ApplicationModelSpec extends FlatSpec {
     assert(model.name == "appName")
   }
 
-  "An ApplicationModel" should "create links without API version if no apiVersion is provided" in {
-    val model = ApplicationModel("appName",null, "desc")
-    model.addControllerModel("/list", classOf[TestEntitiesResource])
-    model.addControllerModel("/list/", classOf[PostTestEntityResource])
-//    val links = model.linksFor(classOf[TestEntitiesResource])//.filter { l => l. }
-//    assert(links.size == 1)
-//    assert(links.head.getUri == "/appName/list/")
-  }
+//  "An ApplicationModel" should "create links without API version if no apiVersion is provided" in {
+//    val model = ApplicationModel("appName",null, "desc")
+//    model.addControllerModel("/list", classOf[TestEntitiesResource])
+//    model.addControllerModel("/list/", classOf[PostTestEntityResource])
+////    val links = model.linksFor(classOf[TestEntitiesResource])//.filter { l => l. }
+////    assert(links.size == 1)
+////    assert(links.head.getUri == "/appName/list/")
+//  }
 
   "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
     val appModel = ApplicationModel("appName",null, "desc")

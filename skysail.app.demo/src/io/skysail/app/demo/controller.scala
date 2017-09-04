@@ -158,7 +158,7 @@ class MappingController extends AsyncListResource[Mapping] {
   }
 }
 
-class ConfigsController extends ListResourceController[ConfigDetails] {
+class ConfigsController extends AsyncListResource[ConfigDetails] {
   //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
   //    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
   //    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
@@ -173,5 +173,9 @@ class ConfigsController extends ListResourceController[ConfigDetails] {
   }
 
   def get() = ???
+
+  def get(sendBackTo: ActorRef): Unit = {
+    ???
+  }
 
 }

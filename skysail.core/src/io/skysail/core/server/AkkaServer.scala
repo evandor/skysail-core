@@ -27,7 +27,6 @@ import akka.http.scaladsl.server.RequestContext
 import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
-import io.skysail.core.app.resources.DefaultResource2
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType

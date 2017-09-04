@@ -3,7 +3,6 @@ package io.skysail.core.app.resources
 import io.skysail.core.app.domain.BundleDescriptor
 import akka.actor.ActorRef
 import akka.pattern.ask
-import io.skysail.core.akka.actors.ListResourceController
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.app.domain.Application
 import io.skysail.core.security.AuthorizeByRole

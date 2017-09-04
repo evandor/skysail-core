@@ -8,7 +8,6 @@ import org.osgi.service.component.annotations._
 
 import akka.actor.ActorSystem
 import io.skysail.core.app.resources.AppResource
-import io.skysail.core.app.resources.DefaultResource2
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
@@ -18,9 +17,8 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.Http
 import io.skysail.core.app.resources._
-import io.skysail.core.akka.actors.AssetsResource
+import io.skysail.core.resources.AssetsResource
 import io.skysail.core.app.resources.BundlesResource
-import io.skysail.core.akka.actors.BackendIndexController
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -54,9 +52,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       "/bundles" -> classOf[BundlesResource],
       "/app" -> classOf[AppResource],
       "/assets" -> classOf[AssetsResource],
-      "/user" -> classOf[CurrentUserController],
-      "" -> classOf[BackendIndexController]
-        
+      "/user" -> classOf[CurrentUserController]
     )
   }
 
