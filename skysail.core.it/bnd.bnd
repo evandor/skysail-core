@@ -103,6 +103,7 @@ logback.configurationFile.path = config/integrationtest
 	com.sun.jna;version=4.2,\
 	com.sun.jna.platform;version=4.2,\
 	skysail.core;version=latest,\
+	skysail.client;version=latest,\
 	skysail.app.demo;version=latest,\
 	io.skysail.bundled.json4s_2.11-3.5.1;version=3.5,\
 	org.scala-lang.scala-library;version=2.11.8,\

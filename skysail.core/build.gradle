@@ -36,7 +36,7 @@ dependencies {
     it.workingDir = 'client/'
     it.standardOutput = new FileOutputStream('skysail.core/etc/npm-build.log')
   }
-}*/
+}
 
 // https://github.com/srs/gradle-node-plugin/blob/master/docs/node.md
 node {
@@ -50,7 +50,7 @@ task buildClient(type:NpmTask, dependsOn:'npmInstall') {
   group = 'build'
   description = "Compile client side folder for production"
   args = ['run','buildProd']
-}
+}*/
 
 sourceSets {
     main {

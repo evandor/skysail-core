@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.items = [
       {
-        label: 'Dashboard',
+        label: 'Home',
         icon: 'fa-th-box',
         url: 'dashboard'
       },

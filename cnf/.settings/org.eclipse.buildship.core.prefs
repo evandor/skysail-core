@@ -1,3 +1,4 @@
+#Mon Sep 04 09:27:33 CEST 2017
 connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
-connection.project.dir=..
 eclipse.preferences.version=1
+connection.project.dir=../skysail.client
