@@ -11,6 +11,7 @@ Import-Package: \
 Bundle-Activator: io.skysail.core.server.AkkaServer
     
 #Require-Capability: io.skysail.api.um
+Require-Capability: skysail.capability.client
 
 
 -buildpath: \

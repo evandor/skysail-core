@@ -7,12 +7,15 @@ import akka.http.scaladsl.server.RequestContext
 import io.skysail.core.akka.ResponseEvent
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.Bundle
-import io.skysail.core.server.actors.BundleActor.GetResource
+import io.skysail.core.server.actors.BundleActor._
+import org.osgi.framework.wiring.BundleWiring
 
 object BundleActor {
   case class GetResource(val path: String)
   case class GetAppModel()
+  case class GetClassloader()
 }
+
 class BundleActor(bundle: Bundle) extends Actor with ActorLogging {
   
   val cnt = new AtomicInteger(0)
@@ -30,6 +33,9 @@ class BundleActor(bundle: Bundle) extends Actor with ActorLogging {
       sendBackTo = sender
       nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
       nextActor ! ctx
+    }
+    case gc: GetClassloader => {
+       sender ! bundle.adapt(classOf[BundleWiring]).getClassLoader
     }
     //case _: ApplicationActor.GetAppModel => sender ! appModel
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"

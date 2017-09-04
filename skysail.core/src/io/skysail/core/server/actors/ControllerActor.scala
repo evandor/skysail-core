@@ -53,12 +53,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   def receive = in
 
   def in: Receive = LoggingReceive {
-    // case gr: ControllerActor.GetRequest => get(sender)
-    //case skysailContext: SkysailContext
     case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncListResource[T], _: Option[BundleContext], _: Uri.Path) => {
-      log debug s"IN - self:   ${self}"
-      log debug s"IN - sender: ${sender}"
-      log debug ""
       sendBackTo = sender
 
       //val asrc = resource.asInstanceOf[AsyncListResource[T]]
@@ -105,9 +100,6 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
 
   def out: Receive = LoggingReceive {
     case msg: List[T] => {
-      log debug s"OUT - self:   ${self}"
-      log debug s"OUT - sender: ${sender}"
-      log debug ""
       //implicit val ec = context.system.dispatcher
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization

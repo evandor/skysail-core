@@ -1,0 +1,8 @@
+Bundle-Name: SKYSAIL :: client
+
+Bundle-Version: 0.1.0.${tstamp}
+    
+Provide-Capability: skysail.capability.client    
+    
+-includeresource: client=dist
+

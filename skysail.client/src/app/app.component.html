@@ -1,0 +1,33 @@
+<div class="ui-g" style="height:100%;">
+    <div class="ui-g-12 ui-g-nopad">
+        <navbar></navbar>
+    </div>
+    <div class="ui-g-12 ui-md-2" style="border-right:1px dotted gray; height:100%;">
+        <p-panelMenu [model]="leftmenuitems"></p-panelMenu>
+    </div>
+    <div class="ui-g-12 ui-md-10">
+        <div class="ui-g-12">
+            <p-breadcrumb [model]="items"></p-breadcrumb>
+        </div>
+        <div class="ui-g-12 ui-g-nopad">
+            <div class="ui-g">
+              <router-outlet></router-outlet>
+            </div>
+            
+            <!--<div class="ui-g">
+                <div class="ui-g-6 ui-md-3"><img src="assets/showcase/images/demo/galleria/galleria1.jpg" style="width:100%"></div>  
+                <div class="ui-g-6 ui-md-3"><img src="assets/showcase/images/demo/galleria/galleria1.jpg" style="width:100%"></div> 
+                <div class="ui-g-6 ui-md-3"><img src="assets/showcase/images/demo/galleria/galleria1.jpg" style="width:100%"></div>    
+                <div class="ui-g-6 ui-md-3"><img src="assets/showcase/images/demo/galleria/galleria1.jpg" style="width:100%"></div>      
+            </div>
+            
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6">Phasellus faucibus purus volutpat mauris lacinia sodales. Ut sit amet sapien facilisis, commodo dui non, fringilla tellus. Quisque tempus facilisis nisi sodales finibus. Pellentesque neque orci, ullamcorper vitae ligula quis, dignissim euismod augue.</div>
+                <div class="ui-g-12 ui-md-6">Fusce ullamcorper congue massa, eget ullamcorper nunc lobortis egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices dui eget dolor feugiat dapibus. Aliquam pretium leo et egestas luctus. Nunc facilisis gravida tellus.</div>
+            </div>-->
+        </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad" style="border:1px solid yellow;">
+        Footer
+    </div>
+</div>

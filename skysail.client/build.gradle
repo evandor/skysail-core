@@ -1,0 +1,63 @@
+apply plugin: 'scala'
+apply plugin: 'java'
+apply plugin: 'org.scoverage'
+apply plugin: 'com.moowork.node'
+
+repositories {
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+}
+
+buildscript {
+  repositories {
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
+  }
+  dependencies {
+    classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+  }
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.8'
+    compile 'org.scala-lang:scala-reflect:2.11.8'
+    scoverage 'org.scoverage:scalac-scoverage-plugin_2.11:1.1.0', 'org.scoverage:scalac-scoverage-runtime_2.11:1.1.0'
+    
+}
+
+// https://github.com/srs/gradle-node-plugin/blob/master/docs/node.md
+node {
+  distBaseUrl = 'https://nodejs.org/dist'
+  download = true
+  nodeModulesDir = file("client")
+}
+
+// http://www.umeshmorsu.com/2017/04/28/spring-boot-and-angular-cli-example/
+task buildClient(type:NpmTask, dependsOn:'npmInstall') {
+  group = 'build'
+  description = "Compile client side folder for production"
+  args = ['run','buildProd']
+}
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src']
+        }
+        java {
+            srcDirs = []
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['test']
+        }
+        java {
+            srcDirs = []
+        }
+    }
+}
+

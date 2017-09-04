@@ -4,6 +4,7 @@ object Constants {
   
   val APPLICATIONS_ACTOR_NAME = "applications"
   val BUNDLES_ACTOR_NAME = "bundles"
+  val CLIENT_CAPABILITY = "skysail.capability.client"
   
   val SKYSAIL_WEBCONSOLE_PATH = "webconsolePath";
   val COOKIE_NAME_MAINPAGE = "mainpage";
