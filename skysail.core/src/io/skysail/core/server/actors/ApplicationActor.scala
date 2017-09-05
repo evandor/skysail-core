@@ -17,15 +17,17 @@ import scala.concurrent.duration.DurationInt
 
 import scala.util.{ Failure, Success }
 import akka.event.LoggingReceive
+import io.skysail.core.app.ApplicationProvider
 
 object ApplicationActor {
   case class GetAppModel()
   case class GetApplication()
   case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
-//    override def toString() = {
-//      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
-//    }
+    //    override def toString() = {
+    //      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
+    //    }
   }
+  case class GetMenu()
 }
 
 /**
@@ -47,31 +49,35 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
   def receive: Receive = LoggingReceive {
     case (ctx: RequestContext, cls: Class[Resource[_]], unmatchedPath: Uri.Path) => {
       sendBackTo = sender
-      log debug s"self:   ${self}"
-      log debug s"sender: ${sender}"
-      log debug ""
-
       val theClass = cls.newInstance()
-      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]]/*, theClass*/), "controllerActor$" + cnt.getAndIncrement)
+      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/ ), "controllerActor$" + cnt.getAndIncrement)
 
       val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, theClass, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
       r onComplete {
-        case Success(value) =>
-          log debug s"backto: ${sendBackTo} ! ${value}"; sendBackTo ! value
+        case Success(value) => sendBackTo ! value
         case Failure(failure) => log error s"$failure"
       }
     }
     case _: ApplicationActor.GetApplication => sender ! application
-    case _: ApplicationActor.GetAppModel =>
-      log debug s"self:   ${self}"
-      log debug s"sender: ${sender}"
-      log debug ""
-      sender ! appModel
+    case _: ApplicationActor.GetAppModel => sender ! appModel
+    case _: ApplicationActor.GetMenu => getMenuIfExistent()
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
+  }
+
+  def getMenuIfExistent() = {
+    if (application.isInstanceOf[ApplicationProvider]) {
+      val appProvider = application.asInstanceOf[ApplicationProvider]
+      val optionalMenu = appProvider.menu()
+      println("optionalMenu: " + optionalMenu)
+      sender ! optionalMenu
+    } else {
+      println("optionalMenu: NONE")
+      sender ! None
+    }
   }
 
 }

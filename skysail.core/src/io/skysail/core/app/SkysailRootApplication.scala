@@ -19,6 +19,7 @@ import akka.http.scaladsl.Http
 import io.skysail.core.app.resources._
 import io.skysail.core.resources.AssetsResource
 import io.skysail.core.app.resources.BundlesResource
+import io.skysail.core.app.menus.MenuItem
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -45,15 +46,21 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   var properties: Dictionary[String, _] = null
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
+  override def menu() = {
+    Some(MenuItem("Root App", "fa-file-o", None, Some(List(
+      MenuItem("Bundles", "fa-file-o", Some("/client/bundles")),
+      MenuItem("Services", "fa-file-o", Some("/client/services"))))))
+  }
+
   def routesMappings: List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])] = {
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
       "/apps" -> classOf[AppsResource],
+      "/apps/menus" -> classOf[MenusResource],
       "/bundles" -> classOf[BundlesResource],
       "/app" -> classOf[AppResource],
       "/assets" -> classOf[AssetsResource],
-      "/user" -> classOf[CurrentUserController]
-    )
+      "/user" -> classOf[CurrentUserController])
   }
 
 }  

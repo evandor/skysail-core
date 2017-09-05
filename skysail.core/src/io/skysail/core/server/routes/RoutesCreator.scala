@@ -65,13 +65,9 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
     entry => entry._2.filter { cap => Constants.CLIENT_CAPABILITY.equals(cap.getNamespace) }.size > 0
   }.map { m => m._1 }
   
-  //println("XXX" + bundleIdsWithClientCapabilities)
-  
   val clientClFuture = (SkysailApplication.getBundleActor(system, bundleIdsWithClientCapabilities.head) ? BundleActor.GetClassloader()).mapTo[ClassLoader]
   val clientClassloader = Await.result(clientClFuture, 1.seconds)
-  
-  println("XXX" + clientClassloader)
-  
+    
   def createRoute(appPath: String, cls: Class[_ <: Resource[_]], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
@@ -80,10 +76,15 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
 
     val pathMatcher =
       appPath.trim() match {
-        case "" => appRoute ~ PathEnd
-        case "/" => appRoute / PathEnd
+        case "" => 
+          appRoute ~ PathEnd
+        case "/" => 
+          appRoute / PathEnd
         case p if (p.endsWith("/*")) =>
           println("matching " + p.substring(1, p.length() - 2)); appRoute / PathMatcher(p.substring(1, p.length() - 2))
+        case p if (p.substring(1,p.length()-2).contains("/")) =>
+          val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
+          segments.foldLeft(appRoute)((a,b) => a / b) ~ PathEnd
         case any => appRoute / getMatcher(any) ~ PathEnd
       }
 

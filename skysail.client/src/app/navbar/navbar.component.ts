@@ -17,18 +17,13 @@ export class NavbarComponent implements OnInit {
     this.items = [
       {
         label: 'Home',
-        icon: 'fa-th-box',
+        icon: 'fa-home',
         url: 'dashboard'
       },
       {
         label: 'Bundles',
         icon: 'fa-th-large',
         url: 'bundles'
-      },
-      {
-        label: 'Services',
-        icon: 'fa-play-circle',
-        url: 'services'
       },
       {
         label: 'Apps',

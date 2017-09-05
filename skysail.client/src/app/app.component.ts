@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from './navbar/navbar.component'
 import { BreadcrumbModule, PanelMenuModule, MenuItem } from 'primeng/primeng';
+import {BackendService} from './services/backend.service'
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,8 @@ import { BreadcrumbModule, PanelMenuModule, MenuItem } from 'primeng/primeng';
   providers: [NavbarComponent]
 })
 export class AppComponent implements OnInit {
+
+  constructor(private _backend: BackendService) {}
 
   title = 'app';
 
@@ -21,8 +24,15 @@ export class AppComponent implements OnInit {
     this.items.push({ label: 'Categories' });
     this.items.push({ label: 'test', url: 'https://www.skysail.io' });
 
+    this._backend.getLeftMenuItems()
+    .subscribe(res => {
+      this.leftmenuitems = res;
+    }, error => {
+      console.log("adding error to alertsService...");
+    });
 
-    this.leftmenuitems = [
+
+    /*this.leftmenuitems = [
       {
         label: 'File',
         icon: 'fa-file-o',
@@ -93,6 +103,6 @@ export class AppComponent implements OnInit {
           }
         ]
       }
-    ];
+    ];*/
   }
 }

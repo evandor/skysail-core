@@ -16,13 +16,15 @@ import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteAp
 import akka.actor.ActorRef
 import io.skysail.core.app.domain.Application
 import io.skysail.core.model.ApplicationModel
-import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
+import io.skysail.core.server.actors.ApplicationsActor._
 import scala.concurrent.Future
 import scala.util.{ Success, Failure }
 import akka.event.LoggingReceive
+import io.skysail.core.app.menus.MenuItem
 
 object ApplicationsActor {
   case class GetAllApplications()
+  case class GetMenus()
 }
 
 class ApplicationsActor extends Actor with ActorLogging {
@@ -38,6 +40,7 @@ class ApplicationsActor extends Actor with ActorLogging {
     case caa: CreateApplicationActor => createApplicationActor(caa)
     case daa: DeleteApplicationActor => deleteApplicationActor(daa)
     case gaa: GetAllApplications => getAllApplications(gaa)
+    case _: GetMenus => getMenus()
     case msg: Any => log info s"received unknown message '$msg' of type '${msg.getClass().getName}' in ${this.getClass.getName}"
   }
 
@@ -70,17 +73,26 @@ class ApplicationsActor extends Actor with ActorLogging {
   }
 
   private def getAllApplications(gaa: GetAllApplications) = {
-    log debug s"self:   ${self}"
-    log debug s"sender: ${sender}"
-    log debug ""
     val originalSender = sender
     val p = context.children.map(appActor => {
       (appActor ? ApplicationActor.GetAppModel()).mapTo[ApplicationModel]
     }).toList
-    println("Hier4" + p)
     implicit val ec = context.system.dispatcher
     Future.sequence(p) onComplete {
       case Success(result) => originalSender ! result.map(appModel => Application(appModel)).toList
+      case Failure(failure) => log error s"Failure: ${failure}"
+    }
+  }
+
+  private def getMenus() = {
+    val originalSender = sender
+    val p = context.children.map(appActor => {
+      (appActor ? ApplicationActor.GetMenu()).mapTo[Option[MenuItem]]
+    }).toList
+    println("P: " + p)
+    implicit val ec = context.system.dispatcher
+    Future.sequence(p) onComplete {
+      case Success(result) => originalSender ! result.filter(m => m.isDefined).toList
       case Failure(failure) => log error s"Failure: ${failure}"
     }
   }

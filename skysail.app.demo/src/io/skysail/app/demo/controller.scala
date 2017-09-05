@@ -49,34 +49,29 @@ class IndicesController extends AsyncListResource[EsIndex] {
 
   val appService = new ContactService()
 
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    ???
-  }
-
-  def get() = ???
-
   //  @AuthorizeByRole("esadmin")
-  //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-  //
-  //    implicit val formats = DefaultFormats
-  //    implicit val serialization = jackson.Serialization
-  //    implicit val materializer = ActorMaterializer()
-  //
-  //    val res = get("http://localhost:9200/_cat/indices?format=json")
-  //    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
-  //    val x = Unmarshal(v)
-  //    val u = x.to[List[EsIndex]]
-  //
-  //    u onSuccess {
-  //      case value => {
-  //        sender ! value
-  //      }
-  //    }
-  //
-  //    u onFailure {
-  //      case failure => println("FAILURE: " + failure)
-  //    }
-  //  }
+
+  def get(sender: ActorRef): Unit = {
+    implicit val formats = DefaultFormats
+    implicit val serialization = jackson.Serialization
+    implicit val system = actorContext.system
+    implicit val materializer = ActorMaterializer()
+
+    val res = get("http://localhost:9200/_cat/indices?format=json")
+    val v = akka.http.scaladsl.model.HttpEntity.Strict(ContentTypes.`application/json`, ByteString(res)).asInstanceOf[ResponseEntity]
+    val x = Unmarshal(v)
+    val u = x.to[List[EsIndex]]
+
+    u onSuccess {
+      case value => {
+        sender ! value
+      }
+    }
+
+    u onFailure {
+      case failure => println("FAILURE: " + failure)
+    }
+  }
 
   def get(path: String) /*(implicit system: ActorSystem = ActorSystem())*/ = {
     //    implicit val materializer = ActorMaterializer()
@@ -102,9 +97,6 @@ class IndicesController extends AsyncListResource[EsIndex] {
     httpclient.execute(httpget, responseHandler)
   }
 
-  def get(sendBackTo: ActorRef): Unit = {
-    ???
-  }
 }
 
 class MappingController extends AsyncListResource[Mapping] {

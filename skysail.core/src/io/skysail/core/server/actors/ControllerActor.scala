@@ -108,7 +108,6 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
         case value =>
           val reqEvent = RequestEvent(null, null)
           val resEvent = ResponseEvent(reqEvent, null)
-          log debug s"backto: ${sendBackTo} ! ${resEvent}";
           sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
       }
     }

@@ -5,13 +5,12 @@ import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.Bundle
 import org.osgi.framework.BundleContext
-
-//trait ApplicationInfoProvider {
-//}
+import io.skysail.core.app.menus.MenuItem
 
 trait ApplicationProvider {
   def appModel(): ApplicationModel
   def routes(): List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])]
   def getBundleContext(): Option[BundleContext] 
   def application(): SkysailApplication
+  def menu(): Option[MenuItem] = None
 }
