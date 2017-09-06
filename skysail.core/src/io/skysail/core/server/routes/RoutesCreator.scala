@@ -90,8 +90,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
 
-    staticResources() ~ matcher2(pathMatcher, cls, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
-
+    staticResources() ~ matcher(pathMatcher, cls, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
   }
 
   private def indexPath(): Route = {
@@ -137,7 +136,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
       case _ => None
     }
 
-  private def matcher2(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
+  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
 
     val getAnnotation = requestAnnotationForGet(cls)
 

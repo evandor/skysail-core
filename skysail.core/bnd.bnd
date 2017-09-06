@@ -13,6 +13,7 @@ Bundle-Activator: io.skysail.core.server.AkkaServer
     
 #Require-Capability: io.skysail.api.um
 Require-Capability: skysail.capability.client
+Require-Capability: skysail.capability.auth 
 
 
 -buildpath: \
