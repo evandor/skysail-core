@@ -72,10 +72,8 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
     if (application.isInstanceOf[ApplicationProvider]) {
       val appProvider = application.asInstanceOf[ApplicationProvider]
       val optionalMenu = appProvider.menu()
-      println("optionalMenu: " + optionalMenu)
       sender ! optionalMenu
     } else {
-      println("optionalMenu: NONE")
       sender ! None
     }
   }

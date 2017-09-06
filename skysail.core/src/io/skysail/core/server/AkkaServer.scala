@@ -98,7 +98,8 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
     }
 
     watchServices[AuthenticationService] {
-      case AddingService(service, context) => addAuthenticationService(service)
+      case AddingService(service, context) => routesTracker.setAuthentication(service)
+      case ModifiedService(service, _) => log info s"Service '$service' modified"
       case RemovedService(service, _) => removeAuthenticationService(service)
     }
 
@@ -128,12 +129,6 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   private def removeApplicationProvider(appInfoProvider: ApplicationProvider) = {
     routesTracker.removeRoutesFrom(appInfoProvider)
     restartServer(routesTracker.routes)
-  }
-
-  private def addAuthenticationService(authenticationService: AuthenticationService) = {
-    log info s"adding authentication ${authenticationService}"; 
-    //this.authenticationService = authenticationService
-    routesTracker.setAuthentication(authenticationService)
   }
 
   private def removeAuthenticationService(authenticationService: AuthenticationService) = {

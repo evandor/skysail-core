@@ -42,6 +42,5 @@
 //    val app2 = new Contact("dort")
 //    val l = List(app1, app2)
 //    val str = l.toJson.toString()
-//    println(str)
 //  }
 //}

@@ -35,13 +35,10 @@
 //    implicit val ec = context.system.dispatcher
 //
 //    val bundle = res.req.ctx.bundleContext.get.getBundle
-//    println("BUNDLE: " + bundle)
 //
 //    val bundleId = bundle.getBundleId
-//    println("BUNDLE: " + bundleId)
 //
 //    val file = res.req.ctx.unmatchedPath.toString()
-//    println("FILE:   " + file)
 //
 //    val bA = SkysailApplication.getBundleActor(context.system, bundleId)
 //    val q = (bA ? BundleActor.GetResource(file)).mapTo[URL]
@@ -51,10 +48,8 @@
 //
 //    q onSuccess {
 //      case value => {
-//        println("URL: " + value)
 //        val is = value.openConnection().getInputStream()
 //        val ba = Source.fromInputStream(is).map(_.toByte).toArray
-//        //println(ba)
 //        nextActor ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba)))
 //      }
 //    }

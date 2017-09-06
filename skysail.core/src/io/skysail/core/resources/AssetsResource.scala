@@ -29,7 +29,6 @@ class AssetsResource extends AsyncStaticResource with ActorContextAware {
 
     q onSuccess {
       case value => {
-        println("URL: " + value)
         val is = value.openConnection().getInputStream()
         val ba = Source.fromInputStream(is).map(_.toByte).toArray
         //println(ba)
