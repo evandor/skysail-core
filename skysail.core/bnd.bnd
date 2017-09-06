@@ -11,7 +11,6 @@ Import-Package: \
 
 Bundle-Activator: io.skysail.core.server.AkkaServer
     
-#Require-Capability: io.skysail.api.um
 Require-Capability: skysail.capability.client
 Require-Capability: skysail.capability.auth 
 
@@ -28,12 +27,8 @@ Require-Capability: skysail.capability.auth
 	${akka-compiletime},\
     ${akka-test},\
     ${json},\
-    skysail.client;version=latest,\
-    skysail.server.auth.basic;version=latest,\
 	domino_2.11;version=1.1
 
-#   io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
-		
 Export-Package: \
 	io.skysail.api.doc,\
 	io.skysail.api.links,\

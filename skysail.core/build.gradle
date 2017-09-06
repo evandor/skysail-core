@@ -1,3 +1,6 @@
+//tasks.assemble.dependsOn(':skysail.client:build')
+//tasks.assemble.dependsOn(':skysail.server.auth.basic:build')
+
 apply plugin: 'scala'
 apply plugin: 'java'
 apply plugin: 'org.scoverage'
