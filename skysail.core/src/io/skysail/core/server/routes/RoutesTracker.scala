@@ -2,19 +2,21 @@ package io.skysail.core.server.routes
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
-import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
+import io.skysail.core.app.{ ApplicationProvider, SkysailApplication }
 import io.skysail.core.app.SkysailApplication.DeleteApplicationActor
 import org.slf4j.LoggerFactory
+import io.skysail.core.security.AuthenticationService
+import io.skysail.core.security.AuthenticationService
 
-class RoutesTracker(system: ActorSystem, authentication: String) {
+class RoutesTracker(system: ActorSystem) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
-  
-  log info s"created RoutesTracker with ${authentication} authentication."
+
+  log info s"created RoutesTracker"
 
   private var routesBuffer = scala.collection.mutable.ListBuffer[Route]()
-  
-  private val routesCreator = RoutesCreator(system, authentication)
+
+  private val routesCreator = RoutesCreator(system)
 
   def routes(): List[Route] = routesBuffer.toList
 
@@ -40,5 +42,6 @@ class RoutesTracker(system: ActorSystem, authentication: String) {
     routesBuffer --= routesFromProvider.map { prt => routesCreator.createRoute(prt._1, prt._2, appInfoProvider) }.toList
   }
 
+  def setAuthentication(a: AuthenticationService) = routesCreator.authentication = a
 
 }

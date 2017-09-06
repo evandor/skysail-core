@@ -61,7 +61,7 @@ case class ApplicationModel(
     require(path != null, "The resource's path must not be null")
     require(cls != null, "The resource's controller class must not be null")
 
-    log info s"mapping '${appPath()}${path}' to '${cls}'"
+    log debug s"mapping '${appPath()}${path}' to '${cls}'"
 
     val controllerModel = new ControllerModel(/*this, */path, cls)
 

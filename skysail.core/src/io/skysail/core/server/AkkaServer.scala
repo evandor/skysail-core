@@ -46,8 +46,9 @@ import io.skysail.core.server.actors.ApplicationsActor
 import io.skysail.core.server.actors.BundlesActor
 import io.skysail.core.app.ApplicationProvider
 import io.skysail.core.Constants
+import io.skysail.core.security.AuthenticationService
 
-case class ServerConfig(val port: Integer, val binding: String, val authentication: String)
+case class ServerConfig(val port: Integer, val binding: String)
 
 class AkkaServer extends DominoActivator { //with SprayJsonSupport {
 
@@ -61,10 +62,10 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   val defaultPort = 8080
   val defaultBinding = "localhost"
   val defaultAuthentication = "HTTP_BASIC"
-  var serverConfig = new ServerConfig(defaultPort, defaultBinding, defaultAuthentication)
+  var serverConfig = new ServerConfig(defaultPort, defaultBinding)
 
   var routesTracker: RoutesTracker = null
-
+  
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
     override def start(): Unit = start(bundleContext)
@@ -96,6 +97,11 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       case RemovedService(service, _) => removeApplicationProvider(service)
     }
 
+    watchServices[AuthenticationService] {
+      case AddingService(service, context) => addAuthenticationService(service)
+      case RemovedService(service, _) => removeAuthenticationService(service)
+    }
+
     watchBundles {
       case AddingBundle(b, context) => bundlesActor ! BundlesActor.CreateBundleActor(b)
       case ModifiedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} modified"
@@ -106,9 +112,9 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
       log info s"received configuration for 'server': ${conf}"
       val port = Integer.parseInt(conf.getOrElse("port", defaultPort.toString).asInstanceOf[String])
       var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
-      var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
-      serverConfig = ServerConfig(port, binding, authentication)
-      routesTracker = new RoutesTracker(actorSystem, serverConfig.authentication)
+      //var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
+      serverConfig = ServerConfig(port, binding)
+      routesTracker = new RoutesTracker(actorSystem)
     }
 
   })
@@ -122,6 +128,16 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   private def removeApplicationProvider(appInfoProvider: ApplicationProvider) = {
     routesTracker.removeRoutesFrom(appInfoProvider)
     restartServer(routesTracker.routes)
+  }
+
+  private def addAuthenticationService(authenticationService: AuthenticationService) = {
+    log info s"adding authentication ${authenticationService}"; 
+    //this.authenticationService = authenticationService
+    routesTracker.setAuthentication(authenticationService)
+  }
+
+  private def removeAuthenticationService(authenticationService: AuthenticationService) = {
+    routesTracker.setAuthentication(null)
   }
 
   private def startServer(arg: List[Route]) = {

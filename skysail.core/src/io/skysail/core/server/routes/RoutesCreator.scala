@@ -37,10 +37,11 @@ import org.osgi.framework.wiring.BundleWiring
 import org.osgi.framework.wiring.BundleCapability
 import scala.concurrent.Await
 import io.skysail.core.server.actors.BundleActor
+import io.skysail.core.security.AuthenticationService
 
 object RoutesCreator {
 
-  def apply(system: ActorSystem, authentication: String): RoutesCreator = new RoutesCreator(system, authentication)
+  def apply(system: ActorSystem): RoutesCreator = new RoutesCreator(system)
 
   def getApplicationActorSelection(system: ActorSystem, name: String): ActorSelection = {
     val applicationActorPath = "/user/" + Constants.APPLICATIONS_ACTOR_NAME + "/" + name
@@ -48,11 +49,13 @@ object RoutesCreator {
   }
 }
 
-class RoutesCreator(system: ActorSystem, authentication: String) {
+class RoutesCreator(system: ActorSystem) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
   
   log info s"instanciating new RoutesCreator"
+
+  var authentication: AuthenticationService = null
 
   private val counter = new AtomicInteger(0)
   
@@ -67,12 +70,13 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
   
   val clientClFuture = (SkysailApplication.getBundleActor(system, bundleIdsWithClientCapabilities.head) ? BundleActor.GetClassloader()).mapTo[ClassLoader]
   val clientClassloader = Await.result(clientClFuture, 1.seconds)
+  
     
   def createRoute(appPath: String, cls: Class[_ <: Resource[_]], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
 
-    log info s"creating route from [${appInfoProvider.appModel.appPath()}]${appPath}"
+    log info s"creating route from [${appInfoProvider.appModel.appPath()}]${appPath} -> ${cls.getSimpleName}"
 
     val pathMatcher =
       appPath.trim() match {
@@ -81,7 +85,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
         case "/" => 
           appRoute / PathEnd
         case p if (p.endsWith("/*")) =>
-          println("matching " + p.substring(1, p.length() - 2)); appRoute / PathMatcher(p.substring(1, p.length() - 2))
+          appRoute / PathMatcher(p.substring(1, p.length() - 2))
         case p if (p.substring(1,p.length()-2).contains("/")) =>
           val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
           segments.foldLeft(appRoute)((a,b) => a / b) ~ PathEnd
@@ -130,12 +134,6 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
     if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
   }
 
-  def myUserPassAuthenticator(credentials: Credentials): Option[String] =
-    credentials match {
-      case p @ Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
-      case _ => None
-    }
-
   private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
 
     val getAnnotation = requestAnnotationForGet(cls)
@@ -173,12 +171,7 @@ class RoutesCreator(system: ActorSystem, authentication: String) {
     }
   }
 
-  private def authenticationDirective(auth: String): Directive1[String] = {
-    auth match {
-      case "HTTP_BASIC" => authenticateBasic(realm = "secure site", myUserPassAuthenticator)
-      case _ => test1("no auth")
-    }
-  }
+  private def authenticationDirective(auth: AuthenticationService): Directive1[String] = auth.directive
 
   private def requestAnnotationForGet(cls: Class[_ <: Resource[_]]): Option[Annotation] = {
     try {

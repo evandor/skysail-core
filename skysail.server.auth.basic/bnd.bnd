@@ -1,10 +1,10 @@
-Bundle-Name: SKYSAIL :: server :: auth :: none
+Bundle-Name: SKYSAIL :: server :: auth :: basic
 
 Bundle-Version: 0.1.0.${tstamp}
     
 Provide-Capability: skysail.capability.auth    
 
-Bundle-Activator: io.skysail.server.auth.none.Activator
+Bundle-Activator: io.skysail.server.auth.basic.Activator
 
 -includeresource: OSGI-OPT/src=src/
 
@@ -23,4 +23,4 @@ Bundle-Activator: io.skysail.server.auth.none.Activator
     skysail.core;version=latest,\
     domino_2.11;version=1.1    
 
-Private-Package: io.skysail.server.auth.none
+Private-Package: io.skysail.server.auth.basic

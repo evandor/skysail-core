@@ -44,5 +44,5 @@ skysail.server.um:
 	org.apache.httpcomponents.httpclient;version=4.3,\
 	skysail.core;version=latest,\
 	skysail.client;version=latest,\
-	skysail.server.auth.none;version=latest,\
+	skysail.server.auth.basic;version=latest,\
 	skysail.app.demo;version=latest
