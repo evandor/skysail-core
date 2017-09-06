@@ -28,6 +28,8 @@ Require-Capability: skysail.capability.auth
 	${akka-compiletime},\
     ${akka-test},\
     ${json},\
+    skysail.client;version=latest,\
+    skysail.server.auth.basic;version=latest,\
 	domino_2.11;version=1.1
 
 #   io.skysail.bundled.kamon-core_2.11;version=0.6.7,\
