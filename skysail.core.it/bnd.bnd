@@ -103,6 +103,7 @@ logback.configurationFile.path = config/integrationtest
 	org.xerial.snappy.snappy-java;version='[1.1.1,1.1.2)',\
 	com.sun.jna;version=4.2,\
 	com.sun.jna.platform;version=4.2,\
+	skysail.api;version=latest,\
 	skysail.core;version=latest,\
 	skysail.client;version=latest,\
 	skysail.server.auth.none;version=latest,\
