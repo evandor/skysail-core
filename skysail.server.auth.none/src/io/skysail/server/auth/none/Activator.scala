@@ -3,7 +3,7 @@ package io.skysail.server.auth.none
 import domino.DominoActivator
 import org.osgi.framework.BundleContext
 import org.slf4j.LoggerFactory
-import io.skysail.core.security.AuthenticationService
+import io.skysail.api.security.AuthenticationService
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{ Directive1, PathMatcher, RequestContext, Route }
 

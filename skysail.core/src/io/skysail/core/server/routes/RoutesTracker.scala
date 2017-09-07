@@ -5,8 +5,8 @@ import akka.http.scaladsl.server.Route
 import io.skysail.core.app.{ ApplicationProvider, SkysailApplication }
 import io.skysail.core.app.SkysailApplication.DeleteApplicationActor
 import org.slf4j.LoggerFactory
-import io.skysail.core.security.AuthenticationService
-import io.skysail.core.security.AuthenticationService
+import io.skysail.api.security.AuthenticationService
+import io.skysail.api.security.AuthenticationService
 
 class RoutesTracker(system: ActorSystem) {
 

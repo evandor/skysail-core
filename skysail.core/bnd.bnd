@@ -27,6 +27,7 @@ Require-Capability: skysail.capability.auth
 	${akka-compiletime},\
     ${akka-test},\
     ${json},\
+    skysail.api;version=latest,\
 	domino_2.11;version=1.1
 
 Export-Package: \

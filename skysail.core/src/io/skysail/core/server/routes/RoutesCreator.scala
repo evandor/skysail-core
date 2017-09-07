@@ -37,7 +37,7 @@ import org.osgi.framework.wiring.BundleWiring
 import org.osgi.framework.wiring.BundleCapability
 import scala.concurrent.Await
 import io.skysail.core.server.actors.BundleActor
-import io.skysail.core.security.AuthenticationService
+import io.skysail.api.security.AuthenticationService
 
 object RoutesCreator {
 

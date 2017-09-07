@@ -46,7 +46,7 @@ import io.skysail.core.server.actors.ApplicationsActor
 import io.skysail.core.server.actors.BundlesActor
 import io.skysail.core.app.ApplicationProvider
 import io.skysail.core.Constants
-import io.skysail.core.security.AuthenticationService
+import io.skysail.api.security.AuthenticationService
 
 case class ServerConfig(val port: Integer, val binding: String)
 
