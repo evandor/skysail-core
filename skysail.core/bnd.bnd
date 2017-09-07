@@ -28,6 +28,8 @@ Require-Capability: skysail.capability.auth
     ${akka-test},\
     ${json},\
     skysail.api;version=latest,\
+    skysail.client;version=latest,\
+    skysail.server.auth.basic;version=latest,\
 	domino_2.11;version=1.1
 
 Export-Package: \
