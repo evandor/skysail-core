@@ -12,7 +12,7 @@ class ContactService { //(implicit val executionContext: ExecutionContext) {
 
   def getApplication(id: String): Future[Option[Contact]] = ???
 
-  def getApplications(): Seq[Contact] = List(Contact("mira"), Contact("carsten"))
+  //def getApplications(): Seq[Contact] = List(Contact("mira"), Contact("carsten"))
 
   //def updateQuestion(id: String, update: QuestionUpdate): Future[Option[Question]] = ...
 

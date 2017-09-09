@@ -6,6 +6,8 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.ApiVersion
+import io.skysail.core.app.RouteMapping
+import scala.reflect.runtime.universe._
 
 @RunWith(classOf[JUnitRunner])
 class ApplicationModelSpec extends FlatSpec {
@@ -37,29 +39,29 @@ class ApplicationModelSpec extends FlatSpec {
   "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
     val appModel = ApplicationModel("appName",null, "desc")
 
-    val cls = appModel.addControllerModel("/path", classOf[TestStringEntityController])
-    
+    val cls = appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
+
     assert(cls.isDefined)
-    assert(cls.get == classOf[String])
+    assert(cls.get == typeOf[String])
   }
   
   "An ApplicationModel" should "retrieve an already added controllerModel by its class name" in {
     val appModel = ApplicationModel("appName",null, "desc")
-    appModel.addControllerModel("/path", classOf[TestStringEntityController])
+    appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
     
     val resourceModel = appModel.controllerModelFor(classOf[TestStringEntityController])
 
     assert(resourceModel.isDefined)
     /*assert(resourceModel.get.appModel == appModel)*/
-    assert(resourceModel.get.entityClass == classOf[String])
-    assert(resourceModel.get.controllerClass == classOf[TestStringEntityController])
+    assert(resourceModel.get.entityClass == typeOf[String])
+    //assert(resourceModel.get.resourceClass == classOf[TestStringEntityController])
   }
 
   "An ApplicationModel" should "add an ControllerModel (identified by its path) only once" in {
     val model = ApplicationModel("appName",null,"desc")
     
-    val entityClass1 = model.addControllerModel("/path", classOf[TestStringEntityController])
-    val entityClass2 = model.addControllerModel("/path", classOf[TestStringEntityController])
+    val entityClass1 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
+    val entityClass2 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
     
     assert(entityClass1.isDefined)
     assert(entityClass2.isEmpty)

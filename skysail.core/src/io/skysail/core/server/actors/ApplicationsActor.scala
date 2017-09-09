@@ -89,7 +89,6 @@ class ApplicationsActor extends Actor with ActorLogging {
     val p = context.children.map(appActor => {
       (appActor ? ApplicationActor.GetMenu()).mapTo[Option[MenuItem]]
     }).toList
-    println("P: " + p)
     implicit val ec = context.system.dispatcher
     Future.sequence(p) onComplete {
       case Success(result) => originalSender ! result.filter(m => m.isDefined).toList

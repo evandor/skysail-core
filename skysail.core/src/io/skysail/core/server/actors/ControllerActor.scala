@@ -28,8 +28,7 @@ import io.skysail.core.app.resources.ActorContextAware
 import io.skysail.core.resources.AsyncStaticResource
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ResponseEntity
-import io.skysail.core.akka.RequestEvent
-import io.skysail.core.resources.AsyncEntityResource
+import io.skysail.core.resources._
 
 object ControllerActor {
   case class GetRequest()
@@ -88,6 +87,12 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       resource.get(self)
       become(out)
     }
+    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncPostResource[_], _: Option[BundleContext], _: Uri.Path) => {
+      sendBackTo = sender
+      resource.setActorContext(context)
+      resource.get(self)
+      become(out)
+    }
     case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
       sendBackTo = sender
       resource.setActorContext(context)
@@ -115,6 +120,12 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
+    }
+    case msg: T => {
+      println("MSG: " + msg)
+      val reqEvent = RequestEvent(null, null)
+      val resEvent = ResponseEvent(reqEvent, null)
+      sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = HttpEntity(msg.toString)))
     }
     case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
   }

@@ -38,6 +38,7 @@ import org.osgi.framework.wiring.BundleCapability
 import scala.concurrent.Await
 import io.skysail.core.server.actors.BundleActor
 import io.skysail.api.security.AuthenticationService
+import io.skysail.core.app.RouteMapping
 
 object RoutesCreator {
 
@@ -72,14 +73,14 @@ class RoutesCreator(system: ActorSystem) {
   val clientClassloader = Await.result(clientClFuture, 1.seconds)
   
     
-  def createRoute(appPath: String, cls: Class[_ <: Resource[_]], appInfoProvider: ApplicationProvider): Route = {
+  def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
 
-    log info s"creating route from [${appInfoProvider.appModel.appPath()}]${appPath} -> ${cls.getSimpleName}"
+    log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
 
     val pathMatcher =
-      appPath.trim() match {
+      mapping.path.trim() match {
         case "" => 
           appRoute ~ PathEnd
         case "/" => 
@@ -94,7 +95,7 @@ class RoutesCreator(system: ActorSystem) {
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
 
-    staticResources() ~ matcher(pathMatcher, cls, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
+    staticResources() ~ matcher(pathMatcher, mapping.resourceClass, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
   }
 
   private def indexPath(): Route = {

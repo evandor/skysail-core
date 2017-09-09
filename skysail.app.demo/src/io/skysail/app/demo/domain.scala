@@ -2,7 +2,9 @@ package io.skysail.app.demo
 
 import org.osgi.service.cm.Configuration
 
-case class Contact(name: String)
+final case class Contact(email: String, firstname: String, lastname: String) {
+  require(!email.isEmpty, "email.empty")
+}
 
 case class Doc(count: String, deleted: String)
 

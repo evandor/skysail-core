@@ -20,19 +20,25 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
   override def menu() = {
     Some(
       MenuItem("DemoApp", "fa-file-o", None, Some(List(
-        MenuItem("ElasticSearch", "fa-plus", Some("/client/demo/v1/indices"))))))
+        MenuItem("ElasticSearch", "fa-plus", Some("/client/demo/v1/indices")),
+        MenuItem("Contacts", "fa-user", None, Some(List(
+          MenuItem("add Contact", "fa-plus", Some("/client/demo/v1/contacts/new"))    
+        )))  
+      ))))
   }
 
   override def routesMappings = List(
-    "" -> classOf[EsController],
-    "/" -> classOf[ContactsController],
-    "/indices" -> classOf[IndicesController],
-    "/indices/" -> classOf[IndicesController],
-    "/configs" -> classOf[ConfigsController],
-    "/mappings" -> classOf[MappingController],
-    "/assets" -> classOf[MyAssetsController],
-    "/allassets/*" -> classOf[MyAssetsController2],
-    "/contacts" -> classOf[ContactsController])
+    RouteMapping("",classOf[EsResource]),
+    RouteMapping("/",classOf[ContactsResource]),
+    RouteMapping("/indices",classOf[IndicesResource]),
+    RouteMapping("/indices/",classOf[IndicesResource]),
+    RouteMapping("/configs",classOf[ConfigsResource]),
+    RouteMapping("/mappings",classOf[MappingResource]),
+    RouteMapping("/assets",classOf[MyAssetsController]),
+    RouteMapping("/allassets/*",classOf[MyAssetsController2]),
+    RouteMapping("/contacts",classOf[ContactsResource]),
+    RouteMapping("/contacts/new",  classOf[PostContactResource]) // TODO fix that!!! need trailing slash to work
+  )
 
   def getConfigs() = configAdmin.listConfigurations(null).map(x => ConfigDetails(x)).toList
   //def getConfig(pid: String): ConfigDetails = new ConfigDetails(configAdmin.getConfiguration(pid))

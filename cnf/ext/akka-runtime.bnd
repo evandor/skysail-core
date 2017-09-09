@@ -1,2 +1,3 @@
 akka-runtime: \
+    com.typesafe.akka.protobuf;version=${akka.version},\
     com.typesafe.akka.slf4j;version=${akka.version}

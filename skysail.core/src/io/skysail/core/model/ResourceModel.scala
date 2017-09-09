@@ -8,9 +8,15 @@ import io.skysail.core.app.ApiVersion
 import akka.http.scaladsl.server.PathMatcher
 import io.skysail.core.resources.Resource
 import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
+import io.skysail.core.app.domain.BundleDescriptor
+import io.skysail.core.app.domain.User
+import io.skysail.core.app.resources.BundlesResource
+import io.skysail.core.resources.Resource._
+import io.skysail.core.app.RouteMapping
 
 /**
- * A ControllerModel connects a pathDefinition with a ResourceController class
+ * A ResourceModel connects a pathDefinition with a ResourceController class
  * which will handle specific requests to this path.
  *
  * The HTTP verbs which will be handled depend on the concrete subclass of the ResourceController provided.
@@ -19,29 +25,16 @@ import scala.reflect.ClassTag
  *  @param controllerClass a concrete subclass of ResourceController which will handle the requests to the
  *                         associated path.
  */
-case class ControllerModel(
+case class ResourceModel(
     //appModel: ApplicationModel, 
-    val pathDefinition: String,
-    val controllerClass: Class[_ <: Resource[_]]) {
+    val routeMapping: RouteMapping[_]) {
 
-  require(pathDefinition != null, "A ResourceModel's pathMatcher must not be null")
-  require(controllerClass != null, "A ResourceModel's target class must not be null")
+  require(routeMapping.path != null, "A ResourceModel's pathMatcher must not be null")
+  require(routeMapping.resourceClass != null, "A ResourceModel's resource class must not be null")
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
-  val entityClass: Class[_] = {
-//    val ctag = implicitly[reflect.ClassTag[T]]
-    //val ctag = implicitly[reflect.ClassTag[String]]
-    //val xxx = ctag.runtimeClass.asInstanceOf[Class[String]]
-    
-//    println(ctag)
-//    val tp = ctag.runtimeClass.getTypeParameters
-//    println("xxx" + tp(0))
-//    println(controllerClass.newInstance())
-//    println(controllerClass.newInstance().entityClass())
-//    controllerClass.newInstance().entityClass()
-    "s".getClass
-  }
+  val entityClass: Type = routeMapping.getEntityType()
 
   var linkModel: LinkModel2 = _
   var linkModels: List[LinkModel2] = List()

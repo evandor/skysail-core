@@ -1,0 +1,2 @@
+rabbitmq-runtime: \
+    com.rabbitmq.client;version=3.6    

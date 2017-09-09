@@ -3,37 +3,30 @@ package io.skysail.core.model
 import scala.collection.JavaConverters._
 import java.lang.reflect.Field
 import io.skysail.core.ScalaReflectionUtils
+import scala.reflect.runtime.universe._
 
-case class EntityModel(entityClass: Class[_]) {
+case class EntityModel(entityClass: Type) {
   
   require(entityClass != null, "The provided entity class must not be null")
   
-  def name() = entityClass.getName
+  def name() = entityClass.toString
 
   val fields = deriveFields()
+//  val members = deriveMembers()
+//  val decls = deriveDeclarations()
   
-  def fieldFor(id: String): Option[FieldModel] = fields.get(id) 
+ // def fieldFor(id: String): Option[FieldModel] = fields.get(id) 
 
-  private def deriveFields() = {
-    ScalaReflectionUtils.getInheritedFields(entityClass)
-      //.filter { filterFormFields(_) }
-      .map { f => new FieldModel(f) }
-      .map(m => m.name -> m)
-      .toMap
-  }
+  private def deriveFields() = entityClass.members.collect { case m: MethodSymbol if m.isGetter => MemberModel(m) }.toList
+  //private def deriveMembers() = entityClass.members.map(m => MemberModel(m)).toList
+  //private def deriveDeclarations() = entityClass.decls.map(m => MemberModel(m)).toList
 
-  def toHtml() = s"""${this.getClass.getSimpleName}("$name")<br>
-        <br><u>Fields</u>: <ul>${printHtmlMap(fields)}</ul><br>"""
-  
-  override def toString() = s"""${this.getClass.getSimpleName}("$name")
-        Fields: ${printMap(fields)}"""
-  
+//  def toHtml() = s"""${this.getClass.getSimpleName}("$name")<br>
+//        <br><u>Fields</u>: <ul>${printHtmlMap(fields)}</ul><br>"""
+//  
+//  override def toString() = s"""${this.getClass.getSimpleName}("$name")
+//        Fields: ${printMap(fields)}"""
+//  
   //private def filterFormFields(f: Field): Boolean = f.getAnnotation(classOf[io.skysail.core.html.Field]) != null
-
-  private def printHtmlMap(map: Map[_, _]) = map.map(v => s"""
-          <li>"${v._1}" -> ${v._2.toString()}</li>""").mkString("")
-
-  private def printMap(map: Map[_, _]) = map.map(v => s"""
-          "${v._1}" -> ${v._2.toString()}""").mkString("")
 
 }

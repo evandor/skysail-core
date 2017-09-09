@@ -27,14 +27,7 @@ import scala.util.Success
 import scala.util.Failure
 import io.skysail.core.resources.AsyncListResource
 
-class ContactsController extends AsyncListResource[Contact] {
-  val appService = new ContactService()
-  def get(sender: ActorRef): Unit = {
-    sender ! List(Contact("Mira"), Contact("carsten"))
-  }
-}
-
-class EsController extends AsyncListResource[DemoRoot] {
+class EsResource extends AsyncListResource[DemoRoot] {
 
   def get(sender: ActorRef): Unit = {
     sender ! List(
@@ -43,7 +36,7 @@ class EsController extends AsyncListResource[DemoRoot] {
   }
 }
 
-class IndicesController extends AsyncListResource[EsIndex] {
+class IndicesResource extends AsyncListResource[EsIndex] {
 
   private val httpclient = HttpClients.createDefault
 
@@ -99,7 +92,7 @@ class IndicesController extends AsyncListResource[EsIndex] {
 
 }
 
-class MappingController extends AsyncListResource[Mapping] {
+class MappingResource extends AsyncListResource[Mapping] {
 
   private val httpclient = HttpClients.createDefault
 
@@ -150,7 +143,7 @@ class MappingController extends AsyncListResource[Mapping] {
   }
 }
 
-class ConfigsController extends AsyncListResource[ConfigDetails] {
+class ConfigsResource extends AsyncListResource[ConfigDetails] {
   //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
   //    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
   //    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]

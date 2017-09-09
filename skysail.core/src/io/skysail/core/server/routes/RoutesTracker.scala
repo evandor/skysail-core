@@ -25,7 +25,7 @@ class RoutesTracker(system: ActorSystem) {
     log info s"Adding routes from ${appInfoProvider.getClass.getName}"
     log info "========================================="
     val routesFromProvider = appInfoProvider.routes()
-    routesBuffer ++= routesFromProvider.map { prt => routesCreator.createRoute(prt._1, prt._2, appInfoProvider) }.toList
+    routesBuffer ++= routesFromProvider.map { prt => routesCreator.createRoute(prt, appInfoProvider) }.toList
   }
 
   def removeRoutesFrom(appInfoProvider: ApplicationProvider) = {
@@ -39,7 +39,7 @@ class RoutesTracker(system: ActorSystem) {
     //routes --= s.routes()
     // TODO need to fix that, routes are not removed
     val routesFromProvider = appInfoProvider.routes()
-    routesBuffer --= routesFromProvider.map { prt => routesCreator.createRoute(prt._1, prt._2, appInfoProvider) }.toList
+    routesBuffer --= routesFromProvider.map { prt => routesCreator.createRoute(prt, appInfoProvider) }.toList
   }
 
   def setAuthentication(a: AuthenticationService) = routesCreator.authentication = a

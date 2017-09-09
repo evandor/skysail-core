@@ -8,23 +8,23 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class ControllerModelSpec extends FlatSpec with BeforeAndAfterEach {
 
-  "A ResourceModel" should "not accept a null value as its path" in {
-    assertThrows[IllegalArgumentException] { new ControllerModel(null, null) }
-  }
-
-  "A ResourceModel" should "not accept a null value as its target class" in {
-    assertThrows[IllegalArgumentException] { new ControllerModel("/path", null) }
-  }
-
-//  "A ResourceModel" should "provide its path variables" in {
-//    val resourceModel = ControllerModel("/path/:id/subpath/:name", classOf[TestStringEntityController])
-//    assert(resourceModel.pathVariables == List("id","name"))
+//  "A ResourceModel" should "not accept a null value as its path" in {
+//    assertThrows[IllegalArgumentException] { new ResourceModel(null, null) }
 //  }
-
-  "A ResourceModel" should "provide access to the target resource" in {
-    val model = ControllerModel("/path", classOf[TestStringEntityController])
-    assert(model.controllerClass == classOf[TestStringEntityController])
-  }
+//
+//  "A ResourceModel" should "not accept a null value as its target class" in {
+//    assertThrows[IllegalArgumentException] { new ResourceModel("/path", null) }
+//  }
+//
+////  "A ResourceModel" should "provide its path variables" in {
+////    val resourceModel = ControllerModel("/path/:id/subpath/:name", classOf[TestStringEntityController])
+////    assert(resourceModel.pathVariables == List("id","name"))
+////  }
+//
+//  "A ResourceModel" should "provide access to the target resource" in {
+//    val model = ResourceModel("/path", classOf[TestStringEntityController])
+//    assert(model.resourceClass == classOf[TestStringEntityController])
+//  }
 
 //  "A ResourceModel" should "provide access to the target entity" in {
 //    val model = ControllerModel("/path", classOf[TestEntityListController])

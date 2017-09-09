@@ -9,7 +9,7 @@ import io.skysail.core.app.menus.MenuItem
 
 trait ApplicationProvider {
   def appModel(): ApplicationModel
-  def routes(): List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])]
+  def routes(): List[RouteMapping[_]]
   def getBundleContext(): Option[BundleContext] 
   def application(): SkysailApplication
   def menu(): Option[MenuItem] = None

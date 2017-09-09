@@ -43,6 +43,7 @@ import akka.http.scaladsl.model.ContentTypes
 import akka.actor.ActorSelection
 import io.skysail.core.Constants
 import io.skysail.core.resources.Resource
+import io.skysail.core.resources.Resource._
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])
@@ -85,18 +86,19 @@ abstract class SkysailApplication(name: String, val apiVersion: ApiVersion, desc
 
   val appModel = ApplicationModel(name, apiVersion, description)
 
-  def routesMappings: List[(String, Class[_ <: Resource[_]])]
+  def routesMappings: List[RouteMapping[_]]
 
   var actorRefsMap = Map.empty[String, ActorRef]
 
   val routes = {
     routesMappings.foreach(m => {
-      appModel.addControllerModel(m._1, m._2)
+      appModel.addResourceModel(m)
     })
 
-    appModel.getResourceModels().map {
-      m => (m.pathDefinition, m.controllerClass)
-    }
+//    appModel.getResourceModels().map {
+//      m => (m.pathDefinition, m.resourceClass)
+//    }
+    routesMappings
   }
   
   def application():SkysailApplication = this

@@ -52,15 +52,15 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       MenuItem("Services", "fa-file-o", Some("/client/services"))))))
   }
 
-  def routesMappings: List[(String, Class[_ <: io.skysail.core.resources.Resource[_]])] = {
+  def routesMappings: List[RouteMapping[_]] = {
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
-      "/apps" -> classOf[AppsResource],
-      "/apps/menus" -> classOf[MenusResource],
-      "/bundles" -> classOf[BundlesResource],
-      "/app" -> classOf[AppResource],
-      "/assets" -> classOf[AssetsResource],
-      "/user" -> classOf[CurrentUserController])
+      RouteMapping("/apps", classOf[AppsResource]),
+      RouteMapping("/apps/menus", classOf[MenusResource]),
+      RouteMapping("/bundles", classOf[BundlesResource]),
+      RouteMapping("/app", classOf[AppResource]),
+      RouteMapping("/assets", classOf[AssetsResource]),
+      RouteMapping("/user", classOf[CurrentUserController]))
   }
 
 }  

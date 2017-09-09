@@ -2,6 +2,8 @@ akka-compiletime: \
 	com.typesafe.akka.osgi;version=${akka.version},\
 	com.typesafe.akka.actor;version=${akka.version},\
 	com.typesafe.akka.stream;version=${akka.version},\
+	com.typesafe.akka.camel;version=${akka.version},\
+	com.typesafe.akka.persistence;version=${akka.version},\
 	com.typesafe.akka.http;version=10.0,\
 	com.typesafe.akka.http.core;version=10.0,\
 	com.typesafe.akka.http.spray.json;version=10.0,\
