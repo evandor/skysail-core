@@ -8,8 +8,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { BackendService } from './services/backend.service';
 import { BundlesComponent } from './bundles/bundles.component';
 
-import { AccordionModule, ButtonModule, TabViewModule, MenuModule, MenubarModule, 
-         DataTableModule, SharedModule, BreadcrumbModule, PanelMenuModule } from 'primeng/primeng';
+import {
+  AccordionModule, ButtonModule, TabViewModule, MenuModule, MenubarModule,
+  DataTableModule, SharedModule, BreadcrumbModule, PanelMenuModule, PanelModule
+} from 'primeng/primeng';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpModule } from '@angular/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -39,10 +43,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     //    CommonModule,
     PanelMenuModule,
+    PanelModule,
     BreadcrumbModule,
     AppRoutingModule,
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [BackendService],
   bootstrap: [AppComponent]
