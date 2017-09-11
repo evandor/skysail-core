@@ -28,6 +28,10 @@ object ApplicationActor {
     //    }
   }
   case class GetMenu()
+  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  //  case class ProcessPost(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  //  case class ProcessPut(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  //  case class ProcessDelete(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
 }
 
 /**
@@ -47,7 +51,7 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
   import context._
 
   def receive: Receive = LoggingReceive {
-    case (ctx: RequestContext, cls: Class[Resource[_]], unmatchedPath: Uri.Path) => {
+    case ApplicationActor.ProcessCommand(ctx, cls, unmatchedPath) => {
       sendBackTo = sender
       val theClass = cls.newInstance()
       val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/ ), "controllerActor$" + cnt.getAndIncrement)

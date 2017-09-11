@@ -29,6 +29,9 @@ import io.skysail.core.resources.AsyncStaticResource
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ResponseEntity
 import io.skysail.core.resources._
+import akka.stream.ActorMaterializer
+import akka.http.scaladsl.model.HttpMethods
+import io.skysail.core.app.resources.PostSupport
 
 object ControllerActor {
   case class GetRequest()
@@ -52,53 +55,37 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   def receive = in
 
   def in: Receive = LoggingReceive {
-    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncListResource[T], _: Option[BundleContext], _: Uri.Path) => {
-      sendBackTo = sender
-
-      //val asrc = resource.asInstanceOf[AsyncListResource[T]]
-      resource.setActorContext(context)
-      //log info s"calling ${asrc} with sender '${self}'"
-      log debug s"delegating to ${resource.getClass.getSimpleName}#get('${self}')"
-      log debug s""
-      resource.get(self)
-
-      become(out)
-      //      val t = resourceController.get().asInstanceOf[List[T]]
-      //      println("GET"+t)
-      //
-      //      //implicit val ec = context.system.dispatcher
-      //
-      //      implicit val formats = DefaultFormats
-      //      implicit val serialization = jackson.Serialization
-      //
-      //      val m = Marshal(t).to[RequestEntity]
-      //
-      //      m.onSuccess {
-      //        case value =>
-      //          val reqEvent = RequestEvent(skysailContext, null)
-      //          val resEvent = ResponseEvent(reqEvent, null)
-      //          sendBackTo ! resEvent.copy(resource = t, httpResponse = resEvent.httpResponse.copy(entity = value))
-      //      }
-
-    }
-    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncEntityResource[_], _: Option[BundleContext], _: Uri.Path) => {
+    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext], _: Uri.Path) => {
       sendBackTo = sender
       resource.setActorContext(context)
-      resource.get(self)
+     // resource.setApplicationModel(model)
+      ctx.request.method match {
+        case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(self)
+        case e: Any => resource.get(self)
+      }
       become(out)
     }
-    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncPostResource[_], _: Option[BundleContext], _: Uri.Path) => {
-      sendBackTo = sender
-      resource.setActorContext(context)
-      resource.get(self)
-      become(out)
-    }
-    case SkysailContext(_: RequestContext, ApplicationModel(_, _, _, _), resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
-      sendBackTo = sender
-      resource.setActorContext(context)
-      resource.get(self)
-      become(out)
-    }
+//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncEntityResource[_], _: Option[BundleContext], _: Uri.Path) => {
+//      sendBackTo = sender
+//      resource.setActorContext(context)
+//      resource.setApplicationModel(model)
+//      resource.get(self)
+//      become(out)
+//    }
+//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncPostResource[_], _: Option[BundleContext], _: Uri.Path) => {
+//      sendBackTo = sender
+//      resource.setActorContext(context)
+//      resource.setApplicationModel(model)
+//      resource.get(self)
+//      become(out)
+//    }
+//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
+//      sendBackTo = sender
+//      resource.setActorContext(context)
+//      resource.setApplicationModel(model)
+//      resource.get(self)
+//      become(out)
+//    }
 
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
@@ -121,11 +108,26 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       val resEvent = ResponseEvent(reqEvent, null)
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
-    case msg: T => {
-      println("MSG: " + msg)
+    case msg: T => { /* and EntityDescription */
+      println("msg: T " + msg)
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
-      sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = HttpEntity(msg.toString)))
+      //implicit val ec = context.system.dispatcher
+      implicit val formats = DefaultFormats
+      implicit val serialization = jackson.Serialization
+      //val t = Marshal(msg)
+      val m = Marshal(List(msg)).to[RequestEntity]
+      
+      
+      //sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = HttpEntity(msg.toString)))
+       m onComplete {
+        case Success(value) =>
+          val reqEvent = RequestEvent(null, null)
+          val resEvent = ResponseEvent(reqEvent, null)
+          sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
+        case Failure(failure) => println (s"Failure: ${failure}")
+      }
+
     }
     case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
   }

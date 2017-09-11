@@ -39,6 +39,11 @@ import scala.concurrent.Await
 import io.skysail.core.server.actors.BundleActor
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.app.RouteMapping
+import io.skysail.core.server.actors.ApplicationActor._
+import io.skysail.core.server.actors.ApplicationActor
+import scala.reflect.runtime.universe._
+import io.skysail.core.app.resources.PostSupport
+import akka.http.scaladsl.model.HttpMethod
 
 object RoutesCreator {
 
@@ -95,7 +100,7 @@ class RoutesCreator(system: ActorSystem) {
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
 
-    staticResources() ~ matcher(pathMatcher, mapping.resourceClass, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
+    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
   }
 
   private def indexPath(): Route = {
@@ -109,8 +114,8 @@ class RoutesCreator(system: ActorSystem) {
   private def clientPath(): Route = {
     pathPrefix("client") {
       get {
-        getFromResourceDirectory("client", getClientClassloader/*classOf[AkkaServer].getClassLoader*/)
-        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader/*classOf[AkkaServer].getClassLoader*/)
+        getFromResourceDirectory("client", getClientClassloader /*classOf[AkkaServer].getClassLoader*/ )
+        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader /*classOf[AkkaServer].getClassLoader*/ )
       }
     }
   }
@@ -119,7 +124,7 @@ class RoutesCreator(system: ActorSystem) {
     path("static") {
       get {
         // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
-        implicit val classloader = clientClassloader/*classOf[AkkaServer].getClassLoader*/
+        implicit val classloader = clientClassloader /*classOf[AkkaServer].getClassLoader*/
         getFromResource("application.conf", ContentTypes.`application/json`, getClientClassloader)
       }
     } ~
@@ -135,9 +140,11 @@ class RoutesCreator(system: ActorSystem) {
     if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
   }
 
-  private def matcher(pathMatcher: PathMatcher[Unit], cls: Class[_ <: Resource[_]], name: String): Route = {
+  private def matcher(pathMatcher: PathMatcher[Unit], mapping: RouteMapping[_], name: String): Route = {
 
-    val getAnnotation = requestAnnotationForGet(cls)
+    val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
+
+    //log info s"matcher for ${pathMatcher}"
 
     pathPrefix(pathMatcher) {
       test() {
@@ -147,24 +154,46 @@ class RoutesCreator(system: ActorSystem) {
               ctx =>
                 test1("test1str") { f =>
                   println(f)
-                  routeWithUnmatchedPath(ctx, cls, name)
+                  routeWithUnmatchedPath(ctx, mapping, name)
                 }
             }
-          }
+          } /*~
+          post {
+            extractRequestContext {
+              ctx =>
+                routeWithUnmatchedPath(ctx, mapping, name)
+            }
+          }*/
         }
       }
     }
   }
 
-  private def routeWithUnmatchedPath(ctx: RequestContext, cls: Class[_ <: Resource[_]], name: String): Route = {
+  //  private def postMatcher(pathMatcher: PathMatcher[Unit], mapping: RouteMapping[_], name: String): Route = {
+  //    log info s"postMatcher for ${pathMatcher}"
+  //    if (mapping.resourceClass.isInstanceOf[PostSupport]) {
+  //      pathPrefix(pathMatcher) {
+  //        authenticationDirective(authentication) { username =>
+  //          post {
+  //            extractRequestContext {
+  //              ctx =>
+  //                routeWithUnmatchedPath(ctx, mapping, name)
+  //            }
+  //          }
+  //        }
+  //      }
+  //    } else {
+  //      pathPrefix(pathMatcher) { post { reject } }
+  //    }
+  //
+  //  }
+
+  private def routeWithUnmatchedPath(ctx: RequestContext, mapping: RouteMapping[_], name: String): Route = {
     extractUnmatchedPath { unmatchedPath =>
-      //implicit val askTimeout: Timeout = 2.seconds
       val applicationActor = getApplicationActorSelection(system, name)
-      log debug s"executing route#${counter.incrementAndGet()}: ${applicationActor.pathString} ! Tuple3(ctx, cls, unmatchedPath):"
-
+      val processCommand = ApplicationActor.ProcessCommand(ctx, mapping.resourceClass, unmatchedPath)
       //println(new PrivateMethodExposer(system)('printTree)())
-
-      val t = (applicationActor ? Tuple3(ctx, cls, unmatchedPath)).mapTo[ResponseEvent[_]]
+      val t = (applicationActor ? processCommand).mapTo[ResponseEvent[_]]
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
         case Failure(failure) => log error s"Failure ${failure}"; complete(StatusCodes.BadRequest, failure)
@@ -183,6 +212,6 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-  private def getClientClassloader() = /*classOf[AkkaServer].getClassLoader*/clientClassloader
+  private def getClientClassloader() = /*classOf[AkkaServer].getClassLoader*/ clientClassloader
 
 }
