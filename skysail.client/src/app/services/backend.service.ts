@@ -38,4 +38,12 @@ export class BackendService {
     return this._http.get(path, { headers: this.headers })
     .map(res => res.json());
   }
+
+  postGeneric(path: string, payload: string):Observable<Object[]> {
+    console.log("Backend Post Call to path: ", path)
+    console.log("Backend Post Call with payload: ", payload)
+    return this._http.post(path, /*{ headers: this.headers }*/ payload)
+      .map(res => res.json());
+
+  }
 }
