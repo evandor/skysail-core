@@ -22,7 +22,7 @@ class ApplicationModelSpec extends FlatSpec {
   }
 
   "An empty ApplicationModel" should "be created successfully for a given name" in {
-    val model = ApplicationModel("appName",ApiVersion(1),"desc")
+    val model = new ApplicationModel("appName",ApiVersion(1),"desc")
     assert(model != null)
     assert(model.name == "appName")
   }
@@ -37,7 +37,7 @@ class ApplicationModelSpec extends FlatSpec {
 //  }
 
   "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
-    val appModel = ApplicationModel("appName",null, "desc")
+    val appModel = new ApplicationModel("appName",null, "desc")
 
     val cls = appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
 
@@ -46,7 +46,7 @@ class ApplicationModelSpec extends FlatSpec {
   }
   
   "An ApplicationModel" should "retrieve an already added controllerModel by its class name" in {
-    val appModel = ApplicationModel("appName",null, "desc")
+    val appModel = new ApplicationModel("appName",null, "desc")
     appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
     
     val resourceModel = appModel.controllerModelFor(classOf[TestStringEntityController])
@@ -58,7 +58,7 @@ class ApplicationModelSpec extends FlatSpec {
   }
 
   "An ApplicationModel" should "add an ControllerModel (identified by its path) only once" in {
-    val model = ApplicationModel("appName",null,"desc")
+    val model = new  ApplicationModel("appName",null,"desc")
     
     val entityClass1 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
     val entityClass2 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))

@@ -11,6 +11,8 @@ case class MemberModel(symbol: reflect.runtime.universe.MethodSymbol) {
 
   val name = symbol.fullName
   
+  val `type` = symbol.typeSignature.resultType.toString()
+  
   override def toString() = {
     s"Name: ${symbol.fullName}, Annotations: ${symbol.annotations}, ${symbol.isSynthetic}, ${symbol.typeSignature.resultType}"
   }

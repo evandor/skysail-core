@@ -12,8 +12,16 @@ class ContactsResource extends AsyncListResource[Contact] {
 }
 
 class PostContactResource extends AsyncPostResource[Contact] {
+  
   def get(sender: ActorRef): Unit = {
-    sender ! Contact("a@b.com", "Mira", "Gräf")//describe(classOf[Contact])
+    val entityModel = applicationModel.entityModelFor(classOf[Contact])
+    if (entityModel.isDefined) {
+      println("EM: " + entityModel.get.fields)
+      println("EM: " + entityModel.get.description())
+      sender ! entityModel.get.description()
+    } else {
+      sender ! Contact("a@b.com", "Mira", "Gräf")//describe(classOf[Contact])
+    }  
   }
 
   def post(sendBackTo: ActorRef): Unit = {

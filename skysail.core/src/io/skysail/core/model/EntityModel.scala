@@ -12,6 +12,9 @@ case class EntityModel(entityClass: Type) {
   def name() = entityClass.toString
 
   val fields = deriveFields()
+  
+  def description() = EntityDescription(this)
+  
 //  val members = deriveMembers()
 //  val decls = deriveDeclarations()
   

@@ -11,6 +11,8 @@ import io.skysail.core.resources.Resource
 import akka.http.scaladsl.server.Directives._
 import io.skysail.core.app.RouteMapping
 import scala.reflect.runtime.universe._
+import com.fasterxml.jackson.annotation.JsonGetter
+import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * This is the root class of skysail's core domain, providing models of "skysail applications",
@@ -30,6 +32,7 @@ import scala.reflect.runtime.universe._
  *  @param associatedResourceClasses a list of associated Resource Classes together with the relation type.
  *
  */
+// TODO case class or not? Use copies when adding resourceModels etc
 case class ApplicationModel(
     val name: String,
     apiVersion: ApiVersion,
@@ -42,7 +45,9 @@ case class ApplicationModel(
   private val log = LoggerFactory.getLogger(this.getClass())
 
   /** The list of resourceModels of this applicationModel. */
-  private val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
+  @JsonInclude
+  @JsonGetter
+  val resourceModels = scala.collection.mutable.ListBuffer[ResourceModel]()
 
   /** The map between */
   private val entityModelsMap: LinkedHashMap[String, EntityModel] = scala.collection.mutable.LinkedHashMap()
