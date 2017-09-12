@@ -6,7 +6,7 @@ import io.skysail.core.app.resources.ActorContextAware
 import akka.actor.ActorRef
 import scala.reflect.runtime.universe._
 
-abstract class AsyncEntityResource[T: TypeTag] extends Resource[T] with ActorContextAware {
+abstract class AsyncEntityResource[T: TypeTag] extends AsyncResource[T] {
   
   def get(sendBackTo: ActorRef): Unit
 
