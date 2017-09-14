@@ -3,6 +3,7 @@ package io.skysail.app.demo
 import akka.actor.ActorRef
 import io.skysail.core.resources.AsyncListResource
 import io.skysail.core.resources.AsyncPostResource
+import akka.actor.Props
 
 class ContactsResource extends AsyncListResource[Contact] {
   val appService = new ContactService()
@@ -24,7 +25,14 @@ class PostContactResource extends AsyncPostResource[Contact] {
     }  
   }
 
-  def post(sendBackTo: ActorRef): Unit = {
-    ???
+  def post(sender: ActorRef): Unit = {
+    val ua = actorContext.actorOf(Props[UserAggregate])
+    val user = Contact("vor", "nach", "email")
+    ua ! UserAggregate.MsgAddUser(user)
+    
+    
+    
+    
+    sender ! Contact("a@b.com", "Mira", "Gräf")
   }
 }

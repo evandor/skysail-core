@@ -4,6 +4,8 @@ Bundle-Version: 0.1.0.${tstamp}
 
 -includeresource: OSGI-OPT/src=src/,resources
 
+#Include-Resource: lib=lib
+
 -buildpath: \
 	${osgi},\
 	org.osgi.service.event;version=1.3,\

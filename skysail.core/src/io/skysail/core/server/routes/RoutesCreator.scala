@@ -157,36 +157,17 @@ class RoutesCreator(system: ActorSystem) {
                   routeWithUnmatchedPath(ctx, mapping, name)
                 }
             }
-          } /*~
+          } ~
           post {
             extractRequestContext {
               ctx =>
                 routeWithUnmatchedPath(ctx, mapping, name)
             }
-          }*/
+          }
         }
       }
     }
   }
-
-  //  private def postMatcher(pathMatcher: PathMatcher[Unit], mapping: RouteMapping[_], name: String): Route = {
-  //    log info s"postMatcher for ${pathMatcher}"
-  //    if (mapping.resourceClass.isInstanceOf[PostSupport]) {
-  //      pathPrefix(pathMatcher) {
-  //        authenticationDirective(authentication) { username =>
-  //          post {
-  //            extractRequestContext {
-  //              ctx =>
-  //                routeWithUnmatchedPath(ctx, mapping, name)
-  //            }
-  //          }
-  //        }
-  //      }
-  //    } else {
-  //      pathPrefix(pathMatcher) { post { reject } }
-  //    }
-  //
-  //  }
 
   private def routeWithUnmatchedPath(ctx: RequestContext, mapping: RouteMapping[_], name: String): Route = {
     extractUnmatchedPath { unmatchedPath =>

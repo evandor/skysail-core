@@ -74,6 +74,11 @@ export class DashboardComponent implements OnInit {
     var res = this._backend.postGeneric("http://localhost:8080/demo/v1/contacts/new", JSON.stringify(this.userform.value))
     console.log("RES: ", res)
 
+    res.subscribe(
+      result => console.log(result),
+      error => console.log(error),
+  ); 
+
   }
 
   get diagnostic() { return JSON.stringify(this.userform.value); }

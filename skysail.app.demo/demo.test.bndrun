@@ -50,4 +50,12 @@ skysail.server.um:
 	skysail.client;version=latest,\
 	skysail.server.auth.basic;version=latest,\
 	skysail.app.demo;version=latest,\
-	org.hibernate.validator;version=5.2.4
+	org.hibernate.validator;version=5.2.4,\
+	com.typesafe.akka.persistence.query;version=2.5.4,\
+	org.scalaz.core;version=7.2.13,\
+	io.skysail.bundled.akka-persistence-inmemory_2.11;version=2.5.1
+	
+#	com.datastax.driver.core;version=2.1.10,\
+#	com.google.guava;version=16.0.1,\
+#	com.codahale.metrics.core;version=3.0.2
+#    org.apache.camel.camel-cassandraql,\

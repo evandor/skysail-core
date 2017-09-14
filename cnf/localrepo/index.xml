@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1502435298000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1505372191000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.core"/>
@@ -779,9 +779,12 @@
 	at aQute.bnd.deployer.repository.providers.R5RepoContentProvider.generateIndex(R5RepoContentProvider.java:290)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:164)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.regenerateAllIndexes(LocalIndexedRepo.java:142)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:377)
-	at bndtools.central.Central.refreshPlugins(Central.java:438)
-	at bndtools.views.repository.RepositoriesView$9.runInWorkspace(RepositoriesView.java:465)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.finishPut(LocalIndexedRepo.java:238)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.putArtifact(LocalIndexedRepo.java:311)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.put(LocalIndexedRepo.java:359)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard.performFinishAddFiles(AddFilesToRepositoryWizard.java:99)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard.access$100(AddFilesToRepositoryWizard.java:30)
+	at bndtools.wizards.workspace.AddFilesToRepositoryWizard$2.runInWorkspace(AddFilesToRepositoryWizard.java:68)
 	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
 Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
@@ -789,7 +792,7 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
 	at java.lang.Integer.parseInt(Integer.java:569)
 	at java.lang.Integer.parseInt(Integer.java:615)
 	at org.osgi.framework.Version.parseInt(Version.java:168)
-	... 14 more
+	... 17 more
  -->
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.testkit"/>
@@ -1285,6 +1288,138 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
   </resource>
   <resource>
     <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="92c0ccded768bb9ce206027f477f3be6a0c239ef4773925bc7835991cbf0a9fb"/>
+      <attribute name="url" value="com.typesafe.akka.persistence.query/com.typesafe.akka.persistence.query-2.5.4.jar"/>
+      <attribute name="size" type="Long" value="124864"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka.actor,akka.persistence.query.javadsl,akka.persistence.query.scaladsl,com.typesafe.config,scala,scala.collection,scala.collection.immutable,scala.math,scala.reflect,scala.runtime,scala.util"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query.javadsl"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka,akka.persistence.query,akka.stream.javadsl,scala.reflect"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query.journal.leveldb"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka.actor,akka.event,akka.persistence.query,akka.persistence.query.javadsl,akka.persistence.query.journal.leveldb.javadsl,akka.persistence.query.journal.leveldb.scaladsl,akka.persistence.query.scaladsl,akka.stream.actor,com.typesafe.config,org.reactivestreams,scala,scala.collection,scala.collection.immutable,scala.concurrent.duration,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query.journal.leveldb.javadsl"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka,akka.persistence.query,akka.persistence.query.javadsl,akka.persistence.query.journal.leveldb.scaladsl,akka.stream.javadsl,scala.reflect"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query.journal.leveldb.scaladsl"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka,akka.actor,akka.persistence.query,akka.persistence.query.scaladsl,akka.stream.scaladsl,com.typesafe.config,scala,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.query.scaladsl"/>
+      <attribute name="version" type="Version" value="2.5.4"/>
+      <attribute name="bundle-symbolic-name" value="com.typesafe.akka.persistence.query"/>
+      <attribute name="bundle-version" type="Version" value="2.5.4"/>
+      <directive name="uses" value="akka,akka.persistence.query,akka.stream.scaladsl,scala.reflect"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.actor)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.event)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.journal.leveldb)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.stream.actor)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.stream.javadsl)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.stream.scaladsl)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.util)(version&gt;=2.5.0)(!(version&gt;=2.6.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=com.typesafe.config)(version&gt;=1.3.0)(!(version&gt;=1.4.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.generic)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.immutable)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.collection.mutable)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.concurrent)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.concurrent.duration)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.math)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.reflect)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.runtime)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=scala.util)(version&gt;=2.11.0)(!(version&gt;=2.12.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=org.reactivestreams)(version&gt;=1.0.0)(!(version&gt;=2.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.config"/>
       <attribute name="type" value="osgi.bundle"/>
       <attribute name="version" type="Version" value="1.3.1"/>
@@ -1671,6 +1806,197 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
     </requirement>
     <requirement namespace="osgi.wiring.package">
       <directive name="filter" value="(osgi.wiring.package=scala.runtime)"/>
+    </requirement>
+    <requirement namespace="osgi.ee">
+      <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace="osgi.identity">
+      <attribute name="osgi.identity" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="type" value="osgi.bundle"/>
+      <attribute name="version" type="Version" value="2.5.1.201709140656"/>
+    </capability>
+    <capability namespace="osgi.content">
+      <attribute name="osgi.content" value="ecee2cd296b980d3399dc7ba360f3535aad7023888d41c5c82e1c772c0914d9d"/>
+      <attribute name="url" value="io.skysail.bundled.akka-persistence-inmemory_2.11/io.skysail.bundled.akka-persistence-inmemory_2.11-2.5.1.jar"/>
+      <attribute name="size" type="Long" value="237793"/>
+      <attribute name="mime" value="application/vnd.osgi.bundle"/>
+    </capability>
+    <capability namespace="osgi.wiring.bundle">
+      <attribute name="osgi.wiring.bundle" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+    </capability>
+    <capability namespace="osgi.wiring.host">
+      <attribute name="osgi.wiring.host" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka.persistence,akka.persistence.query,scala,scala.collection,scala.collection.immutable,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.extension"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka.actor,akka.event,akka.persistence.inmemory,akka.persistence.query,akka.serialization,scala,scala.collection,scala.collection.immutable,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.journal"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka,akka.actor,akka.event,akka.pattern,akka.persistence,akka.persistence.inmemory,akka.persistence.journal,akka.serialization,akka.stream,akka.stream.scaladsl,akka.util,com.typesafe.config,scala,scala.collection.immutable,scala.concurrent,scala.reflect,scala.runtime,scala.util"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka.actor,akka.persistence.inmemory.query.javadsl,akka.persistence.inmemory.query.scaladsl,akka.persistence.query,akka.persistence.query.javadsl,akka.persistence.query.scaladsl,com.typesafe.config,scala.reflect"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query.javadsl"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka,akka.persistence.inmemory.query.scaladsl,akka.persistence.query,akka.persistence.query.javadsl,akka.stream.javadsl,scala.reflect"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query.scaladsl"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka,akka.actor,akka.persistence,akka.persistence.inmemory,akka.persistence.query,akka.persistence.query.scaladsl,akka.stream.scaladsl,com.typesafe.config,scala,scala.collection.immutable,scala.concurrent,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.snapshot"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="akka.actor,akka.event,akka.pattern,akka.persistence,akka.persistence.inmemory,akka.persistence.serialization,akka.persistence.snapshot,akka.serialization,akka.stream,akka.stream.scaladsl,akka.util,com.typesafe.config,scala,scala.concurrent,scala.reflect,scala.runtime"/>
+    </capability>
+    <capability namespace="osgi.wiring.package">
+      <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.util"/>
+      <attribute name="version" type="Version" value="2.5.1"/>
+      <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <directive name="uses" value="scala,scala.reflect,scala.runtime"/>
+    </capability>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.actor)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.event)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.pattern)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.inmemory)(version&gt;=2.5.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.inmemory.extension)(version&gt;=2.5.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.inmemory.query.javadsl)(version&gt;=2.5.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.inmemory.query.scaladsl)(version&gt;=2.5.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(&amp;(osgi.wiring.package=akka.persistence.inmemory.util)(version&gt;=2.5.0)(!(version&gt;=3.0.0)))"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.journal)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.query)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.query.javadsl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.query.scaladsl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.serialization)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.persistence.snapshot)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.serialization)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.stream)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.stream.javadsl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.stream.scaladsl)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=akka.util)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=com.typesafe.config)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.collection)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.collection.generic)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.collection.immutable)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.collection.mutable)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.compat)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.concurrent)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.concurrent.duration)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.math)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.reflect)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.runtime)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scala.util)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scalaz)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scalaz.std)"/>
+    </requirement>
+    <requirement namespace="osgi.wiring.package">
+      <directive name="filter" value="(osgi.wiring.package=scalaz.syntax)"/>
     </requirement>
     <requirement namespace="osgi.ee">
       <directive name="filter" value="(&amp;(osgi.ee=JavaSE)(version=1.8))"/>
