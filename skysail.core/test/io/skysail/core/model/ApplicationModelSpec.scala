@@ -36,26 +36,26 @@ class ApplicationModelSpec extends FlatSpec {
 ////    assert(links.head.getUri == "/appName/list/")
 //  }
 
-  "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
+ /* "An ApplicationModel" should "return the parameterized class of the ControllerModel when added" in {
     val appModel = new ApplicationModel("appName",null, "desc")
 
     val cls = appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
 
     assert(cls.isDefined)
     assert(cls.get == typeOf[String])
-  }
+  }*/
   
-  "An ApplicationModel" should "retrieve an already added controllerModel by its class name" in {
+  /*"An ApplicationModel" should "retrieve an already added controllerModel by its class name" in {
     val appModel = new ApplicationModel("appName",null, "desc")
     appModel.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
     
     val resourceModel = appModel.controllerModelFor(classOf[TestStringEntityController])
 
     assert(resourceModel.isDefined)
-    /*assert(resourceModel.get.appModel == appModel)*/
+    //assert(resourceModel.get.appModel == appModel)
     assert(resourceModel.get.entityClass == typeOf[String])
     //assert(resourceModel.get.resourceClass == classOf[TestStringEntityController])
-  }
+  }*/
 
   "An ApplicationModel" should "add an ControllerModel (identified by its path) only once" in {
     val model = new  ApplicationModel("appName",null,"desc")

@@ -10,6 +10,7 @@
 -runtrace: false
 -runproperties: ${runproperties},\
     config.file=config/application.conf
+#    config.resource=config/dev.conf
 
 -runvm: -Xmx256M
 
