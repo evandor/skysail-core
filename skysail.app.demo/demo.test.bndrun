@@ -39,6 +39,7 @@ skysail.server.um:
 	${akka-runtime},\
 	${camel-compiletime},\
 	${rabbitmq-runtime},\
+	${orientdb},\
 	org.apache.commons.pool;version=1.6.0,\
 	com.thoughtworks.paranamer;version=2.8.0,\
 	domino_2.11;version=1.1.2,\
@@ -50,6 +51,7 @@ skysail.server.um:
 	skysail.core;version=latest,\
 	skysail.client;version=latest,\
 	skysail.server.auth.basic;version=latest,\
+	skysail.server.persistence.orientdb;version=latest,\
 	skysail.app.demo;version=latest,\
 	org.hibernate.validator;version=5.2.4,\
 	com.typesafe.akka.persistence.query;version=2.5.4,\

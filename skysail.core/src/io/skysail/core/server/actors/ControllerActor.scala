@@ -65,28 +65,6 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       }
       become(out)
     }
-//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncEntityResource[_], _: Option[BundleContext], _: Uri.Path) => {
-//      sendBackTo = sender
-//      resource.setActorContext(context)
-//      resource.setApplicationModel(model)
-//      resource.get(self)
-//      become(out)
-//    }
-//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncPostResource[_], _: Option[BundleContext], _: Uri.Path) => {
-//      sendBackTo = sender
-//      resource.setActorContext(context)
-//      resource.setApplicationModel(model)
-//      resource.get(self)
-//      become(out)
-//    }
-//    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncStaticResource, _: Option[BundleContext], _: Uri.Path) => {
-//      sendBackTo = sender
-//      resource.setActorContext(context)
-//      resource.setApplicationModel(model)
-//      resource.get(self)
-//      become(out)
-//    }
-
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 

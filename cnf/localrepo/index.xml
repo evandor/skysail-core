@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<repository increment="1505374526777" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
+<repository increment="1505485917000" name="LocalRepo" xmlns="http://www.osgi.org/xmlns/repository/v1.0.0">
   <resource>
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.core"/>
@@ -768,41 +768,28 @@
     </requirement>
   </resource>
   <resource>
-    <!-- Error calling analyzer "org.osgi.service.indexer.impl.BundleAnalyzer" on resource C:/git/skysail-core/cnf/localrepo/com.typesafe.akka.http.testkit/com.typesafe.akka.http.testkit-10.0.7.jar with message java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}" and stack: java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}"
+    <!-- Error calling analyzer "org.osgi.service.indexer.impl.BundleAnalyzer" on resource /Users/carsten/git/skysail-core/cnf/localrepo/com.typesafe.akka.http.testkit/com.typesafe.akka.http.testkit-10.0.7.jar with message java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}" and stack: java.lang.IllegalArgumentException: invalid version "${range;[==,=+)}": non-numeric "${range;[==,=+)}"
 	at org.osgi.framework.Version.parseInt(Version.java:170)
 	at org.osgi.framework.Version.&lt;init&gt;(Version.java:126)
 	at org.osgi.service.indexer.impl.types.VersionRange.&lt;init&gt;(VersionRange.java:58)
-	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:348)
+	at org.osgi.service.indexer.impl.BundleAnalyzer.doImports(BundleAnalyzer.java:343)
 	at org.osgi.service.indexer.impl.BundleAnalyzer.analyzeResource(BundleAnalyzer.java:72)
-	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:271)
-	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:187)
+	at org.osgi.service.indexer.impl.RepoIndex.generateResource(RepoIndex.java:259)
+	at org.osgi.service.indexer.impl.RepoIndex.index(RepoIndex.java:180)
 	at aQute.bnd.deployer.repository.providers.R5RepoContentProvider.generateIndex(R5RepoContentProvider.java:290)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:169)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.generateIndex(LocalIndexedRepo.java:164)
 	at aQute.bnd.deployer.repository.LocalIndexedRepo.regenerateAllIndexes(LocalIndexedRepo.java:142)
-	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:397)
-	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.refreshRepositories(BndProjectImporter.java:666)
-	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.doReimportProjects(BndProjectImporter.java:633)
-	at org.jetbrains.osgi.bnd.imp.BndProjectImporter.access$400(BndProjectImporter.java:77)
-	at org.jetbrains.osgi.bnd.imp.BndProjectImporter$4.run(BndProjectImporter.java:616)
-	at com.intellij.openapi.progress.impl.CoreProgressManager$TaskRunnable.run(CoreProgressManager.java:718)
-	at com.intellij.openapi.progress.impl.CoreProgressManager.a(CoreProgressManager.java:170)
-	at com.intellij.openapi.progress.impl.CoreProgressManager.a(CoreProgressManager.java:548)
-	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:493)
-	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:94)
-	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:157)
-	at com.intellij.openapi.progress.impl.ProgressManagerImpl$2.run(ProgressManagerImpl.java:165)
-	at com.intellij.openapi.application.impl.ApplicationImpl$2.run(ApplicationImpl.java:342)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at java.lang.Thread.run(Thread.java:745)
+	at aQute.bnd.deployer.repository.LocalIndexedRepo.refresh(LocalIndexedRepo.java:377)
+	at bndtools.central.Central.refreshPlugins(Central.java:438)
+	at bndtools.views.repository.RepositoriesView$9.runInWorkspace(RepositoriesView.java:465)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
 Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
 	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
 	at java.lang.Integer.parseInt(Integer.java:569)
 	at java.lang.Integer.parseInt(Integer.java:615)
 	at org.osgi.framework.Version.parseInt(Version.java:168)
-	... 27 more
+	... 14 more
  -->
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="com.typesafe.akka.http.testkit"/>
@@ -1825,76 +1812,76 @@ Caused by: java.lang.NumberFormatException: For input string: "${range;[==,=+)}"
     <capability namespace="osgi.identity">
       <attribute name="osgi.identity" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
       <attribute name="type" value="osgi.bundle"/>
-      <attribute name="version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="version" type="Version" value="2.5.1.201709141502"/>
     </capability>
     <capability namespace="osgi.content">
-      <attribute name="osgi.content" value="ecee2cd296b980d3399dc7ba360f3535aad7023888d41c5c82e1c772c0914d9d"/>
+      <attribute name="osgi.content" value="af44854ad7b7186a57f764be492ddb96c37fbb9c221d21c857106568f0ef482a"/>
       <attribute name="url" value="io.skysail.bundled.akka-persistence-inmemory_2.11/io.skysail.bundled.akka-persistence-inmemory_2.11-2.5.1.jar"/>
-      <attribute name="size" type="Long" value="237793"/>
+      <attribute name="size" type="Long" value="237807"/>
       <attribute name="mime" value="application/vnd.osgi.bundle"/>
     </capability>
     <capability namespace="osgi.wiring.bundle">
       <attribute name="osgi.wiring.bundle" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
     </capability>
     <capability namespace="osgi.wiring.host">
       <attribute name="osgi.wiring.host" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka.persistence,akka.persistence.query,scala,scala.collection,scala.collection.immutable,scala.reflect,scala.runtime"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.extension"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka.actor,akka.event,akka.persistence.inmemory,akka.persistence.query,akka.serialization,scala,scala.collection,scala.collection.immutable,scala.reflect,scala.runtime"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.journal"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka,akka.actor,akka.event,akka.pattern,akka.persistence,akka.persistence.inmemory,akka.persistence.journal,akka.serialization,akka.stream,akka.stream.scaladsl,akka.util,com.typesafe.config,scala,scala.collection.immutable,scala.concurrent,scala.reflect,scala.runtime,scala.util"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka.actor,akka.persistence.inmemory.query.javadsl,akka.persistence.inmemory.query.scaladsl,akka.persistence.query,akka.persistence.query.javadsl,akka.persistence.query.scaladsl,com.typesafe.config,scala.reflect"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query.javadsl"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka,akka.persistence.inmemory.query.scaladsl,akka.persistence.query,akka.persistence.query.javadsl,akka.stream.javadsl,scala.reflect"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.query.scaladsl"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka,akka.actor,akka.persistence,akka.persistence.inmemory,akka.persistence.query,akka.persistence.query.scaladsl,akka.stream.scaladsl,com.typesafe.config,scala,scala.collection.immutable,scala.concurrent,scala.reflect,scala.runtime"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.snapshot"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="akka.actor,akka.event,akka.pattern,akka.persistence,akka.persistence.inmemory,akka.persistence.serialization,akka.persistence.snapshot,akka.serialization,akka.stream,akka.stream.scaladsl,akka.util,com.typesafe.config,scala,scala.concurrent,scala.reflect,scala.runtime"/>
     </capability>
     <capability namespace="osgi.wiring.package">
       <attribute name="osgi.wiring.package" value="akka.persistence.inmemory.util"/>
       <attribute name="version" type="Version" value="2.5.1"/>
       <attribute name="bundle-symbolic-name" value="io.skysail.bundled.akka-persistence-inmemory_2.11"/>
-      <attribute name="bundle-version" type="Version" value="2.5.1.201709140656"/>
+      <attribute name="bundle-version" type="Version" value="2.5.1.201709141502"/>
       <directive name="uses" value="scala,scala.reflect,scala.runtime"/>
     </capability>
     <requirement namespace="osgi.wiring.package">

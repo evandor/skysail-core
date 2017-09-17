@@ -8,6 +8,7 @@ import io.skysail.core.model.{ LinkRelation, ResourceAssociationType }
 import scala.concurrent.duration.DurationInt
 import scala.reflect.runtime.universe._
 import io.skysail.core.model.ApplicationModel
+import io.skysail.core.app.SkysailApplication
 
 object Resource {
   implicit class TypeDetector[T: TypeTag](related: Resource[T]) {
@@ -23,6 +24,10 @@ abstract class Resource[T: TypeTag] {
   
   var applicationModel: ApplicationModel = null
   
+  var application: SkysailApplication = null
+  
   def setApplicationModel(model: ApplicationModel) = this.applicationModel = model
+  
+  def setApplication(app: SkysailApplication) = this.application = app
 
 }

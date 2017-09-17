@@ -5,6 +5,8 @@ import io.skysail.core.app._
 import org.osgi.service.cm.ConfigurationAdmin
 import org.osgi.service.component.annotations._
 import io.skysail.core.app.menus.MenuItem
+import io.skysail.api.persistence.DbService
+import org.osgi.service.component.ComponentContext
 
 object DemoApplication {
   val APPLICATION_NAME = "demo"
@@ -16,6 +18,24 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
 
   @Reference
   var configAdmin: ConfigurationAdmin = null
+
+  @Reference//(cardinality = ReferenceCardinality.OPTIONAL)
+  var dbService: DbService = null
+  
+  var repo: DemoRepository = null
+  
+  @Activate
+  override def activate(appConfig: ApplicationConfiguration, componentContext: ComponentContext): Unit = {
+    super.activate(appConfig, componentContext)
+    println("NEW DemoRepository")
+    repo = new DemoRepository(dbService)
+  }
+  
+  @Deactivate
+  override def deactivate(componentContext: ComponentContext): Unit = {
+    super.deactivate(componentContext)
+    repo = null
+  }
 
   override def menu() = {
     Some(

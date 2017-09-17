@@ -21,6 +21,7 @@ Export-Package: \
 	io.skysail.api.um,\
 	io.skysail.api.doc,\
 	io.skysail.api.metrics,\
+	io.skysail.api.persistence,\
 	io.skysail.api.security,\
 	io.skysail.api.validation,\
 	io.skysail.api.weaving

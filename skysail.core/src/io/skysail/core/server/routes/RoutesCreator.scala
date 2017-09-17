@@ -100,7 +100,7 @@ class RoutesCreator(system: ActorSystem) {
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
 
-    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider.getClass.getName) ~ clientPath() ~ indexPath()
+    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath()
   }
 
   private def indexPath(): Route = {
@@ -140,7 +140,7 @@ class RoutesCreator(system: ActorSystem) {
     if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
   }
 
-  private def matcher(pathMatcher: PathMatcher[Unit], mapping: RouteMapping[_], name: String): Route = {
+  private def matcher(pathMatcher: PathMatcher[Unit], mapping: RouteMapping[_], appProvider: ApplicationProvider): Route = {
 
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
@@ -154,14 +154,14 @@ class RoutesCreator(system: ActorSystem) {
               ctx =>
                 test1("test1str") { f =>
                   println(f)
-                  routeWithUnmatchedPath(ctx, mapping, name)
+                  routeWithUnmatchedPath(ctx, mapping, appProvider)
                 }
             }
           } ~
           post {
             extractRequestContext {
               ctx =>
-                routeWithUnmatchedPath(ctx, mapping, name)
+                routeWithUnmatchedPath(ctx, mapping, appProvider)
             }
           }
         }
@@ -169,9 +169,9 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-  private def routeWithUnmatchedPath(ctx: RequestContext, mapping: RouteMapping[_], name: String): Route = {
+  private def routeWithUnmatchedPath(ctx: RequestContext, mapping: RouteMapping[_], appProvider: ApplicationProvider): Route = {
     extractUnmatchedPath { unmatchedPath =>
-      val applicationActor = getApplicationActorSelection(system, name)
+      val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
       val processCommand = ApplicationActor.ProcessCommand(ctx, mapping.resourceClass, unmatchedPath)
       //println(new PrivateMethodExposer(system)('printTree)())
       val t = (applicationActor ? processCommand).mapTo[ResponseEvent[_]]
@@ -193,6 +193,6 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-  private def getClientClassloader() = /*classOf[AkkaServer].getClassLoader*/ clientClassloader
+  private def getClientClassloader() = clientClassloader
 
 }

@@ -6,6 +6,7 @@ import io.skysail.app.demo.EventSender.{ Confirm, Msg }
 import io.skysail.app.demo.UserAggregate.{ Evt, GetUsersForwardResponse, MsgAddUser, MsgConfirmed }
 import io.skysail.app.demo.UserRepository.{ AddUser, ConfirmAddUser, GetUsers }
 import io.skysail.app.demo.AddUserCmd
+import akka.event.LoggingReceive
 
 object UserAggregate {
 
@@ -34,8 +35,8 @@ class UserAggregate extends PersistentActor with AtLeastOnceDelivery with ActorL
   override val supervisorStrategy = SupervisorStrategy.stoppingStrategy
   implicit val timeout = Timeout(100 milliseconds)
 
-  private val userRepository = context.watch(createUserRepository())
-  private val eventSender = context.watch(createEventSender())
+  //private val userRepository = context.watch(createUserRepository())
+  //private val eventSender = context.watch(createEventSender())
 
   protected def createUserRepository(): ActorRef = {
     context.actorOf(UserRepository.props(), UserRepository.Name)
@@ -45,7 +46,7 @@ class UserAggregate extends PersistentActor with AtLeastOnceDelivery with ActorL
     context.actorOf(EventSender.props(), EventSender.Name)
   }
 
-  override def receiveCommand: Receive = {
+  override def receiveCommand: Receive = LoggingReceive {
     /*
     Not the nicest solution, but it's non-blocking and sufficient to show the idea.
     Other solutions would be;
@@ -54,17 +55,19 @@ class UserAggregate extends PersistentActor with AtLeastOnceDelivery with ActorL
      */
     case AddUserCmd(newUser) =>
       val origSender = sender()
-      val usersFuture = userRepository ? GetUsers
-      pipe(usersFuture.mapTo[Set[Contact]].map(GetUsersForwardResponse(origSender, _, newUser))) to self
+          println("AddUserCmd II")
 
+      //val usersFuture = userRepository ? GetUsers
+      //pipe(usersFuture.mapTo[Set[Contact]].map(GetUsersForwardResponse(origSender, _, newUser))) to self
+      self ! GetUsersForwardResponse(origSender, Set(), newUser)
     case GetUsersForwardResponse(origSender, users, newUser) =>
-      if (users.exists(_.email == newUser.email)) {
-        origSender ! UserExistsResp(newUser)
-      } else {
+      //if (users.exists(_.email == newUser.email)) {
+//        origSender ! UserExistsResp(newUser)
+//      } else {
         persist(MsgAddUser(newUser)) { persistedMsg =>
-          updateState(persistedMsg)
+          //updateState(persistedMsg)
           origSender ! UserAddedResp(newUser)
-        }
+        //}
       }
 
     case ConfirmAddUser(deliveryId) =>
@@ -73,14 +76,14 @@ class UserAggregate extends PersistentActor with AtLeastOnceDelivery with ActorL
       persist(MsgConfirmed(deliveryId))(updateState)
   }
 
-  override def receiveRecover: Receive = {
+  override def receiveRecover: Receive = LoggingReceive {
     case evt: Evt => updateState(evt)
   }
 
   def updateState(evt: Evt): Unit = evt match {
     case MsgAddUser(u) =>
-      deliver(eventSender.path)(deliveryId => Msg(deliveryId, u))
-      deliver(userRepository.path)(deliveryId => AddUser(deliveryId, u))
+      //deliver(eventSender.path)(deliveryId => Msg(deliveryId, u))
+      //deliver(userRepository.path)(deliveryId => AddUser(deliveryId, u))
     case MsgConfirmed(deliveryId) =>
       confirmDelivery(deliveryId)
   }

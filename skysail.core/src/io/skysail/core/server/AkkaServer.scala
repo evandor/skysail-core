@@ -93,19 +93,19 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
 
     watchServices[ApplicationProvider] {
       case AddingService(service, context) => addApplicationProvider(service)
-      case ModifiedService(service, _) => log info s"Service '$service' modified"
+      case ModifiedService(service, _) => //log info s"Service '$service' modified"
       case RemovedService(service, _) => removeApplicationProvider(service)
     }
 
     watchServices[AuthenticationService] {
       case AddingService(service, context) => routesTracker.setAuthentication(service)
-      case ModifiedService(service, _) => log info s"Service '$service' modified"
+      case ModifiedService(service, _) => //log info s"Service '$service' modified"
       case RemovedService(service, _) => removeAuthenticationService(service)
     }
 
     watchBundles {
       case AddingBundle(b, context) => bundlesActor ! BundlesActor.CreateBundleActor(b)
-      case ModifiedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} modified"
+      case ModifiedBundle(b, _) => //log info s"Bundle ${b.getSymbolicName} modified"
       case RemovedBundle(b, _) => log info s"Bundle ${b.getSymbolicName} removed"
     }
 
