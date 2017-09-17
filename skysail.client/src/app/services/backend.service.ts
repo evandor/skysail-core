@@ -6,6 +6,7 @@ import { MenuItem } from '../domain/menuitem'
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class BackendService {
@@ -31,8 +32,12 @@ export class BackendService {
   }
 
   getLeftMenuItems(): Observable<MenuItem[]> {
-    return this._http.get(/*this.config.endpoint + */'/root/apps/menus', { headers: this.headers })
-      .map(res => res.json());
+    return this._http.get('/root/apps/menus', { headers: this.headers })
+      .map(res => res.json())
+      .catch(err => { 
+        console.log(err);
+        return Observable.of([new MenuItem('Apps','fa-box','/maincontent/sub'),new MenuItem('Dashboard','fa-box','/maincontent/sub2')])
+     })
   }
 
   getGeneric(path: string): Observable<Object[]> {

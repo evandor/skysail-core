@@ -29,7 +29,13 @@ export class NavbarComponent implements OnInit {
         label: 'Apps',
         icon: 'fa-play-circle',
         url: 'apps'
+      },
+      {
+        label: 'Main',
+        icon: 'fa-play-circle',
+        url: 'maincontent'
       }
+
     ];
   }
 

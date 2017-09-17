@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     .subscribe(res => {
       this.leftmenuitems = res;
     }, error => {
-      console.log("adding error to alertsService...");
+      console.log("adding error to alertsService:", error);
     });
 
 

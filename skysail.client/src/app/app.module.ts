@@ -20,6 +20,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GenericComponent } from './generic/generic.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaincontentComponent } from './maincontent/maincontent.component';
+import { LeftmenuComponent } from './leftmenu/leftmenu.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppsComponent,
     BundlesComponent,
     DashboardComponent,
-    GenericComponent
+    GenericComponent,
+    MaincontentComponent,
+    LeftmenuComponent
   ],
   imports: [
     BrowserModule,
