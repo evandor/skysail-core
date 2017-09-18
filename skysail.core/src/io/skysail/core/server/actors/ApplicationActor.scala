@@ -1,6 +1,6 @@
 package io.skysail.core.server.actors
 
-import akka.actor.{ Actor, ActorLogging, ActorRef, PoisonPill, Props }
+import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.RequestContext
@@ -15,29 +15,43 @@ import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 import akka.event.LoggingReceive
 import io.skysail.core.app.ApplicationProvider
 
 object ApplicationActor {
+
   case class GetAppModel()
+
   case class GetApplication()
+
   case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
-    //    override def toString() = {
-    //      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
-    //    }
+    override def toString() = {
+      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
+    }
   }
+
   case class GetMenu()
-  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
-//  case class ProcessPost(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
-//  case class ProcessPut(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
-//  case class ProcessDelete(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+
+  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path) {
+    override def toString() = {
+      s"""ProcessCommand(
+            ${ctx.toString},
+            ${cls.toString},
+            '${unmatchedPath}')
+       """.stripMargin
+    }
+  }
+
+  //  case class ProcessPost(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  //  case class ProcessPut(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  //  case class ProcessDelete(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
 }
 
 /**
- * An ApplicationActor waits for ... messages
- *
- */
+  * An ApplicationActor waits for ... messages
+  *
+  */
 class ApplicationActor(appModel: ApplicationModel, application: SkysailApplication, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
@@ -54,7 +68,7 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
     case ApplicationActor.ProcessCommand(ctx, cls, unmatchedPath) => {
       sendBackTo = sender
       val theClass = cls.newInstance()
-      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/ ), "controllerActor$" + cnt.getAndIncrement)
+      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/), "controllerActor$" + cnt.getAndIncrement)
 
       val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, theClass, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
       r onComplete {
