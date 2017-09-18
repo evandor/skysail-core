@@ -35,7 +35,7 @@ export class BackendService {
     return this._http.get('/root/apps/menus', { headers: this.headers })
       .map(res => res.json())
       .catch(err => { 
-        console.log(err);
+        console.log("Backend Error in getLeftMenuItems:", err);
         return Observable.of([new MenuItem('Apps','fa-box','/maincontent/sub'),new MenuItem('Dashboard','fa-box','/maincontent/sub2')])
      })
   }

@@ -21,7 +21,7 @@ class AppsResource extends AsyncListResource[Application] {
     
     val appsActor = SkysailApplication.getApplicationsActor(this.actorContext.system)
     
-    log debug s"about to send message GetAllApplications to ${appsActor}"
+    //log info s"about to send message GetAllApplications to ${appsActor}"
 
     (appsActor ? ApplicationsActor.GetAllApplications())
       .mapTo[List[Application]]

@@ -57,6 +57,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   def in: Receive = LoggingReceive {
     case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext], _: Uri.Path) => {
       sendBackTo = sender
+      log info s"<<< IN <<<: SkysailContext"
       resource.setActorContext(context)
       resource.setApplicationModel(model)
       ctx.request.method match {
@@ -65,11 +66,12 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       }
       become(out)
     }
-    case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
+    case msg: Any => log info s"<<< IN <<<: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   def out: Receive = LoggingReceive {
     case msg: List[T] => {
+      log info s">>> OUT >>>: List[T]"
       //implicit val ec = context.system.dispatcher
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
@@ -82,12 +84,13 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       }
     }
     case msg: ControllerActor.MyResponseEntity => {
+      log info s">>> OUT >>>: ControllerActor.MyResponseEntity"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
     case msg: T => { /* and EntityDescription */
-      println("msg: T " + msg)
+      log info s">>> OUT >>>: T"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       //implicit val ec = context.system.dispatcher
@@ -107,7 +110,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       }
 
     }
-    case msg: Any => log info s"OUT: received unknown message '$msg' in ${this.getClass.getName}"
+    case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {
