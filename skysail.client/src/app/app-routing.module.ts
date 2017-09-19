@@ -23,6 +23,10 @@ const routes: Routes = [
         component: DashboardComponent,
       },
       {
+        path: 'generic',
+        component: GenericComponent,
+      },
+      {
         path: '',
         redirectTo: 'sub',
         pathMatch: 'full'

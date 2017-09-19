@@ -1,6 +1,8 @@
 # docker build -f Dockerfile.app.demo -t hello-skysail .
 # docker rmi $(docker images -f "dangling=true" -q)
 # docker stop $(docker ps -a -q)
+# docker container prune
+# ./gradlew clean build skysail.core:export.core.int
 FROM java
 
 RUN echo "executing 'useradd -d /home/skysail -m -s /bin/bash skysail'"
@@ -15,8 +17,10 @@ WORKDIR /home/skysail
 RUN echo "creating /home/skysail/products/demo"
 RUN mkdir -p /home/skysail/products/demo/plugins
 
-COPY skysail.core/generated/skysail.core.jar /home/skysail/products/demo/skysail.core.jar
+COPY skysail.core/generated/distributions/executable/core.int.jar /home/skysail/products/demo/core.int.jar
+
 COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
+
 #COPY etc/docker/start.sh /home/skysail/products/demo/start.sh
 #RUN chmod 775 /home/skysail/products/demo/start.sh
 
@@ -25,4 +29,4 @@ WORKDIR /home/skysail/products/demo
 #CMD ["ls","-al"]
 #CMD ["start.sh", "run"]
 #CMD ["java", "-jar" "skysail.app.demo.jar"]
-CMD ["java","-jar","/home/skysail/products/demo/skysail.core.jar"]
+CMD ["java","-jar","/home/skysail/products/demo/core.int.jar"]

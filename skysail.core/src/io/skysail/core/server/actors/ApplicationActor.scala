@@ -27,7 +27,7 @@ object ApplicationActor {
 
   case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
     override def toString() = {
-      s"SkysailContext(RequestContext(...),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
+      s"SkysailContext@${this.hashCode()}(RequestContext([@${ctx.hashCode()}]),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
     }
   }
 
@@ -36,7 +36,7 @@ object ApplicationActor {
   case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path) {
     override def toString() = {
       s"""ProcessCommand(
-            ${ctx.toString},
+            [${ctx.hashCode()}]${ctx.toString},
             ${cls.toString},
             '${unmatchedPath}')
        """.stripMargin
@@ -58,22 +58,22 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
 
   val cnt = new AtomicInteger(0)
 
-  var nextActor: ActorRef = null
-  val originalSender = sender
-  var sendBackTo: ActorRef = null
+  // http://helenaedelson.com/?p=879 !!!
+  //var sendBackTo: ActorRef = null
 
   import context._
 
   def receive: Receive = LoggingReceive {
     case ApplicationActor.ProcessCommand(ctx, cls, unmatchedPath) => {
-      sendBackTo = sender
+      val sendBackTo = sender()
+      log info s"setting sender to ${sendBackTo}"
       val theClass = cls.newInstance()
       val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/), "controllerActor$" + cnt.getAndIncrement)
 
       val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, theClass, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
       r onComplete {
-        case Success(value) => sendBackTo ! value
-        case Failure(failure) => log error s"$failure"
+        case Success(value) => log info s"HIER: ${sendBackTo} ! ${value}"; sendBackTo ! value
+        case Failure(failure) => log error s"Failure>>> $failure"
       }
     }
     case _: ApplicationActor.GetApplication => sender ! application

@@ -65,7 +65,7 @@ class RoutesCreator(system: ActorSystem) {
 
   private val counter = new AtomicInteger(0)
   
-  implicit val timeout: Timeout  = 1.seconds
+  implicit val timeout: Timeout  = 3.seconds
 
   val capabilitiesFuture = (SkysailApplication.getBundlesActor(system) ? BundlesActor.GetCapabilities()).mapTo[Map[Long, List[BundleCapability]]]
   val capabilities = Await.result(capabilitiesFuture, 1.seconds)
@@ -177,7 +177,7 @@ class RoutesCreator(system: ActorSystem) {
       val t = (applicationActor ? processCommand).mapTo[ResponseEvent[_]]
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
-        case Failure(failure) => log error s"Failure ${failure}"; complete(StatusCodes.BadRequest, failure)
+        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
       }
     }
   }

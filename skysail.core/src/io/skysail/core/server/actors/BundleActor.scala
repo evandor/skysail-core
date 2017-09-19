@@ -20,18 +20,14 @@ class BundleActor(bundle: Bundle) extends Actor with ActorLogging {
   
   val cnt = new AtomicInteger(0)
 
-  var nextActor: ActorRef = null
-  val originalSender = sender
-  var sendBackTo: ActorRef = null
-
   import context._
 
   def receive: Receive = {
     case gr: GetResource => getResource(gr)
     case (ctx:RequestContext,cls : Class[_])  => {
+      val sendBackTo = sender
       log debug s"in AppActor... got message ($ctx, $cls)"
-      sendBackTo = sender
-      nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
+      val nextActor = context.actorOf(Props.apply(cls)) // ResourceActor, e.g. AppsResource
       nextActor ! ctx
     }
     case gc: GetClassloader => {

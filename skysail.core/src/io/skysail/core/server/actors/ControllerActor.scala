@@ -57,7 +57,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   def in: Receive = LoggingReceive {
     case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext], _: Uri.Path) => {
       sendBackTo = sender
-      log info s"<<< IN <<<: SkysailContext"
+      log info s"<<< IN(${this.hashCode()}) <<<: SkysailContext"
       resource.setActorContext(context)
       resource.setApplicationModel(model)
       ctx.request.method match {
@@ -71,7 +71,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
 
   def out: Receive = LoggingReceive {
     case msg: List[T] => {
-      log info s">>> OUT >>>: List[T]"
+      log info s">>> OUT(${this.hashCode()} >>>: List[T]"
       //implicit val ec = context.system.dispatcher
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
@@ -80,17 +80,18 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
         case value =>
           val reqEvent = RequestEvent(null, null)
           val resEvent = ResponseEvent(reqEvent, null)
+          log info s">>> OUT(${this.hashCode()} >>>: sending back to ${sendBackTo}"
           sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
       }
     }
     case msg: ControllerActor.MyResponseEntity => {
-      log info s">>> OUT >>>: ControllerActor.MyResponseEntity"
+      log info s">>> OUT(${this.hashCode()} >>>: ControllerActor.MyResponseEntity"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
     case msg: T => { /* and EntityDescription */
-      log info s">>> OUT >>>: T"
+      log info s">>> OUT(${this.hashCode()} >>>: T"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       //implicit val ec = context.system.dispatcher

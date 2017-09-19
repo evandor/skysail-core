@@ -48,8 +48,13 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
   override def menu() = {
     Some(MenuItem("Root App", "fa-file-o", None, Some(List(
+      MenuItem("Bundles Persp.", "fa-file-o", Some("/bundles")),
+      MenuItem("Services Persp.", "fa-file-o", Some("/services")),
       MenuItem("Bundles", "fa-file-o", Some("/client/bundles")),
-      MenuItem("Services", "fa-file-o", Some("/client/services"))))))
+      MenuItem("Services", "fa-file-o", Some("/client/services")),
+      MenuItem("Sub", "fa-file-o", Some("/maincontent/sub")),
+      MenuItem("Sub2", "fa-file-o", Some("/maincontent/sub2"))
+    ))))
   }
 
   def routesMappings: List[RouteMapping[_]] = {
