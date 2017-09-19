@@ -49,7 +49,7 @@ skysail.server.um:
 	skysail.api;version=latest,\
 	skysail.core;version=latest,\
 	skysail.client;version=latest,\
-	skysail.server.auth.none;version=latest,\
+	skysail.server.auth.basic;version=latest,\
 	skysail.server.persistence.orientdb;version=latest,\
 	org.hibernate.validator;version=5.2.4,\
 	com.typesafe.akka.persistence.query;version=2.5.4,\
