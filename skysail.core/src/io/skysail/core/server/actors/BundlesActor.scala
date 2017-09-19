@@ -27,7 +27,7 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   override def receive: Receive = LoggingReceive {
     case gr: GetResource => getResource(gr)
     case gb: GetBundles => getBundles(gb)
-    case GetServices => getServices()
+    case GetServices() => getServices()
     case gc: GetCapabilities => getCapabilities()
     case cb: CreateBundleActor => createBundleActor(cb)
     case msg: Any => log info s"received unknown message '$msg' of type '${msg.getClass().getName}' in ${this.getClass.getName}"
@@ -63,7 +63,8 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
 
   private def getServices() = {
     val allServiceRefs = bundleContext.getAllServiceReferences(null, null).toList
-    allServiceRefs.map(serviceRef => ServiceDescriptor(serviceRef))
+    //val result = allServiceRefs.map(serviceRef => ServiceDescriptor(serviceRef)).toList
+    sender ! allServiceRefs
   }
 
 }

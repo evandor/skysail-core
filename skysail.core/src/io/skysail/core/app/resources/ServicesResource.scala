@@ -11,10 +11,12 @@ import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 import io.skysail.core.server.actors.BundlesActor
-import org.osgi.framework.Bundle
+import org.osgi.framework.{Bundle, ServiceReference}
 import akka.util.Timeout
+
 import scala.concurrent.duration.DurationInt
 import io.skysail.core.resources.AsyncListResource
+
 import scala.util.Success
 import scala.util.Failure
 import org.slf4j.LoggerFactory
@@ -25,10 +27,11 @@ class ServicesResource extends AsyncListResource[ServiceDescriptor] {
   //  @AuthorizeByRole("admin")
   def get(sender: ActorRef) {
     val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
-    (bundlesActor ? BundlesActor.GetBundles())
-      .mapTo[List[Bundle]]
+    (bundlesActor ? BundlesActor.GetServices())
+      .mapTo[List[ServiceReference[_]]]
       .onComplete {
-        case Success(s) => sender ! s.map(b => BundleDescriptor(b)).toList
+        //  val result = allServiceRefs.map(serviceRef => ServiceDescriptor(serviceRef)).toList
+        case Success(s) => sender ! s.map(s => ServiceDescriptor(s)).toList
         case Failure(f) => println(s"failure ${f}")
       }
   }
