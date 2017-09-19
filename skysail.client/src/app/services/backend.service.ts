@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Observable';
 import { Bundle } from '../domain/bundle'
+import { Service } from '../domain/service'
 import { MenuItem } from '../domain/menuitem'
 
 import 'rxjs/add/operator/map';
@@ -23,6 +24,11 @@ export class BackendService {
 
   getBundles(): Observable<Bundle[]> {
     return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
+      .map(res => res.json());
+  }
+
+  getServices(): Observable<Service[]> {
+    return this._http.get('/root/services', { headers: this.headers })
       .map(res => res.json());
   }
 

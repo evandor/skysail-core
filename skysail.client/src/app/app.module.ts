@@ -22,6 +22,7 @@ import { GenericComponent } from './generic/generic.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaincontentComponent } from './maincontent/maincontent.component';
 import { LeftmenuComponent } from './leftmenu/leftmenu.component';
+import { OsgiServicesComponent } from './osgi-services/osgi-services.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LeftmenuComponent } from './leftmenu/leftmenu.component';
     DashboardComponent,
     GenericComponent,
     MaincontentComponent,
-    LeftmenuComponent
+    LeftmenuComponent,
+    OsgiServicesComponent
   ],
   imports: [
     BrowserModule,
