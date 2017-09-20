@@ -24,7 +24,7 @@ import akka.http.scaladsl.server.RequestContext
 import akka.http.scaladsl.model.Uri
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.BundleContext
-import io.skysail.core.app.resources.ActorContextAware
+import io.skysail.core.resources.ActorContextAware
 import io.skysail.core.resources.AsyncStaticResource
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ResponseEntity

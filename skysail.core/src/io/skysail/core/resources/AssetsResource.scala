@@ -5,7 +5,6 @@ import akka.actor.ActorRef
 import akka.util.Timeout
 import scala.concurrent.duration.DurationInt
 import akka.http.scaladsl.model.MediaTypes
-import io.skysail.core.app.resources.ActorContextAware
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.server.actors.BundlesActor
 import java.net.URL

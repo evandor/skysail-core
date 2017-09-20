@@ -1,6 +1,5 @@
-package io.skysail.core.app.resources
+package io.skysail.core.resources
 
-import akka.actor.{ActorRef, ActorSystem}
 import akka.actor.ActorContext
 
 trait ActorContextAware {

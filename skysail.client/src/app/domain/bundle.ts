@@ -28,7 +28,9 @@ export class Bundle {
     registeredServicesCount: number;
     scrMap: Map<string, string>;
 
-    constructor() {
+    constructor(id: string, name: string) {
+        this.id = id;
+        this.symbolicName = name;
         this.scrMap = new Map<string, string>();
     }
 }

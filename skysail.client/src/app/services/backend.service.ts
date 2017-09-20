@@ -24,7 +24,11 @@ export class BackendService {
 
   getBundles(): Observable<Bundle[]> {
     return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
-      .map(res => res.json());
+      .map(res => res.json())
+      .catch(err => { 
+        console.log("Backend Error in getBundles:", err);
+        return Observable.of([new Bundle("1","symbolicName")])
+     })
   }
 
   getServices(): Observable<Service[]> {
@@ -42,7 +46,7 @@ export class BackendService {
       .map(res => res.json())
       .catch(err => { 
         console.log("Backend Error in getLeftMenuItems:", err);
-        return Observable.of([new MenuItem('Apps','fa-box','/maincontent/sub'),new MenuItem('Dashboard','fa-box','/maincontent/sub2')])
+        return Observable.of([new MenuItem('Bundles','fa-th-large','/maincontent/bundles'),new MenuItem('Services','fa-play-circle','/maincontent/services')])
      })
   }
 

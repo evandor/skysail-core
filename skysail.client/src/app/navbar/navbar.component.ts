@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
         url: 'apps'
       },
       {
-        label: 'Main',
+        label: 'OSGi',
         icon: 'fa-play-circle',
         url: 'maincontent'
       }
