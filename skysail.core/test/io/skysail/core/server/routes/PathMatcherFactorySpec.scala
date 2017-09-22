@@ -104,7 +104,7 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
       case (pm: Any, e:Any) => get {
         pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[Int]]]) { i =>
           complete {
-            s"successfully matched " + i
+            s"successfully matched"
           }
         }
       }
