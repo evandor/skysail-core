@@ -58,26 +58,25 @@ object RoutesCreator {
 class RoutesCreator(system: ActorSystem) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
-  
+
   log info s"instanciating new RoutesCreator"
 
   var authentication: AuthenticationService = null
 
   private val counter = new AtomicInteger(0)
-  
-  implicit val timeout: Timeout  = 3.seconds
+
+  implicit val timeout: Timeout = 3.seconds
 
   val capabilitiesFuture = (SkysailApplication.getBundlesActor(system) ? BundlesActor.GetCapabilities()).mapTo[Map[Long, List[BundleCapability]]]
   val capabilities = Await.result(capabilitiesFuture, 1.seconds)
-  
-  val bundleIdsWithClientCapabilities = capabilities.filter { 
+
+  val bundleIdsWithClientCapabilities = capabilities.filter {
     entry => entry._2.filter { cap => Constants.CLIENT_CAPABILITY.equals(cap.getNamespace) }.size > 0
   }.map { m => m._1 }
-  
+
   val clientClFuture = (SkysailApplication.getBundleActor(system, bundleIdsWithClientCapabilities.head) ? BundleActor.GetClassloader()).mapTo[ClassLoader]
   val clientClassloader = Await.result(clientClFuture, 1.seconds)
-  
-    
+
   def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
 
     val appRoute = appInfoProvider.appModel.appRoute
@@ -86,15 +85,15 @@ class RoutesCreator(system: ActorSystem) {
 
     val pathMatcher =
       mapping.path.trim() match {
-        case "" => 
+        case "" =>
           appRoute ~ PathEnd
-        case "/" => 
+        case "/" =>
           appRoute / PathEnd
         case p if (p.endsWith("/*")) =>
           appRoute / PathMatcher(p.substring(1, p.length() - 2))
-        case p if (p.substring(1,p.length()-2).contains("/")) =>
+        case p if (p.substring(1, p.length() - 2).contains("/")) =>
           val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
-          segments.foldLeft(appRoute)((a,b) => a / b) ~ PathEnd
+          segments.foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
         case any => appRoute / getMatcher(any) ~ PathEnd
       }
 
@@ -158,12 +157,12 @@ class RoutesCreator(system: ActorSystem) {
                 }
             }
           } ~
-          post {
-            extractRequestContext {
-              ctx =>
-                routeWithUnmatchedPath(ctx, mapping, appProvider)
+            post {
+              extractRequestContext {
+                ctx =>
+                  routeWithUnmatchedPath(ctx, mapping, appProvider)
+              }
             }
-          }
         }
       }
     }
