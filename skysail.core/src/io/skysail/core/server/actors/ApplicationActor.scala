@@ -25,15 +25,15 @@ object ApplicationActor {
 
   case class GetApplication()
 
-  case class SkysailContext(ctx: RequestContext, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext], unmatchedPath: Uri.Path) {
+  case class SkysailContext(cmd: ApplicationActor.ProcessCommand, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext]) {
     override def toString() = {
-      s"SkysailContext@${this.hashCode()}(RequestContext([@${ctx.hashCode()}]),ApplicationModel(...),Option[BundleContext],'${unmatchedPath}')"
+      s"SkysailContext@${this.hashCode()}(RequestContext([@${cmd.ctx.hashCode()}]),ApplicationModel(...),Option[BundleContext],'${cmd.unmatchedPath}')"
     }
   }
 
   case class GetMenu()
 
-  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path) {
+  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path) {
     override def toString() = {
       s"""ProcessCommand(
             [${ctx.hashCode()}]${ctx.toString},
@@ -64,15 +64,16 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
   import context._
 
   def receive: Receive = LoggingReceive {
-    case ApplicationActor.ProcessCommand(ctx, cls, unmatchedPath) => {
+    //case ApplicationActor.ProcessCommand(ctx, cls, urlParameter, unmatchedPath) => {
+    case cmd:ApplicationActor.ProcessCommand => {
       val sendBackTo = sender()
       log info s"setting sender to ${sendBackTo}"
-      val theClass = cls.newInstance()
-      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]] /*, theClass*/), "controllerActor$" + cnt.getAndIncrement)
+      val theClass = cmd.cls.newInstance()
+      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]]), "controllerActor$" + cnt.getAndIncrement)
 
-      val r = (controllerActor ? ApplicationActor.SkysailContext(ctx, appModel, theClass, bundleContext, unmatchedPath)).mapTo[ResponseEvent[_]]
+      val r = (controllerActor ? ApplicationActor.SkysailContext(cmd, appModel, theClass, bundleContext)).mapTo[ResponseEvent[_]]
       r onComplete {
-        case Success(value) => log info s"HIER: ${sendBackTo} ! ${value}"; sendBackTo ! value
+        case Success(value) => sendBackTo ! value
         case Failure(failure) => log error s"Failure>>> $failure"
       }
     }

@@ -1,23 +1,23 @@
 package io.skysail.core.akka
 
-import akka.actor.{ Actor, ActorLogging, ActorRef, Props }
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import akka.http.scaladsl.model.RequestEntity
 import akka.http.scaladsl.server.RequestContext
 import akka.util.Timeout
-import io.skysail.core.model.{ LinkRelation, ResourceAssociationType }
+import io.skysail.core.model.{LinkRelation, ResourceAssociationType}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
-import io.skysail.core.server.actors.ApplicationActor.SkysailContext
-import org.json4s.{ DefaultFormats, jackson }
+import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
+import org.json4s.{DefaultFormats, jackson}
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import io.skysail.core.resources.AsyncListResource
-
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model.RequestEntity
-import org.json4s.{ jackson, native, DefaultFormats }
+import org.json4s.{DefaultFormats, jackson, native}
+
 import scala.util.Success
 import scala.util.Failure
 import akka.http.scaladsl.server.RequestContext
@@ -55,12 +55,12 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   def receive = in
 
   def in: Receive = LoggingReceive {
-    case SkysailContext(ctx: RequestContext, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext], _: Uri.Path) => {
+    case SkysailContext(cmd: ProcessCommand, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext]) => {
       sendBackTo = sender
       log info s"<<< IN(${this.hashCode()}) <<<: SkysailContext"
       resource.setActorContext(context)
       resource.setApplicationModel(model)
-      ctx.request.method match {
+      cmd.ctx.request.method match {
         case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(self)
         case e: Any => resource.get(self)
       }
