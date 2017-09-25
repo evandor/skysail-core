@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppsComponent } from './apps/apps.component';
 import { BundlesComponent } from './bundles/bundles.component'
+import { BundleComponent } from './bundle/bundle.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
 import { GenericComponent } from './generic/generic.component'
 import { MaincontentComponent } from './maincontent/maincontent.component'
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'bundles',
         component: BundlesComponent,
+      },
+      {
+        path: 'bundles/:id',
+        component: BundleComponent,
       },
       {
         path: 'services',

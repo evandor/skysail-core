@@ -9,15 +9,17 @@ import io.skysail.core.server.actors.ApplicationsActor.GetAllApplications
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import io.skysail.core.server.actors.ApplicationsActor
-import scala.util.{ Success, Failure }
+
+import scala.util.{Failure, Success}
 import org.slf4j.LoggerFactory
 
 class AppsResource extends AsyncListResource[Application] {
 
   private val log = LoggerFactory.getLogger(this.getClass())
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     
     val appsActor = SkysailApplication.getApplicationsActor(this.actorContext.system)
     

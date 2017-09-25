@@ -8,13 +8,14 @@ import scala.concurrent.Future
 import scala.reflect.ClassTag
 import io.skysail.core.resources.AsyncEntityResource
 import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 case class TestEntity(val foo: String)
 
 class TestEntitiesResource extends AsyncListResource[String] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
      ???
    }
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
@@ -23,7 +24,7 @@ class TestEntitiesResource extends AsyncListResource[String] {
 class TestStringEntityController extends AsyncEntityResource[String] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
      ???
    }
 }
@@ -54,7 +55,7 @@ class TestStringEntityController extends AsyncEntityResource[String] {
 class TestEntityController extends AsyncEntityResource[TestEntity] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
      ???
    }
 }
@@ -62,7 +63,7 @@ class TestEntityController extends AsyncEntityResource[TestEntity] {
 class TestEntityListController extends AsyncListResource[TestEntity] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List(TestEntity("hi"), TestEntity("content"))
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
      ???
    }
 }

@@ -126,36 +126,72 @@ class RoutesCreator(system: ActorSystem) {
 
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
-    pathPrefix(pathMatcherWithClass._1.asInstanceOf[PathMatcher[Unit]]) {
-      test() {
-        authenticationDirective(authentication) { username =>
-          get {
-            extractRequestContext {
-              ctx =>
-                test1("test1str") { f =>
-                  println(f)
-                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-                }
-            }
-          } ~
-            post {
-              extractRequestContext {
-                ctx =>
-                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-              }
-            }
-        }
-      }
-    }
+//    pathPrefix(pathMatcherWithClass._1.asInstanceOf[PathMatcher[Unit]]) {
+//      test() {
+//        authenticationDirective(authentication) { username =>
+//          get {
+//            extractRequestContext {
+//              ctx =>
+//                test1("test1str") { f =>
+//                  println(f)
+//                  routeWithUnmatchedPath(ctx, mapping, appProvider)
+//                }
+//            }
+//          } ~
+//            post {
+//              extractRequestContext {
+//                ctx =>
+//                  routeWithUnmatchedPath(ctx, mapping, appProvider)
+//              }
+//            }
+//        }
+//      }
+//    }
 
-    /*pathMatcherWithClass match {
+    pathMatcherWithClass match {
       case (pm: Any, Unit) =>
         pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {
-          createRoute(mapping, appProvider)
+          test() {
+            authenticationDirective(authentication) { username =>
+              get {
+                extractRequestContext {
+                  ctx =>
+                    test1("test1str") { f =>
+                      println(f)
+                      routeWithUnmatchedPath(ctx, mapping, appProvider)
+                    }
+                }
+              } ~
+                post {
+                  extractRequestContext {
+                    ctx =>
+                      routeWithUnmatchedPath(ctx, mapping, appProvider)
+                  }
+                }
+            }
+          }
         }
       case (pm: Any, e: Class[Tuple1[_]]) => get {
         pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { urlParameter =>
-          createRoute(mapping, appProvider, urlParameter)
+          test() {
+            authenticationDirective(authentication) { username =>
+              get {
+                extractRequestContext {
+                  ctx =>
+                    test1("test1str") { f =>
+                      println(f)
+                      routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                    }
+                }
+              } ~
+                post {
+                  extractRequestContext {
+                    ctx =>
+                      routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                  }
+                }
+            }
+          }
         }
       }
       case (first: Any, second: Any) =>
@@ -166,7 +202,7 @@ class RoutesCreator(system: ActorSystem) {
           }
         }
       }
-    }*/
+    }
 
   }
 

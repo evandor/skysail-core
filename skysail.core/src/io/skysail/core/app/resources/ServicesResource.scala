@@ -21,11 +21,12 @@ import scala.util.Success
 import scala.util.Failure
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.domain.ServiceDescriptor
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class ServicesResource extends AsyncListResource[ServiceDescriptor] {
 
   //  @AuthorizeByRole("admin")
-  def get(sender: ActorRef) {
+  def get(sender: ActorRef, cmd: ProcessCommand) {
     val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
     (bundlesActor ? BundlesActor.GetServices())
       .mapTo[List[ServiceReference[_]]]

@@ -10,13 +10,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 import io.skysail.core.resources.AsyncListResource
 import io.skysail.core.server.actors.ApplicationsActor
-import scala.util.{ Success, Failure }
+
+import scala.util.{Failure, Success}
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.menus.MenuItem
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class MenusResource extends AsyncListResource[MenuItem] {
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     
     val appsActor = SkysailApplication.getApplicationsActor(this.actorContext.system)
     

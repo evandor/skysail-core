@@ -3,14 +3,14 @@ package io.skysail.app.demo
 import akka.actor.ActorRef
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import io.skysail.core.akka.actors._
-import org.apache.http.{ HttpEntity, HttpResponse }
-import org.apache.http.client.{ ClientProtocolException, ResponseHandler }
+import org.apache.http.{HttpEntity, HttpResponse}
+import org.apache.http.client.{ClientProtocolException, ResponseHandler}
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.{ CloseableHttpClient, HttpClients }
+import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
 import org.apache.http.util.EntityUtils
 
 import scala.reflect.ClassTag
-import org.json4s.{ DefaultFormats, jackson, native }
+import org.json4s.{DefaultFormats, jackson, native}
 import akka.http.scaladsl.model.ContentTypes
 import akka.util.ByteString
 import akka.http.scaladsl.model.ResponseEntity
@@ -23,13 +23,15 @@ import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.server.actors.ApplicationActor
 import akka.pattern.ask
+
 import scala.util.Success
 import scala.util.Failure
 import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class EsResource extends AsyncListResource[DemoRoot] {
 
-  def get(sender: ActorRef): Unit = {
+  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
     sender ! List(
       DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"),
       DemoRoot("config", "/demo/v1/configs", "System Configuration"))
@@ -44,7 +46,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
   //  @AuthorizeByRole("esadmin")
 
-  def get(sender: ActorRef): Unit = {
+  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     implicit val system = actorContext.system
@@ -138,7 +140,7 @@ class MappingResource extends AsyncListResource[Mapping] {
     ???
   }
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     ???
   }
 }
@@ -159,7 +161,7 @@ class ConfigsResource extends AsyncListResource[ConfigDetails] {
 
   def get() = ???
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     ???
   }
 

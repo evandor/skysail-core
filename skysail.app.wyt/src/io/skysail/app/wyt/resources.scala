@@ -6,6 +6,7 @@ import io.skysail.core.akka.actors._
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class PactsResource extends AsyncListResource[Pact] {
   val pactsService = new PactsService()
@@ -16,7 +17,7 @@ class PactsResource extends AsyncListResource[Pact] {
 
    def get() = ???
 
-  def get(sendBackTo: ActorRef): Unit = {
+  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     ???
   }
 }

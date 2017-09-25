@@ -15,6 +15,7 @@ import io.skysail.core.app.domain.ServiceDescriptor
 object BundlesActor {
   case class GetResource(val path: String)
   case class GetBundles()
+  case class GetBundle(id: Long)
   case class GetServices()
   case class CreateBundleActor(b: Bundle)
   case class GetCapabilities()
@@ -27,6 +28,7 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   override def receive: Receive = LoggingReceive {
     case gr: GetResource => getResource(gr)
     case gb: GetBundles => getBundles(gb)
+    case GetBundle(id: Long) => getBundle(id)
     case GetServices() => getServices()
     case gc: GetCapabilities => getCapabilities()
     case cb: CreateBundleActor => createBundleActor(cb)
@@ -65,6 +67,10 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
     val allServiceRefs = bundleContext.getAllServiceReferences(null, null).toList
     //val result = allServiceRefs.map(serviceRef => ServiceDescriptor(serviceRef)).toList
     sender ! allServiceRefs
+  }
+
+  private def getBundle(id:Long) = {
+    sender ! bundleContext.getBundle(id)
   }
 
 }

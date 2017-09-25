@@ -7,12 +7,14 @@ import akka.actor.Props
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.server.actors.ApplicationActor
 import akka.pattern.ask
-import scala.util.{ Success, Failure }
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
+
+import scala.util.{Failure, Success}
 
 class ContactsResource extends AsyncListResource[Contact] {
   val appService = new ContactService()
 
-  def get(sender: ActorRef): Unit = {
+  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
     val applicationActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[DemoApplication].getName)
     val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
     import scala.concurrent.ExecutionContext.Implicits.global
@@ -25,7 +27,7 @@ class ContactsResource extends AsyncListResource[Contact] {
 
 class PostContactResource extends AsyncPostResource[Contact] {
 
-  def get(sender: ActorRef): Unit = {
+  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
     val entityModel = applicationModel.entityModelFor(classOf[Contact])
     if (entityModel.isDefined) {
       println("EM: " + entityModel.get.fields)

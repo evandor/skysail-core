@@ -2,36 +2,22 @@ package io.skysail.core.akka
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import akka.http.scaladsl.model.RequestEntity
-import akka.http.scaladsl.server.RequestContext
 import akka.util.Timeout
-import io.skysail.core.model.{LinkRelation, ResourceAssociationType}
 
-import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
-import scala.reflect.ClassTag
 import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
-import org.json4s.{DefaultFormats, jackson}
+import org.json4s.{DefaultFormats, Extraction, JObject, jackson, native}
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
-import io.skysail.core.resources.AsyncListResource
 import akka.http.scaladsl.marshalling.Marshal
-import akka.http.scaladsl.model.RequestEntity
-import org.json4s.{DefaultFormats, jackson, native}
+import akka.http.scaladsl.model._
 
 import scala.util.Success
 import scala.util.Failure
-import akka.http.scaladsl.server.RequestContext
-import akka.http.scaladsl.model.Uri
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.BundleContext
-import io.skysail.core.resources.ActorContextAware
-import io.skysail.core.resources.AsyncStaticResource
-import akka.http.scaladsl.model.HttpEntity
-import akka.http.scaladsl.model.ResponseEntity
 import io.skysail.core.resources._
-import akka.stream.ActorMaterializer
-import akka.http.scaladsl.model.HttpMethods
 import io.skysail.core.app.resources.PostSupport
+import org.json4s.jackson.Serialization.{read, write}
 
 object ControllerActor {
   case class GetRequest()
@@ -62,7 +48,7 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       resource.setApplicationModel(model)
       cmd.ctx.request.method match {
         case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(self)
-        case e: Any => resource.get(self)
+        case e: Any => resource.get(self,cmd)
       }
       become(out)
     }
@@ -91,24 +77,26 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
     case msg: T => { /* and EntityDescription */
-      log info s">>> OUT(${this.hashCode()} >>>: T"
+      log info s">>> OUT(${this.hashCode()}) >>>: T"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
-      //implicit val ec = context.system.dispatcher
       implicit val formats = DefaultFormats
-      implicit val serialization = jackson.Serialization
-      //val t = Marshal(msg)
-      val m = Marshal(List(msg)).to[RequestEntity]
-      
-      
-      //sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = HttpEntity(msg.toString)))
-       m onComplete {
-        case Success(value) =>
-          val reqEvent = RequestEvent(null, null)
-          val resEvent = ResponseEvent(reqEvent, null)
-          sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
-        case Failure(failure) => println (s"Failure: ${failure}")
-      }
+//      implicit val serialization = jackson.Serialization
+//      val m = Marshal(List(msg)).to[RequestEntity]
+
+      val e = Extraction.decompose(msg).asInstanceOf[JObject]
+      val written = write(e)
+      val r = HttpEntity(ContentTypes.`application/json`, written)
+
+      sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
+
+//       m onComplete {
+//        case Success(value) =>
+//          val reqEvent = RequestEvent(null, null)
+//          val resEvent = ResponseEvent(reqEvent, null)
+//          sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
+//        case Failure(failure) => println (s"Failure: ${failure}")
+//      }
 
     }
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"

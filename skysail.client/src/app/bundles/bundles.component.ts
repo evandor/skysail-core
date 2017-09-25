@@ -30,6 +30,8 @@ export class BundlesComponent implements OnInit {
   hidePageHelpFor: string = '';
   alerts: any;
 
+  selectedBundle: Bundle;
+
   constructor(private router: Router, private _backend: BackendService/*, private _appGlobals: AppGlobalsService*/) {
     //_appGlobals._alerts.subscribe(value => this.alerts = value);
     //_appGlobals._filteredCount.subscribe(value => this.filteredCount = value);
@@ -61,4 +63,7 @@ export class BundlesComponent implements OnInit {
       });
   }
 
+  onRowSelect(event) {
+    this.router.navigate(['/maincontent/bundles/' + event.data.id]);
+  }
 }

@@ -3,21 +3,25 @@ package io.skysail.core.resources
 import io.skysail.core.akka._
 import akka.actor.ActorRef
 import akka.util.Timeout
+
 import scala.concurrent.duration.DurationInt
 import akka.http.scaladsl.model.MediaTypes
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.server.actors.BundlesActor
 import java.net.URL
+
 import akka.pattern.ask
+
 import scala.io.Source
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.model.HttpEntity
 import akka.actor.actorRef2Scala
 import akka.util.Timeout.durationToTimeout
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class AssetsResource extends AsyncStaticResource with ActorContextAware {
 
-  override def get(sendBackTo: ActorRef): Unit = {
+  override def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = actorContext.system.dispatcher
     val bA = SkysailApplication.getBundlesActor(actorContext.system)
