@@ -1,16 +1,16 @@
 package io.skysail.server.auth.basic
 
 import domino.DominoActivator
-import org.osgi.framework.BundleContext
 import org.slf4j.LoggerFactory
 import io.skysail.api.security.AuthenticationService
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.{ Directive1, PathMatcher, RequestContext, Route }
 import akka.http.scaladsl.server.directives.Credentials
 
 class Activator extends DominoActivator {
 
   private var log = LoggerFactory.getLogger(this.getClass)
+
+  var password = "p4ssw0rd"
 
   whenBundleActive({
 
@@ -35,9 +35,20 @@ class Activator extends DominoActivator {
 
   })
 
+
+  whenConfigurationActive("auth") { conf =>
+    log info s"received configuration for 'auth.basic': ${conf}"
+    password = conf.getOrElse("password", "p4ssw0rd").asInstanceOf[String]
+    //var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
+    //var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
+    //serverConfig = ServerConfig(port, binding)
+    //routesTracker = new RoutesTracker(actorSystem)
+  }
+
+
   private def myUserPassAuthenticator(credentials: Credentials): Option[String] =
     credentials match {
-      case p @ Credentials.Provided(id) if p.verify("p4ssw0rd") => Some(id)
+      case p@Credentials.Provided(id) if p.verify(this.password) => Some(id)
       case _ => None
     }
 
