@@ -31,7 +31,7 @@ node {
    }
 
    stage('buildDockerImage') {
-     sh 'echo "" | sudo ./gradlew buildImage'
+     sh 'sudo ./gradlew buildImage'
    }
 
    stage('publishHTML') {
