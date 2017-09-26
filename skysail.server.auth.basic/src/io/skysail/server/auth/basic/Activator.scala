@@ -33,18 +33,13 @@ class Activator extends DominoActivator {
       def directive() = authenticateBasic(realm = "secure site", myUserPassAuthenticator)
     }.providesService[AuthenticationService]
 
+
+    whenConfigurationActive("auth") { conf =>
+      log info s"received configuration for 'auth.basic': not shown, contains password"
+      password = conf.getOrElse("password", "p4ssw0rd").asInstanceOf[String]
+    }
+
   })
-
-
-  whenConfigurationActive("auth") { conf =>
-    log info s"received configuration for 'auth.basic': ${conf}"
-    password = conf.getOrElse("password", "p4ssw0rd").asInstanceOf[String]
-    //var binding = conf.getOrElse("binding", defaultBinding).asInstanceOf[String]
-    //var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
-    //serverConfig = ServerConfig(port, binding)
-    //routesTracker = new RoutesTracker(actorSystem)
-  }
-
 
   private def myUserPassAuthenticator(credentials: Credentials): Option[String] =
     credentials match {

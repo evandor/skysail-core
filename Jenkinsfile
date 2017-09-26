@@ -30,6 +30,10 @@ node {
        )
    }
 
+   stage('buildDockerImage') {
+     sh './gradlew buildImage'
+   }
+
    stage('publishHTML') {
      publishHTML([
        allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 

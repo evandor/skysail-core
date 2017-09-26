@@ -6,6 +6,8 @@ apply plugin: 'java'
 apply plugin: 'org.scoverage'
 apply plugin: 'com.moowork.node'
 
+apply plugin: 'com.bmuschko.docker-remote-api'
+
 repositories {
     mavenCentral()
     maven {
@@ -21,6 +23,7 @@ buildscript {
   }
   dependencies {
     classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+    classpath "com.bmuschko:gradle-docker-plugin:3.0.11"
   }
 }
 
@@ -31,6 +34,30 @@ dependencies {
     
 }
 
+task copyConf(type : Copy) {
+    println "copying configuration"
+    from "config"
+    into "etc/release/config"
+}
+
+task copyRunnables(type : Copy) {
+    println "copying executable"
+    from "generated/distributions/executable"
+    into "etc/release"
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task buildImage(type: DockerBuildImage) {
+    //dependsOn createDockerfile
+    inputDir = project.file('etc/release')//createDockerfile.destFile.parentFile
+    tag = 'evandor/skysail-server'
+}
+
+task runnable(dependsOn: ['copyConf', 'copyRunnables']) {
+    println "copying configuration..."
+}
 
 /*task myScript(type: NodeTask) {
   script = file('client/npm-build.js')

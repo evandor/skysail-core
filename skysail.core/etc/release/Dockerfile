@@ -1,10 +1,19 @@
 # http://paulbakker.io/docker/docker-osgi/
+#
+# In project root dir:
+#
 # ./gradlew clean build skysail.core:export.core.int skysail.core:runnable
-# docker build -f Dockerfile.app.demo -t evandor/skysail .
+#
+# cd skysail.core/etc/release
+#
+# docker build -t evandor/skysail-server .
+#
 # docker rmi $(docker images -f "dangling=true" -q)
 # docker stop $(docker ps -a -q)
 # docker container prune
-# docker run -ti --rm hello-skysail
+# docker run -ti --rm -p 9102:9102 evandor/skysail-server
+# docker login
+# docker push evandor/skysail-server
 FROM java
 
 RUN echo "executing 'useradd -d /home/skysail -m -s /bin/bash skysail'"
@@ -19,18 +28,16 @@ WORKDIR /home/skysail
 RUN echo "creating /home/skysail/products/demo"
 RUN mkdir -p /home/skysail/products/demo/plugins
 
-COPY skysail.core/generated/distributions/executable/core.int.jar /home/skysail/products/demo/core.int.jar
+COPY core.int.jar /home/skysail/products/demo/core.int.jar
+COPY config/ /home/skysail/products/demo/config/
 
-COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
+#COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
 
 #COPY etc/docker/start.sh /home/skysail/products/demo/start.sh
 #RUN chmod 775 /home/skysail/products/demo/start.sh
 
 WORKDIR /home/skysail/products/demo
 
-#CMD ["ls","-al"]
-#CMD ["start.sh", "run"]
-#CMD ["java", "-jar" "skysail.app.demo.jar"]
 CMD ["java","-jar","/home/skysail/products/demo/core.int.jar"]
 
-EXPOSE 8080
+EXPOSE 9102
