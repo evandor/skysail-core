@@ -28,8 +28,8 @@ WORKDIR /home/skysail
 #RUN echo "creating /home/skysail/products/demo"
 RUN mkdir -p /home/skysail/products/demo/plugins
 
-COPY config/ /home/skysail/products/demo/config/
-COPY core.int.jar /home/skysail/products/demo/core.int.jar
+COPY etc/release/config/ /home/skysail/products/demo/config/
+COPY etc/release/core.int.jar /home/skysail/products/demo/core.int.jar
 
 #COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
 
