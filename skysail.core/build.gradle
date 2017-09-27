@@ -42,7 +42,7 @@ task copyConf(type : Copy) {
 
 task copyRunnables(type : Copy) {
     println "copying executable"
-    from "../../generated/distributions/executable"
+    from "generated/distributions/executable"
     into "etc/release"
 }
 

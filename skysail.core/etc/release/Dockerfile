@@ -29,7 +29,7 @@ WORKDIR /home/skysail
 RUN mkdir -p /home/skysail/products/demo/plugins
 
 COPY config/ /home/skysail/products/demo/config/
-COPY core.int.jar /home/skysail/products/demo/core.int.jar
+COPY ../../../skysail-core.export.int/workspace/skysail.core/generated/distributions/executable/core.int.jar /home/skysail/products/demo/core.int.jar
 
 #COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
 
