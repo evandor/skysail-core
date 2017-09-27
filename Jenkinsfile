@@ -24,10 +24,14 @@ node {
       sh './gradlew reportScoverage'   
    }   
    
-   stage('deploy') {
+   /*stage('deploy') {
        parallel (
            server_int: { build 'skysail-core.export.int'}
        )
+   }*/
+
+   stage('buildJar') {
+     sh 'sudo ./gradlew skysail.core:export.core.int'
    }
 
    stage('buildDockerImage') {
