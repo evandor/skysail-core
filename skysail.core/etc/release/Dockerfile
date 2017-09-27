@@ -25,11 +25,11 @@ USER skysail
 ENV HOME /home/skysail
 WORKDIR /home/skysail
 
-RUN echo "creating /home/skysail/products/demo"
+#RUN echo "creating /home/skysail/products/demo"
 RUN mkdir -p /home/skysail/products/demo/plugins
 
-COPY core.int.jar /home/skysail/products/demo/core.int.jar
 COPY config/ /home/skysail/products/demo/config/
+COPY core.int.jar /home/skysail/products/demo/core.int.jar
 
 #COPY skysail.app.demo/generated/skysail.app.demo.jar /home/skysail/products/demo/plugins/skysail.app.demo.jar
 
