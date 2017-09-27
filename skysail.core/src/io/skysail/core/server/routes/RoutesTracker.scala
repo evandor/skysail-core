@@ -11,11 +11,7 @@ import io.skysail.api.security.AuthenticationService
 class RoutesTracker(system: ActorSystem) {
 
   private val log = LoggerFactory.getLogger(this.getClass())
-
-  log info s"created RoutesTracker"
-
   private var routesBuffer = scala.collection.mutable.ListBuffer[Route]()
-
   private val routesCreator = RoutesCreator(system)
 
   def routes(): List[Route] = routesBuffer.toList
@@ -35,8 +31,6 @@ class RoutesTracker(system: ActorSystem) {
     log info "========================================="
     log info s"Removing routes from ${appInfoProvider.getClass.getName}"
     log info "========================================="
-    //log info s"Removing routes ${s.routes()} not supplied no more from ${s.getClass.getName}"
-    //routes --= s.routes()
     // TODO need to fix that, routes are not removed
     val routesFromProvider = appInfoProvider.routes()
     routesBuffer --= routesFromProvider.map { prt => routesCreator.createRoute(prt, appInfoProvider) }.toList
