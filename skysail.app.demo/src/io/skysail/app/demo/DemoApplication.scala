@@ -40,6 +40,7 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
   override def menu() = {
     Some(
       MenuItem("DemoApp", "fa-file-o", None, Some(List(
+        MenuItem("Config", "fa-plus", Some("/client/demo/v1/configs")),
         MenuItem("ElasticSearch", "fa-plus", Some("/client/demo/v1/indices")),
         MenuItem("Contacts", "fa-user", None, Some(List(
           MenuItem("add Contact", "fa-plus", Some("/client/demo/v1/contacts/new"))    

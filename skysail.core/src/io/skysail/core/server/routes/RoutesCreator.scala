@@ -61,27 +61,10 @@ class RoutesCreator(system: ActorSystem) {
   val pathMatcherFactory = PathMatcherFactory
 
   def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
-
     val appRoute = appInfoProvider.appModel.appRoute
-
     log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
-
     val pathMatcher = PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
-//      mapping.path.trim() match {
-//        case "" =>
-//          appRoute ~ PathEnd
-//        case "/" =>
-//          appRoute / PathEnd
-//        case p if (p.endsWith("/*")) =>
-//          appRoute / PathMatcher(p.substring(1, p.length() - 2))
-//        case p if (p.substring(1, p.length() - 2).contains("/")) =>
-//          val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
-//          segments.foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
-//        case any => appRoute / getMatcher(any) ~ PathEnd
-//      }
-
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
-
     staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath()
   }
 
