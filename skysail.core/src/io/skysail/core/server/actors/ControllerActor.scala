@@ -1,6 +1,7 @@
 package io.skysail.core.akka
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
+import akka.actor.{Actor, ActorLogging, ActorRef, OneForOneStrategy, Props}
 import akka.event.LoggingReceive
 import akka.util.Timeout
 
@@ -30,8 +31,6 @@ object ControllerActor {
 class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
-
-  // log debug s"new ControllerActor created -> Resource('${resource}')"
 
   val originalSender = sender
   var sendBackTo: ActorRef = null
@@ -105,5 +104,14 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   override def preRestart(reason: Throwable, message: Option[Any]) {
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
+
+  override val supervisorStrategy =
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
+      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
+      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
+      case _: Exception                => log warning "HIER: EACALATE"; Escalate
+      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
+    }
 
 }
