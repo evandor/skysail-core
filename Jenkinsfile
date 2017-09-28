@@ -38,6 +38,10 @@ node {
      sh 'sudo ./gradlew runnable buildImage'
    }
 
+   stage('restartDockerContainer') {
+     sh './skysail.core/deployment/scripts/run_docker.sh'
+   }
+
    stage('publishHTML') {
      publishHTML([
        allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
