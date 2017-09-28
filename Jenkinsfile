@@ -39,7 +39,7 @@ node {
    }
 
    stage('restartDockerContainer') {
-     sh './skysail.core/deployment/scripts/run_docker.sh'
+     sh 'sudo ./skysail.core/deployment/scripts/run_docker.sh'
    }
 
    stage('publishHTML') {
