@@ -53,7 +53,7 @@ task buildImage(type: DockerBuildImage) {
     //dependsOn createDockerfile
     inputDir = project.file('etc/release')//createDockerfile.destFile.parentFile
     tag = 'evandor/skysail-server'
-    noCache = true
+    //noCache = true
 }
 
 task runnable(dependsOn: ['copyConf', 'copyRunnables']) {
