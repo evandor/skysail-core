@@ -1,23 +1,22 @@
 package io.skysail.core.server.actors
 
-import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.http.scaladsl.server.RequestContext
-import io.skysail.core.akka.ResponseEvent
-import io.skysail.core.model.ApplicationModel
-import org.osgi.framework.BundleContext
+import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
+import akka.actor.{Actor, ActorLogging, OneForOneStrategy, Props}
+import akka.event.LoggingReceive
 import akka.http.scaladsl.model.Uri
-import io.skysail.core.app.SkysailApplication
-import io.skysail.core.akka.ControllerActor
-import io.skysail.core.resources.Resource
+import akka.http.scaladsl.server.RequestContext
 import akka.pattern.ask
 import akka.util.Timeout
-import scala.concurrent.duration.DurationInt
+import io.skysail.core.akka.{ControllerActor, ResponseEvent}
+import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
+import io.skysail.core.model.ApplicationModel
+import io.skysail.core.resources.Resource
+import org.osgi.framework.BundleContext
 
+import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
-import akka.event.LoggingReceive
-import io.skysail.core.app.ApplicationProvider
 
 object ApplicationActor {
 
@@ -96,5 +95,16 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
       sender ! None
     }
   }
+
+  /*override val supervisorStrategy =
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+      case _: ArithmeticException      => log warning "HIER2: RESUMING"; Resume
+      case _: NullPointerException     => log warning "HIER2: RESTART"; Restart
+      case _: IllegalArgumentException => log warning "HIER2: STOPPIG"; Stop
+      case _: Exception                => log warning "HIER2: EACALATE"; Escalate
+      case _: scala.NotImplementedError => log warning "HIER2: EACALATE"; Escalate
+      case _: Any => log warning "HIER2: XXX"; Resume
+    }*/
+
 
 }

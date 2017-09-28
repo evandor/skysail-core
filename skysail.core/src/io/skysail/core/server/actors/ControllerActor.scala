@@ -1,24 +1,20 @@
 package io.skysail.core.akka
 
-import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
-import akka.actor.{Actor, ActorLogging, ActorRef, OneForOneStrategy, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.event.LoggingReceive
-import akka.util.Timeout
-
-import scala.concurrent.duration.DurationInt
-import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
-import org.json4s.{DefaultFormats, Extraction, JObject, jackson, native}
-import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
-
-import scala.util.Success
-import scala.util.Failure
-import io.skysail.core.model.ApplicationModel
-import org.osgi.framework.BundleContext
-import io.skysail.core.resources._
+import akka.util.Timeout
+import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import io.skysail.core.app.resources.PostSupport
-import org.json4s.jackson.Serialization.{read, write}
+import io.skysail.core.model.ApplicationModel
+import io.skysail.core.resources._
+import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
+import org.json4s.jackson.Serialization.write
+import org.json4s.{DefaultFormats, Extraction, JObject, jackson}
+import org.osgi.framework.BundleContext
+
+import scala.concurrent.duration.DurationInt
 
 object ControllerActor {
   case class GetRequest()
@@ -105,13 +101,14 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
 
-  override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
-      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
-      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
-      case _: Exception                => log warning "HIER: EACALATE"; Escalate
-      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
-    }
+//  override val supervisorStrategy =
+//    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+//      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
+//      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
+//      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
+//      case _: Exception                => log warning "HIER: EACALATE"; Escalate
+//      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
+//      case _: Any => log warning "HIER: XXX"; Resume
+//    }
 
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Observable';
 import { Bundle } from '../domain/bundle'
+import { BundleDetails } from '../domain/bundleDetails'
 import { Service } from '../domain/service'
 import { MenuItem } from '../domain/menuitem'
 
@@ -25,15 +26,29 @@ export class BackendService {
   getBundles(): Observable<Bundle[]> {
     return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
       .map(res => res.json())
-      .catch(err => { 
+      .catch(err => {
         console.log("Backend Error in getBundles:", err);
-        return Observable.of([new Bundle("1","symbolicName")])
-     })
+        return Observable.of([new Bundle("1", "symbolicName"), new Bundle("2", "symbolicName2")])
+      })
+  }
+
+  getBundleDetails(id: string): Observable<BundleDetails> {
+    console.log("calling '/root/bundles/'" + id)
+    return this._http.get('/root/bundles/' + id, { headers: this.headers })
+      .map(res => res.json())
+      .catch(err => {
+        console.log("Backend Error in getBundleDetails(id):", err);
+        return Observable.of(new BundleDetails())
+      })
   }
 
   getServices(): Observable<Service[]> {
     return this._http.get('/root/services', { headers: this.headers })
-      .map(res => res.json());
+      .map(res => res.json())
+      .catch(err => {
+        console.log("Backend Error in getServices:", err);
+        return Observable.of([new Service("1", "objectClass"), new Service("2", "objectClass2")])
+      })
   }
 
   getApps(): Observable<Object[]> {
@@ -44,10 +59,10 @@ export class BackendService {
   getLeftMenuItems(): Observable<MenuItem[]> {
     return this._http.get('/root/apps/menus', { headers: this.headers })
       .map(res => res.json())
-      .catch(err => { 
+      .catch(err => {
         console.log("Backend Error in getLeftMenuItems:", err);
-        return Observable.of([new MenuItem('Bundles','fa-th-large','/maincontent/bundles'),new MenuItem('Services','fa-play-circle','/maincontent/services')])
-     })
+        return Observable.of([new MenuItem('Bundles', 'fa-th-large', '/maincontent/bundles'), new MenuItem('Services', 'fa-play-circle', '/maincontent/services')])
+      })
   }
 
   getGeneric(path: string): Observable<Object[]> {

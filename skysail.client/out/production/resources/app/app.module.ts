@@ -23,6 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaincontentComponent } from './maincontent/maincontent.component';
 import { LeftmenuComponent } from './leftmenu/leftmenu.component';
 import { OsgiServicesComponent } from './osgi-services/osgi-services.component';
+import { BundleComponent } from './bundle/bundle.component';
+import { InfotableComponent } from './layout/infotable/infotable.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { OsgiServicesComponent } from './osgi-services/osgi-services.component';
     GenericComponent,
     MaincontentComponent,
     LeftmenuComponent,
-    OsgiServicesComponent
+    OsgiServicesComponent,
+    BundleComponent,
+    InfotableComponent
   ],
   imports: [
     BrowserModule,

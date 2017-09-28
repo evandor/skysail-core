@@ -1,33 +1,27 @@
 package io.skysail.app.demo
 
 import akka.actor.ActorRef
+import akka.http.scaladsl.model.{ContentTypes, ResponseEntity}
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import io.skysail.core.akka.actors._
-import org.apache.http.{HttpEntity, HttpResponse}
-import org.apache.http.client.{ClientProtocolException, ResponseHandler}
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
-import org.apache.http.util.EntityUtils
-
-import scala.reflect.ClassTag
-import org.json4s.{DefaultFormats, jackson, native}
-import akka.http.scaladsl.model.ContentTypes
-import akka.util.ByteString
-import akka.http.scaladsl.model.ResponseEntity
 import akka.stream.ActorMaterializer
+import akka.util.ByteString
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+import io.skysail.core.app.SkysailApplication
+import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.server.actors.ApplicationActor
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
+import org.apache.http.HttpResponse
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.client.{ClientProtocolException, ResponseHandler}
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.util.EntityUtils
+import org.json4s.{DefaultFormats, jackson}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import io.skysail.core.resources.Resource
-import io.skysail.core.security.AuthorizeByRole
-import io.skysail.core.app.SkysailApplication
-import io.skysail.core.server.actors.ApplicationActor
+import scala.reflect.ClassTag
 import akka.pattern.ask
 
-import scala.util.Success
-import scala.util.Failure
-import io.skysail.core.resources.AsyncListResource
-import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
+import scala.util.{Failure, Success}
 
 class EsResource extends AsyncListResource[DemoRoot] {
 
@@ -119,22 +113,22 @@ class MappingResource extends AsyncListResource[Mapping] {
   //    }
   //  }
 
-  def get() = ???
-
-  def get(path: String) = {
-    val httpget = new HttpGet(path)
-    val responseHandler = new ResponseHandler[String]() {
-      override def handleResponse(response: HttpResponse): String = {
-        val status = response.getStatusLine.getStatusCode
-        if (status >= 200 && status < 300) {
-          val entity = response.getEntity
-          if (entity != null) EntityUtils.toString(entity)
-          else null
-        } else throw new ClientProtocolException("Unexpected response status: " + status)
-      }
-    }
-    httpclient.execute(httpget, responseHandler)
-  }
+  //  def get() = ???
+  //
+  //  def get(path: String) = {
+  //    val httpget = new HttpGet(path)
+  //    val responseHandler = new ResponseHandler[String]() {
+  //      override def handleResponse(response: HttpResponse): String = {
+  //        val status = response.getStatusLine.getStatusCode
+  //        if (status >= 200 && status < 300) {
+  //          val entity = response.getEntity
+  //          if (entity != null) EntityUtils.toString(entity)
+  //          else null
+  //        } else throw new ClientProtocolException("Unexpected response status: " + status)
+  //      }
+  //    }
+  //    httpclient.execute(httpget, responseHandler)
+  //  }
 
   def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
     ???
@@ -146,23 +140,14 @@ class MappingResource extends AsyncListResource[Mapping] {
 }
 
 class ConfigsResource extends AsyncListResource[ConfigDetails] {
-  //  override protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-  //    val appActor = SkysailApplication.getApplicationActorSelection(context.system, classOf[DemoApplication].getName)
-  //    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
-  //    r onComplete {
-  //      case Success(app) => sender ! app.getConfigs()
-  //      case Failure(failure) => log error s"$failure"
-  //    }
-  //  }
-  //}
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
-    ???
-  }
 
-  def get() = ???
-
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
-    ???
+  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
+    val appActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[DemoApplication].getName)
+    val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
+    r onComplete {
+      case Success(app) => sender ! app.getConfigs()
+      case Failure(failure) => println (s"FAILURE: $failure")
+    }
   }
 
 }

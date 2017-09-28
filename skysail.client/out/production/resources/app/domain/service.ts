@@ -8,7 +8,8 @@ export class Service {
     properties: Map<string, string>;
     usingBundles: {};
 
-    constructor() {
-        this.properties = new Map<string, string>();
+    constructor(id: string, name: string) {
+        this.id = id;
+        this.objectClass = "objectClass";
     }
 }
