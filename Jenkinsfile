@@ -38,9 +38,16 @@ node {
      sh 'sudo ./gradlew runnable buildImage'
    }
 
-   stage('restartDockerContainer') {
+   /*stage('restartDockerContainer') {
      sh 'sudo ./skysail.core/deployment/scripts/stop_docker.sh'
      //sh 'sudo ./skysail.core/deployment/scripts/run_docker.sh'
+   }*/
+
+   stage('restartDockerContainer') {
+     // docker run --name skysail-server -t --rm -p 9102:9102 evandor/skysail-server
+     docker.image('evandor/skysail-server:latest').run('--name skysail-server -t --rm -p 9102:9102') {c ->
+
+     }
    }
 
    stage('publishHTML') {
