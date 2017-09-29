@@ -553,7 +553,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
-      <library name="Gradle: skysail.api">
+      <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
         </CLASSES>
@@ -573,15 +573,6 @@
     <orderEntry type="module" module-name="skysail.api" scope="RUNTIME" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.scala-lang:scala-library:2.11.8" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.scala-lang:scala-reflect:2.11.8" level="project" />
-    <orderEntry type="module-library" scope="RUNTIME">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/bin" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
       <library name="Gradle: osgi.core-6.0.0.201403061837">
         <CLASSES>
@@ -1105,9 +1096,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
-      <library name="Gradle: skysail.api">
+      <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
+          <root url="file://$MODULE_DIR$/bin" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1117,6 +1108,15 @@
       <library name="Gradle: domino_2.11-1.1.2">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../cnf/localrepo/domino_2.11/domino_2.11-1.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1648,15 +1648,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: skysail.api">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
       <library name="Gradle: domino_2.11-1.1.2">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../cnf/localrepo/domino_2.11/domino_2.11-1.1.2.jar!/" />
@@ -1668,13 +1659,22 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="file://$MODULE_DIR$/bin_test" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/bin" />
