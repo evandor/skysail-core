@@ -583,7 +583,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
-      <library>
+      <library name="Gradle: skysail.server.auth.none">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../skysail.server.auth.none/generated/skysail.server.auth.none.jar!/" />
         </CLASSES>
@@ -647,6 +647,15 @@
     </orderEntry>
     <orderEntry type="module" module-name="skysail.api" scope="RUNTIME" />
     <orderEntry type="module" module-name="skysail.server.auth.none" scope="RUNTIME" />
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/bin" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
       <library name="Gradle: osgi.core-6.0.0.201403061837">
         <CLASSES>
@@ -1206,9 +1215,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
-      <library>
+      <library name="Gradle: skysail.server.auth.none">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/bin" />
+          <root url="jar://$MODULE_DIR$/../skysail.server.auth.none/generated/skysail.server.auth.none.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1227,15 +1236,6 @@
       <library name="Gradle: io.skysail.bundled.kamon-core_2.11-0.6.7">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../cnf/localrepo/io.skysail.bundled.kamon-core_2.11/io.skysail.bundled.kamon-core_2.11-0.6.7.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.server.auth.none/generated/skysail.server.auth.none.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1838,6 +1838,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="TEST">
+      <library name="Gradle: skysail.server.auth.none">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.server.auth.none/generated/skysail.server.auth.none.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
       <library name="Gradle: domino_2.11-1.1.2">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../cnf/localrepo/domino_2.11/domino_2.11-1.1.2.jar!/" />
@@ -1892,15 +1901,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="TEST">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.server.auth.none/generated/skysail.server.auth.none.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/bin_test" />
