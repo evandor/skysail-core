@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
         url: 'apps'
       },
       {
-        label: 'Runtime!',
+        label: 'Runtime',
         icon: 'fa-play-circle',
         url: 'maincontent'
       }

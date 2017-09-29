@@ -29,7 +29,9 @@ export class GenericComponent implements OnInit {
   ngOnInit() {
     this.path.subscribe(
       value => {
-        this._backend.getGeneric("/" + value)
+        console.log ("value = '"+value+"'")
+        console.log ("value = '"+value.substring("/maincontent/generic".length)+"'")
+        this._backend.getGeneric("/" + value.substring("/maincontent/generic".length))
         .subscribe(res => {
           this.apps = res;
         }, error => {
