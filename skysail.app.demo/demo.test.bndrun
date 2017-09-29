@@ -53,6 +53,7 @@ skysail.server.um:
 	skysail.server.auth.basic;version=latest,\
 	skysail.server.persistence.orientdb;version=latest,\
 	skysail.app.demo;version=latest,\
+	skysail.app.elasticsearch;version=latest,\
 	org.hibernate.validator;version=5.2.4,\
 	com.typesafe.akka.persistence.query;version=2.5.4,\
 	org.scalaz.core;version=7.2.13,\

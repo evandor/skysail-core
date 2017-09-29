@@ -1,11 +1,11 @@
 package io.skysail.app.demo
 
 import io.skysail.app.demo.DemoApplication._
-import io.skysail.core.app._
 import org.osgi.service.cm.ConfigurationAdmin
 import org.osgi.service.component.annotations._
 import io.skysail.core.app.menus.MenuItem
 import io.skysail.api.persistence.DbService
+import io.skysail.core.app._
 import org.osgi.service.component.ComponentContext
 
 object DemoApplication {
@@ -51,8 +51,6 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
   override def routesMappings = List(
     RouteMapping("",classOf[EsResource]),
     RouteMapping("/",classOf[ContactsResource]),
-    RouteMapping("/indices",classOf[IndicesResource]),
-    RouteMapping("/indices/",classOf[IndicesResource]),
     RouteMapping("/configs",classOf[ConfigsResource]),
     RouteMapping("/mappings",classOf[MappingResource]),
     RouteMapping("/assets",classOf[MyAssetsController]),
