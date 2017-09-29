@@ -4,8 +4,8 @@ del_stopped(){
   local name=$1
   local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
 
-  if [[ "$state" == "false" ]]; then
-    docker rm $name
+  if [[ "$state" == "true" ]]; then
+    docker stop $name
   fi
 }
 
