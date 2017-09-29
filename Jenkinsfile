@@ -39,7 +39,7 @@ node {
    }
 
    stage('restartDockerContainer') {
-     sh 'sudo ./skysail.core/deployment/scripts/stop_docker.sh'
+     //sh 'sudo ./skysail.core/deployment/scripts/stop_docker.sh'
      script{
        withEnv(['JENKINS_NODE_COOKIE =dontkill']) {
          sh "sudo ./skysail.core/deployment/scripts/run_docker.sh &"
