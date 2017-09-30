@@ -50,9 +50,9 @@ node {
      }
    }*/
 
-   stage('coverage') {
-      sh './gradlew reportScoverage'
-   }
+   //stage('coverage') {
+   //   sh './gradlew reportScoverage'
+   //}
 
    stage('publishHTML') {
      publishHTML([
