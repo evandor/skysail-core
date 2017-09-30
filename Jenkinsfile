@@ -31,20 +31,20 @@ node {
    }*/
 
    stage('buildJar') {
-     sh 'sudo ./gradlew skysail.core:export.core.int'
+     sh 'sudo ./gradlew clean skysail.core:export.core.int'
    }
 
    stage('buildDockerImage') {
-     sh 'sudo ./gradlew runnable buildImage'
+     //sh 'sudo ./gradlew runnable buildImage'
    }
 
    stage('restartDockerContainer') {
      //sh 'sudo ./skysail.core/deployment/scripts/stop_docker.sh'
-     script{
+     /*script{
        withEnv(['JENKINS_NODE_COOKIE =dontkill']) {
          sh "sudo ./skysail.core/deployment/scripts/run_docker.sh &"
        }
-     }
+     }*/
    }
 
    /*stage('restartDockerContainer') {
