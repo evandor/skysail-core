@@ -31,7 +31,7 @@ node {
    }*/
 
    stage('buildJar') {
-     sh 'sudo ./gradlew skysail.core:export.core.int'
+     sh './gradlew skysail.core:export.core.int'
    }
 
    stage('buildDockerImage') {
