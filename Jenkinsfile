@@ -15,14 +15,10 @@ node {
       sh './gradlew clean build'
    }
 
-   stage('cucumber') {
+   /*stage('cucumber') {
 	 //build 'skysail.cucumber'
 	 //step([$class: 'CucumberReportPublisher', failedFeaturesNumber: 0, failedScenariosNumber: 0, failedStepsNumber: 0, fileExcludePattern: '', fileIncludePattern: '**/cucumber.json', jsonReportDirectory: '', parallelTesting: false, pendingStepsNumber: 0, skippedStepsNumber: 0, trendsLimit: 0, undefinedStepsNumber: 0])
-   }   
-   
-   stage('coverage') {
-      sh './gradlew reportScoverage'   
-   }   
+   }   */
    
    /*stage('deploy') {
        parallel (
@@ -34,11 +30,11 @@ node {
      sh './gradlew skysail.core:export.core.int'
    }
 
-   stage('buildDockerImage') {
+   stage('build Docker Image') {
      sh 'sudo ./gradlew runnable buildImage'
    }
 
-   stage('restartDockerContainer') {
+   stage('restart Docker Container') {
      //sh 'sudo ./skysail.core/deployment/scripts/stop_docker.sh'
      script{
        withEnv(['JENKINS_NODE_COOKIE =dontkill']) {
@@ -53,6 +49,10 @@ node {
 
      }
    }*/
+
+   stage('coverage') {
+      sh './gradlew reportScoverage'
+   }
 
    stage('publishHTML') {
      publishHTML([
