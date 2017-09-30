@@ -6,6 +6,7 @@ del_stopped(){
 
   if [[ "$state" == "true" ]]; then
     docker stop $name
+    docker rm $name
   fi
 }
 
