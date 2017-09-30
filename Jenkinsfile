@@ -12,7 +12,7 @@ node {
    
    stage('gradle build') {
       //buildCode()
-      sh './gradlew build'
+      sh './gradlew clean build'
    }
 
    stage('cucumber') {
@@ -31,7 +31,7 @@ node {
    }*/
 
    stage('buildJar') {
-     sh 'sudo ./gradlew clean skysail.core:export.core.int'
+     sh 'sudo ./gradlew skysail.core:export.core.int'
    }
 
    stage('buildDockerImage') {
