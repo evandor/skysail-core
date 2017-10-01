@@ -4,10 +4,13 @@ import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{ActorRef, ActorSelection, ActorSystem}
+import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
 import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
+import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
@@ -65,7 +68,7 @@ class RoutesCreator(system: ActorSystem) {
     log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
     val pathMatcher = PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
-    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath()
+    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
   }
 
   private def indexPath(): Route = {
@@ -73,6 +76,24 @@ class RoutesCreator(system: ActorSystem) {
       get {
         getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader)
       }
+    }
+  }
+
+  //implicit val materializer = ActorMaterializer()
+
+  def greeter: Flow[Message, Message, Any] =
+    Flow[Message].mapConcat {
+      case tm: TextMessage =>
+        TextMessage(Source.single("Hello ") ++ tm.textStream ++ Source.single("!")) :: Nil
+      case bm: BinaryMessage =>
+        // ignore binary messages but drain content to avoid the stream being clogged
+        // bm.dataStream.runWith(Sink.ignore)
+        Nil
+    }
+
+  private def websocketPath(): Route = {
+    path("websocket") {
+      handleWebSocketMessages(greeter)
     }
   }
 
@@ -109,27 +130,27 @@ class RoutesCreator(system: ActorSystem) {
 
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
-//    pathPrefix(pathMatcherWithClass._1.asInstanceOf[PathMatcher[Unit]]) {
-//      test() {
-//        authenticationDirective(authentication) { username =>
-//          get {
-//            extractRequestContext {
-//              ctx =>
-//                test1("test1str") { f =>
-//                  println(f)
-//                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-//                }
-//            }
-//          } ~
-//            post {
-//              extractRequestContext {
-//                ctx =>
-//                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-//              }
-//            }
-//        }
-//      }
-//    }
+    //    pathPrefix(pathMatcherWithClass._1.asInstanceOf[PathMatcher[Unit]]) {
+    //      test() {
+    //        authenticationDirective(authentication) { username =>
+    //          get {
+    //            extractRequestContext {
+    //              ctx =>
+    //                test1("test1str") { f =>
+    //                  println(f)
+    //                  routeWithUnmatchedPath(ctx, mapping, appProvider)
+    //                }
+    //            }
+    //          } ~
+    //            post {
+    //              extractRequestContext {
+    //                ctx =>
+    //                  routeWithUnmatchedPath(ctx, mapping, appProvider)
+    //              }
+    //            }
+    //        }
+    //      }
+    //    }
 
     pathMatcherWithClass match {
       case (pm: Any, Unit) =>
@@ -178,13 +199,14 @@ class RoutesCreator(system: ActorSystem) {
         }
       }
       case (first: Any, second: Any) =>
-        println(s"Unmatched! First '$first', Second ${second}"); get {
-        pathPrefix("") {
-          complete {
-            "error"
+        println(s"Unmatched! First '$first', Second ${second}");
+        get {
+          pathPrefix("") {
+            complete {
+              "error"
+            }
           }
         }
-      }
     }
 
   }

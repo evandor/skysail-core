@@ -6,6 +6,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AppsComponent } from './apps/apps.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BackendService } from './services/backend.service';
+import { ChatService } from './services/chatService';
 import { BundlesComponent } from './bundles/bundles.component';
 
 import {
@@ -25,6 +26,7 @@ import { LeftmenuComponent } from './leftmenu/leftmenu.component';
 import { OsgiServicesComponent } from './osgi-services/osgi-services.component';
 import { BundleComponent } from './bundle/bundle.component';
 import { InfotableComponent } from './layout/infotable/infotable.component';
+import { ChatComponentComponent } from './chat-component/chat-component.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { InfotableComponent } from './layout/infotable/infotable.component';
     LeftmenuComponent,
     OsgiServicesComponent,
     BundleComponent,
-    InfotableComponent
+    InfotableComponent,
+    ChatComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,7 @@ import { InfotableComponent } from './layout/infotable/infotable.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [BackendService],
+  providers: [BackendService,ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

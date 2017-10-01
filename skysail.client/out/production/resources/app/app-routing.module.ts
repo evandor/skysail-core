@@ -7,11 +7,13 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 import { GenericComponent } from './generic/generic.component'
 import { MaincontentComponent } from './maincontent/maincontent.component'
 import { OsgiServicesComponent } from './osgi-services/osgi-services.component'
+import { ChatComponentComponent } from './chat-component/chat-component.component'
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'apps', component: AppsComponent },
+  { path: 'chat', component: ChatComponentComponent },
   { path: 'bundles', component: BundlesComponent },
   { path: 'services', component: OsgiServicesComponent },
   {
