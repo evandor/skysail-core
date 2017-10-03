@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{ActorRef, ActorSelection, ActorSystem}
 import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
@@ -76,7 +76,13 @@ class RoutesCreator(system: ActorSystem) {
       get {
         getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader)
       }
-    }
+    } ~
+      path("v2") {
+        get {
+          val r = io.skysail.core.app.resources.html.index4.apply()
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
+        }
+      }
   }
 
   //implicit val materializer = ActorMaterializer()
@@ -100,8 +106,8 @@ class RoutesCreator(system: ActorSystem) {
   private def clientPath(): Route = {
     pathPrefix("client") {
       get {
-        getFromResourceDirectory("client", getClientClassloader /*classOf[AkkaServer].getClassLoader*/)
-        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader /*classOf[AkkaServer].getClassLoader*/)
+        getFromResourceDirectory("client", getClientClassloader )
+        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader )
       }
     }
   }
@@ -130,33 +136,12 @@ class RoutesCreator(system: ActorSystem) {
 
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
-    //    pathPrefix(pathMatcherWithClass._1.asInstanceOf[PathMatcher[Unit]]) {
-    //      test() {
-    //        authenticationDirective(authentication) { username =>
-    //          get {
-    //            extractRequestContext {
-    //              ctx =>
-    //                test1("test1str") { f =>
-    //                  println(f)
-    //                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-    //                }
-    //            }
-    //          } ~
-    //            post {
-    //              extractRequestContext {
-    //                ctx =>
-    //                  routeWithUnmatchedPath(ctx, mapping, appProvider)
-    //              }
-    //            }
-    //        }
-    //      }
-    //    }
-
     pathMatcherWithClass match {
       case (pm: Any, Unit) =>
         pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {
           test() {
             authenticationDirective(authentication) { username =>
+
               get {
                 extractRequestContext {
                   ctx =>
@@ -179,21 +164,23 @@ class RoutesCreator(system: ActorSystem) {
         pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { urlParameter =>
           test() {
             authenticationDirective(authentication) { username =>
-              get {
-                extractRequestContext {
-                  ctx =>
-                    test1("test1str") { f =>
-                      println(f)
-                      routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
-                    }
-                }
-              } ~
-                post {
+              optionalHeaderValueByName("Accept") { acceptHeader =>
+                get {
                   extractRequestContext {
                     ctx =>
-                      routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                      test1("test1str") { f =>
+                        println(f)
+                        routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                      }
                   }
-                }
+                } ~
+                  post {
+                    extractRequestContext {
+                      ctx =>
+                        routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                    }
+                  }
+              }
             }
           }
         }
@@ -214,25 +201,31 @@ class RoutesCreator(system: ActorSystem) {
   private def createRoute(mapping: RouteMapping[_], appProvider: ApplicationProvider, urlParameter: List[String] = List()): Route = {
     test() {
       authenticationDirective(authentication) { username =>
-        get {
-          extractRequestContext {
-            ctx =>
-              test1("test1str") { f =>
-                routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
-              }
-          }
-        } ~
-          post {
+        optionalHeaderValueByName("Accept") { acceptHeader =>
+          get {
             extractRequestContext {
               ctx =>
-                routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                test1("test1str") { f =>
+                  routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                }
             }
-          }
+          } ~
+            post {
+              extractRequestContext {
+                ctx =>
+                  routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+              }
+            }
+        }
       }
     }
   }
 
-  private def routeWithUnmatchedPath(ctx: RequestContext, mapping: RouteMapping[_], appProvider: ApplicationProvider, urlParameter: List[String] = List()): Route = {
+  private def routeWithUnmatchedPath(
+                                      ctx: RequestContext,
+                                      mapping: RouteMapping[_],
+                                      appProvider: ApplicationProvider,
+                                      urlParameter: List[String] = List()): Route = {
     extractUnmatchedPath { unmatchedPath =>
       val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
       val processCommand = ApplicationActor.ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)

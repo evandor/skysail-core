@@ -20,13 +20,14 @@ import org.json4s.{DefaultFormats, jackson}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 import akka.pattern.ask
+import io.skysail.core.akka.RequestEvent
 
 import scala.util.{Failure, Success}
 
 class EsResource extends AsyncListResource[DemoRoot] {
 
-  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
-    sender ! List(
+  def get(requestEvent: RequestEvent): Unit = {
+    requestEvent.resourceActor ! List(
       DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"),
       DemoRoot("config", "/demo/v1/configs", "System Configuration"))
   }
@@ -40,7 +41,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
   //  @AuthorizeByRole("esadmin")
 
-  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     implicit val system = actorContext.system
@@ -53,7 +54,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
     u onSuccess {
       case value => {
-        sender ! value
+        requestEvent.resourceActor ! value
       }
     }
 
@@ -130,22 +131,22 @@ class MappingResource extends AsyncListResource[Mapping] {
   //    httpclient.execute(httpget, responseHandler)
   //  }
 
-  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {
+  def get[T](requestEvent: RequestEvent)(implicit c: ClassTag[T]): Unit = {
     ???
   }
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
     ???
   }
 }
 
 class ConfigsResource extends AsyncListResource[ConfigDetails] {
 
-  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
     val appActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[DemoApplication].getName)
     val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
     r onComplete {
-      case Success(app) => sender ! app.getConfigs()
+      case Success(app) => requestEvent.resourceActor ! app.getConfigs()
       case Failure(failure) => println (s"FAILURE: $failure")
     }
   }

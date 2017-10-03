@@ -6,6 +6,7 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+import io.skysail.core.akka.RequestEvent
 import io.skysail.core.resources.AsyncListResource
 import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import org.apache.http.HttpResponse
@@ -24,7 +25,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
   //val appService = new ContactService()
 
   //  @AuthorizeByRole("esadmin")
-  def get(sender: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     implicit val system = actorContext.system
@@ -37,7 +38,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
     u onSuccess {
       case value => {
-        sender ! value
+        requestEvent.resourceActor ! value
       }
     }
 

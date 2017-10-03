@@ -1,6 +1,7 @@
 package io.skysail.core.model
 
 import akka.actor.ActorRef
+import io.skysail.core.akka.RequestEvent
 import io.skysail.core.akka.actors._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -13,9 +14,9 @@ import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 case class TestEntity(val foo: String)
 
 class TestEntitiesResource extends AsyncListResource[String] {
-   protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List("hi", "content")
+   protected def get[T](requestEvent: RequestEvent)(implicit c: ClassTag[T]): Unit = List("hi", "content")
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
      ???
    }
   //override def linkedResourceClasses() = List(classOf[PostTestEntityResource])
@@ -24,7 +25,7 @@ class TestEntitiesResource extends AsyncListResource[String] {
 class TestStringEntityController extends AsyncEntityResource[String] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
      ???
    }
 }
@@ -55,7 +56,7 @@ class TestStringEntityController extends AsyncEntityResource[String] {
 class TestEntityController extends AsyncEntityResource[TestEntity] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {}
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
      ???
    }
 }
@@ -63,7 +64,7 @@ class TestEntityController extends AsyncEntityResource[TestEntity] {
 class TestEntityListController extends AsyncListResource[TestEntity] {
    protected def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = List(TestEntity("hi"), TestEntity("content"))
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
      ???
    }
 }

@@ -1,12 +1,11 @@
 package io.skysail.app.demo
 
-import akka.actor.{ ActorLogging, ActorRef, Props, SupervisorStrategy }
-import akka.persistence.{ AtLeastOnceDelivery, PersistentActor }
-import io.skysail.app.demo.EventSender.{ Confirm, Msg }
-import io.skysail.app.demo.UserAggregate.{ Evt, GetUsersForwardResponse, MsgAddUser, MsgConfirmed }
-import io.skysail.app.demo.UserRepository.{ AddUser, ConfirmAddUser, GetUsers }
-import io.skysail.app.demo.AddUserCmd
+import akka.actor.{ActorLogging, ActorRef, Props, SupervisorStrategy}
 import akka.event.LoggingReceive
+import akka.persistence.{AtLeastOnceDelivery, PersistentActor}
+import io.skysail.app.demo.EventSender.Confirm
+import io.skysail.app.demo.UserAggregate.{Evt, GetUsersForwardResponse, MsgAddUser, MsgConfirmed}
+import io.skysail.app.demo.UserRepository.ConfirmAddUser
 
 object UserAggregate {
 
@@ -25,9 +24,7 @@ object UserAggregate {
 
 class UserAggregate extends PersistentActor with AtLeastOnceDelivery with ActorLogging {
 
-  import akka.pattern.{ ask, pipe }
   import akka.util.Timeout
-  import context.dispatcher
 
   import scala.concurrent.duration._
 

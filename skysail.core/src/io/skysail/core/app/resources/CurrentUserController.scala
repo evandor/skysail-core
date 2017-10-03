@@ -1,18 +1,15 @@
 package io.skysail.core.app.resources
 
-import akka.actor.ActorRef
-
-import scala.reflect.ClassTag
+import io.skysail.core.akka.RequestEvent
 import io.skysail.core.app.domain.User
 import io.skysail.core.resources.AsyncEntityResource
-import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class CurrentUserController extends AsyncEntityResource[User] {
   
-  override def get(sendBackTo: ActorRef, cmd: ProcessCommand) {
+  override def get(requestEvent: RequestEvent) {
     val currentUser = User(0,"anonymous",List())
     //println(currentUser)
-    sendBackTo ! List(currentUser) 
+    requestEvent.resourceActor ! List(currentUser)
   }
 
 //  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {

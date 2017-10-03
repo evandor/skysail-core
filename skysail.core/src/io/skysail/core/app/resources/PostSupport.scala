@@ -1,8 +1,7 @@
 package io.skysail.core.app.resources
 
-import akka.actor.{ActorRef, ActorSystem}
-import akka.actor.ActorContext
+import io.skysail.core.akka.RequestEvent
 
 trait PostSupport {
-  def post(sendBackTo: ActorRef): Unit
+  def post(requestEvent: RequestEvent): Unit
 }

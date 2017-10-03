@@ -21,7 +21,7 @@ import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 class AssetsResource extends AsyncStaticResource with ActorContextAware {
 
-  override def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  override def get(requestEvent: RequestEvent): Unit = {
     implicit val askTimeout: Timeout = 1.seconds
     implicit val ec = actorContext.system.dispatcher
     val bA = SkysailApplication.getBundlesActor(actorContext.system)
@@ -36,7 +36,7 @@ class AssetsResource extends AsyncStaticResource with ActorContextAware {
         val ba = Source.fromInputStream(is).map(_.toByte).toArray
         //println(ba)
         //sendBackTo ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba)))
-        sendBackTo ! ControllerActor.MyResponseEntity(HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba))
+        requestEvent.resourceActor ! ControllerActor.MyResponseEntity(HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba))
       }
     }
   }

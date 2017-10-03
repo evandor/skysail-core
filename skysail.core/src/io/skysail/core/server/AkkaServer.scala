@@ -3,11 +3,11 @@ package io.skysail.core.server
 import akka.osgi.ActorSystemActivator
 import org.osgi.framework.BundleContext
 import io.skysail.core.app.ApplicationProvider
-import akka.actor.{ ActorRef, ActorSystem, PoisonPill, Props }
+import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 import akka.http.scaladsl.server.Route
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{ AddingService, ModifiedService, RemovedService }
+import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{ PrivateMethodExposer, ResponseEvent }
+import io.skysail.core.akka.{PrivateMethodExposer, ResponseEvent}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -26,7 +26,7 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.RequestContext
 import akka.http.scaladsl.server.RouteResult
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.{ CreateApplicationActor, DeleteApplicationActor }
+import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
@@ -65,10 +65,11 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   var serverConfig = new ServerConfig(defaultPort, defaultBinding)
 
   var routesTracker: RoutesTracker = null
-  
+
   private class AkkaCapsule(bundleContext: BundleContext) extends ActorSystemActivator with Capsule {
 
     override def start(): Unit = start(bundleContext)
+
     override def stop(): Unit = stop(bundleContext)
 
     def configure(osgiContext: BundleContext, system: ActorSystem): Unit = {
@@ -157,14 +158,17 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
   }
 
   def createApplicationActor(appInfoProvider: ApplicationProvider) = {
-    implicit val askTimeout: Timeout = 1.seconds
-    val appsActor = SkysailApplication.getApplicationsActor(actorSystem)
-    val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
-    val appModel = appInfoProvider.appModel()
-    val application = appInfoProvider.application()
-    val optionalBundleContext = appInfoProvider.getBundleContext()
+    if (appInfoProvider == null) {
+      log warn "provided ApplicationProvider was null!"
+    } else {
+      implicit val askTimeout: Timeout = 1.seconds
+      val appsActor = SkysailApplication.getApplicationsActor(actorSystem)
+      val appClass = appInfoProvider.getClass.asInstanceOf[Class[SkysailApplication]]
+      val appModel = appInfoProvider.appModel()
+      val application = appInfoProvider.application()
+      val optionalBundleContext = appInfoProvider.getBundleContext()
 
-    appsActor ! CreateApplicationActor(appClass, appModel, application, optionalBundleContext)
+      appsActor ! CreateApplicationActor(appClass, appModel, application, optionalBundleContext)
+    }
   }
-
 }

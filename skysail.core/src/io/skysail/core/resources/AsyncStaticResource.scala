@@ -6,6 +6,6 @@ import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
 abstract class AsyncStaticResource extends AsyncResource[Any] {
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit
+  def get(requestEvent: RequestEvent): Unit
 
 }

@@ -1,12 +1,10 @@
 package io.skysail.app.wyt;
 
 import akka.actor.ActorRef
-import io.skysail.core.akka.actors._
-
-import scala.concurrent.Future
-import scala.reflect.ClassTag
+import io.skysail.core.akka.RequestEvent
 import io.skysail.core.resources.AsyncListResource
-import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
+
+import scala.reflect.ClassTag
 
 class PactsResource extends AsyncListResource[Pact] {
   val pactsService = new PactsService()
@@ -17,7 +15,7 @@ class PactsResource extends AsyncListResource[Pact] {
 
    def get() = ???
 
-  def get(sendBackTo: ActorRef, cmd: ProcessCommand): Unit = {
+  def get(requestEvent: RequestEvent): Unit = {
     ???
   }
 }

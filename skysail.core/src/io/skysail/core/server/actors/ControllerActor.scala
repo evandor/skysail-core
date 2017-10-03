@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.event.LoggingReceive
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.MediaTypeNegotiator
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import io.skysail.core.app.resources.PostSupport
@@ -13,22 +14,28 @@ import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailCo
 import org.json4s.jackson.Serialization.write
 import org.json4s.{DefaultFormats, Extraction, JObject, jackson}
 import org.osgi.framework.BundleContext
+import play.twirl.api.HtmlFormat
 
 import scala.concurrent.duration.DurationInt
 
 object ControllerActor {
+
   case class GetRequest()
+
   case class PostRequest()
+
   case class PutRequest()
+
   case class DeleteRequest()
+
   case class MyResponseEntity(val entity: ResponseEntity)
+
 }
 
-class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLogging {
+class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
 
-  val originalSender = sender
   var sendBackTo: ActorRef = null
 
   import context._
@@ -42,8 +49,8 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       resource.setActorContext(context)
       resource.setApplicationModel(model)
       cmd.ctx.request.method match {
-        case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(self)
-        case e: Any => resource.get(self,cmd)
+        case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(RequestEvent(cmd, self))
+        case e: Any => resource.get(RequestEvent(cmd, self))
       }
       become(out)
     }
@@ -51,6 +58,36 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
   }
 
   def out: Receive = LoggingReceive {
+    case response: ResponseEvent[T] =>
+      val negotiator = new MediaTypeNegotiator(response.req.cmd.ctx.request.headers)
+      val acceptedMediaRanges = negotiator.acceptedMediaRanges
+
+      implicit val formats = DefaultFormats
+      implicit val serialization = jackson.Serialization
+
+      val m = Marshal(List(response.resource)).to[RequestEntity]
+
+      if (negotiator.isAccepted(MediaTypes.`text/html`)) {
+        val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
+        log info s"$resourceClassAsString"
+        val resourceHtmlClass = Class.forName(resourceClassAsString)
+        val applyMethod = resourceHtmlClass.getMethod("apply", classOf[String])
+
+        m.onSuccess {
+          case value =>
+//            val r = io.skysail.core.app.resources.html.BundlesResource.apply()
+//            log info s"R1: ${r}"
+            val r2 = applyMethod.invoke(resourceHtmlClass, "hi").asInstanceOf[HtmlFormat.Appendable]
+            log info s"R2: ${r2}"
+            val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
+            sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+        }
+      } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
+        m.onSuccess {
+          case value =>
+            sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
+        }
+      }
     case msg: List[T] => {
       log info s">>> OUT(${this.hashCode()} >>>: List[T]"
       //implicit val ec = context.system.dispatcher
@@ -71,13 +108,12 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
       val resEvent = ResponseEvent(reqEvent, null)
       sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
-    case msg: T => { /* and EntityDescription */
+    case msg: T => {
+      /* and EntityDescription */
       log info s">>> OUT(${this.hashCode()}) >>>: T"
       val reqEvent = RequestEvent(null, null)
       val resEvent = ResponseEvent(reqEvent, null)
       implicit val formats = DefaultFormats
-//      implicit val serialization = jackson.Serialization
-//      val m = Marshal(List(msg)).to[RequestEntity]
 
       val e = Extraction.decompose(msg).asInstanceOf[JObject]
       val written = write(e)
@@ -85,13 +121,6 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
 
       sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
 
-//       m onComplete {
-//        case Success(value) =>
-//          val reqEvent = RequestEvent(null, null)
-//          val resEvent = ResponseEvent(reqEvent, null)
-//          sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
-//        case Failure(failure) => println (s"Failure: ${failure}")
-//      }
 
     }
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
@@ -101,14 +130,14 @@ class ControllerActor[T]( /*resource: Resource[_]*/ ) extends Actor with ActorLo
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
 
-//  override val supervisorStrategy =
-//    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-//      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
-//      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
-//      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
-//      case _: Exception                => log warning "HIER: EACALATE"; Escalate
-//      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
-//      case _: Any => log warning "HIER: XXX"; Resume
-//    }
+  //  override val supervisorStrategy =
+  //    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+  //      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
+  //      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
+  //      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
+  //      case _: Exception                => log warning "HIER: EACALATE"; Escalate
+  //      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
+  //      case _: Any => log warning "HIER: XXX"; Resume
+  //    }
 
 }

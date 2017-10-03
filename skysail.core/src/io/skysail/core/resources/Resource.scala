@@ -20,7 +20,7 @@ abstract class Resource[T: TypeTag] {
 
   implicit val askTimeout: Timeout = 1.seconds
 
-  var sendBackTo: ActorRef = null
+  //var sendBackTo: ActorRef = null
   
   var applicationModel: ApplicationModel = null
   

@@ -4,7 +4,6 @@ Bundle-Version: 1.0.1.${tstamp}
 
 Import-Package: \
     io.skysail.api.weaving,\
-    !play.*,\
     !scala.tools.*,\
     *
     
@@ -54,6 +53,7 @@ Export-Package: \
 	io.skysail.core.app,\
 	io.skysail.core.app.menus,\
 	io.skysail.core.app.resources,\
+	io.skysail.core.app.resources.html,\
 	io.skysail.core.akka,\
 	io.skysail.core.akka.actors,\
 	io.skysail.core.domain,\
@@ -69,7 +69,8 @@ Export-Package: \
 	io.skysail.core.um.domain,\
 	io.skysail.core.html,\
 	io.skysail.core.model,\
-	io.skysail.core.metrics
+	io.skysail.core.metrics,\
+	html
 	
 Private-Package: \
 	io.skysail.core.app.domain,\

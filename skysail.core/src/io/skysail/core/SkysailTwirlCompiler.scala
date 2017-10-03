@@ -4,10 +4,11 @@ import java.io.File
 import play.twirl.compiler.TwirlCompiler
 import scala.io.Codec
 
+// https://github.com/csokol/vraptor-twirl/blob/master/src/main/java/br/com/caelum/vraptor/twirl/Compiler.java
 object SkysailTwirlCompiler {
 
   private val root = new File("./resources/templates")
-  private val outputFolder = new File("./gen-src")
+  private val outputFolder = new File("./src")
 
   def main(args: Array[String]) {
     println("Hello, world!")
