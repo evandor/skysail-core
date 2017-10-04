@@ -54,7 +54,12 @@ skysail.server.um:
 	org.hibernate.validator;version=5.2.4,\
 	com.typesafe.akka.persistence.query;version=2.5.4,\
 	org.scalaz.core;version=7.2.13,\
-	io.skysail.bundled.akka-persistence-inmemory_2.11;version=2.5.1
+	io.skysail.bundled.akka-persistence-inmemory_2.11;version=2.5.1,\
+    io.skysail.bundled.twirl-api_2.11;version=1.3,\
+    io.skysail.bundled.twirl-parser_2.11;version=1.3,\
+    io.skysail.bundled.twirl-compiler_2.11;version=1.3,\
+    org.scala-lang.scala-compiler;version=2.11
+
 	
 #	com.datastax.driver.core;version=2.1.10,\
 #	com.google.guava;version=16.0.1,\

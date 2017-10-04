@@ -18,7 +18,8 @@
 # run on sofia:
 # sudo docker run --name skysail-server -ti --rm -p 9102:9102 evandor/skysail-server:latest
 #
-#sudo docker exec -i -t skysail-server /bin/bash
+# access running container on sofia
+# sudo docker exec -i -t skysail-server /bin/bash
 FROM java
 
 RUN echo "executing 'useradd -d /home/skysail -m -s /bin/bash skysail'"
