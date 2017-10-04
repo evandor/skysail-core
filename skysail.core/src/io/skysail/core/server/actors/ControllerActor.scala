@@ -65,7 +65,10 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
 
-      val m = Marshal(List(response.resource)).to[RequestEntity]
+      val m = Marshal(response.resource.asInstanceOf[List[_]]).to[RequestEntity]
+
+//      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
+//      val written = write(e)
 
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
         val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName

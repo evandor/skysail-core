@@ -13,7 +13,13 @@ import 'rxjs/add/observable/of';
 @Injectable()
 export class BackendService {
 
-  headers = new Headers();
+  headerDict = {
+    //'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    //'Access-Control-Allow-Headers': 'Content-Type',
+  }
+
+  headers = new Headers(this.headerDict);
   options: RequestOptions;
 
   constructor(private _http: Http/*, private _appGlobals: AppGlobalsService*/) {
@@ -24,7 +30,7 @@ export class BackendService {
   }
 
   getBundles(): Observable<Bundle[]> {
-    return this._http.get(/*this.config.endpoint + */'/root/bundles', { headers: this.headers })
+    return this._http.get('/root/bundles', { headers: this.headers })
       .map(res => res.json())
       .catch(err => {
         console.log("Backend Error in getBundles:", err);
