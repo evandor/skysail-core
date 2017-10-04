@@ -23,10 +23,10 @@ object SkysailTwirlCompiler {
   }
 
   var additionalImports: scala.Seq[_root_.scala.Predef.String] = List("play.twirl.api.Html")
+  var constructorAnnotations: scala.Seq[_root_.scala.Predef.String] = Nil
 
   def compile(view: File): Unit = {
     System.out.println("Generating scala file " + view.getAbsolutePath)
-    //TwirlCompiler.compile(source, sourceDirectory, generatedDirectory, formatterType,               additionalImports, constructorAnnotations, codec, inclusiveDot)
-    TwirlCompiler.compile(view, root, outputFolder, "play.twirl.api.HtmlFormat", additionalImports, Nil, Codec(scala.util.Properties.sourceEncoding), false)
+    TwirlCompiler.compile(view, root, outputFolder, "play.twirl.api.HtmlFormat", additionalImports, constructorAnnotations, Codec(scala.util.Properties.sourceEncoding), false)
   }
 }
