@@ -1,0 +1,31 @@
+<h4><i class="fa fa-th-large" aria-hidden="true" style="color: green"></i> Bundles</h4>
+
+<p-tabView>
+  <p-tabPanel header="Bundles Overview">
+    <!--app-errors../app-errors-->
+    <p-dataTable [value]="bundles" [rows]="20" selectionMode="single" [(selection)]="selectedBundle" (onRowSelect)="onRowSelect($event)" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,20,50,100]">
+      <p-column field="id" header="ID" [style]="{'width':'40px','font-weight': 'bold'}">
+        <ng-template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+          <span><a href='/maincontent/bundle/{{car[col.field]}}'>{{car[col.field]}}</a></span>
+        </ng-template>
+      </p-column>
+      <p-column field="symbolicName" 
+                header="Symbolic Name" 
+                [sortable]="true" 
+                [filter]="true" filterPlaceholder="Search" filterMatchMode="contains" 
+                [style]="{'width':'40%'}">
+      </p-column>
+      <p-column field="providedServices" header="# prov. Serv."></p-column>
+      <p-column field="usedServices" header="# used Serv."></p-column>
+      <p-column field="version" header="Version" [style]="{'width':'180px'}"></p-column>
+      <p-column field="state" header="State"></p-column>
+      <p-column field="size" header="Size" [sortable]="true"></p-column>
+    </p-dataTable>
+  </p-tabPanel>
+  <p-tabPanel header="Service Dependencies">
+    app-errors../app-errors Content 3
+  </p-tabPanel>
+  <p-tabPanel header="Package Dependencies">
+    app-errors../app-errors Content 3
+  </p-tabPanel>
+</p-tabView>

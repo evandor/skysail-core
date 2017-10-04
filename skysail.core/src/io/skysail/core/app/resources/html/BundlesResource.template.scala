@@ -1,9 +1,8 @@
 
 package io.skysail.core.app.resources.html
 
-import play.twirl.api.Html
 import html.main
-import html.head
+import play.twirl.api.Html
 
 object BundlesResource extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[String,play.twirl.api.HtmlFormat.Appendable] {
 
@@ -38,11 +37,11 @@ Seq[Any](format.raw/*6.15*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Wed Oct 04 08:13:26 CEST 2017
+                  DATE: Wed Oct 04 17:34:27 CEST 2017
                   SOURCE: /Users/carsten/git/skysail-core/skysail.core/./resources/templates/io/skysail/core/app/resources/BundlesResource.scala.html
-                  HASH: 26098dbae2ad07ec10a84e4143b2941710bc931a
-                  MATRIX: 607->193|715->206|743->209|754->213|792->215|820->217|865->236|889->239
-                  LINES: 15->6|20->6|22->8|22->8|22->8|23->9|24->10|24->10
+                  HASH: ac6ea7a25d462f12d449a60f16f886e41498db8f
+                  MATRIX: 573->193|681->206|709->209|720->213|758->215|786->217|831->236|855->239
+                  LINES: 13->6|18->6|20->8|20->8|20->8|21->9|22->10|22->10
                   -- GENERATED --
               */
           

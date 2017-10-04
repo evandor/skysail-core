@@ -1,0 +1,16 @@
+<h2><i class="fa fa-th-large" aria-hidden="true" style="color: green"></i> Generic:</h2>
+
+<p-dataTable [value]="apps" [rows]="20" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,20,50,100]">
+  <ng-template ngFor let-col [ngForOf]="getColumns()">
+    <p-column [field]="col" [header]="col">
+      <ng-template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+        <span><a href='/client{{car["context"]}}'>{{car[col.field]}}</a></span>
+      </ng-template>
+    </p-column>
+  </ng-template>
+  <!--<p-column field="name" header="Raw">
+    <ng-template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+      <span><a href='/root{{car["context"]}}/'>{{car[col.field]}}</a></span>
+    </ng-template>
+  </p-column>-->
+</p-dataTable>

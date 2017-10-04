@@ -22,7 +22,8 @@ object SkysailTwirlCompiler {
     }
   }
 
-  var additionalImports: scala.Seq[_root_.scala.Predef.String] = List("play.twirl.api.Html")
+  var additionalImports: scala.Seq[_root_.scala.Predef.String] = List("play.twirl.api.Html","html.main")
+
   var constructorAnnotations: scala.Seq[_root_.scala.Predef.String] = Nil
 
   def compile(view: File): Unit = {

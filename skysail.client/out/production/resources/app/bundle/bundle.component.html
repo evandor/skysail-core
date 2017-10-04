@@ -1,0 +1,32 @@
+<h4><i class="fa fa-th-large" aria-hidden="true" style="color: green"></i> Bundle <i>{{bundle?.desc.symbolicName}}</i></h4>
+
+<p-tabView>
+  <p-tabPanel header="Bundle Overview">
+    <p-panel>
+      <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <app-infotable key="ID" value="{{bundle?.desc.id}}"></app-infotable>
+        <app-infotable key="Symbolic Name" value="{{bundle?.desc.symbolicName}}"></app-infotable>
+        <app-infotable key="State" value="{{bundle?.state}}"></app-infotable>
+        <app-infotable key="Description" value="{{bundle?.description}}"></app-infotable>
+        <app-infotable key="Last Modification" value="{{bundle?.lastModified}}"></app-infotable>
+        <app-infotable key="Bundle Classpath" value="{{bundle?.bundleClasspath}}"></app-infotable>
+        <app-infotable key="Location" value="{{bundle?.location}}"></app-infotable>
+        <app-infotable key="Vendor" value="{{bundle?.vendor}}"></app-infotable>
+      </div>
+    </p-panel>
+  </p-tabPanel>
+  <p-tabPanel header="Exported Packages">
+  </p-tabPanel>
+  <p-tabPanel header="Imported">
+    <p-tabPanel header="Imported Packages">
+    </p-tabPanel>
+  </p-tabPanel>
+  <p-tabPanel header="Manifest">
+    <p-panel>
+      <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <app-infotable key="ID" value="{{bundle?.desc.id}}"></app-infotable>
+      </div>
+    </p-panel>
+  </p-tabPanel>
+
+</p-tabView>
