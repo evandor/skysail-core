@@ -23,6 +23,7 @@ import io.skysail.core.server.directives.MyDirectives._
 import io.skysail.core.server.routes.RoutesCreator._
 import org.osgi.framework.wiring.BundleCapability
 import org.slf4j.LoggerFactory
+import play.twirl.api.Html
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -80,6 +81,12 @@ class RoutesCreator(system: ActorSystem) {
       path("v2") {
         get {
           val r = io.skysail.core.app.resources.html.index4.apply()
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
+        }
+      } ~
+      path("v3") {
+        get {
+          val r = html.main.apply(Html("hi"))
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
         }
       }

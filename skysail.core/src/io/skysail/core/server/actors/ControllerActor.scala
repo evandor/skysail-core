@@ -75,10 +75,7 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
         m.onSuccess {
           case value =>
-//            val r = io.skysail.core.app.resources.html.BundlesResource.apply()
-//            log info s"R1: ${r}"
             val r2 = applyMethod.invoke(resourceHtmlClass, "hi").asInstanceOf[HtmlFormat.Appendable]
-            log info s"R2: ${r2}"
             val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
             sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
         }
