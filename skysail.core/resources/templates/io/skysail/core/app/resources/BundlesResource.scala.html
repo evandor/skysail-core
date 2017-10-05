@@ -6,9 +6,6 @@
 @(rep: RepresentationModel)
 
 @main {
-this is main
-<h1>@rep</h1>
-
 
 <table class="table table-sm">
     <thead>
@@ -23,15 +20,29 @@ this is main
     </tr>
     </thead>
     <tbody>
+    @for(p <- rep.rawData) {
     <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>mdo</td>
-        <th># used Serv.</th>
-        <th>Version</th>
-        <th>Version</th>
+        <th scope="row">@p.get("id")</th>
+        <td>@p.get("symbolicName")</td>
+        <td>@p.get("registeredServiceIds").size</td>
+        <td>@p.get("servicesInUse").size</td>
+        <th>@p.get("version")</th>
+        <th>@p.get("state")</th>
+        <th>@p.get("size")</th>
     </tr>
+    }
     </tbody>
+
+    @****
+    <ul>
+        @for(p <- rep.rawData) {
+        <li>
+            @for(q <- p.keys) {
+            @q = @p.get(q)
+            }
+        </li>
+        }
+    </ul>
+    ****@
 </table>
 }

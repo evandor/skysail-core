@@ -22,7 +22,11 @@ object SkysailTwirlCompiler {
     }
   }
 
-  var additionalImports: scala.Seq[_root_.scala.Predef.String] = List("play.twirl.api.Html","html.main")
+  var additionalImports: scala.Seq[_root_.scala.Predef.String] = List(
+    "play.twirl.api.Html",
+    "html.main",
+    "io.skysail.core.model.RepresentationModel"
+  )
 
   var constructorAnnotations: scala.Seq[_root_.scala.Predef.String] = Nil
 

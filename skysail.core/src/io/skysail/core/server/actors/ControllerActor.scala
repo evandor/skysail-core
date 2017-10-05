@@ -74,11 +74,11 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
         val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
         log info s"$resourceClassAsString"
         val resourceHtmlClass = Class.forName(resourceClassAsString)
-        val applyMethod = resourceHtmlClass.getMethod("apply", classOf[String])
+        val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
 
         m.onSuccess {
           case value =>
-            val rep = new RepresentationModel[T](response)
+            val rep = new RepresentationModel(response)
             val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
             val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
             sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
