@@ -3,9 +3,35 @@
 *                                   *
 * @param msg The message to display *
 *************************************@
-@(msg: String)
+@(rep: RepresentationModel)
 
 @main {
- this is main
- <h1>@msg</h1>
+this is main
+<h1>@msg</h1>
+
+
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Symbolic Name</th>
+        <th># prov. Serv.</th>
+        <th># used Serv.</th>
+        <th>Version</th>
+        <th>State</th>
+        <th>Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>mdo</td>
+        <th># used Serv.</th>
+        <th>Version</th>
+        <th>Version</th>
+    </tr>
+    </tbody>
+</table>
 }

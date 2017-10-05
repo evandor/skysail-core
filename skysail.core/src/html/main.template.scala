@@ -2,6 +2,7 @@
 package html
 
 import play.twirl.api.Html
+import html.main
 
 object main extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[Html,play.twirl.api.HtmlFormat.Appendable] {
 
@@ -20,9 +21,24 @@ Seq[Any](format.raw/*1.17*/("""
 """),format.raw/*7.1*/("""</head>
 
 <body>
-body:
-"""),_display_(/*11.2*/content),format.raw/*11.9*/("""
-"""),format.raw/*12.1*/("""</body>
+
+    """),_display_(/*11.6*/navbar()),format.raw/*11.14*/("""
+
+    """),format.raw/*13.5*/("""<div class="container">
+        <div class="starter-template">
+            <h1>Bootstrap starter template</h1>
+            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+            """),_display_(/*17.14*/content),format.raw/*17.21*/("""
+        """),format.raw/*18.9*/("""</div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+</body>
 </html>"""))
       }
     }
@@ -39,11 +55,11 @@ body:
 
               /*
                   -- GENERATED --
-                  DATE: Wed Oct 04 17:34:27 CEST 2017
+                  DATE: Thu Oct 05 07:44:58 CEST 2017
                   SOURCE: /Users/carsten/git/skysail-core/skysail.core/./resources/templates/main.scala.html
-                  HASH: 3ce52d48a544fc818d359f4510453ae91dbe7339
-                  MATRIX: 343->1|453->16|480->17|574->86|600->92|627->93|676->116|703->123|731->124
-                  LINES: 9->1|14->1|15->2|19->6|19->6|20->7|24->11|24->11|25->12
+                  HASH: 6e058b2a1dd362eb2a73626eca9bbdac8fa8dbbf
+                  MATRIX: 360->1|470->16|497->17|591->86|617->92|644->93|692->115|721->123|754->129|1065->413|1093->420|1129->429
+                  LINES: 10->1|15->1|16->2|20->6|20->6|21->7|25->11|25->11|27->13|31->17|31->17|32->18
                   -- GENERATED --
               */
           

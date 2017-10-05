@@ -83,12 +83,6 @@ class RoutesCreator(system: ActorSystem) {
           val r = io.skysail.core.app.resources.html.index4.apply()
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
         }
-      } ~
-      path("v3") {
-        get {
-          val r = html.main.apply(Html("hi"))
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
-        }
       }
   }
 
@@ -120,7 +114,7 @@ class RoutesCreator(system: ActorSystem) {
   }
 
   private def staticResources(): Route = {
-    path("static") {
+    pathPrefix("static") {
       get {
         // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
         implicit val classloader = clientClassloader /*classOf[AkkaServer].getClassLoader*/

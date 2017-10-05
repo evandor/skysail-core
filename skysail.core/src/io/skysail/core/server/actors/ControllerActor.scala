@@ -8,7 +8,7 @@ import akka.http.scaladsl.server.MediaTypeNegotiator
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import io.skysail.core.app.resources.PostSupport
-import io.skysail.core.model.ApplicationModel
+import io.skysail.core.model.{ApplicationModel, RepresentationModel}
 import io.skysail.core.resources._
 import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
 import org.json4s.jackson.Serialization.write
@@ -67,8 +67,8 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
       val m = Marshal(response.resource.asInstanceOf[List[_]]).to[RequestEntity]
 
-//      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
-//      val written = write(e)
+      //      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
+      //      val written = write(e)
 
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
         val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
@@ -78,7 +78,8 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
         m.onSuccess {
           case value =>
-            val r2 = applyMethod.invoke(resourceHtmlClass, "hi").asInstanceOf[HtmlFormat.Appendable]
+            val rep = new RepresentationModel[T](response)
+            val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
             val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
             sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
         }
