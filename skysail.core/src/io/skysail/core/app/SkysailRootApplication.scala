@@ -65,7 +65,9 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       RouteMapping("/services", classOf[ServicesResource]),
       RouteMapping("/app", classOf[AppResource]),
       RouteMapping("/assets", classOf[AssetsResource]),
-      RouteMapping("/user", classOf[CurrentUserController]))
+      RouteMapping("/user", classOf[CurrentUserController]),
+      RouteMapping("/system/load", classOf[LoadAverageResource])
+    )
   }
 
 }  
