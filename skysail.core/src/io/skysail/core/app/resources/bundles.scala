@@ -13,8 +13,8 @@ class BundlesResource extends AsyncListResource[BundleDescriptor] {
   //  @AuthorizeByRole("admin")
   def get(requestEvent: RequestEvent) {
     val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
-    val eventualBundles = (bundlesActor ? BundlesActor.GetBundles()).mapTo[List[Bundle]]
-    reply[Bundle](requestEvent, eventualBundles, s => s.map(b => BundleDescriptor(b)).toList)
+    val bundles = (bundlesActor ? BundlesActor.GetBundles()).mapTo[List[Bundle]]
+    reply[Bundle](requestEvent, bundles, s => s.map(b => BundleDescriptor(b)).toList)
   }
 
 }

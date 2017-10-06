@@ -1,14 +1,23 @@
 package $basePackageName$;
 
 import io.skysail.core.akka.actors._
+import io.skysail.core.resources.AsyncListResource
+import io.skysail.core.resources.AsyncEntityResource
+import io.skysail.core.akka.RequestEvent
 
-
-class AppsResource extends ListResource[Application] {  
+class AppsResource extends AsyncListResource[Application] {  
   val appService = new ApplicationService()
-  override def get(): List[Application] = appService.getApplications().toList
+
+  def get(requestEvent: RequestEvent): Unit = {
+    val r = appService.getApplications().toList
+    requestEvent.resourceActor ! ResponseEvent(requestEvent, r)
+  }
 }
 
-class AppResource extends EntityResource[Application] {
+class AppResource extends AsyncEntityResource[Application] {
   val appService = new ApplicationService()
-  override def get(): Application = Application("hi")
+
+  def get(requestEvent: RequestEvent): Unit = {
+    Application("hi")
+  }
 }

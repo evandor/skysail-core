@@ -16,6 +16,7 @@ import org.json4s.{DefaultFormats, Extraction, JObject, jackson}
 import org.osgi.framework.BundleContext
 import play.twirl.api.HtmlFormat
 
+import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
 object ControllerActor {
@@ -71,23 +72,9 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
       //      val written = write(e)
 
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
-        val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
-        log info s"$resourceClassAsString"
-        val resourceHtmlClass = Class.forName(resourceClassAsString)
-        val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
-
-        m.onSuccess {
-          case value =>
-            val rep = new RepresentationModel(response)
-            val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
-            val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
-            sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
-        }
+        handleHtmlWithFallback(response, m)
       } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
-        m.onSuccess {
-          case value =>
-            sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
-        }
+        handleJson(m,response)
       }
     case msg: List[T] => {
       log info s">>> OUT(${this.hashCode()} >>>: List[T]"
@@ -125,6 +112,33 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
     }
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
+  }
+
+  private def handleHtmlWithFallback(response: ResponseEvent[T], m: Future[MessageEntity]) = {
+    val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
+    log info s"$resourceClassAsString"
+    try {
+      val resourceHtmlClass = Class.forName(resourceClassAsString)
+      val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
+
+      m.onSuccess {
+        case value =>
+          val rep = new RepresentationModel(response)
+          val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
+          val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
+          sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+      }
+
+    } catch {
+      case _: Exception => handleJson(m,response)
+    }
+  }
+
+  private def handleJson(m: Future[MessageEntity], response: ResponseEvent[T]) = {
+    m.onSuccess {
+      case value =>
+        sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
+    }
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {

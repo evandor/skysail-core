@@ -9,8 +9,7 @@ import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
-import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{Flow, Source}
 import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
@@ -23,7 +22,6 @@ import io.skysail.core.server.directives.MyDirectives._
 import io.skysail.core.server.routes.RoutesCreator._
 import org.osgi.framework.wiring.BundleCapability
 import org.slf4j.LoggerFactory
-import play.twirl.api.Html
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -147,7 +145,7 @@ class RoutesCreator(system: ActorSystem) {
                 extractRequestContext {
                   ctx =>
                     test1("test1str") { f =>
-                      println(f)
+                      //println(f)
                       routeWithUnmatchedPath(ctx, mapping, appProvider)
                     }
                 }
@@ -170,7 +168,7 @@ class RoutesCreator(system: ActorSystem) {
                   extractRequestContext {
                     ctx =>
                       test1("test1str") { f =>
-                        println(f)
+                        //println(f)
                         routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
                       }
                   }

@@ -1,0 +1,48 @@
+@*************************************
+* Home page.                        *
+*                                   *
+* @param msg The message to display *
+*************************************@
+@(rep: RepresentationModel)
+
+@main {
+
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Symbolic Name</th>
+        <th># prov. Serv.</th>
+        <th># used Serv.</th>
+        <th>Version</th>
+        <th>State</th>
+        <th>Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for(p <- rep.rawData) {
+    <tr>
+        <th scope="row">@p.get("id")</th>
+        <td>@p.get("symbolicName")</td>
+        <td>@p.get("registeredServiceIds").size</td>
+        <td>@p.get("servicesInUse").size</td>
+        <th>@p.get("version")</th>
+        <th>@p.get("state")</th>
+        <th>@p.get("size")</th>
+    </tr>
+    }
+    </tbody>
+
+    @****
+    <ul>
+        @for(p <- rep.rawData) {
+        <li>
+            @for(q <- p.keys) {
+            @q = @p.get(q)
+            }
+        </li>
+        }
+    </ul>
+    ****@
+</table>
+}

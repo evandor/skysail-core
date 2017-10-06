@@ -8,15 +8,15 @@ import io.skysail.core.app._
 import org.osgi.service.component.ComponentContext
 
 object TemplateApplication {
-  val APPLICATION_NAME = "demo"
+  val APPLICATION_NAME = "template"
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationProvider]))
-class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Template Application") with ApplicationProvider {
+@Component(immediate = true, property = { Array("service.pid=template") }, service = Array(classOf[ApplicationProvider]))
+class TemplateApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Template Application") with ApplicationProvider {
   
   override def routesMappings = List(
-    //"apps" -> classOf[AppsResource]
-    )
+    RouteMapping("", classOf[AppsResource])
+  )
 
 }
