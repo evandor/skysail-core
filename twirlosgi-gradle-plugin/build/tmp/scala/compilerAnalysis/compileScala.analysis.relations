@@ -1,0 +1,23 @@
+products:
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\CompileTask.scala -> C:\git\skysail-core\twirlosgi-gradle-plugin\build\classes\main\io\skysail\gradle\plugin\twirlosgi\CompileTask.class
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> C:\git\skysail-core\twirlosgi-gradle-plugin\build\classes\main\io\skysail\gradle\plugin\twirlosgi\SkysailTwirlCompiler$$anonfun$compileDir$1.class
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> C:\git\skysail-core\twirlosgi-gradle-plugin\build\classes\main\io\skysail\gradle\plugin\twirlosgi\SkysailTwirlCompiler.class
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> C:\git\skysail-core\twirlosgi-gradle-plugin\build\classes\main\io\skysail\gradle\plugin\twirlosgi\TwirlPlugin.class
+binary dependencies:
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\CompileTask.scala -> C:\Java\jdk1.8.0_144\jre\lib\rt.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\CompileTask.scala -> C:\Users\graefca\.gradle\caches\3.5-rc-2\generated-gradle-jars\gradle-api-3.5-rc-2.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\CompileTask.scala -> C:\Users\graefca\.gradle\caches\modules-2\files-2.1\org.scala-lang\scala-library\2.11.11\e283d2b7fde6504f6a86458b1f6af465353907cc\scala-library-2.11.11.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> C:\Java\jdk1.8.0_144\jre\lib\rt.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> C:\Users\graefca\.gradle\caches\modules-2\files-2.1\com.typesafe.play\twirl-compiler_2.11\1.3.12\2f53b89992011c2ee20c98b04ee1a0ac6b68125d\twirl-compiler_2.11-1.3.12.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> C:\Users\graefca\.gradle\caches\modules-2\files-2.1\org.scala-lang\scala-library\2.11.11\e283d2b7fde6504f6a86458b1f6af465353907cc\scala-library-2.11.11.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> C:\Java\jdk1.8.0_144\jre\lib\rt.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> C:\Users\graefca\.gradle\caches\3.5-rc-2\generated-gradle-jars\gradle-api-3.5-rc-2.jar
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> C:\Users\graefca\.gradle\caches\modules-2\files-2.1\org.scala-lang\scala-library\2.11.11\e283d2b7fde6504f6a86458b1f6af465353907cc\scala-library-2.11.11.jar
+source dependencies:
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala
+external dependencies:
+class names:
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\CompileTask.scala -> io.skysail.gradle.plugin.twirlosgi.CompileTask
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> io.skysail.gradle.plugin.twirlosgi.SkysailTwirlCompiler
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\SkysailTwirlCompiler.scala -> io.skysail.gradle.plugin.twirlosgi.SkysailTwirlCompiler$$anonfun$compileDir$1
+   C:\git\skysail-core\twirlosgi-gradle-plugin\src\main\scala\TwirlPlugin.scala -> io.skysail.gradle.plugin.twirlosgi.TwirlPlugin

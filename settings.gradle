@@ -110,3 +110,5 @@ def getBndProject(Workspace workspace, String projectName) {
   }
   throw new GradleException("Project ${rootDir}/${projectName} is not a valid bnd project")
 }
+include 'twirlosgi-gradle-plugin'
+
