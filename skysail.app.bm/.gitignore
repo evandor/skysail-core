@@ -1,0 +1,7 @@
+/.cache-main
+/.cache-tests
+/generated/
+/bin/
+/bin_test/
+/bin_test/
+/skysail.core.iml
