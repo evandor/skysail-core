@@ -412,18 +412,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
-      <library name="Gradle: skysail.api">
+      <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library name="Gradle: skysail.core">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1129,18 +1120,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
-      <library name="Gradle: skysail.api">
+      <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="RUNTIME">
-      <library name="Gradle: skysail.core">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1837,24 +1819,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: skysail.api">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: skysail.core">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
       <library name="Gradle: paranamer-2.8">
         <CLASSES>
           <root url="jar://$USER_HOME$/.bnd/cache/https%3A%2F%2Fgithub.com%2Fevandor%2Fskysail-repository%2Fraw%2Fmaster%2Frelease/paranamer-2.8.jar!/" />
@@ -2151,6 +2115,15 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="TEST">
       <library name="Gradle: akka-testkit_2.11-2.5.3">
         <CLASSES>
@@ -2160,7 +2133,34 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.api/generated/skysail.api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../skysail.core/generated/skysail.core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/bin_test" />
