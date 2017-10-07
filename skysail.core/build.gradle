@@ -61,7 +61,7 @@ task runnable(dependsOn: ['copyConf', 'copyRunnables']) {
     println "copying configuration..."
 }
 
-//apply plugin: 'io.skysail.twirl.osgi'
+apply plugin: 'io.skysail.twirl.osgi'
 
 /*task greeting(type: io.skysail.gradle.plugin.twirlosgi.GreetingTask) {
     greeting = 'howdy!'
