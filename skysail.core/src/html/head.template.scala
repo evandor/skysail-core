@@ -55,7 +55,7 @@ Seq[Any](format.raw/*1.3*/("""<meta charset="utf-8">
 
               /*
                   -- GENERATED --
-                  DATE: Thu Oct 05 17:07:19 CEST 2017
+                  DATE: Sat Oct 07 10:05:49 CEST 2017
                   SOURCE: /Users/carsten/git/skysail-core/skysail.core/./resources/templates/head.scala.html
                   HASH: 4e4147995a3e2807cb8f8c3fd8c75bc5653fbf26
                   MATRIX: 493->2

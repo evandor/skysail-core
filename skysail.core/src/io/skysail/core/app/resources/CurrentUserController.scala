@@ -9,7 +9,7 @@ class CurrentUserController extends AsyncEntityResource[User] {
   override def get(requestEvent: RequestEvent) {
     val currentUser = User(0,"anonymous",List())
     //println(currentUser)
-    requestEvent.resourceActor ! List(currentUser)
+    requestEvent.controllerActor ! List(currentUser)
   }
 
 //  def get[T](sender: ActorRef)(implicit c: ClassTag[T]): Unit = {

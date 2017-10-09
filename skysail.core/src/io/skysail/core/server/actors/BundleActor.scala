@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.http.scaladsl.server.RequestContext
-import io.skysail.core.akka.ResponseEvent
+import io.skysail.core.akka.ListResponseEvent
 import io.skysail.core.model.ApplicationModel
 import org.osgi.framework.Bundle
 import io.skysail.core.server.actors.BundleActor._

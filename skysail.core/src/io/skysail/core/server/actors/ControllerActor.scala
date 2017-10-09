@@ -33,11 +33,11 @@ object ControllerActor {
 
 }
 
-class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogging {
+class ControllerActor[T]() extends Actor with ActorLogging {
 
   implicit val askTimeout: Timeout = 1.seconds
 
-  var sendBackTo: ActorRef = null
+  var applicationActor: ActorRef = null
 
   import context._
 
@@ -45,11 +45,11 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
   def in: Receive = LoggingReceive {
     case SkysailContext(cmd: ProcessCommand, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext]) => {
-      sendBackTo = sender
-      log info s"<<< IN(${this.hashCode()}) <<<: SkysailContext"
+      applicationActor = sender
       resource.setActorContext(context)
       resource.setApplicationModel(model)
       cmd.ctx.request.method match {
+        case HttpMethods.GET => resource.get(RequestEvent(cmd, self))
         case HttpMethods.POST => resource.asInstanceOf[PostSupport].post(RequestEvent(cmd, self))
         case e: Any => resource.get(RequestEvent(cmd, self))
       }
@@ -59,7 +59,7 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
   }
 
   def out: Receive = LoggingReceive {
-    case response: ResponseEvent[T] =>
+    case response: ListResponseEvent[T] =>
       val negotiator = new MediaTypeNegotiator(response.req.cmd.ctx.request.headers)
       val acceptedMediaRanges = negotiator.acceptedMediaRanges
 
@@ -68,76 +68,100 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
 
       val m = Marshal(response.resource.asInstanceOf[List[_]]).to[RequestEntity]
 
-      //      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
-      //      val written = write(e)
-
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
         handleHtmlWithFallback(response, m)
       } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
-        handleJson(m,response)
+        handleJson(m, response)
+      }
+    case response: ResponseEvent[T] =>
+      val negotiator = new MediaTypeNegotiator(response.req.cmd.ctx.request.headers)
+      val acceptedMediaRanges = negotiator.acceptedMediaRanges
+
+      implicit val formats = DefaultFormats
+      implicit val serialization = jackson.Serialization
+
+      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
+      val written = write(e)
+
+      if (negotiator.isAccepted(MediaTypes.`text/html`)) {
+        handleHtmlWithFallback(response, e)
+      } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
+        //handleJson(m,response)
       }
     case msg: List[T] => {
-      log info s">>> OUT(${this.hashCode()} >>>: List[T]"
-      //implicit val ec = context.system.dispatcher
+      log warning s">>> OUT(${this.hashCode()}) @deprecated >>>: List[T]"
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
       val m = Marshal(msg).to[RequestEntity]
       m.onSuccess {
         case value =>
           val reqEvent = RequestEvent(null, null)
-          val resEvent = ResponseEvent(reqEvent, null)
-          log info s">>> OUT(${this.hashCode()} >>>: sending back to ${sendBackTo}"
-          sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
+          val resEvent = ListResponseEvent(reqEvent, null)
+          log info s">>> OUT(${this.hashCode()} >>>: sending back to ${applicationActor}"
+          applicationActor ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
       }
     }
     case msg: ControllerActor.MyResponseEntity => {
-      log info s">>> OUT(${this.hashCode()} >>>: ControllerActor.MyResponseEntity"
+      log warning s">>> OUT(${this.hashCode()}) @deprecated >>>: ControllerActor.MyResponseEntity"
       val reqEvent = RequestEvent(null, null)
-      val resEvent = ResponseEvent(reqEvent, null)
-      sendBackTo ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
+      val resEvent = ListResponseEvent(reqEvent, null)
+      applicationActor ! resEvent.copy(httpResponse = resEvent.httpResponse.copy(entity = msg.entity))
     }
     case msg: T => {
-      /* and EntityDescription */
-      log info s">>> OUT(${this.hashCode()}) >>>: T"
+      log warning s">>> OUT(${this.hashCode()}) @deprecated >>>: T"
       val reqEvent = RequestEvent(null, null)
-      val resEvent = ResponseEvent(reqEvent, null)
+      val resEvent = ListResponseEvent(reqEvent, null)
       implicit val formats = DefaultFormats
-
       val e = Extraction.decompose(msg).asInstanceOf[JObject]
       val written = write(e)
       val r = HttpEntity(ContentTypes.`application/json`, written)
-
-      sendBackTo ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
-
-
+      applicationActor ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
     }
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
-  private def handleHtmlWithFallback(response: ResponseEvent[T], m: Future[MessageEntity]) = {
-    val resourceClassAsString = response.req.cmd.cls.getPackage.getName + ".html." + response.req.cmd.cls.getSimpleName
-    log info s"$resourceClassAsString"
+  private def handleHtmlWithFallback(response: ListResponseEvent[T], m: Future[MessageEntity]) = {
     try {
-      val resourceHtmlClass = Class.forName(resourceClassAsString)
+      val loader = response.req.cmd.cls.getClassLoader
+      val resourceHtmlClass = loader.loadClass(getHtmlTemplate(response.req))
       val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
 
       m.onSuccess {
         case value =>
-          val rep = new RepresentationModel(response)
+          val rep = new RepresentationModel(response.resource)
           val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
           val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
-          sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+          applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
       }
 
     } catch {
-      case _: Exception => handleJson(m,response)
+      case e: Exception => log info s"rendering fallback to json, could not load '${getHtmlTemplate(response.req)}', reason: $e"; handleJson(m, response)
     }
   }
 
-  private def handleJson(m: Future[MessageEntity], response: ResponseEvent[T]) = {
+  def handleHtmlWithFallback(response: ResponseEvent[T], e: JObject): Unit = {
+    val resourceClassAsString = getHtmlTemplate(response.req)
+    try {
+      val loader = response.req.cmd.cls.getClassLoader
+      val resourceHtmlClass = loader.loadClass(resourceClassAsString)
+      val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
+
+      val rep = new RepresentationModel(response.resource)
+      val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
+      val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
+      applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+
+    } catch {
+      case e: Exception => log info s"rendering fallback to json, could not load '$resourceClassAsString', reason: $e" //; handleJson(m, response)
+    }
+
+  }
+
+
+  private def handleJson(m: Future[MessageEntity], response: ListResponseEvent[T]) = {
     m.onSuccess {
       case value =>
-        sendBackTo ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
+        applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
     }
   }
 
@@ -145,14 +169,8 @@ class ControllerActor[T](/*resource: Resource[_]*/) extends Actor with ActorLogg
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
 
-  //  override val supervisorStrategy =
-  //    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-  //      case _: ArithmeticException      => log warning "HIER: RESUMING"; Resume
-  //      case _: NullPointerException     => log warning "HIER: RESTART"; Restart
-  //      case _: IllegalArgumentException => log warning "HIER: STOPPIG"; Stop
-  //      case _: Exception                => log warning "HIER: EACALATE"; Escalate
-  //      case _: scala.NotImplementedError => log warning "HIER: EACALATE"; Escalate
-  //      case _: Any => log warning "HIER: XXX"; Resume
-  //    }
+  private def getHtmlTemplate(req: RequestEvent) = {
+    s"${req.cmd.cls.getPackage.getName}.html.${req.cmd.cls.getSimpleName}_Get"
+  }
 
 }

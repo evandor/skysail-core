@@ -27,7 +27,7 @@ import scala.util.{Failure, Success}
 class EsResource extends AsyncListResource[DemoRoot] {
 
   def get(requestEvent: RequestEvent): Unit = {
-    requestEvent.resourceActor ! List(
+    requestEvent.controllerActor ! List(
       DemoRoot("indices", "/demo/v1/indices", "ElasticSearch Indices"),
       DemoRoot("config", "/demo/v1/configs", "System Configuration"))
   }
@@ -54,7 +54,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
     u onSuccess {
       case value => {
-        requestEvent.resourceActor ! value
+        requestEvent.controllerActor ! value
       }
     }
 
@@ -146,7 +146,7 @@ class ConfigsResource extends AsyncListResource[ConfigDetails] {
     val appActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[DemoApplication].getName)
     val r = (appActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
     r onComplete {
-      case Success(app) => requestEvent.resourceActor ! app.getConfigs()
+      case Success(app) => requestEvent.controllerActor ! app.getConfigs()
       case Failure(failure) => println (s"FAILURE: $failure")
     }
   }

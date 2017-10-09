@@ -1,10 +1,8 @@
 package io.skysail.core.server.routes
 
-import io.skysail.core.app.RouteMapping
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import org.slf4j.LoggerFactory
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.directives.{AuthenticationDirective, Credentials}
 
 import scala.util.matching.Regex
 import scala.util.matching.Regex.MatchIterator
@@ -14,7 +12,6 @@ object PathMatcherFactory {
   private val log = LoggerFactory.getLogger(this.getClass)
 
   def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
-    log info s"creating pathMatcher for '${path}'"
 
     path.trim() match {
       case "" => (appRoute ~ PathEnd,Unit)
@@ -36,18 +33,14 @@ object PathMatcherFactory {
   }
 
   private def handleParameters(appRoute: PathMatcher[Unit], p: String):(PathMatcher[_],Any) = {
-    println("hier: ':(.)*$'") 
     val pattern = new Regex(":(.)*$")
-    println("applying " + p)
-    println ((pattern findAllIn p).mkString(","))
     PathEnd
     val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
-    println(segments)
     val r = segments.foldLeft(appRoute)((a, b) => substituteIfPattern[Unit](a, b, pattern findAllIn p)) ~ PathEnd
     
     if (segments.size == 2) {
       val s = appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
-      println("S:" + s.getClass.getName)
+      //println("S:" + s.getClass.getName)
       (s, classOf[Tuple1[String]])
     } else {
       (r,Unit)

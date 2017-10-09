@@ -17,7 +17,7 @@ class ModelResource extends AsyncEntityResource[ApplicationModel] {
 
 
   def get(requestEvent: RequestEvent): Unit = {
-    println(applicationModel.resourceModels); requestEvent.resourceActor ! applicationModel
+    println(applicationModel.resourceModels); requestEvent.controllerActor ! applicationModel
   }
 
   //  //implicit val ec = E

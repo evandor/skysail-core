@@ -2,14 +2,13 @@ package io.skysail.core.server.actors
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
-import akka.actor.{Actor, ActorLogging, OneForOneStrategy, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 import akka.event.LoggingReceive
 import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.server.RequestContext
 import akka.pattern.ask
 import akka.util.Timeout
-import io.skysail.core.akka.{ControllerActor, ResponseEvent}
+import io.skysail.core.akka.{ControllerActor, ResponseEventBase}
 import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.resources.Resource
@@ -19,32 +18,11 @@ import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
 object ApplicationActor {
-
   case class GetAppModel()
-
   case class GetApplication()
-
-  case class SkysailContext(cmd: ApplicationActor.ProcessCommand, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext]) {
-    override def toString() = {
-      s"SkysailContext@${this.hashCode()}(RequestContext([@${cmd.ctx.hashCode()}]),ApplicationModel(...),Option[BundleContext],'${cmd.unmatchedPath}')"
-    }
-  }
-
+  case class SkysailContext(cmd: ApplicationActor.ProcessCommand, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext])
   case class GetMenu()
-
-  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path) {
-    override def toString() = {
-      s"""ProcessCommand(
-            [${ctx.hashCode()}]${ctx.toString},
-            ${cls.toString},
-            '${unmatchedPath}')
-       """.stripMargin
-    }
-  }
-
-  //  case class ProcessPost(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
-  //  case class ProcessPut(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
-  //  case class ProcessDelete(ctx: RequestContext, cls: Class[_ <: Resource[_]], unmatchedPath: Uri.Path)
+  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path)
 }
 
 /**
@@ -57,22 +35,17 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
 
   val cnt = new AtomicInteger(0)
 
-  // http://helenaedelson.com/?p=879 !!!
-  //var sendBackTo: ActorRef = null
-
   import context._
 
   def receive: Receive = LoggingReceive {
-    //case ApplicationActor.ProcessCommand(ctx, cls, urlParameter, unmatchedPath) => {
-    case cmd:ApplicationActor.ProcessCommand => {
-      val sendBackTo = sender()
-      log info s"setting sender to ${sendBackTo}"
+    case cmd: ApplicationActor.ProcessCommand => {
+      val routesCreator = sender()
       val theClass = cmd.cls.newInstance()
       val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]]), "controllerActor$" + cnt.getAndIncrement)
 
-      val r = (controllerActor ? ApplicationActor.SkysailContext(cmd, appModel, theClass, bundleContext)).mapTo[ResponseEvent[_]]
+      val r = (controllerActor ? ApplicationActor.SkysailContext(cmd, appModel, theClass, bundleContext)).mapTo[ResponseEventBase]
       r onComplete {
-        case Success(value) => sendBackTo ! value
+        case Success(value) => routesCreator ! value
         case Failure(failure) => log error s"Failure>>> $failure"
       }
     }
@@ -95,16 +68,5 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
       sender ! None
     }
   }
-
-  /*override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-      case _: ArithmeticException      => log warning "HIER2: RESUMING"; Resume
-      case _: NullPointerException     => log warning "HIER2: RESTART"; Restart
-      case _: IllegalArgumentException => log warning "HIER2: STOPPIG"; Stop
-      case _: Exception                => log warning "HIER2: EACALATE"; Escalate
-      case _: scala.NotImplementedError => log warning "HIER2: EACALATE"; Escalate
-      case _: Any => log warning "HIER2: XXX"; Resume
-    }*/
-
 
 }

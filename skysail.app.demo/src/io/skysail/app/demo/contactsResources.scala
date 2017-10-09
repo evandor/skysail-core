@@ -20,7 +20,7 @@ class ContactsResource extends AsyncListResource[Contact] {
     val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[DemoApplication]
     import scala.concurrent.ExecutionContext.Implicits.global
     r onComplete {
-      case Success(app) => requestEvent.resourceActor ! app.repo.find()
+      case Success(app) => requestEvent.controllerActor ! app.repo.find()
       case Failure(failure) => println(failure)
     }
   }
@@ -33,9 +33,9 @@ class PostContactResource extends AsyncPostResource[Contact] {
     if (entityModel.isDefined) {
       println("EM: " + entityModel.get.fields)
       println("EM: " + entityModel.get.description())
-      requestEvent.resourceActor ! entityModel.get.description()
+      requestEvent.controllerActor ! entityModel.get.description()
     } else {
-      requestEvent.resourceActor ! Contact("a@b.com", "Mira", "Gräf") //describe(classOf[Contact])
+      requestEvent.controllerActor ! Contact("a@b.com", "Mira", "Gräf") //describe(classOf[Contact])
     }
   }
 
@@ -56,6 +56,6 @@ class PostContactResource extends AsyncPostResource[Contact] {
     //ua ! AddUserCmd(user)
     //applicationModel.ap
 
-    requestEvent.resourceActor ! Contact("a@b.com", "Mira", "Gräf")
+    requestEvent.controllerActor ! Contact("a@b.com", "Mira", "Gräf")
   }
 }

@@ -22,7 +22,7 @@ class AppsResource extends AsyncListResource[Application] {
     (appsActor ? ApplicationsActor.GetAllApplications())
       .mapTo[List[Application]]
       .onComplete {
-        case Success(s) => requestEvent.resourceActor ! s
+        case Success(s) => requestEvent.controllerActor ! s
         case Failure(f) => log error s"failure ${f}"
       }
 

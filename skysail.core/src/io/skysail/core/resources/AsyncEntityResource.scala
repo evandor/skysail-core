@@ -13,7 +13,7 @@ abstract class AsyncEntityResource[T: TypeTag] extends AsyncResource[T] {
 
   def reply[U](requestEvent: RequestEvent, answer: Future[U], c: U => T) = {
     answer.onComplete {
-      case Success(s) => requestEvent.resourceActor ! ResponseEvent(requestEvent, c.apply(s))
+      case Success(s) => requestEvent.controllerActor ! ListResponseEvent(requestEvent, c.apply(s))
       case Failure(f) => println(s"failure ${f}")
     }
   }

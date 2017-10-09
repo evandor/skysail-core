@@ -10,7 +10,7 @@ class Activator extends DominoActivator {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 
-  var password = "p4ssw0rd"
+  var password = "password"
 
   whenBundleActive({
 
@@ -36,7 +36,7 @@ class Activator extends DominoActivator {
 
     whenConfigurationActive("auth") { conf =>
       log info s"received configuration for 'auth.basic': not shown, contains password"
-      password = conf.getOrElse("password", "p4ssw0rd").asInstanceOf[String]
+      password = conf.getOrElse("password", "password").asInstanceOf[String]
     }
 
   })

@@ -13,7 +13,7 @@ import akka.stream.scaladsl.{Flow, Source}
 import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
-import io.skysail.core.akka.ResponseEvent
+import io.skysail.core.akka.ResponseEventBase
 import io.skysail.core.app.{ApplicationProvider, RouteMapping, SkysailApplication}
 import io.skysail.core.resources.Resource
 import io.skysail.core.security.AuthorizeByRole
@@ -229,7 +229,7 @@ class RoutesCreator(system: ActorSystem) {
       val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
       val processCommand = ApplicationActor.ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
       //println(new PrivateMethodExposer(system)('printTree)())
-      val t = (applicationActor ? processCommand).mapTo[ResponseEvent[_]]
+      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
         case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)

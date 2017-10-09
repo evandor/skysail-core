@@ -10,7 +10,7 @@ class LoadAverageResource extends AsyncEntityResource[AvergeLoad] {
   val operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean
   
   override def get(requestEvent: RequestEvent) {
-    requestEvent.resourceActor ! AvergeLoad(operatingSystemMXBean.getSystemLoadAverage())
+    requestEvent.controllerActor ! AvergeLoad(operatingSystemMXBean.getSystemLoadAverage())
   }
 
 

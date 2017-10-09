@@ -38,7 +38,7 @@ class IndicesResource extends AsyncListResource[EsIndex] {
 
     u onSuccess {
       case value => {
-        requestEvent.resourceActor ! value
+        requestEvent.controllerActor ! value
       }
     }
 

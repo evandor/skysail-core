@@ -36,6 +36,12 @@ Bundle-Version: 0.1.0.${tstamp}
     org.apache.httpcomponents.httpcore;version=4.3,\
     org.apache.httpcomponents.httpclient;version=4.3,\
     com.typesafe.akka.http.testkit;version=10.0,\
-    com.typesafe.akka.testkit;version=2.5
+    com.typesafe.akka.testkit;version=2.5,\
+    io.skysail.bundled.twirl-api_2.11;version=1.3,\
+    io.skysail.bundled.twirl-parser_2.11;version=1.3,\
+    io.skysail.bundled.twirl-compiler_2.11;version=1.3,\
+    org.scala-lang.scala-compiler;version=2.11
 
 Private-Package: io.skysail.app.bookmarks
+
+Export-Package: io.skysail.app.bookmarks.html

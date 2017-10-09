@@ -36,7 +36,7 @@ class AssetsResource extends AsyncStaticResource with ActorContextAware {
         val ba = Source.fromInputStream(is).map(_.toByte).toArray
         //println(ba)
         //sendBackTo ! res.copy(httpResponse = res.httpResponse.copy(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba)))
-        requestEvent.resourceActor ! ControllerActor.MyResponseEntity(HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba))
+        requestEvent.controllerActor ! ControllerActor.MyResponseEntity(HttpEntity(ContentTypes.`text/plain(UTF-8)`, ba))
       }
     }
   }

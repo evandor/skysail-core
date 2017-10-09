@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{PrivateMethodExposer, ResponseEvent}
+import io.skysail.core.akka.{PrivateMethodExposer, ListResponseEvent}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt

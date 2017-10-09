@@ -1,7 +1,5 @@
 package io.skysail.app.bookmarks;
 
-import io.skysail.core.akka.actors._
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 class ApplicationService { //(implicit val executionContext: ExecutionContext) {
@@ -12,7 +10,7 @@ class ApplicationService { //(implicit val executionContext: ExecutionContext) {
 
   def getApplication(id: String): Future[Option[Bookmark]] = ???
 
-  def getApplications(): Seq[Bookmark] = List(Bookmark("hi",""), Bookmark("there",""))
+  def getApplications(): Seq[Bookmark] = List(Bookmark("skysail","http://www.skysail.io"), Bookmark("pline","http://www.pline.one"))
 
   //def updateQuestion(id: String, update: QuestionUpdate): Future[Option[Question]] = ...
 

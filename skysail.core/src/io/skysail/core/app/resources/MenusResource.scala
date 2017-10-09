@@ -19,7 +19,7 @@ class MenusResource extends AsyncListResource[MenuItem] {
     (appsActor ? ApplicationsActor.GetMenus())
       .mapTo[List[MenuItem]]
       .onComplete {
-        case Success(menuItems) => requestEvent.resourceActor ! menuItems
+        case Success(menuItems) => requestEvent.controllerActor ! menuItems
         case Failure(f) => println(s"failure ${f}")
       }
 

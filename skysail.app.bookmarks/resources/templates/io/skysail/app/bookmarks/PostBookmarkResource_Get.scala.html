@@ -1,0 +1,43 @@
+@*************************************
+* Home page.                        *
+*                                   *
+* @param msg The message to display *
+*************************************@
+@(rep: RepresentationModel)
+
+@main {
+
+<br><br><br>
+
+<div class="container">
+    <div class="starter-template">
+        <h1>Bookmarks</h1>
+        <p class="lead">add bookmark:</p>
+        <form actio="/bookmarks/v1/" method="post">
+
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Url</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row"><input type="text" name="title"/></th>
+                    <td><input type="url" name="url"/></td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <input type="submit">
+                    </th>
+                </tr>
+                </tbody>
+
+            </table>
+        </form>
+
+    </div>
+</div>
+
+}

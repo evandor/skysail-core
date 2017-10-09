@@ -33,7 +33,7 @@ class ServicesResource extends AsyncListResource[ServiceDescriptor] {
       .mapTo[List[ServiceReference[_]]]
       .onComplete {
         //  val result = allServiceRefs.map(serviceRef => ServiceDescriptor(serviceRef)).toList
-        case Success(s) => requestEvent.resourceActor ! s.map(s => ServiceDescriptor(s)).toList
+        case Success(s) => requestEvent.controllerActor ! s.map(s => ServiceDescriptor(s)).toList
         case Failure(f) => println(s"failure ${f}")
       }
   }
