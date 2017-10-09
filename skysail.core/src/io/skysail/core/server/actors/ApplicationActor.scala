@@ -18,15 +18,26 @@ import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
 object ApplicationActor {
+
   case class GetAppModel()
+
   case class GetApplication()
-  case class SkysailContext(cmd: ApplicationActor.ProcessCommand, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext])
+
+  case class SkysailContext(cmd: ProcessCommand, appModel: ApplicationModel, resource: Resource[_], bundleContext: Option[BundleContext])
+
   case class GetMenu()
+
   case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path)
+
 }
 
 /**
-  * An ApplicationActor waits for ... messages
+  * An ApplicationActor handles various messages related to a skysail application.
+  *
+  * Each (running?) skysail application has an associated ApplicationActor which deals with various messages, the
+  * most generic one of which is to handle a ProcessCommand.
+  *
+  * A ProcessCommand demands a specific resource inside the current application to handle a users HTTP request.
   *
   */
 class ApplicationActor(appModel: ApplicationModel, application: SkysailApplication, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
