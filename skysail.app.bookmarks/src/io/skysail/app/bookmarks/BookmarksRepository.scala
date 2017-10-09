@@ -3,7 +3,8 @@ package io.skysail.app.bookmarks
 import io.skysail.api.persistence.DbService
 
 class BookmarksRepository(dbService: DbService) {
-  dbService.createWithSuperClass("V", classOf[Bookmark].getSimpleName)
+
+  dbService.createWithSuperClass("V", DbService.tableNameFor(classOf[Bookmark]))
   dbService.register(classOf[Bookmark])
 
   def save(entity: Any): String = {

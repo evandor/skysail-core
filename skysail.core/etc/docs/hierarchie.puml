@@ -1,3 +1,44 @@
 @startuml
-testdot
+usecase  root
+usecase  user
+usecase  system
+usecase  applications
+
+entity RouteCreator [
+Route Creator
+]
+
+usecase  bundles
+usecase  bundle1
+usecase  bundle2
+usecase  bundle...
+usecase  Application1
+usecase  Application2
+usecase  Application3
+usecase controller
+usecase more...
+
+entity Resource
+
+root -- user
+root -- system
+
+system -- more...
+user -- applications
+user -- bundles
+
+bundles -- bundle1
+bundles -- bundle2
+bundles -- bundle...
+
+applications -- Application1
+applications -- Application2
+applications -- Application3
+
+RouteCreator <~~> Application1
+
+Application1 <..> controller
+
+controller <~~> Resource
+
 @enduml
