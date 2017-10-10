@@ -84,8 +84,6 @@ class RoutesCreator(system: ActorSystem) {
       }
   }
 
-  //implicit val materializer = ActorMaterializer()
-
   def greeter: Flow[Message, Message, Any] =
     Flow[Message].mapConcat {
       case tm: TextMessage =>
@@ -114,7 +112,6 @@ class RoutesCreator(system: ActorSystem) {
   private def staticResources(): Route = {
     pathPrefix("static") {
       get {
-        // & redirectToTrailingSlashIfMissing(TemporaryRedirect)) {
         implicit val classloader = clientClassloader /*classOf[AkkaServer].getClassLoader*/
         getFromResource("application.conf", ContentTypes.`application/json`, getClientClassloader)
       }

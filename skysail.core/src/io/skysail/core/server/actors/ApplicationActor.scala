@@ -12,6 +12,7 @@ import io.skysail.core.akka.{ControllerActor, ResponseEventBase}
 import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
 import io.skysail.core.model.ApplicationModel
 import io.skysail.core.resources.Resource
+import io.skysail.core.server.actors.ApplicationActor._
 import org.osgi.framework.BundleContext
 
 import scala.concurrent.duration.DurationInt
@@ -38,6 +39,8 @@ object ApplicationActor {
   * most generic one of which is to handle a ProcessCommand.
   *
   * A ProcessCommand demands a specific resource inside the current application to handle a users HTTP request.
+  * This is done using a new ControllerActor, which is sent a SkysailContext message containing a newly created
+  * instance of the specific resource mentioned above.
   *
   */
 class ApplicationActor(appModel: ApplicationModel, application: SkysailApplication, bundleContext: Option[BundleContext]) extends Actor with ActorLogging {
@@ -49,20 +52,21 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
   import context._
 
   def receive: Receive = LoggingReceive {
-    case cmd: ApplicationActor.ProcessCommand => {
+    case cmd: ProcessCommand => {
       val routesCreator = sender()
-      val theClass = cmd.cls.newInstance()
-      val controllerActor = context.actorOf(Props.apply(classOf[ControllerActor[String]]), "controllerActor$" + cnt.getAndIncrement)
+      val resourceInstance = cmd.cls.newInstance()
+      val controllerActor = createController
 
-      val r = (controllerActor ? ApplicationActor.SkysailContext(cmd, appModel, theClass, bundleContext)).mapTo[ResponseEventBase]
-      r onComplete {
-        case Success(value) => routesCreator ! value
+      val skysailContext = SkysailContext(cmd, appModel, resourceInstance, bundleContext)
+      val res = (controllerActor ? skysailContext).mapTo[ResponseEventBase]
+      res onComplete {
+        case Success(responseEvent) => routesCreator ! responseEvent
         case Failure(failure) => log error s"Failure>>> $failure"
       }
     }
-    case _: ApplicationActor.GetApplication => sender ! application
-    case _: ApplicationActor.GetAppModel => sender ! appModel
-    case _: ApplicationActor.GetMenu => getMenuIfExistent()
+    case _: GetApplication => sender ! application
+    case _: GetAppModel => sender ! appModel
+    case _: GetMenu => getMenuIfExistent()
     case msg: Any => log info s"IN: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
@@ -79,5 +83,10 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
       sender ! None
     }
   }
+
+  private def createController = {
+    context.actorOf(Props.apply(classOf[ControllerActor[String]]), "controllerActor$" + cnt.getAndIncrement)
+  }
+
 
 }

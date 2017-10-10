@@ -10,9 +10,7 @@ import io.skysail.core.resources.{AsyncListResource, AsyncPostResource}
 import io.skysail.core.server.actors.ApplicationActor
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
-import scala.concurrent.duration.DurationInt
 
 class BookmarksResource extends AsyncListResource[Bookmark] {
   val appService = new ApplicationService()
@@ -59,7 +57,7 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] {
     //println("Res: " + res)
     val user = Bookmark("vor", "nach")
 
-    e.dataBytes.filter(p => p.)
+   // e.dataBytes.filter(p => p.)
     e.dataBytes.runWith(Sink.fold(ByteString.empty)(_ ++ _)).map(_.utf8String) map { result =>
       println("x: " + result)
     }
