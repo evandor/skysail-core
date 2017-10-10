@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{ActorRef, ActorSelection, ActorSystem}
 import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes, Uri}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
@@ -14,9 +14,11 @@ import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
 import io.skysail.core.akka.ResponseEventBase
+import io.skysail.core.app.domain.BundleDescriptor
 import io.skysail.core.app.{ApplicationProvider, RouteMapping, SkysailApplication}
 import io.skysail.core.resources.Resource
 import io.skysail.core.security.AuthorizeByRole
+import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import io.skysail.core.server.actors.{ApplicationActor, BundleActor, BundlesActor}
 import io.skysail.core.server.directives.MyDirectives._
 import io.skysail.core.server.routes.RoutesCreator._
@@ -80,6 +82,12 @@ class RoutesCreator(system: ActorSystem) {
         get {
           val r = io.skysail.core.app.resources.html.index4.apply()
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, r.body))
+        }
+      } ~
+      path("c4") {
+        parameterMap { map =>
+          println ("MAP: " + map)
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "hier we are"))
         }
       }
   }
@@ -148,10 +156,10 @@ class RoutesCreator(system: ActorSystem) {
                 }
               } ~
                 post {
-                  extractRequestContext {
-                    ctx =>
-                      routeWithUnmatchedPath(ctx, mapping, appProvider)
-                  }
+                    extractRequestContext {
+                      ctx =>
+                        routeWithUnmatchedPath(ctx, mapping, appProvider)
+                    }
                 }
             }
           }
@@ -224,13 +232,43 @@ class RoutesCreator(system: ActorSystem) {
                                       urlParameter: List[String] = List()): Route = {
     extractUnmatchedPath { unmatchedPath =>
       val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
-      val processCommand = ApplicationActor.ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
+      //parameterMap { p =>
+      val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
       //println(new PrivateMethodExposer(system)('printTree)())
       val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
         case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
       }
+      //}
+    }
+  }
+
+  private def routeWithUnmatchedPath2(
+                                      ctx: RequestContext,
+                                      mapping: RouteMapping[_],
+                                      appProvider: ApplicationProvider,
+                                      urlParameter: List[String] = List()): Route = {
+    extractUnmatchedPath { unmatchedPath =>
+      val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
+      val clazz = mapping.resourceClass
+      val resourceInstance = clazz.newInstance().asInstanceOf[Resource[_]]
+      val processCommand = ProcessCommand(ctx, clazz, urlParameter, unmatchedPath)
+      //resourceInstance.createRoute(applicationActor, processCommand)
+      testingNewApproach(ctx, mapping, urlParameter, unmatchedPath, applicationActor)
+    }
+  }
+
+  private def testingNewApproach(ctx: RequestContext, mapping: RouteMapping[_], urlParameter: List[String], unmatchedPath: Uri.Path, applicationActor: ActorSelection): Route = {
+
+
+
+    val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
+    //println(new PrivateMethodExposer(system)('printTree)())
+    val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
+    onComplete(t) {
+      case Success(result) => complete(result.httpResponse)
+      case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
     }
   }
 

@@ -56,6 +56,8 @@ Seq[Any](format.raw/*6.28*/("""
 
         </table>
 
+        <a href="/bookmarks/v1/">New</a>
+
     </div>
 </div>
 
@@ -75,9 +77,9 @@ Seq[Any](format.raw/*6.28*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Mon Oct 09 07:21:19 CEST 2017
-                  SOURCE: /Users/carsten/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/BookmarksResource_Get.scala.html
-                  HASH: 4f9b61f2e62677efd4efba9fb16be5dfec805601
+                  DATE: Tue Oct 10 14:27:34 CEST 2017
+                  SOURCE: C:/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/BookmarksResource_Get.scala.html
+                  HASH: a977a585acacea0892170c63d23003721b5cbd97
                   MATRIX: 653->193|774->219|802->222|813->226|851->228|880->230|1258->581|1295->602|1335->604|1376->617|1441->655|1451->656|1485->669|1548->705|1558->706|1590->717|1620->720|1630->721|1662->732|1734->773|1775->786
                   LINES: 15->6|20->6|22->8|22->8|22->8|24->10|38->24|38->24|38->24|39->25|40->26|40->26|40->26|41->27|41->27|41->27|41->27|41->27|41->27|43->29|44->30
                   -- GENERATED --

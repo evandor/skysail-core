@@ -51,6 +51,7 @@ class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
   override def routesMappings = List(
     RouteMapping("",classOf[EsResource]),
     RouteMapping("/",classOf[ContactsResource]),
+    RouteMapping("/arztdaten", classOf[AerzteDatenResource]),
     RouteMapping("/configs",classOf[ConfigsResource]),
     RouteMapping("/mappings",classOf[MappingResource]),
     RouteMapping("/assets",classOf[MyAssetsController]),
