@@ -1,5 +1,6 @@
 package io.skysail.core.resources
 
+import akka.actor.ActorSystem
 import io.skysail.core.akka.RequestEvent
 import io.skysail.core.app.resources.PostSupport
 

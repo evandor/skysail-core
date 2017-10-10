@@ -254,8 +254,9 @@ class RoutesCreator(system: ActorSystem) {
       val clazz = mapping.resourceClass
       val resourceInstance = clazz.newInstance().asInstanceOf[Resource[_]]
       val processCommand = ProcessCommand(ctx, clazz, urlParameter, unmatchedPath)
-      //resourceInstance.createRoute(applicationActor, processCommand)
-      testingNewApproach(ctx, mapping, urlParameter, unmatchedPath, applicationActor)
+
+      resourceInstance.createRoute(applicationActor, processCommand)(system)
+      //testingNewApproach(ctx, mapping, urlParameter, unmatchedPath, applicationActor)
     }
   }
 
@@ -265,10 +266,12 @@ class RoutesCreator(system: ActorSystem) {
 
     val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
     //println(new PrivateMethodExposer(system)('printTree)())
-    val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
-    onComplete(t) {
-      case Success(result) => complete(result.httpResponse)
-      case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
+    parameterMap { p =>
+      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
+      onComplete(t) {
+        case Success(result) => complete(result.httpResponse)
+        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
+      }
     }
   }
 
