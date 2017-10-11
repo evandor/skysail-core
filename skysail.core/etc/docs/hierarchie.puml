@@ -4,8 +4,8 @@ usecase  user
 usecase  system
 usecase  applications
 
-entity RouteCreator [
-Route Creator
+entity RouteMapper [
+Route Mapper
 ]
 
 usecase  bundles
@@ -17,6 +17,8 @@ usecase  Application2
 usecase  Application3
 usecase controller
 usecase more...
+
+actor "theUser"
 
 entity Resource
 
@@ -35,10 +37,12 @@ applications -- Application1
 applications -- Application2
 applications -- Application3
 
-RouteCreator <~~> Application1
+theUser --> RouteMapper: calls Url
 
-Application1 <..> controller
+RouteMapper <~~> Application1 : " finds apps"
 
-controller <~~> Resource
+Application1 <..> controller : " creates controller"
+
+controller <~~> Resource : " calls business logic"
 
 @enduml

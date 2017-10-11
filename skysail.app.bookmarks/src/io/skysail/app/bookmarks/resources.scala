@@ -57,23 +57,24 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] with JsonSupport 
     val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[BookmarksApplication]
     val e = requestEvent.cmd.ctx.request.entity
 
-    val mp = requestEvent.cmd.ctx.request.uri.query().toMap
-    val user = Bookmark(mp.getOrElse("title", "Unknown"), mp.getOrElse("url", "Unknown"))
+    //val mp = requestEvent.cmd.ctx.request.uri.query().toMap
+    //val user = Bookmark(mp.getOrElse("title", "Unknown"), mp.getOrElse("url", "Unknown"))
+    r onComplete {
+      case Success(app) => app.repo.save(requestEvent.cmd.entity)
+      case Failure(failure) => println(failure)
+    }
 
     requestEvent.controllerActor ! Bookmark("a@b.com", "Mira")
   }
 
   override def createRoute(applicationActor: ActorSelection, processCommand: ProcessCommand)(implicit system: ActorSystem): Route = {
     implicit val materializer = ActorMaterializer()
-    //implicit def defaultUrlEncodedFormDataUnmarshaller(implicit fm: FlowMaterializer): FromEntityUnmarshaller[FormData]
 
-   // val intFuture = Unmarshal("title=a&url=b").to[Bookmark]
-   // val int = Await.result(intFuture, 1.second) // don't block in non-test code!
-
-
-    entity(as[Bookmark]) { bookmark =>
-      println("Bookmark: " + bookmark)
-      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
+    formFieldMap { map =>
+      //entity(as[Bookmark]) { bookmark =>
+      val entity = Bookmark(map.getOrElse("title", "Unknown"), map.getOrElse("url", "Unknown"))
+      println("Bookmark: " + entity)
+      val t = (applicationActor ? processCommand.copy(entity = entity)).mapTo[ResponseEventBase]
       onComplete(t) {
         case Success(result) => complete(result.httpResponse)
         case Failure(failure) => /*log error s"Failure>>> ${failure}"; */ complete(StatusCodes.BadRequest, failure)

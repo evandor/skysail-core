@@ -150,7 +150,7 @@ class RoutesCreator(system: ActorSystem) {
                   ctx =>
                     test1("test1str") { f =>
                       //println(f)
-                      routeWithUnmatchedPath(ctx, mapping, appProvider)
+                      routeWithUnmatchedPath2(ctx, mapping, appProvider)
                     }
                 }
               } ~
@@ -173,7 +173,7 @@ class RoutesCreator(system: ActorSystem) {
                     ctx =>
                       test1("test1str") { f =>
                         //println(f)
-                        routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                        routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
                       }
                   }
                 } ~
@@ -209,7 +209,7 @@ class RoutesCreator(system: ActorSystem) {
             extractRequestContext {
               ctx =>
                 test1("test1str") { f =>
-                  routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                  routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
                 }
             }
           } ~
@@ -224,24 +224,24 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-  private def routeWithUnmatchedPath(
-                                      ctx: RequestContext,
-                                      mapping: RouteMapping[_],
-                                      appProvider: ApplicationProvider,
-                                      urlParameter: List[String] = List()): Route = {
-    extractUnmatchedPath { unmatchedPath =>
-      val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
-      //parameterMap { p =>
-      val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
-      //println(new PrivateMethodExposer(system)('printTree)())
-      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
-      onComplete(t) {
-        case Success(result) => complete(result.httpResponse)
-        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
-      }
-      //}
-    }
-  }
+//  private def routeWithUnmatchedPath(
+//                                      ctx: RequestContext,
+//                                      mapping: RouteMapping[_],
+//                                      appProvider: ApplicationProvider,
+//                                      urlParameter: List[String] = List()): Route = {
+//    extractUnmatchedPath { unmatchedPath =>
+//      val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
+//      //parameterMap { p =>
+//      val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
+//      //println(new PrivateMethodExposer(system)('printTree)())
+//      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
+//      onComplete(t) {
+//        case Success(result) => complete(result.httpResponse)
+//        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
+//      }
+//      //}
+//    }
+//  }
 
   private def routeWithUnmatchedPath2(
                                       ctx: RequestContext,
@@ -255,22 +255,6 @@ class RoutesCreator(system: ActorSystem) {
       val processCommand = ProcessCommand(ctx, clazz, urlParameter, unmatchedPath)
 
       resourceInstance.createRoute(applicationActor, processCommand)(system)
-      //testingNewApproach(ctx, mapping, urlParameter, unmatchedPath, applicationActor)
-    }
-  }
-
-  private def testingNewApproach(ctx: RequestContext, mapping: RouteMapping[_], urlParameter: List[String], unmatchedPath: Uri.Path, applicationActor: ActorSelection): Route = {
-
-
-
-    val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
-    //println(new PrivateMethodExposer(system)('printTree)())
-    parameterMap { p =>
-      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
-      onComplete(t) {
-        case Success(result) => complete(result.httpResponse)
-        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
-      }
     }
   }
 

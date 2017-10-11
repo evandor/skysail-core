@@ -28,7 +28,7 @@ object ApplicationActor {
 
   case class GetMenu()
 
-  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path)
+  case class ProcessCommand(ctx: RequestContext, cls: Class[_ <: Resource[_]], urlParameter: List[String], unmatchedPath: Uri.Path, entity: Any = null)
 
 }
 
