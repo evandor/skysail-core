@@ -14,12 +14,11 @@ import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
 import io.skysail.core.akka.ResponseEventBase
-import io.skysail.core.app.domain.BundleDescriptor
 import io.skysail.core.app.{ApplicationProvider, RouteMapping, SkysailApplication}
 import io.skysail.core.resources.Resource
 import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
-import io.skysail.core.server.actors.{ApplicationActor, BundleActor, BundlesActor}
+import io.skysail.core.server.actors.{BundleActor, BundlesActor}
 import io.skysail.core.server.directives.MyDirectives._
 import io.skysail.core.server.routes.RoutesCreator._
 import org.osgi.framework.wiring.BundleCapability
@@ -158,7 +157,7 @@ class RoutesCreator(system: ActorSystem) {
                 post {
                     extractRequestContext {
                       ctx =>
-                        routeWithUnmatchedPath(ctx, mapping, appProvider)
+                        routeWithUnmatchedPath2(ctx, mapping, appProvider)
                     }
                 }
             }
@@ -181,7 +180,7 @@ class RoutesCreator(system: ActorSystem) {
                   post {
                     extractRequestContext {
                       ctx =>
-                        routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                        routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
                     }
                   }
               }
@@ -217,7 +216,7 @@ class RoutesCreator(system: ActorSystem) {
             post {
               extractRequestContext {
                 ctx =>
-                  routeWithUnmatchedPath(ctx, mapping, appProvider, urlParameter)
+                  routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
               }
             }
         }
