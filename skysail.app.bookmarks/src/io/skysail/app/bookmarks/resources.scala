@@ -1,5 +1,7 @@
 package io.skysail.app.bookmarks
 
+import java.util.UUID
+
 import akka.actor.{ActorSelection, ActorSystem}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.ContentTypes
@@ -45,7 +47,7 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] with JsonSupport 
     if (entityModel.isDefined) {
       requestEvent.controllerActor ! entityModel.get.description()
     } else {
-      requestEvent.controllerActor ! ResponseEvent(requestEvent, Bookmark("", "", "")) //describe(classOf[Contact])
+      requestEvent.controllerActor ! ResponseEvent(requestEvent, Bookmark(None, "", "")) //describe(classOf[Contact])
     }
   }
 
@@ -73,7 +75,7 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] with JsonSupport 
     println ("Entity2" + b)
 
     formFieldMap { map =>
-      val entity = Bookmark(null, map.getOrElse("title", "Unknown"), map.getOrElse("url", "Unknown"))
+      val entity = Bookmark(Some(UUID.randomUUID().toString), map.getOrElse("title", "Unknown"), map.getOrElse("url", "Unknown"))
       super.createRoute(applicationActor, processCommand.copy(entity = entity))
     }
   }
@@ -81,6 +83,6 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] with JsonSupport 
 
 class BookmarkResource extends AsyncResource[Bookmark] {
   override def get(requestEvent: RequestEvent): Unit = {
-
+    println("hier")
   }
 }

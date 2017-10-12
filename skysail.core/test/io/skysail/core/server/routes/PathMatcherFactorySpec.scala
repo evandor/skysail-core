@@ -27,10 +27,17 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
 
   "The PathMatcherFactory" should {
 
-    "create a pathMatcher matching an 'empty path' definition" in {
+    "create a pathMatcher matching an 'empty path' definition for an app without version" in {
       val testedRoute = testRouteForPath("appPath", "")
       expectFailureFor(testedRoute, "/")
       expectSuccessFor(testedRoute, "/appPath")
+    }
+
+    "create a pathMatcher matching an 'empty path' definition for an app with version" in {
+      val testedRoute = testRouteForPath("appPath/v1", "")
+      expectFailureFor(testedRoute, "/")
+      expectFailureFor(testedRoute, "/appPath")
+      //expectSuccessFor(testedRoute, "/appPath/v1")
     }
 
     "leave GET requests to other paths unhandled" in {
@@ -55,6 +62,11 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
       expectSuccessFor(testedRoute, "/appPath/seg1/seg2")
       expectFailureFor(testedRoute, "/appPath/seg1/seg2/")
       expectFailureFor(testedRoute, "/appPath/seg1/seg2/test")
+    }
+
+    "create a pathMatcher matching a path definition with segments2" in {
+      val testedRoute = testRouteForPath("appPath", "/v1/:id")
+      expectSuccessFor(testedRoute, "/appPath/v1/76dbbd1c-6242-498f-a064-55a2f6ad3d41")
     }
 
     "create a pathMatcher matching a 'catchAll path' definition" in {
@@ -102,7 +114,7 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
   }
 
   private def testRouteForPath(appPath: String, path: String): Route = {
-    val m = PathMatcherFactory.matcherFor(/*PathMatcher(*/ "appPath", path)
+    val m = PathMatcherFactory.matcherFor(appPath, path)
     m match {
       case (pm: Any, Unit) => get {
         pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {

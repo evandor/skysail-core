@@ -104,7 +104,12 @@ class OrientDbGraphService extends DbService {
     result.toList
   }
 
-  private def getGraphDb(): OrientGraph = graphDbFactory.getTx()
+  private def getGraphDb(): OrientGraph = {
+    val graph = graphDbFactory.getTx()
+    // https://github.com/orientechnologies/orientdb/issues/2722
+    graph.setStandardElementConstraints(false)
+    graph
+  }
 
   def documentToBean[T: Manifest](doc: ODocument, cls: Class[T]): T = {
     //populateProperties(document.toMap(), bean, new SkysailBeanUtils(bean, Locale.getDefault(), appService));

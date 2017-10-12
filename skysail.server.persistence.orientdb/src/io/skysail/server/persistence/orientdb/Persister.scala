@@ -20,7 +20,7 @@ class Persister(db: OrientGraph) {
 
   private val log = LoggerFactory.getLogger(this.getClass)
 
-  val edgeHandler = new EdgeHandler( /*(identifiable) -> execute(identifiable), */ db)
+  val edgeHandler = new EdgeHandler(/*(identifiable) -> execute(identifiable), */ db)
 
   val mapper = new ObjectMapper()
 
@@ -79,31 +79,26 @@ class Persister(db: OrientGraph) {
   }
 
   def setPropertyOrCreateEdge(entity: Any, vertex: OrientVertex, props: Map[String, Any]): String => Unit = {
-    key: String =>
-      {
-        if ("id".equals(key)) {
-
-        } else if (isProperty(entity, key)) {
-          //System.out.println(entity.getClass() + ": " + key + ":= \""+properties.get(key)+"\"");
-          if (props.get(key) != null && !("class".equals(key))) {
-            setProperty(entity, vertex, key);
-          }
-        } else {
-          System.out.println(entity.getClass() + ": " + key + ":= [EDGE]");
-          try {
-            //            edgeHandler.handleEdges(entity, vertex, properties, key);
-          } catch {
-            case e: Exception => log.error(e.getMessage(), e);
-          }
+    key: String => {
+      if (isProperty(entity, key)) {
+        //System.out.println(entity.getClass() + ": " + key + ":= \""+properties.get(key)+"\"");
+        if (props.get(key) != null && !("class".equals(key))) {
+          setProperty(entity, vertex, key);
+        }
+      } else {
+        System.out.println(entity.getClass() + ": " + key + ":= [EDGE]");
+        try {
+          //            edgeHandler.handleEdges(entity, vertex, properties, key);
+        } catch {
+          case e: Exception => log.error(e.getMessage(), e);
         }
       }
+    }
   }
 
   def setPropertyOrCreateEdge2(entity: Any, vertex: OrientVertex, jValue: JField) = {
     val key = jValue._1
-    if ("id".equals(key)) {
-
-    } else if (isProperty(entity, key)) {
+    if (isProperty(entity, key)) {
       //if (props.get(key) != null && !("class".equals(key))) {
       setProperty2(vertex, jValue);
       //}
