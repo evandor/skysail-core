@@ -5,7 +5,11 @@
     <!--app-errors../app-errors-->
     <p-dataTable [value]="services" [rows]="20" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,20,50,100]">
       <p-column field="id" header="ID" [sortable]="true" [style]="{'width':'40px','font-weight': 'bold'}"></p-column>
-      <p-column field="objectClass" header="Object Classes"></p-column>
+      <p-column 
+        field="objectClass" 
+        header="Object Classes"
+        [filter]="true" filterPlaceholder="Search" filterMatchMode="contains">
+      </p-column>
       <p-column field="pid" header="PID"></p-column>
       <p-column field="ranking" header="Ranking" [style]="{'width':'180px'}"></p-column>
       <p-column field="bundleId" header="Bundle ID" [sortable]="true"></p-column>
