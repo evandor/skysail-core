@@ -67,8 +67,8 @@ node {
    
    stage('deployment.apps.int') {
       parallel (
-  	    app_int:            { build 'skysail-core.app.demo.deploy.int' }
-	    //pact_int:        { build 'ssp.pact.export.int' },
+  	    demo_int: { build 'skysail-core.app.demo.deploy.int' }
+	    es_int:   { build 'skysail-core.app.elasticsearch.deploy.int' },
 	    //pact_standalone: { build 'ssp.pact.export.standalone' }
 	  )
    }
