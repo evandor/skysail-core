@@ -27,14 +27,11 @@ abstract class Resource[T: TypeTag] {
 
   var applicationModel: ApplicationModel = null
   var application: SkysailApplication = null
+
   def setApplicationModel(model: ApplicationModel) = this.applicationModel = model
   def setApplication(app: SkysailApplication) = this.application = app
 
-  //def createRoute(applicationActor: ActorSelection, processCommand: ProcessCommand): Route
-
   def createRoute(applicationActor: ActorSelection, processCommand: ProcessCommand)(implicit system: ActorSystem): Route = {
-    //val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
-    //println(new PrivateMethodExposer(system)('printTree)())
     val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
     onComplete(t) {
       case Success(result) => complete(result.httpResponse)

@@ -33,7 +33,7 @@ object ApplicationActor {
 }
 
 /**
-  * An ApplicationActor handles various messages related to a skysail application.
+  * An ApplicationActor handles various messages related to a single skysail application.
   *
   * Each (running?) skysail application has an associated ApplicationActor which deals with various messages, the
   * most generic one of which is to handle a ProcessCommand.

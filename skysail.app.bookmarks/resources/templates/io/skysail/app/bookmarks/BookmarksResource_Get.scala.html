@@ -16,6 +16,7 @@
         <table class="table table-sm">
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Url</th>
             </tr>
@@ -23,6 +24,7 @@
             <tbody>
             @for(p <- rep.rawData) {
             <tr>
+                <th scope="row">@p.get("id")</th>
                 <th scope="row">@p.get("title")</th>
                 <td><a href='@p.get("url")'>@p.get("url")</a></td>
             </tr>

@@ -10,7 +10,8 @@ class ApplicationService { //(implicit val executionContext: ExecutionContext) {
 
   def getApplication(id: String): Future[Option[Bookmark]] = ???
 
-  def getApplications(): Seq[Bookmark] = List(Bookmark("skysail","http://www.skysail.io"), Bookmark("pline","http://www.pline.one"))
+  def getApplications(): Seq[Bookmark] = List(Bookmark("","skysail","http://www.skysail.io"),
+  Bookmark(null,"pline","http://www.pline.one"))
 
   //def updateQuestion(id: String, update: QuestionUpdate): Future[Option[Question]] = ...
 
