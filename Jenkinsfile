@@ -65,13 +65,13 @@ node {
      ])
    }*/
    
-   /*stage('deployment.int') {
+   stage('deployment.apps.int') {
       parallel (
-  	    demo:            { build 'ssp.demo.export.int' }
+  	    app_int:            { build 'skysail-core.app.demo.deploy.int' }
 	    //pact_int:        { build 'ssp.pact.export.int' },
 	    //pact_standalone: { build 'ssp.pact.export.standalone' }
 	  )
-   }*/
+   }
 
    /*stage('stresstest') {
      sh './gradlew skysail.product.demo.e2e.gatling:gatlingRun -DbaseUrl=http://192.168.100.3:8391/'
