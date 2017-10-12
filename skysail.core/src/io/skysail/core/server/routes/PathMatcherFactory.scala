@@ -14,7 +14,7 @@ object PathMatcherFactory {
   def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
 
     path.trim() match {
-      case "" => (appRoute ~ PathEnd,Unit)
+      case "" => (appRoute  ~ PathEnd,Unit)
       case "/" => (appRoute / PathEnd,Unit)
       case p if p.endsWith("/*") => (handleCatchAll(appRoute, p),Unit)
       case p if (containsParameters(p)) => handleParameters(appRoute, p)

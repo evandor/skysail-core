@@ -1,4 +1,6 @@
-package io.skysail.app.bookmarks;
+package io.skysail.app.bookmarks
 
-case class Bookmark(id: Option[String], title: String, url: String)
+import io.skysail.api.ddd.Entity
+
+case class Bookmark(id: Option[String], title: String, url: String) extends Entity[String]
 

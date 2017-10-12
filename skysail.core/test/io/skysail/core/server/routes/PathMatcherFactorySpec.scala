@@ -1,24 +1,12 @@
 package io.skysail.core.server.routes
 
-import akka.http.javadsl.testkit.JUnitRouteTest
-
-import collection.mutable.Stack
-import org.scalatest._
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.{PathMatcher, _}
+import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.scalatest.{Matchers, WordSpec, _}
 import org.slf4j.LoggerFactory
-import io.skysail.core.app.ApiVersion
-import io.skysail.core.app.RouteMapping
-
-import scala.reflect.runtime.universe._
-import akka.http.scaladsl.server.PathMatcher
-import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import org.scalatest.{Matchers, WordSpec}
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import akka.http.scaladsl.server._
-import Directives._
 
 @RunWith(classOf[JUnitRunner])
 class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Matchers with ScalatestRouteTest {
@@ -37,36 +25,72 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
       val testedRoute = testRouteForPath("appPath/v1", "")
       expectFailureFor(testedRoute, "/")
       expectFailureFor(testedRoute, "/appPath")
-      //expectSuccessFor(testedRoute, "/appPath/v1")
+      expectSuccessFor(testedRoute, "/appPath/v1")
     }
 
-    "leave GET requests to other paths unhandled" in {
+    "leave GET requests to other paths unhandled for app without version" in {
       val testedRoute = testRouteForPath("appPath", "")
       expectSuccessFor(testedRoute, "/appPath")
       expectFailureFor(testedRoute, "/kermit")
     }
 
-    "create a pathMatcher matching a 'slash path' definition" in {
+    "leave GET requests to other paths unhandled for app with version" in {
+      val testedRoute = testRouteForPath("appPath/v1", "")
+      expectSuccessFor(testedRoute, "/appPath/v1")
+      expectFailureFor(testedRoute, "/kermit")
+    }
+
+    "create a pathMatcher matching a 'slash path' definition for an app without version" in {
       val testedRoute = testRouteForPath("appPath", "/")
       expectSuccessFor(testedRoute, "/appPath/")
       expectFailureFor(testedRoute, "/appPath/more")
     }
 
-    "create a pathMatcher matching a 'simple path' definition" in {
+    "create a pathMatcher matching a 'slash path' definition for an app with version" in {
+      val testedRoute = testRouteForPath("appPath/v1", "/")
+      expectFailureFor(testedRoute, "/appPath/")
+      expectFailureFor(testedRoute, "/appPath/v1")
+      expectSuccessFor(testedRoute, "/appPath/v1/")
+      expectFailureFor(testedRoute, "/appPath/more")
+    }
+
+    "create a pathMatcher matching a 'simple path' definition for an app without version" in {
       val testedRoute = testRouteForPath("appPath", "/sub")
       expectSuccessFor(testedRoute, "/appPath/sub")
     }
 
-    "create a pathMatcher matching a path definition with segments" in {
+    "create a pathMatcher matching a 'simple path' definition for an app with version" in {
+      val testedRoute = testRouteForPath("appPath/v1", "/sub")
+      expectFailureFor(testedRoute, "/appPath/sub")
+      expectSuccessFor(testedRoute, "/appPath/v1/sub")
+    }
+
+    "create a pathMatcher matching a path definition with segments for an app without version" in {
       val testedRoute = testRouteForPath("appPath", "/seg1/seg2")
       expectSuccessFor(testedRoute, "/appPath/seg1/seg2")
       expectFailureFor(testedRoute, "/appPath/seg1/seg2/")
       expectFailureFor(testedRoute, "/appPath/seg1/seg2/test")
     }
 
-    "create a pathMatcher matching a path definition with segments2" in {
-      val testedRoute = testRouteForPath("appPath", "/v1/:id")
-      expectSuccessFor(testedRoute, "/appPath/v1/76dbbd1c-6242-498f-a064-55a2f6ad3d41")
+    "create a pathMatcher matching a path definition with segments for an app with version" in {
+      val testedRoute = testRouteForPath("appPath/v1", "/seg1/seg2")
+      expectFailureFor(testedRoute, "/appPath/seg1/seg2")
+      expectSuccessFor(testedRoute, "/appPath/v1/seg1/seg2")
+      expectFailureFor(testedRoute, "/appPath/v1/seg1/seg2/")
+      expectFailureFor(testedRoute, "/appPath/v1/seg1/seg2/test")
+    }
+
+    "create a pathMatcher matching a path definition with placeholder for an app without version" in {
+      expectSuccessFor(testRouteForPath("appPath", "/seg1/:id"), "/appPath/seg1/76dbbd1c-6242")
+      expectSuccessFor(testRouteForPath("appPath", "/seg1/:id/"), "/appPath/seg1/76dbbd1c-6242/")
+      //expectSuccessFor(testRouteForPath("appPath", "/seg1/:id/seg2"), "/appPath/seg1/76dbbd1c-6242/seg2")
+    }
+
+    "create a pathMatcher matching a path definition with placeholder for an app with version" in {
+      expectFailureFor(testRouteForPath("appPath/v1", "/seg1/:id"), "/appPath/seg1/76dbbd1c-6242-498f-a064-55a2f6ad3d41")
+
+      expectSuccessFor(testRouteForPath("appPath/v1", "/seg1/:id"), "/appPath/v1/seg1/76dbbd1c")
+      expectSuccessFor(testRouteForPath("appPath/v1", "/seg1/:id/"), "/appPath/v1/seg1/76dbbd1c/")
     }
 
     "create a pathMatcher matching a 'catchAll path' definition" in {
@@ -114,7 +138,12 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
   }
 
   private def testRouteForPath(appPath: String, path: String): Route = {
-    val m = PathMatcherFactory.matcherFor(appPath, path)
+    val m = if (appPath.contains("/")) {
+      //appPath.split("/").fold(PathMatchers.E)((a,b) => a / b).toString()
+      PathMatcherFactory.matcherFor("appPath" / "v1", path)
+    } else {
+      PathMatcherFactory.matcherFor(appPath, path)
+    }
     m match {
       case (pm: Any, Unit) => get {
         pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {
@@ -124,7 +153,7 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
         }
       }
       case (pm: Any, e: Class[Tuple1[_]]) => get {
-        println (s"hier: ${pm.getClass.getName}")
+        println(s"hier: ${pm.getClass.getName}")
         pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { i =>
           complete {
             log info s"matched(1) ${i}"
@@ -140,14 +169,15 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
           }
         }
       }
-      case (first: Any, second: Any) => println(s"Unmatched! First '$first', Second ${second}"); get {
-        pathPrefix("") {
-          complete {
-            "error"
+      case (first: Any, second: Any) => println(s"Unmatched! First '$first', Second ${second}");
+        get {
+          pathPrefix("") {
+            complete {
+              "error"
+            }
           }
         }
-      }
     }
-
   }
+
 }
