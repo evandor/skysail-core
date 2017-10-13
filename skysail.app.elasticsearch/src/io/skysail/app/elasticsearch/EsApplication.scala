@@ -10,7 +10,7 @@ object EsApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationProvider]))
+@Component(immediate = true, property = { Array("service.pid=elasticsearch") }, service = Array(classOf[ApplicationProvider]))
 class EsApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Elasticsearch Application") with ApplicationProvider {
 
   override def menu() = {
