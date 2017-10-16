@@ -23,7 +23,7 @@
     <tbody>
     @for(p <- rep.rawData) {
     <tr>
-        <th scope="row"><a href='/root/bundles/@p.get("id")'>@p.get("id")</a></th>
+        <th scope="row"><a href='@rep.linkFor(classOf[BundleResource], p.get("id")'>@p.get("id")</a></th>
         <td>@p.get("symbolicName")</td>
         <td>@p.get("registeredServiceIds").size</td>
         <td>@p.get("servicesInUse").size</td>
