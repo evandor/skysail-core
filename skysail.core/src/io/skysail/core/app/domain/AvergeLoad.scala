@@ -1,5 +1,5 @@
 package io.skysail.core.app.domain
 
-case class AvergeLoad(load: Double) {
+import io.skysail.api.ddd.DddElement
 
-}
+case class AvergeLoad(load: Double) extends DddElement

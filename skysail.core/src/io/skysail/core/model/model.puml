@@ -1,0 +1,29 @@
+@startuml
+
+class ApplicationModel {
+  name: String
+  version: ApiVersion
+  description: String
+  appRoute: PathMatcher[Unit]
+  addResourceModel(routeMapping: RouteMapping[_]): Option[Type]
+  controllerModelFor(cls: Class[_ <: Resource[_]])
+  getResourceModels(): List[ResourceModel]
+  entityModelFor(ssr: Resource[_]): Option[EntityModel]
+}
+
+class ResourceModel {
+  routeMapping: RouteMapping[_]
+  entityClass: Type
+  linkModel: LinkModel2
+  linkModels: List[LinkModel2] = List()
+}
+
+
+class LinkModel {
+}
+
+ApplicationModel o-- "n" ResourceModel
+ResourceModel -- LinkModel
+
+
+@enduml

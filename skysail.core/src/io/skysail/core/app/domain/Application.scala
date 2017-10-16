@@ -1,5 +1,6 @@
 package io.skysail.core.app.domain
 
+import io.skysail.api.ddd.DddElement
 import io.skysail.core.model.ApplicationModel
 
 object Application {
@@ -8,4 +9,4 @@ object Application {
   }
 }
 
-case class Application(name: String, context: String, description: String)
+case class Application(name: String, context: String, description: String) extends DddElement

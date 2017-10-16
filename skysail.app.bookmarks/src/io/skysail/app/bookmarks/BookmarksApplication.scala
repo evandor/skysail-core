@@ -45,7 +45,7 @@ class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERS
   override def routesMappings = List(
     RouteMapping("", classOf[BookmarksResource]),
     RouteMapping("/bm", classOf[BookmarksResource]),
-    RouteMapping("/bm/", classOf[PostBookmarkResource])
+    RouteMapping("/bm/new", classOf[PostBookmarkResource]) // fix me
     //RouteMapping("/bm/:id", classOf[BookmarkResource]),
     //RouteMapping("/bm/:id/", classOf[BookmarkResource])
   )

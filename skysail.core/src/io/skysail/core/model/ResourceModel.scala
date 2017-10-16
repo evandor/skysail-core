@@ -16,18 +16,14 @@ import io.skysail.core.resources.Resource._
 import io.skysail.core.app.RouteMapping
 
 /**
- * A ResourceModel connects a pathDefinition with a ResourceController class
- * which will handle specific requests to this path.
- *
- * The HTTP verbs which will be handled depend on the concrete subclass of the ResourceController provided.
- *
- *  @param pathDefinition e.g. "/somepath/:id". This will be mapped to an akka route.
- *  @param controllerClass a concrete subclass of ResourceController which will handle the requests to the
- *                         associated path.
- */
-case class ResourceModel(
-    //appModel: ApplicationModel, 
-    val routeMapping: RouteMapping[_]) {
+  * A ResourceModel connects a pathDefinition with a ResourceController class
+  * which will handle specific requests to this path.
+  *
+  * The HTTP verbs which will be handled depend on the concrete subclass of the ResourceController provided.
+  *
+  * @param routeMapping  todo
+  */
+case class ResourceModel(routeMapping: RouteMapping[_]) {
 
   require(routeMapping.path != null, "A ResourceModel's pathMatcher must not be null")
   require(routeMapping.resourceClass != null, "A ResourceModel's resource class must not be null")
@@ -57,7 +53,9 @@ case class ResourceModel(
   private def getPathVariables(path: String) =
     "\\{([^\\}]*)\\}".r
       .findAllIn(path)
-      .map { (e => e.toString().replace("{", "").replace("}", "")) }
+      .map {
+        (e => e.toString().replace("{", "").replace("}", ""))
+      }
       .toList
 
 }

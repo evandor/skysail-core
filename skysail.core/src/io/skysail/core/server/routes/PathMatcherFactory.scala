@@ -35,7 +35,7 @@ object PathMatcherFactory {
     val t = PathMatcher("seg1") / PathMatchers.Segment / PathMatcher("seg2") ~ PathEnd
 
     val segDescriptors = SegmentDescriptor("appPath") :: segments.map(SegmentDescriptor(_))
-    val t2 = segDescriptors.reduce((a,b) => a.pathMatcher() / b.pathMatcher())// ~ PathEnd
+    //val t2 = segDescriptors.reduce((a,b) => a.pathMatcher() / b.pathMatcher())// ~ PathEnd
 
     if (segments.size == 2) {
       val s = appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
