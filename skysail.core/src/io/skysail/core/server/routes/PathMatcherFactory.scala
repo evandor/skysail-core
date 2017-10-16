@@ -11,6 +11,8 @@ object PathMatcherFactory {
 
   private val log = LoggerFactory.getLogger(this.getClass)
 
+  private val pattern = new Regex(":(.)*$")
+
   def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
 
     path.trim() match {
@@ -27,27 +29,27 @@ object PathMatcherFactory {
     appRoute / PathMatcher(p.substring(1, p.length() - 2))
   }
 
-  private def handleSegments(appRoute: akka.http.scaladsl.server.PathMatcher[Unit], p: String) = {
-    val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
-    segments.foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
-  }
-
   private def handleParameters(appRoute: PathMatcher[Unit], p: String):(PathMatcher[_],Any) = {
-    val pattern = new Regex(":(.)*$")
-    PathEnd
-    val segments = p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
-    val r = segments.foldLeft(appRoute)((a, b) => substituteIfPattern[Unit](a, b, pattern findAllIn p)) ~ PathEnd
-    
+    val segments = splitBySlashes(p)
+
+    val t = PathMatcher("seg1") / PathMatchers.Segment / PathMatcher("seg2") ~ PathEnd
+
+    val segDescriptors = SegmentDescriptor("appPath") :: segments.map(SegmentDescriptor(_))
+    val t2 = segDescriptors.reduce((a,b) => a.pathMatcher() / b.pathMatcher())// ~ PathEnd
+
     if (segments.size == 2) {
       val s = appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
-      //println("S:" + s.getClass.getName)
       (s, classOf[Tuple1[String]])
     } else {
+      val r = segments.foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
       (r,Unit)
     }
-    
   }
-  
+
+  private def handleSegments(appRoute: akka.http.scaladsl.server.PathMatcher[Unit], p: String) = {
+    splitBySlashes(p).foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
+  }
+
   private def substituteIfPattern[L](a: PathMatcher[L], b: String, mi: MatchIterator):PathMatcher[L] = {
     a / b 
 //    a match {
@@ -64,5 +66,19 @@ object PathMatcherFactory {
   private def containsSegments(p: String) = p.substring(1, p.length() - 2).contains("/")
   
   private def containsParameters(p: String) = p.contains(":")
+
+  private def splitBySlashes(p: String) = {
+    p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
+  }
+
+
+  case class SegmentDescriptor(seg: String) {
+//    this(pathMatcher: PathMatcher[_]) {
+//
+//    }
+    def pathMatcher(): PathMatcher[_] = {
+      if (seg.trim.startsWith(":")) PathMatchers.Segment else PathMatcher(seg)
+    }
+  }
 
 }

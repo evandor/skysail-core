@@ -2,24 +2,11 @@ package io.skysail.core.app
 
 import java.util.Dictionary
 
-import org.osgi.service.cm.ManagedService
-import org.osgi.service.component.ComponentContext
-import org.osgi.service.component.annotations._
-
-import akka.actor.ActorSystem
-import io.skysail.core.app.resources.AppResource
-import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.model.HttpEntity
-import akka.http.scaladsl.model.ContentTypes
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server._
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.Http
-import io.skysail.core.app.resources._
-import io.skysail.core.resources.AssetsResource
-import io.skysail.core.app.resources.BundlesResource
 import io.skysail.core.app.menus.MenuItem
+import io.skysail.core.app.resources.{AppResource, BundlesResource, _}
+import io.skysail.core.resources.AssetsResource
+import org.osgi.service.cm.ManagedService
+import org.osgi.service.component.annotations._
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -61,7 +48,9 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       RouteMapping("/apps", classOf[AppsResource]),
       RouteMapping("/apps/menus", classOf[MenusResource]),
       RouteMapping("/bundles", classOf[BundlesResource]),
-      RouteMapping("/bundles/:id", classOf[BundleResource]),
+      RouteMapping("/bundles/:id/start", classOf[StartBundleResource]),
+      //RouteMapping("/bundles/:id", classOf[BundleResource]),
+      //RouteMapping("/bundles/:id/stop", classOf[StopBundleResource]),
       RouteMapping("/services", classOf[ServicesResource]),
       RouteMapping("/app", classOf[AppResource]),
       RouteMapping("/assets", classOf[AssetsResource]),

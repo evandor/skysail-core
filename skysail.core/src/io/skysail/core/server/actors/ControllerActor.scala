@@ -86,7 +86,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
         handleHtmlWithFallback(response, e)
       } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
-        //handleJson(m,response)
+        handleJson(response,e)
       }
     case msg: List[T] => {
       log warning s">>> OUT(${this.hashCode()}) @deprecated >>>: List[T]"
@@ -152,7 +152,9 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
 
     } catch {
-      case e: Exception => log info s"rendering fallback to json, could not load '$resourceClassAsString', reason: $e" //; handleJson(m, response)
+      case ex: Exception =>
+        log info s"rendering fallback to json, could not load '$resourceClassAsString', reason: $ex"
+        handleJson(response,e)
     }
 
   }
@@ -163,6 +165,12 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       case value =>
         applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
     }
+  }
+
+  private def handleJson(response: ResponseEvent[T], e: JObject) = {
+    import org.json4s.jackson.JsonMethods._
+    applicationActor ! response.copy(resource = response.resource,
+      httpResponse = response.httpResponse.copy(entity = compact(render(e))))
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {

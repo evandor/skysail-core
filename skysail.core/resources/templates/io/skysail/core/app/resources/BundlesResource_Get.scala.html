@@ -17,18 +17,20 @@
         <th>Version</th>
         <th>State</th>
         <th>Size</th>
+        <th>Aktionen</th>
     </tr>
     </thead>
     <tbody>
     @for(p <- rep.rawData) {
     <tr>
-        <th scope="row">@p.get("id")</th>
+        <th scope="row"><a href='/root/bundles/@p.get("id")'>@p.get("id")</a></th>
         <td>@p.get("symbolicName")</td>
         <td>@p.get("registeredServiceIds").size</td>
         <td>@p.get("servicesInUse").size</td>
         <th>@p.get("version")</th>
         <th>@p.get("state")</th>
         <th>@p.get("size")</th>
+        <th>[<a href='/root/bundles/@p.get("id")/start'>start</a>][<a href='/root/bundles/@p.get("id")/stop'>stop</a>]</th>
     </tr>
     }
     </tbody>
