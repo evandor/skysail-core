@@ -83,7 +83,7 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
     "create a pathMatcher matching a path definition with placeholder for an app without version" in {
       expectSuccessFor(testRouteForPath("appPath", "/seg1/:id"), "/appPath/seg1/76dbbd1c-6242")
       expectSuccessFor(testRouteForPath("appPath", "/seg1/:id/"), "/appPath/seg1/76dbbd1c-6242/")
-      //expectSuccessFor(testRouteForPath("appPath", "/seg1/:id/seg2"), "/appPath/seg1/76dbbd1c-6242/seg2")
+      expectSuccessFor(testRouteForPath("appPath", "/seg1/:id/seg2"), "/appPath/seg1/76dbbd1c-6242/seg2")
     }
 
     "create a pathMatcher matching a path definition with placeholder for an app with version" in {
@@ -116,7 +116,7 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
   }
 
   private def expectSuccessFor(testedRoute: Route, testPath: String): Unit = {
-    log info s" - testing '${testPath}' against route definition, expecting success"
+    log info s" - testing '$testPath' against route definition, expecting success"
     Get(testPath) ~> testedRoute ~> check {
       successfulCall(testPath)
     }
@@ -154,12 +154,22 @@ class PathMatcherFactorySpec extends WordSpec with BeforeAndAfterEach with Match
       }
       case (pm: Any, e: Class[Tuple1[_]]) => get {
         println(s"hier: ${pm.getClass.getName}")
-        pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { i =>
-          complete {
-            log info s"matched(1) ${i}"
-            s"successfully matched"
+        if (pm.isInstanceOf[PathMatcher[Tuple1[List[String]]]]) {
+          pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { i =>
+            complete {
+              log info s"matched(1) ${i}"
+              s"successfully matched"
+            }
+          }
+        } else {
+          pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[String]]]) { i =>
+            complete {
+              log info s"matched(1) ${i}"
+              s"successfully matched"
+            }
           }
         }
+
       }
       case (pm: Any, e: Tuple2[_, _]) => get {
         pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[String]]]) { i =>

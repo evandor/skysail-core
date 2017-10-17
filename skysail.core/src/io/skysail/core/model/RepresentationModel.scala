@@ -13,7 +13,11 @@ class RepresentationModel(/*responseEvent: ListResponseEvent[_]*/ resource: Any)
 
   val rawData: List[Map[String, Any]] = deriveRawData()
 
-  def deriveRawData(): List[Map[String, Any]] = {
+  def linkFor(clsName: String, id: Option[Any]): String = {
+    "/root/bundles/" +  id.getOrElse("unknown")
+  }
+
+  private def deriveRawData(): List[Map[String, Any]] = {
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     //val r = responseEvent.resource
