@@ -1,16 +1,18 @@
 package io.skysail.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.skysail.core.akka.ResponseEventBase
 import org.json4s.JsonAST.JArray
 import org.json4s.{DefaultFormats, Extraction, JObject, jackson}
 import org.slf4j.LoggerFactory
 
-class RepresentationModel(/*responseEvent: ListResponseEvent[_]*/ resource: Any) {
+class RepresentationModel(/*responseEvent: ListResponseEvent[_]*/ response: ResponseEventBase, model: ApplicationModel) {
 
   private val log = LoggerFactory.getLogger(this.getClass)
 
   private val mapper = new ObjectMapper
 
+  //private val model = response.resource
   val rawData: List[Map[String, Any]] = deriveRawData()
 
   def linkFor(clsName: String, id: Option[Any]): String = {
@@ -21,7 +23,7 @@ class RepresentationModel(/*responseEvent: ListResponseEvent[_]*/ resource: Any)
     implicit val formats = DefaultFormats
     implicit val serialization = jackson.Serialization
     //val r = responseEvent.resource
-    val e = Extraction.decompose(resource)//.asInstanceOf[JArray]
+    val e = Extraction.decompose(response.entity)//.asInstanceOf[JArray]
     e match {
       case _:JArray => {
         e.children.map(c => {

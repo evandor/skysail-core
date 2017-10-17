@@ -18,12 +18,22 @@ class ResourceModel {
   linkModels: List[LinkModel2] = List()
 }
 
+class EntityModel {
+    entityClass: Type
+}
 
 class LinkModel {
 }
 
+class RouteMapping {
+  path: String, resourceClass: Class[_ <: Resource[T]]
+  getEntityType(): Type
+}
+
 ApplicationModel o-- "n" ResourceModel
+ApplicationModel .. RouteMapping
 ResourceModel -- LinkModel
+ResourceModel -- "1" EntityModel
 
 
 @enduml

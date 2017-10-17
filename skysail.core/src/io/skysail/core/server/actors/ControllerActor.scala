@@ -38,6 +38,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
   implicit val askTimeout: Timeout = 1.seconds
 
   var applicationActor: ActorRef = null
+  var applicationModel: ApplicationModel = null
 
   import context._
 
@@ -46,6 +47,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
   def in: Receive = LoggingReceive {
     case SkysailContext(cmd: ProcessCommand, model: ApplicationModel, resource: AsyncResource[T], _: Option[BundleContext]) => {
       applicationActor = sender
+      applicationModel = model
       resource.setActorContext(context)
       resource.setApplicationModel(model)
       cmd.ctx.request.method match {
@@ -66,7 +68,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
 
-      val m = Marshal(response.resource.asInstanceOf[List[_]]).to[RequestEntity]
+      val m = Marshal(response.entity.asInstanceOf[List[_]]).to[RequestEntity]
 
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
         handleHtmlWithFallback(response, m)
@@ -80,7 +82,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       implicit val formats = DefaultFormats
       implicit val serialization = jackson.Serialization
 
-      val e = Extraction.decompose(response.resource).asInstanceOf[JObject]
+      val e = Extraction.decompose(response.entity).asInstanceOf[JObject]
       val written = write(e)
 
       if (negotiator.isAccepted(MediaTypes.`text/html`)) {
@@ -98,7 +100,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
           val reqEvent = RequestEvent(null, null)
           val resEvent = ListResponseEvent(reqEvent, null)
           log info s">>> OUT(${this.hashCode()} >>>: sending back to ${applicationActor}"
-          applicationActor ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
+          applicationActor ! resEvent.copy(entity = msg, httpResponse = resEvent.httpResponse.copy(entity = value))
       }
     }
     case msg: ControllerActor.MyResponseEntity => {
@@ -115,7 +117,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       val e = Extraction.decompose(msg).asInstanceOf[JObject]
       val written = write(e)
       val r = HttpEntity(ContentTypes.`application/json`, written)
-      applicationActor ! resEvent.copy(resource = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
+      applicationActor ! resEvent.copy(entity = msg, httpResponse = resEvent.httpResponse.copy(entity = r))
     }
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
   }
@@ -128,10 +130,10 @@ class ControllerActor[T]() extends Actor with ActorLogging {
 
       m.onSuccess {
         case value =>
-          val rep = new RepresentationModel(response.resource)
+          val rep = new RepresentationModel(response, applicationModel)
           val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
           val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
-          applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+          applicationActor ! response.copy(entity = response.entity, httpResponse = response.httpResponse.copy(entity = answer))
       }
 
     } catch {
@@ -146,10 +148,10 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       val resourceHtmlClass = loader.loadClass(resourceClassAsString)
       val applyMethod = resourceHtmlClass.getMethod("apply", classOf[RepresentationModel])
 
-      val rep = new RepresentationModel(response.resource)
+      val rep = new RepresentationModel(response, applicationModel)
       val r2 = applyMethod.invoke(resourceHtmlClass, rep).asInstanceOf[HtmlFormat.Appendable]
       val answer = HttpEntity(ContentTypes.`text/html(UTF-8)`, r2.body)
-      applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = answer))
+      applicationActor ! response.copy(entity = response.entity, httpResponse = response.httpResponse.copy(entity = answer))
 
     } catch {
       case ex: Exception =>
@@ -163,13 +165,13 @@ class ControllerActor[T]() extends Actor with ActorLogging {
   private def handleJson(m: Future[MessageEntity], response: ListResponseEvent[T]) = {
     m.onSuccess {
       case value =>
-        applicationActor ! response.copy(resource = response.resource, httpResponse = response.httpResponse.copy(entity = value))
+        applicationActor ! response.copy(entity = response.entity, httpResponse = response.httpResponse.copy(entity = value))
     }
   }
 
   private def handleJson(response: ResponseEvent[T], e: JObject) = {
     import org.json4s.jackson.JsonMethods._
-    applicationActor ! response.copy(resource = response.resource,
+    applicationActor ! response.copy(entity = response.entity,
       httpResponse = response.httpResponse.copy(entity = compact(render(e))))
   }
 

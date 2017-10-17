@@ -25,6 +25,7 @@ class ApplicationModelSpec extends FlatSpec {
     val model = new ApplicationModel("appName",ApiVersion(1),"desc")
     assert(model != null)
     assert(model.name == "appName")
+    assert(model.description == "desc")
   }
 
 //  "An ApplicationModel" should "create links without API version if no apiVersion is provided" in {

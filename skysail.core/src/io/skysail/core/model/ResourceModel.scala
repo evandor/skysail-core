@@ -31,11 +31,9 @@ case class ResourceModel(routeMapping: RouteMapping[_]) {
   private val log = LoggerFactory.getLogger(this.getClass())
 
   val entityClass: Type = routeMapping.getEntityType()
-
   var linkModel: LinkModel2 = _
   var linkModels: List[LinkModel2] = List()
-
-  // def getUri() = appModel.name + appModel.apiVersion.getVersionPath() + path
+  var entityModel = new EntityModel(entityClass)
 
   def resourceType() = {
     //    resource match {
