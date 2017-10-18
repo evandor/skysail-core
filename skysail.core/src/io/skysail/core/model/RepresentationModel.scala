@@ -16,7 +16,8 @@ class RepresentationModel(/*responseEvent: ListResponseEvent[_]*/ response: Resp
   val rawData: List[Map[String, Any]] = deriveRawData()
 
   def linkFor(clsName: String, id: Option[Any]): String = {
-    "/root/bundles/" +  id.getOrElse("unknown")
+    val link: Option[String] = model.linkFor(clsName)
+    link.getOrElse("unknown").replace(":id", id.getOrElse("").toString)
   }
 
   private def deriveRawData(): List[Map[String, Any]] = {

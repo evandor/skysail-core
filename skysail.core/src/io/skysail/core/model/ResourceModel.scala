@@ -1,19 +1,9 @@
 package io.skysail.core.model
 
-import scala.collection.JavaConverters._
-import java.lang.reflect.Field
-import io.skysail.core.ScalaReflectionUtils
-import org.slf4j.LoggerFactory
-import io.skysail.core.app.ApiVersion
-import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.resources.Resource
-import scala.reflect.ClassTag
-import scala.reflect.runtime.universe._
-import io.skysail.core.app.domain.BundleDescriptor
-import io.skysail.core.app.domain.User
-import io.skysail.core.app.resources.BundlesResource
-import io.skysail.core.resources.Resource._
 import io.skysail.core.app.RouteMapping
+import org.slf4j.LoggerFactory
+
+import scala.reflect.runtime.universe._
 
 /**
   * A ResourceModel connects a pathDefinition with a ResourceController class
@@ -21,7 +11,7 @@ import io.skysail.core.app.RouteMapping
   *
   * The HTTP verbs which will be handled depend on the concrete subclass of the ResourceController provided.
   *
-  * @param routeMapping  todo
+  * @param routeMapping todo
   */
 case class ResourceModel(routeMapping: RouteMapping[_]) {
 
@@ -34,6 +24,10 @@ case class ResourceModel(routeMapping: RouteMapping[_]) {
   var linkModel: LinkModel2 = _
   var linkModels: List[LinkModel2] = List()
   var entityModel = new EntityModel(entityClass)
+
+  def linkFor(clsName: String): Option[String] = {
+    if (routeMapping.resourceClass.getName == clsName) Some(routeMapping.path) else None
+  }
 
   def resourceType() = {
     //    resource match {

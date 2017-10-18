@@ -23,14 +23,14 @@
     <tbody>
     @for(p <- rep.rawData) {
     <tr>
-        <th scope="row"><a href='@rep.linkFor("BundleResource", p.get("id"))'>@p.get("id")</a></th>
+        <th scope="row"><a href='@rep.linkFor("io.skysail.core.app.resources.BundleResource", p.get("id"))'>@p.get("id")</a></th>
         <td>@p.get("symbolicName")</td>
         <td>@p.get("registeredServiceIds").size</td>
         <td>@p.get("servicesInUse").size</td>
         <th>@p.get("version")</th>
         <th>@p.get("state")</th>
         <th>@p.get("size")</th>
-        <th>[<a href='@rep.linkFor("BundleResource", p.get("id"))/start'>start</a>][<a href='@rep.linkFor("BundleResource", p.get("id"))/stop'>stop</a>]</th>
+        <th>[<a href='@rep.linkFor("io.skysail.core.app.resources.StartBundleResource", p.get("id"))'>start</a>][<a href='@rep.linkFor("io.skysail.core.app.resources.StopBundleResource", p.get("id"))'>stop</a>]</th>
     </tr>
     }
     </tbody>

@@ -31,7 +31,9 @@ class BundleResource extends AsyncEntityResource[BundleDetails] {
 
 class StartBundleResource extends AsyncPostResource[BundleDetails] {
   def get(requestEvent: RequestEvent): Unit = {
-    requestEvent.controllerActor ! ResponseEvent(requestEvent, null)
+    val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
+    bundlesActor ! BundlesActor.StartBundle(requestEvent.cmd.urlParameter.head.toLong)
+    requestEvent.controllerActor ! ResponseEvent(requestEvent, "{}")
   }
 
   def post(requestEvent: RequestEvent): Unit = {
@@ -41,26 +43,28 @@ class StartBundleResource extends AsyncPostResource[BundleDetails] {
 //      case Success(app) => app.repo.save(requestEvent.cmd.entity)
 //      case Failure(failure) => println(failure)
 //    }
-    requestEvent.controllerActor ! ResponseEvent(requestEvent, null)
+    requestEvent.controllerActor ! ResponseEvent(requestEvent, "{}")
   }
 
-//  override def createRoute(applicationActor: ActorSelection, processCommand: ProcessCommand)(implicit system: ActorSystem): Route = {
-//
-//    implicit val materializer = ActorMaterializer()
-//
-//    val a = Unmarshaller.stringUnmarshaller
-//      .forContentTypes(ContentTypes.`application/json`)
-//      .map(_.parseJson.convertTo[Bookmark])
-//
-//    val entity1 = processCommand.ctx.request.entity
-//    println("Entity1" + entity1)
-//    val b = a.apply(entity1)
-//    println("Entity2" + b)
-//
-//    formFieldMap { map =>
-//      val entity = Bookmark(Some(UUID.randomUUID().toString), map.getOrElse("title", "Unknown"), map.getOrElse("url", "Unknown"))
-//      super.createRoute(applicationActor, processCommand.copy(entity = entity))
-//    }
-//  }
+
+}
+
+class StopBundleResource extends AsyncPostResource[BundleDetails] {
+  def get(requestEvent: RequestEvent): Unit = {
+    val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
+    bundlesActor ! BundlesActor.StopBundle(requestEvent.cmd.urlParameter.head.toLong)
+    requestEvent.controllerActor ! ResponseEvent(requestEvent, "{}")
+  }
+
+  def post(requestEvent: RequestEvent): Unit = {
+    val applicationActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[SkysailRootApplication].getName)
+    val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[SkysailRootApplication]
+    //    r onComplete {
+    //      case Success(app) => app.repo.save(requestEvent.cmd.entity)
+    //      case Failure(failure) => println(failure)
+    //    }
+    requestEvent.controllerActor ! ResponseEvent(requestEvent, "{}")
+  }
+
 
 }

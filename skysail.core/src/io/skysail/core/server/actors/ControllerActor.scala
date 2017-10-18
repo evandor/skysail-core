@@ -11,6 +11,7 @@ import io.skysail.core.app.resources.PostSupport
 import io.skysail.core.model.{ApplicationModel, RepresentationModel}
 import io.skysail.core.resources._
 import io.skysail.core.server.actors.ApplicationActor.{ProcessCommand, SkysailContext}
+import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.write
 import org.json4s.{DefaultFormats, Extraction, JObject, jackson}
 import org.osgi.framework.BundleContext
@@ -79,16 +80,22 @@ class ControllerActor[T]() extends Actor with ActorLogging {
       val negotiator = new MediaTypeNegotiator(response.req.cmd.ctx.request.headers)
       val acceptedMediaRanges = negotiator.acceptedMediaRanges
 
-      implicit val formats = DefaultFormats
-      implicit val serialization = jackson.Serialization
+      implicit val formats: DefaultFormats.type = DefaultFormats
+      implicit val serialization: Serialization.type = jackson.Serialization
 
-      val e = Extraction.decompose(response.entity).asInstanceOf[JObject]
-      val written = write(e)
+      val e1 = Extraction.decompose(response.entity)
 
-      if (negotiator.isAccepted(MediaTypes.`text/html`)) {
-        handleHtmlWithFallback(response, e)
-      } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
-        handleJson(response,e)
+      if (e1.isInstanceOf[JObject]) {
+        val e = e1.asInstanceOf[JObject]
+        val written = write(e)
+
+        if (negotiator.isAccepted(MediaTypes.`text/html`)) {
+          handleHtmlWithFallback(response, e)
+        } else if (negotiator.isAccepted(MediaTypes.`application/json`)) {
+          handleJson(response, e)
+        }
+      } else {
+        applicationActor ! response
       }
     case msg: List[T] => {
       log warning s">>> OUT(${this.hashCode()}) @deprecated >>>: List[T]"
@@ -156,7 +163,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
     } catch {
       case ex: Exception =>
         log info s"rendering fallback to json, could not load '$resourceClassAsString', reason: $ex"
-        handleJson(response,e)
+        handleJson(response, e)
     }
 
   }

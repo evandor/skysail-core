@@ -37,14 +37,14 @@ Seq[Any](format.raw/*6.28*/("""
     <tbody>
     """),_display_(/*24.6*/for(p <- rep.rawData) yield /*24.27*/ {_display_(Seq[Any](format.raw/*24.29*/("""
     """),format.raw/*25.5*/("""<tr>
-        <th scope="row"><a href='"""),_display_(/*26.35*/rep/*26.38*/.linkFor("BundleResource", p.get("id"))),format.raw/*26.77*/("""'>"""),_display_(/*26.80*/p/*26.81*/.get("id")),format.raw/*26.91*/("""</a></th>
+        <th scope="row"><a href='"""),_display_(/*26.35*/rep/*26.38*/.linkFor("io.skysail.core.app.resources.BundleResource", p.get("id"))),format.raw/*26.107*/("""'>"""),_display_(/*26.110*/p/*26.111*/.get("id")),format.raw/*26.121*/("""</a></th>
         <td>"""),_display_(/*27.14*/p/*27.15*/.get("symbolicName")),format.raw/*27.35*/("""</td>
         <td>"""),_display_(/*28.14*/p/*28.15*/.get("registeredServiceIds").size),format.raw/*28.48*/("""</td>
         <td>"""),_display_(/*29.14*/p/*29.15*/.get("servicesInUse").size),format.raw/*29.41*/("""</td>
         <th>"""),_display_(/*30.14*/p/*30.15*/.get("version")),format.raw/*30.30*/("""</th>
         <th>"""),_display_(/*31.14*/p/*31.15*/.get("state")),format.raw/*31.28*/("""</th>
         <th>"""),_display_(/*32.14*/p/*32.15*/.get("size")),format.raw/*32.27*/("""</th>
-        <th>[<a href='"""),_display_(/*33.24*/rep/*33.27*/.linkFor("BundleResource", p.get("id"))),format.raw/*33.66*/("""/start'>start</a>][<a href='"""),_display_(/*33.95*/rep/*33.98*/.linkFor("BundleResource", p.get("id"))),format.raw/*33.137*/("""/stop'>stop</a>]</th>
+        <th>[<a href='"""),_display_(/*33.24*/rep/*33.27*/.linkFor("io.skysail.core.app.resources.StartBundleResource", p.get("id"))),format.raw/*33.101*/("""'>start</a>][<a href='"""),_display_(/*33.124*/rep/*33.127*/.linkFor("io.skysail.core.app.resources.StopBundleResource", p.get("id"))),format.raw/*33.200*/("""'>stop</a>]</th>
     </tr>
     """)))}),format.raw/*35.6*/("""
     """),format.raw/*36.5*/("""</tbody>
@@ -67,10 +67,10 @@ Seq[Any](format.raw/*6.28*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Tue Oct 17 07:37:06 CEST 2017
+                  DATE: Wed Oct 18 08:10:01 CEST 2017
                   SOURCE: /Users/carsten/git/skysail-core/skysail.core/./resources/templates/io/skysail/core/app/resources/BundlesResource_Get.scala.html
-                  HASH: 1ff74bbabfd10253f24a6687e3ff9a17647e5c8c
-                  MATRIX: 656->193|777->219|805->222|816->226|854->228|883->230|1208->529|1245->550|1285->552|1317->557|1383->596|1395->599|1455->638|1485->641|1495->642|1526->652|1576->675|1586->676|1627->696|1673->715|1683->716|1737->749|1783->768|1793->769|1840->795|1886->814|1896->815|1932->830|1978->849|1988->850|2022->863|2068->882|2078->883|2111->895|2167->924|2179->927|2239->966|2295->995|2307->998|2368->1037|2435->1074|2467->1079|2509->1270|2537->1271
+                  HASH: 868e0c965e01c836ce238099e2566bf7262df018
+                  MATRIX: 656->193|777->219|805->222|816->226|854->228|883->230|1208->529|1245->550|1285->552|1317->557|1383->596|1395->599|1486->668|1517->671|1528->672|1560->682|1610->705|1620->706|1661->726|1707->745|1717->746|1771->779|1817->798|1827->799|1874->825|1920->844|1930->845|1966->860|2012->879|2022->880|2056->893|2102->912|2112->913|2145->925|2201->954|2213->957|2309->1031|2360->1054|2373->1057|2468->1130|2530->1162|2562->1167|2604->1358|2632->1359
                   LINES: 15->6|20->6|22->8|22->8|22->8|24->10|38->24|38->24|38->24|39->25|40->26|40->26|40->26|40->26|40->26|40->26|41->27|41->27|41->27|42->28|42->28|42->28|43->29|43->29|43->29|44->30|44->30|44->30|45->31|45->31|45->31|46->32|46->32|46->32|47->33|47->33|47->33|47->33|47->33|47->33|49->35|50->36|52->48|53->49
                   -- GENERATED --
               */
