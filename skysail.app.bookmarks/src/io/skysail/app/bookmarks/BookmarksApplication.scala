@@ -12,7 +12,7 @@ object BookmarksApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=template") }, service = Array(classOf[ApplicationProvider]))
+@Component(immediate = true, property = { Array("service.pid=bookmarks") }, service = Array(classOf[ApplicationProvider]))
 class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Bookmark Application") with ApplicationProvider {
 
   @Reference
