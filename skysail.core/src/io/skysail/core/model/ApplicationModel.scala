@@ -87,7 +87,7 @@ case class ApplicationModel(
     resourceModels.filter { model => model.routeMapping.resourceClass == cls }.headOption
   }
 
-  def getResourceModels: List[ResourceModel] = resourceModels.toList
+  //def getResourceModels: List[ResourceModel] = resourceModels.toList
 
   def entityModelFor(cls: Class[_]): Option[EntityModel] = entityModelsMap.get(cls.getName)
 

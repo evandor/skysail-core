@@ -18,7 +18,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 
 import scala.reflect.api.materializeTypeTag
 import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{PrivateMethodExposer, ListResponseEvent}
+import io.skysail.core.akka.{ListResponseEvent, PrivateMethodExposer}
 import akka.util.Timeout
 
 import scala.concurrent.duration.DurationInt
@@ -40,6 +40,7 @@ import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
 import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
 import io.skysail.core.model.ApplicationModel
 import akka.http.scaladsl.server.directives.Credentials
+import domino.service_watching.ServiceWatcherContext
 import io.skysail.core.server.directives.AuthenticateDirective._
 import io.skysail.core.server.routes.RoutesTracker
 import io.skysail.core.server.actors.ApplicationsActor
@@ -93,8 +94,8 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
     addCapsule(new AkkaCapsule(bundleContext))
 
     watchServices[ApplicationProvider] {
-      case AddingService(service, context) => addApplicationProvider(service)
-      case ModifiedService(service, _) => //log info s"Service '$service' modified"
+      case AddingService(service, context) => addApplicationProvider(service, context)
+      case ModifiedService(service, context) => log info s"Service '$service' modified"; addApplicationProvider(service, context)
       case RemovedService(service, _) => removeApplicationProvider(service)
     }
 
@@ -121,10 +122,11 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
 
   })
 
-  private def addApplicationProvider(appInfoProvider: ApplicationProvider) = {
+  private def addApplicationProvider(appInfoProvider: ApplicationProvider, ctx: ServiceWatcherContext[_]): Unit = {
+    log info s"adding ApplicationProvider: $appInfoProvider; $ctx"
     createApplicationActor(appInfoProvider)
     routesTracker.addRoutesFor(appInfoProvider)
-    restartServer(routesTracker.routes)
+    restartServer(routesTracker.routes())
   }
 
   private def removeApplicationProvider(appInfoProvider: ApplicationProvider) = {
@@ -157,7 +159,7 @@ class AkkaServer extends DominoActivator { //with SprayJsonSupport {
     }
   }
 
-  def createApplicationActor(appInfoProvider: ApplicationProvider) = {
+  private def createApplicationActor(appInfoProvider: ApplicationProvider) = {
     if (appInfoProvider == null) {
       log warn "provided ApplicationProvider was null!"
     } else {

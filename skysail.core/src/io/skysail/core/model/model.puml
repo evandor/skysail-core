@@ -8,7 +8,6 @@ class ApplicationModel {
   addResourceModel(routeMapping: RouteMapping[_]): Option[Type]
   linkFor(clsName: String): Option[String]
   controllerModelFor(cls: Class[_ <: Resource[_]])
-  getResourceModels(): List[ResourceModel]
   entityModelFor(ssr: Resource[_]): Option[EntityModel]
 }
 
