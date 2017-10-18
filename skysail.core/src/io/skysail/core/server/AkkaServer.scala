@@ -1,57 +1,33 @@
 package io.skysail.core.server
 
-import akka.osgi.ActorSystemActivator
-import org.osgi.framework.BundleContext
-import io.skysail.core.app.ApplicationProvider
-import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
+import akka.osgi.ActorSystemActivator
+import akka.stream.ActorMaterializer
+import akka.util.Timeout
+import domino.DominoActivator
+import domino.bundle_watching.BundleWatcherEvent.{AddingBundle, ModifiedBundle, RemovedBundle}
+import domino.capsule.Capsule
+import domino.service_watching.ServiceWatcherContext
+import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
+import io.skysail.api.security.AuthenticationService
+import io.skysail.core.Constants
+import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
+import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.server.actors.{ApplicationsActor, BundlesActor}
+import io.skysail.core.server.routes.RoutesTracker
+import org.osgi.framework.BundleContext
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
-import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
-import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
-import akka.http.scaladsl.server.Directives._
-import domino.DominoActivator
-import domino.capsule.Capsule
-import org.slf4j.LoggerFactory
-import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
-
-import scala.reflect.api.materializeTypeTag
-import akka.http.scaladsl.server.PathMatcher
-import io.skysail.core.akka.{ListResponseEvent, PrivateMethodExposer}
-import akka.util.Timeout
-
 import scala.concurrent.duration.DurationInt
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.RequestContext
-import akka.http.scaladsl.server.RouteResult
-import io.skysail.core.app.SkysailApplication
-import io.skysail.core.app.SkysailApplication.{CreateApplicationActor, DeleteApplicationActor}
-import java.util.concurrent.atomic.AtomicInteger
-
-import akka.http.scaladsl.server.ContentNegotiator.Alternative.ContentType
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.headers.`Content-Type`
-import akka.http.scaladsl.model.ContentTypes._
-import akka.actor.ActorSelection
-import akka.http.scaladsl.server.directives.ContentTypeResolver
-import domino.bundle_watching.BundleWatcherEvent.AddingBundle
-import domino.bundle_watching.BundleWatcherEvent.ModifiedBundle
-import domino.bundle_watching.BundleWatcherEvent.RemovedBundle
-import io.skysail.core.model.ApplicationModel
-import akka.http.scaladsl.server.directives.Credentials
-import domino.service_watching.ServiceWatcherContext
-import io.skysail.core.server.directives.AuthenticateDirective._
-import io.skysail.core.server.routes.RoutesTracker
-import io.skysail.core.server.actors.ApplicationsActor
-import io.skysail.core.server.actors.BundlesActor
-import io.skysail.core.app.ApplicationProvider
-import io.skysail.core.Constants
-import io.skysail.api.security.AuthenticationService
 
 case class ServerConfig(val port: Integer, val binding: String)
 
-class AkkaServer extends DominoActivator { //with SprayJsonSupport {
+class AkkaServer extends DominoActivator {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 

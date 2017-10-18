@@ -48,6 +48,7 @@ skysail.server.um:
 	org.apache.httpcomponents.httpclient;version=4.3,\
 	skysail.api;version=latest,\
 	skysail.core;version=latest,\
+	skysail.app.bookmarks;version=latest,\
 	skysail.client;version=latest,\
 	skysail.server.auth.none;version=latest,\
 	skysail.server.persistence.orientdb;version=latest,\

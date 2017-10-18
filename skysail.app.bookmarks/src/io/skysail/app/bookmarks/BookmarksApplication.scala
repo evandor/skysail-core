@@ -12,21 +12,21 @@ object BookmarksApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-@Component(immediate = true, property = { Array("service.pid=bookmarks") }, service = Array(classOf[ApplicationProvider]))
+//@Component(immediate = true, property = { Array("service.pid=bookmarks") }, service = Array(classOf[ApplicationProvider]))
 class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Bookmark Application") with ApplicationProvider {
 
-  @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
+  //@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
   var dbService: DbService = null
 
   var repo: BookmarksRepository = null
 
-  @Activate
+ // @Activate
   override def activate(appConfig: ApplicationConfiguration, componentContext: ComponentContext): Unit = {
     super.activate(appConfig, componentContext)
     repo = new BookmarksRepository(dbService)
   }
 
-  @Deactivate
+ // @Deactivate
   override def deactivate(componentContext: ComponentContext): Unit = {
     super.deactivate(componentContext)
     repo = null
