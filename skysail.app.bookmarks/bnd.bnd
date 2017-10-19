@@ -1,4 +1,4 @@
-Bundle-Name: SKYSAIL :: app :: template
+Bundle-Name: SKYSAIL :: app :: bookmarks
 
 Bundle-Version: 0.1.0.${tstamp}
 

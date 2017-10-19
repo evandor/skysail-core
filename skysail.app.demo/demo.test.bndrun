@@ -37,8 +37,6 @@ skysail.server.um:
 	${scala-runtime},\
 	${akka-compiletime},\
 	${akka-runtime},\
-	${camel-compiletime},\
-	${rabbitmq-runtime},\
 	${orientdb},\
 	org.apache.commons.pool;version=1.6.0,\
 	com.thoughtworks.paranamer;version=2.8.0,\

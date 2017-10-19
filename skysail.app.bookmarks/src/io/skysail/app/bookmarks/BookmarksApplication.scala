@@ -5,7 +5,6 @@ import io.skysail.app.bookmarks.BookmarksApplication._
 import io.skysail.core.app._
 import io.skysail.core.app.menus.MenuItem
 import org.osgi.service.component.ComponentContext
-import org.osgi.service.component.annotations._
 
 object BookmarksApplication {
   val APPLICATION_NAME = "bookmarks"
@@ -21,8 +20,8 @@ class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERS
   var repo: BookmarksRepository = null
 
  // @Activate
-  override def activate(appConfig: ApplicationConfiguration, componentContext: ComponentContext): Unit = {
-    super.activate(appConfig, componentContext)
+  def activate(): Unit = {
+    //super.activate(appConfig, componentContext)
     repo = new BookmarksRepository(dbService)
   }
 
