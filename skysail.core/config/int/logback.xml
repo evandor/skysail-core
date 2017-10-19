@@ -47,11 +47,41 @@
 		</encoder>
 	</appender>
 
+	<appender name="graylogAppender" class="me.moocar.logbackgelf.GelfUDPAppender">
+		<remoteHost>85.25.22.126</remoteHost>
+		<port>12201</port>
+		<encoder class="me.moocar.logbackgelf.GZIPEncoder">
+			<layout class="me.moocar.logbackgelf.GelfLayout">
+				<useLoggerName>true</useLoggerName>
+				<useThreadName>true</useThreadName>
+				<useMarker>true</useMarker>
+				<includeFullMDC>true</includeFullMDC>
+
+				<staticField class="me.moocar.logbackgelf.Field">
+					<key>env</key>
+					<value>${kvb.env}</value> <!-- SYSTEM VARIABLE -->
+				</staticField>
+
+				<staticField class="me.moocar.logbackgelf.Field">
+					<key>application</key>
+					<value>skysail-server</value>
+				</staticField>
+
+        <staticField class="me.moocar.logbackgelf.Field">
+          <key>stage</key>
+          <value>INT</value>
+        </staticField>
+
+      </layout>
+		</encoder>
+	</appender>
+
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="INFO_FILE" />
 		<appender-ref ref="DEBUG_FILE" />
 		<appender-ref ref="WARN_FILE" />
+		<appender-ref ref="graylogAppender"/>
 	</root>
 
 </configuration>

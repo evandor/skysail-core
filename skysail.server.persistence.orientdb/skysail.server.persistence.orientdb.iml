@@ -34,6 +34,7 @@
     <orderEntry type="library" name="bnd:ch.qos.logback.core:1.1.9" level="project" />
     <orderEntry type="library" name="bnd:slf4j.api:1.7.21" level="project" />
     <orderEntry type="library" name="bnd:org.jboss.logging.jboss-logging:3.1.4.GA" level="project" />
+    <orderEntry type="library" name="bnd:me.moocar.logback-gelf:0.12.0" level="project" />
     <orderEntry type="library" name="bnd:org.apache.commons.beanutils:1.9.2" level="project" />
     <orderEntry type="library" name="bnd:org.apache.commons.collections:3.2.1" level="project" />
     <orderEntry type="library" name="bnd:org.apache.commons.configuration:1.10.0" level="project" />
