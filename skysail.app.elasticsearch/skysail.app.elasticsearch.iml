@@ -97,6 +97,5 @@
     <orderEntry type="library" name="bnd:org.apache.httpcomponents.httpclient:4.3.1" level="project" />
     <orderEntry type="library" name="bnd:com.typesafe.akka.http.testkit:10.0.7" level="project" />
     <orderEntry type="library" name="bnd:com.typesafe.akka.testkit:2.5.3" level="project" />
-    <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
   </component>
 </module>
