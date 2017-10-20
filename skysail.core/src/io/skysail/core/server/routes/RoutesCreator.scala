@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{ActorRef, ActorSelection, ActorSystem}
 import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes, Uri}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
@@ -13,7 +13,6 @@ import akka.stream.scaladsl.{Flow, Source}
 import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
-import io.skysail.core.akka.ResponseEventBase
 import io.skysail.core.app.{ApplicationProvider, RouteMapping, SkysailApplication}
 import io.skysail.core.resources.Resource
 import io.skysail.core.security.AuthorizeByRole
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
-import scala.util.{Failure, Success}
 
 object RoutesCreator {
 
@@ -68,7 +66,10 @@ class RoutesCreator(system: ActorSystem) {
   def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
     val appRoute = appInfoProvider.appModel.appRoute
     log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
-    val pathMatcher = PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
+    val pathMatcher = if (mapping.pathMatcher != null)
+      (mapping.pathMatcher, Unit)
+    else
+      PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
     staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
   }

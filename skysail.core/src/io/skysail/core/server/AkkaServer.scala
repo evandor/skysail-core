@@ -15,8 +15,8 @@ import domino.service_watching.ServiceWatcherContext
 import domino.service_watching.ServiceWatcherEvent.{AddingService, ModifiedService, RemovedService}
 import io.skysail.api.security.AuthenticationService
 import io.skysail.core.Constants
-import io.skysail.core.app.{ApplicationProvider, SkysailApplication}
 import io.skysail.core.app.SkysailApplication.CreateApplicationActor
+import io.skysail.core.app.{ApplicationProvider, SkysailApplication, SkysailRootApplication}
 import io.skysail.core.server.actors.{ApplicationsActor, BundlesActor}
 import io.skysail.core.server.routes.RoutesTracker
 import org.osgi.framework.BundleContext
@@ -68,6 +68,12 @@ class AkkaServer extends DominoActivator {
 
   whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
+
+    //whenServicePresent[DbService] { s =>
+      val app = new SkysailRootApplication()
+      // app.dbService = s
+      app.providesService[ApplicationProvider]
+    //}
 
     watchServices[ApplicationProvider] {
       case AddingService(service, context) => addApplicationProvider(service, context)
