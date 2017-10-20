@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory
 import io.skysail.core.app.domain.ServiceDescriptor
 import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 
+@deprecated // moved to app.osgi
 class ServicesResource extends AsyncListResource[ServiceDescriptor] {
 
   //  @AuthorizeByRole("admin")

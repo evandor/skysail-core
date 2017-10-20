@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import io.skysail.core.server.actors.BundlesActor._
 import org.osgi.framework.{Bundle, BundleContext}
-import org.osgi.framework.wiring.BundleWiring
+import org.osgi.framework.wiring.{BundleCapability, BundleWiring}
 
 object BundlesActor {
 
@@ -70,8 +70,15 @@ class BundlesActor(bundleContext: BundleContext) extends Actor with ActorLogging
   import scala.collection.JavaConversions._
 
   private def getCapabilities() {
-    val result = bundleContext.getBundles.toList.map(bundle => {
-      bundle.getBundleId -> bundle.adapt(classOf[BundleWiring]).getCapabilities(null).toList
+    val result: Map[Long, List[BundleCapability]] = bundleContext.getBundles.toList.filter(_ != null).map(bundle => {
+      val wiring = bundle.adapt(classOf[BundleWiring])
+      if (wiring == null) {
+        bundle.getBundleId -> List()
+      } else {
+        val caps = wiring.getCapabilities(null)
+        val list = if (caps != null) caps.toList else List()
+        bundle.getBundleId -> list
+      }
     }).toMap
     sender ! result
   }

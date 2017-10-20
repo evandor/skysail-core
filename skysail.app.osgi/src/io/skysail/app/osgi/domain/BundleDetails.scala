@@ -1,11 +1,8 @@
-package io.skysail.core.app.domain
+package io.skysail.app.osgi.domain
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import org.osgi.framework.{Bundle, Constants}
 import org.osgi.framework.startlevel.BundleStartLevel
-import org.osgi.framework.wiring.BundleWiring
+import org.osgi.framework.{Bundle, Constants}
 
-@deprecated
 object BundleDetails {
 
 
@@ -55,7 +52,6 @@ object BundleDetails {
 
 }
 
-@deprecated
 case class BundleDetails(
                           desc: BundleDescriptor,
                           location: String,
