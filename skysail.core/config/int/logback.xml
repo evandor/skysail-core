@@ -67,12 +67,12 @@
 					<value>skysail-server</value>
 				</staticField>
 
-        <staticField class="me.moocar.logbackgelf.Field">
-          <key>stage</key>
-          <value>INT</value>
-        </staticField>
+				<staticField class="me.moocar.logbackgelf.Field">
+				  <key>stage</key>
+				  <value>INT</value>
+				</staticField>
 
-      </layout>
+            </layout>
 		</encoder>
 	</appender>
 

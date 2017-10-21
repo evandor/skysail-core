@@ -52,8 +52,6 @@ class RoutesCreator(system: ActorSystem) {
   val capabilitiesFuture = (SkysailApplication.getBundlesActor(system) ? BundlesActor.GetCapabilities()).mapTo[Map[Long, List[BundleCapability]]]
   val capabilities = Await.result(capabilitiesFuture, 1.seconds)
 
-  log info "HIER: " +  capabilities
-
   val bundleIdsWithClientCapabilities = capabilities.filter {
     entry => entry._2.filter { cap => Constants.CLIENT_CAPABILITY.equals(cap.getNamespace) }.size > 0
   }.map { m => m._1 }
