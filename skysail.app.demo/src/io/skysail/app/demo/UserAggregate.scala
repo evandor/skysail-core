@@ -1,11 +1,11 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import akka.actor.{ActorLogging, ActorRef, Props, SupervisorStrategy}
 import akka.event.LoggingReceive
 import akka.persistence.{AtLeastOnceDelivery, PersistentActor}
-import io.skysail.app.osgi.EventSender.Confirm
-import io.skysail.app.osgi.UserAggregate.{Evt, GetUsersForwardResponse, MsgAddUser, MsgConfirmed}
-import io.skysail.app.osgi.UserRepository.ConfirmAddUser
+import io.skysail.app.demo.EventSender.Confirm
+import io.skysail.app.demo.UserAggregate.{Evt, GetUsersForwardResponse, MsgAddUser, MsgConfirmed}
+import io.skysail.app.demo.UserRepository.ConfirmAddUser
 
 object UserAggregate {
 

@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import org.osgi.service.cm.Configuration
 

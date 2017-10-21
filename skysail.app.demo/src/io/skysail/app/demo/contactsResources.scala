@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import akka.actor.ActorRef
 import io.skysail.core.resources.AsyncListResource

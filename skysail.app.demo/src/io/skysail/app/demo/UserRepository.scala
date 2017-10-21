@@ -1,8 +1,8 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import akka.actor.{ ActorLogging, Props }
 import akka.persistence.PersistentActor
-import io.skysail.app.osgi.UserRepository.{ AddUser, ConfirmAddUser, GetUsers }
+import io.skysail.app.demo.UserRepository.{ AddUser, ConfirmAddUser, GetUsers }
 
 object UserRepository {
 

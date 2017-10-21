@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 final case class AddUserCmd(user: Contact)
 

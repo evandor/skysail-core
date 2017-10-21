@@ -1,6 +1,6 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
-import io.skysail.app.osgi.DemoApplication._
+import io.skysail.app.demo.DemoApplication._
 import org.osgi.service.cm.ConfigurationAdmin
 import org.osgi.service.component.annotations._
 import io.skysail.core.app.menus.MenuItem

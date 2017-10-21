@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
-case class ServerConfig(val port: Integer, val binding: String)
+case class ServerConfig(port: Integer, binding: String)
 
 class AkkaServer extends DominoActivator {
 
@@ -69,12 +69,6 @@ class AkkaServer extends DominoActivator {
   whenBundleActive({
     addCapsule(new AkkaCapsule(bundleContext))
 
-    //whenServicePresent[DbService] { s =>
-      val app = new SkysailRootApplication()
-      // app.dbService = s
-      app.providesService[ApplicationProvider]
-    //}
-
     watchServices[ApplicationProvider] {
       case AddingService(service, context) => addApplicationProvider(service, context)
       case ModifiedService(service, context) => log info s"Service '$service' modified"; addApplicationProvider(service, context)
@@ -100,6 +94,10 @@ class AkkaServer extends DominoActivator {
       //var authentication = conf.getOrElse("authentication", defaultAuthentication).asInstanceOf[String]
       serverConfig = ServerConfig(port, binding)
       routesTracker = new RoutesTracker(actorSystem)
+
+      val app = new SkysailRootApplication()
+      app.providesService[ApplicationProvider]
+
     }
 
   })

@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import io.skysail.core.akka.RequestEvent
 import io.skysail.core.resources.{AsyncEntityResource, AsyncListResource}

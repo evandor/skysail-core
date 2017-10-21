@@ -1,15 +1,15 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.model.{ContentTypes, ResponseEntity}
 import akka.http.scaladsl.unmarshalling.Unmarshal
+import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+import io.skysail.core.akka.RequestEvent
 import io.skysail.core.app.SkysailApplication
 import io.skysail.core.resources.AsyncListResource
 import io.skysail.core.server.actors.ApplicationActor
-import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.{ClientProtocolException, ResponseHandler}
@@ -19,9 +19,6 @@ import org.json4s.{DefaultFormats, jackson}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
-import akka.pattern.ask
-import io.skysail.core.akka.RequestEvent
-
 import scala.util.{Failure, Success}
 
 class EsResource extends AsyncListResource[DemoRoot] {

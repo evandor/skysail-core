@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import io.skysail.core.akka.actors._
 import scala.concurrent.ExecutionContext

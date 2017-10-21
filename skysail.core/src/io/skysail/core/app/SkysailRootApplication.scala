@@ -2,11 +2,11 @@ package io.skysail.core.app
 
 import java.util.Dictionary
 
+import akka.http.scaladsl.server.{PathMatcher, PathMatchers}
 import io.skysail.core.app.menus.MenuItem
 import io.skysail.core.app.resources.{AppResource, BundlesResource, _}
 import io.skysail.core.resources.AssetsResource
 import org.osgi.service.cm.ManagedService
-import org.osgi.service.component.annotations._
 
 object SkysailRootApplication {
   val ROOT_APPLICATION_NAME = "root"
@@ -22,10 +22,10 @@ object SkysailRootApplication {
 
 }
 
-@Component(
-  immediate = true,
-  property = { Array("service.pid=landingpages") },
-  service = Array(classOf[ApplicationProvider], classOf[ManagedService]))
+//@Component(
+//  immediate = true,
+//  property = { Array("service.pid=landingpages") },
+//  service = Array(classOf[ApplicationProvider], classOf[ManagedService]))
 class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null, "backend root")
     with ApplicationProvider
     with ManagedService {
@@ -48,10 +48,10 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       RouteMapping("/apps", classOf[AppsResource]),
       RouteMapping("/apps/menus", classOf[MenusResource]),
       RouteMapping("/bundles", classOf[BundlesResource]),
-      RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
-      //RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundle") / PathMatchers.Segment),
-      RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
-      RouteMapping("/bundles/:id", classOf[BundleResource]),
+      //RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
+      RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundles") / PathMatchers.Segment),
+      //RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
+      //RouteMapping("/bundles/:id", classOf[BundleResource]),
       RouteMapping("/services", classOf[ServicesResource]),
       RouteMapping("/app", classOf[AppResource]),
       RouteMapping("/assets", classOf[AssetsResource]),

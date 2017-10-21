@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import akka.actor.{ Actor, ActorLogging, ActorPath, Props, Status }
 //import akka.camel.{ CamelMessage, Producer }

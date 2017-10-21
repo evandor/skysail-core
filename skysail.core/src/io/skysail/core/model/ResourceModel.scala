@@ -15,7 +15,7 @@ import scala.reflect.runtime.universe._
   */
 case class ResourceModel(routeMapping: RouteMapping[_]) {
 
-  require(routeMapping.path != null, "A ResourceModel's pathMatcher must not be null")
+  //require(routeMapping.path != null, "A ResourceModel's pathMatcher must not be null")
   require(routeMapping.resourceClass != null, "A ResourceModel's resource class must not be null")
 
   private val log = LoggerFactory.getLogger(this.getClass())
@@ -26,7 +26,7 @@ case class ResourceModel(routeMapping: RouteMapping[_]) {
   var entityModel = new EntityModel(entityClass)
 
   def linkFor(clsName: String): Option[String] = {
-    if (routeMapping.resourceClass.getName == clsName) Some(routeMapping.path) else None
+    if (routeMapping.resourceClass.getName == clsName && routeMapping.path != null) Some(routeMapping.path) else None
   }
 
   def resourceType() = {

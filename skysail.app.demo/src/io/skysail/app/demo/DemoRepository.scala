@@ -1,4 +1,4 @@
-package io.skysail.app.osgi
+package io.skysail.app.demo
 
 import io.skysail.api.persistence.DbService
 import com.tinkerpop.blueprints.impls.orient.OrientVertex

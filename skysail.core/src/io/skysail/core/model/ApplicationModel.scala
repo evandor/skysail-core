@@ -63,7 +63,7 @@ case class ApplicationModel(
     * @return
     */
   def addResourceModel(routeMapping: RouteMapping[_]): Option[Type] = {
-    require(routeMapping.path != null, "The resource's path must not be null")
+    //require(routeMapping.path != null, "The resource's path must not be null")
     require(routeMapping.resourceClass != null, "The resource's controller class must not be null")
 
     log debug s"mapping '${appPath()}${routeMapping.path}' to '${routeMapping.resourceClass}[${routeMapping.getEntityType()}]'"
@@ -109,7 +109,7 @@ case class ApplicationModel(
   def appPath(): String = "/" + name + (if (apiVersion != null) "/" + apiVersion.toString else "")
 
   private def build(): Unit = {
-    resourceModels.foreach {
+    resourceModels.filter(m => m.routeMapping.path != null).foreach {
       resourceModel =>
         resourceModel.linkModel = new LinkModel2(appPath(), resourceModel.routeMapping.path, RESOURCE_SELF)
         var result = scala.collection.mutable.ListBuffer[LinkModel2]()

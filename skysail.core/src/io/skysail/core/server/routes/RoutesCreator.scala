@@ -67,9 +67,10 @@ class RoutesCreator(system: ActorSystem) {
     val appRoute = appInfoProvider.appModel.appRoute
     log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
     val pathMatcher = if (mapping.pathMatcher != null)
-      (mapping.pathMatcher, Unit)
+      (mapping.pathMatcher, classOf[Tuple1[String]])
     else
       PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
+
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
     staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
   }

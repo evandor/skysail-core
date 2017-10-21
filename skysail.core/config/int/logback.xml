@@ -48,7 +48,7 @@
 	</appender>
 
 	<appender name="graylogAppender" class="me.moocar.logbackgelf.GelfUDPAppender">
-		<remoteHost>85.25.22.126</remoteHost>
+		<remoteHost>172.17.0.1</remoteHost>
 		<port>12201</port>
 		<encoder class="me.moocar.logbackgelf.GZIPEncoder">
 			<layout class="me.moocar.logbackgelf.GelfLayout">
