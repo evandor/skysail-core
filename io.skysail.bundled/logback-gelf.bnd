@@ -1,0 +1,23 @@
+Bundle-Version: 1.0.4.${tstamp}
+
+-classpath: \
+    jar/logback-gelf-1.0.4.jar
+   
+#-includeresource: /LICENSE.txt
+#Include-Resource: reference.conf=reference.conf,LICENSE.txt=LICENSE.txt
+#Include-Resource: OSGI-OPT/src=LICENSE.txt
+
+#Private-Package: reference.conf
+#Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+#-includeresource: @jar/akka-persistence-inmemory_2.11-2.5.1.1.jar
+
+Export-Package: \
+    de.siegmar.logbackgelf.*;version=1.0.4
+    
+Bundle-Name: logback-gelf.jar
+
+Import-Package: \
+    *
+
+
