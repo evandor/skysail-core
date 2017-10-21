@@ -2,6 +2,9 @@ Bundle-Version: 1.0.4.${tstamp}
 
 -classpath: \
     jar/logback-gelf-1.0.4.jar
+    
+Fragment-Host: ch.qos.logback.classic
+    
    
 #-includeresource: /LICENSE.txt
 #Include-Resource: reference.conf=reference.conf,LICENSE.txt=LICENSE.txt
