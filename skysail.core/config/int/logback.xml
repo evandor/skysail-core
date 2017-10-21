@@ -47,34 +47,10 @@
 		</encoder>
 	</appender>
 
-	<appender name="graylogAppender" class="me.moocar.logback.net.SocketEncoderAppender">
-		<remoteHost>172.17.0.1</remoteHost>
-		<port>12201</port>
-		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-			<layout class="me.moocar.logbackgelf.GelfLayout">
-				<useLoggerName>true</useLoggerName>
-				<useThreadName>true</useThreadName>
-				<useMarker>true</useMarker>
-				<includeFullMDC>true</includeFullMDC>
-
-				<staticField class="me.moocar.logbackgelf.Field">
-					<key>env</key>
-					<value>${kvb.env}</value> <!-- SYSTEM VARIABLE -->
-				</staticField>
-
-				<staticField class="me.moocar.logbackgelf.Field">
-					<key>application</key>
-					<value>skysail-server</value>
-				</staticField>
-
-				<staticField class="me.moocar.logbackgelf.Field">
-				  <key>stage</key>
-				  <value>INT</value>
-				</staticField>
-
-            </layout>
-		</encoder>
-	</appender>
+	<appender name="graylogAppender" class="de.siegmar.logbackgelf.GelfTcpAppender">
+        <graylogHost>172.17.0.1</graylogHost>
+        <graylogPort>12201</graylogPort>
+    </appender>
 
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
