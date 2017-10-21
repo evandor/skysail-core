@@ -47,10 +47,10 @@
 		</encoder>
 	</appender>
 
-	<appender name="graylogAppender" class="me.moocar.logbackgelf.GelfUDPAppender">
+	<appender name="graylogAppender" class="me.moocar.logback.net.SocketEncoderAppender">
 		<remoteHost>172.17.0.1</remoteHost>
 		<port>12201</port>
-		<encoder class="me.moocar.logbackgelf.GZIPEncoder">
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
 			<layout class="me.moocar.logbackgelf.GelfLayout">
 				<useLoggerName>true</useLoggerName>
 				<useThreadName>true</useThreadName>
