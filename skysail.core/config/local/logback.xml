@@ -44,11 +44,33 @@
 			<pattern>%date{"yyyy-MM-dd HH:mm:ss,SSS"} %-5level [%-45logger{40}] - %msg%n</pattern>
 		</encoder>
 	</appender>
-	
-	<appender name="graylogAppender" class="de.siegmar.logbackgelf.GelfTcpAppender">
-        <graylogHost>172.17.0.1</graylogHost>
-        <graylogPort>12201</graylogPort>
-    </appender>
+
+	<appender name="graylogAppender" class="de.siegmar.logbackgelf.GelfUdpAppender">
+		<graylogHost>localhost</graylogHost>
+		<graylogPort>12201</graylogPort>
+		<useCompression>true</useCompression>
+		<layout class="de.siegmar.logbackgelf.GelfLayout">
+			<originHost>localhost</originHost>
+			<includeRawMessage>true</includeRawMessage>
+			<includeMarker>true</includeMarker>
+			<includeMdcData>true</includeMdcData>
+			<includeCallerData>true</includeCallerData>
+			<includeRootCauseData>true</includeRootCauseData>
+			<includeLevelName>true</includeLevelName>
+			<shortPatternLayout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>%m%nopex</pattern>
+			</shortPatternLayout>
+			<fullPatternLayout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>%m</pattern>
+			</fullPatternLayout>
+			<staticField>app_name:server</staticField>
+			<staticField>stage:INT</staticField>
+			<staticField>os_arch:${os.arch}</staticField>
+			<staticField>os_name:${os.name}</staticField>
+			<staticField>os_version:${os.version}</staticField>
+		</layout>
+	</appender>
+
 
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />

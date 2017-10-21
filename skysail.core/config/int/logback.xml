@@ -48,7 +48,7 @@
 	</appender>
 
 	<appender name="graylogAppender" class="de.siegmar.logbackgelf.GelfUdpAppender">
-        <graylogHost>localhost</graylogHost>
+        <graylogHost>172.17.0.1</graylogHost>
         <graylogPort>12201</graylogPort>
 		<useCompression>true</useCompression>
 		<layout class="de.siegmar.logbackgelf.GelfLayout">
