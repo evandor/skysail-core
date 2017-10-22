@@ -70,5 +70,6 @@
     <orderEntry type="library" name="bnd:com.sun.jna.platform:4.2.0" level="project" />
     <orderEntry type="module" module-name="skysail.api" />
     <orderEntry type="library" name="bnd:domino_2.11:1.1.2" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
   </component>
 </module>

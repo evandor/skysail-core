@@ -13,7 +13,6 @@ object DemoApplication {
   val API_VERSION = ApiVersion(1)
 }
 
-//@Component(immediate = true, property = { Array("service.pid=demo") }, service = Array(classOf[ApplicationProvider]))
 class DemoApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Demo Application") with ApplicationProvider {
 
   @Reference

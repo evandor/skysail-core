@@ -21,7 +21,7 @@ import org.json4s.jackson.JsonMethods._
 import scala.reflect.ClassTag
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 
-class OrientDbGraphService extends DbService {
+class OrientDbGraphService(url: String, user: String, pass: String) extends DbService {
 
   private var log = LoggerFactory.getLogger(this.getClass)
 
@@ -30,14 +30,14 @@ class OrientDbGraphService extends DbService {
   log info s"activating ${this.getClass().getName()}"
 
   //http://stackoverflow.com/questions/30291359/orient-db-unable-to-open-any-kind-of-graph
-  if (getDbUrl().startsWith("memory:")) {
+  if (url.startsWith("memory:")) {
     // https://github.com/orientechnologies/orientdb/issues/5105
     // com.orientechnologies.common.util.OClassLoaderHelper
     new OGraphCommandExecutorSQLFactory()
-    new OrientGraphNoTx(getDbUrl())
+    new OrientGraphNoTx(url)
   }
 
-  graphDbFactory = new OrientGraphFactory(getDbUrl(), getDbUsername(), getDbPassword()).setupPool(1, 10)
+  graphDbFactory = new OrientGraphFactory(url, user, pass).setupPool(1, 10)
 
   val graphFunctions = new OGraphFunctionFactory()
   val names = graphFunctions.getFunctionNames().asScala
@@ -52,11 +52,6 @@ class OrientDbGraphService extends DbService {
     }
   }
 
-  //#url = plocal:etc/db
-  private def getDbUrl(): String = "remote:localhost/skysailcrm" //memory:testdb"
-  private def getDbUsername(): String = "admin"
-  private def getDbPassword(): String = "admin"
-
   def createWithSuperClass(superClass: String, vertices: String*) = {
     val objectDb = getObjectDb()
     vertices.foreach(v => {
@@ -68,7 +63,7 @@ class OrientDbGraphService extends DbService {
   }
 
   private def getObjectDb(): OObjectDatabaseTx = {
-    val opDatabasePool = new OPartitionedDatabasePool(getDbUrl(), getDbUsername(), getDbPassword())
+    val opDatabasePool = new OPartitionedDatabasePool(url, user, pass)
     val oDatabaseDocumentTx = opDatabasePool.acquire()
     new OObjectDatabaseTx(oDatabaseDocumentTx)
   }
