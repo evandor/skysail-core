@@ -111,7 +111,7 @@ class AkkaServer extends DominoActivator {
 
   private def removeApplicationProvider(appInfoProvider: ApplicationProvider) = {
     routesTracker.removeRoutesFrom(appInfoProvider)
-    restartServer(routesTracker.routes)
+    restartServer(routesTracker.routes())
   }
 
   private def removeAuthenticationService(authenticationService: AuthenticationService) = {

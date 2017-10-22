@@ -1,7 +1,6 @@
 package io.skysail.app.demo
 
 import io.skysail.api.persistence.DbService
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
 
 class DemoRepository(dbService: DbService) {
   dbService.createWithSuperClass("V", classOf[Contact].getSimpleName)
@@ -17,7 +16,7 @@ class DemoRepository(dbService: DbService) {
     //                        : "")
     //                + " " + limitClause(pagination);
     //pagination.setEntityCount(count(filter));
-    println("executing sql " + sql)
+    //println("executing sql " + sql)
     dbService.findGraphs(classOf[Contact], sql) //, filter.getParams());
   }
 

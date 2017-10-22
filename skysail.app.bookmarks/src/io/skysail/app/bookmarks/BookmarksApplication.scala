@@ -4,7 +4,6 @@ import io.skysail.api.persistence.DbService
 import io.skysail.app.bookmarks.BookmarksApplication._
 import io.skysail.core.app._
 import io.skysail.core.app.menus.MenuItem
-import org.osgi.service.component.ComponentContext
 
 object BookmarksApplication {
   val APPLICATION_NAME = "bookmarks"
@@ -13,20 +12,13 @@ object BookmarksApplication {
 
 class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "Skysail Bookmark Application") with ApplicationProvider {
 
-  var dbService: DbService = null
-  var repo: BookmarksRepository = null
+  var dbService: DbService = _
+  var repo: BookmarksRepository = _
 
-  def activate(): Unit = {
-    repo = new BookmarksRepository(dbService)
-  }
+  def activate(): Unit = repo = new BookmarksRepository(dbService)
+  def deactivate(): Unit = repo = null
 
- // @Deactivate
-  override def deactivate(componentContext: ComponentContext): Unit = {
-    super.deactivate(componentContext)
-    repo = null
-  }
-
-  override def menu() = {
+  override def menu(): Some[MenuItem] = {
     Some(
       MenuItem("Bookmarks", "fa-file-o", None, Some(List(
         MenuItem("Overview", "fa-plus", Some("/client/bookmarks/v1")),

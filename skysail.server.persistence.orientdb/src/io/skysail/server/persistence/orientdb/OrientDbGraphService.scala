@@ -113,7 +113,7 @@ class OrientDbGraphService(url: String, user: String, pass: String) extends DbSe
     //doc.fieldNames().foreach(fieldName => )
     val ast = parse(doc.toJSON())
     implicit val formats = DefaultFormats
-    println("AST" + ast)
+    //println("AST" + ast)
     ast.extract[T]
   }
 

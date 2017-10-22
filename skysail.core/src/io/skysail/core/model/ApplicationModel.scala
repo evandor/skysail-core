@@ -33,6 +33,8 @@ case class ApplicationModel(
                              description: String,
                              associatedResourceClasses: List[Tuple2[ResourceAssociationType, Class[_ <: Resource[_]]]] = List()) {
 
+  val id: String = if (apiVersion == null) name else s"$name/${apiVersion.toString()}"
+
   def linkFor(clsName: String): Option[String] = {
     val res = resourceModels.map(m => m.linkFor(clsName)).filter(l => l.isDefined).map(l => l.get)
     if (res.size == 0) None else Some("/" + name + res.head)
