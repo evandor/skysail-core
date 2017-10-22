@@ -67,9 +67,6 @@
 			</fullPatternLayout>
 			<staticField>app_name:server</staticField>
 			<staticField>stage:INT</staticField>
-			<staticField>os_arch:${os.arch}</staticField>
-			<staticField>os_name:${os.name}</staticField>
-			<staticField>os_version:${os.version}</staticField>
 		</layout>
     </appender>
 

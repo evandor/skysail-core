@@ -50,7 +50,7 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
       RouteMapping("/bundles", classOf[BundlesResource]),
       //RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
       RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundles") / PathMatchers.Segment),
-      //RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
+      RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
       //RouteMapping("/bundles/:id", classOf[BundleResource]),
       RouteMapping("/services", classOf[ServicesResource]),
       RouteMapping("/app", classOf[AppResource]),
