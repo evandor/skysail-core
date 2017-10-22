@@ -8,6 +8,7 @@ import io.skysail.core.resources._
 import io.skysail.core.server.actors.{ApplicationActor, BundlesActor}
 import org.osgi.framework.Bundle
 
+@deprecated
 class BundlesResource extends AsyncListResource[BundleDescriptor] {
 
   //  @AuthorizeByRole("admin")
@@ -18,6 +19,7 @@ class BundlesResource extends AsyncListResource[BundleDescriptor] {
   }
 }
 
+@deprecated
 class BundleResource extends AsyncEntityResource[BundleDetails] {
 
   //  @AuthorizeByRole("admin")
@@ -29,6 +31,7 @@ class BundleResource extends AsyncEntityResource[BundleDetails] {
 
 }
 
+@deprecated
 class StartBundleResource extends AsyncPostResource[BundleDetails] {
   def get(requestEvent: RequestEvent): Unit = {
     val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
@@ -49,6 +52,7 @@ class StartBundleResource extends AsyncPostResource[BundleDetails] {
 
 }
 
+@deprecated
 class StopBundleResource extends AsyncPostResource[BundleDetails] {
   def get(requestEvent: RequestEvent): Unit = {
     val bundlesActor = SkysailApplication.getBundlesActor(this.actorContext.system)
