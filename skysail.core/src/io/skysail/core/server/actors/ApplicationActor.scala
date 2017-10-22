@@ -2,7 +2,8 @@ package io.skysail.core.server.actors
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.SupervisorStrategy.{Restart, Stop}
+import akka.actor.{Actor, ActorInitializationException, ActorKilledException, ActorLogging, DeathPactException, OneForOneStrategy, Props}
 import akka.event.LoggingReceive
 import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.server.RequestContext
@@ -73,6 +74,15 @@ class ApplicationActor(appModel: ApplicationModel, application: SkysailApplicati
   override def preRestart(reason: Throwable, message: Option[Any]) {
     log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
+
+  override val supervisorStrategy =
+    OneForOneStrategy() {
+      case _: ClassNotFoundException       ⇒ Stop
+      case _: ActorInitializationException ⇒ Stop
+      case _: ActorKilledException         ⇒ Stop
+      case _: DeathPactException           ⇒ Stop
+      case _: Exception                    ⇒ Restart
+    }
 
   def getMenuIfExistent() = {
     if (application.isInstanceOf[ApplicationProvider]) {

@@ -130,15 +130,6 @@ class ControllerActor[T]() extends Actor with ActorLogging {
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
-  override val supervisorStrategy =
-    OneForOneStrategy() {
-      case _: ClassNotFoundException       ⇒ Stop
-      case _: ActorInitializationException ⇒ Stop
-      case _: ActorKilledException         ⇒ Stop
-      case _: DeathPactException           ⇒ Stop
-      case _: Exception                    ⇒ Restart
-    }
-
   private def handleHtmlWithFallback(response: ListResponseEvent[T], m: Future[MessageEntity]) = {
     try {
       val loader = response.req.cmd.cls.getClassLoader
