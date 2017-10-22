@@ -1,25 +1,18 @@
 package io.skysail.server.persistence.orientdb
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
-import org.slf4j.LoggerFactory
-import com.orientechnologies.orient.graph.sql.OGraphCommandExecutorSQLFactory
-import com.orientechnologies.orient.graph.sql.functions.OGraphFunctionFactory
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
-import com.orientechnologies.orient.core.sql.OSQLEngine
-import com.orientechnologies.orient.core.sql.functions.OSQLFunction
-import scala.collection.JavaConverters._
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
-import io.skysail.api.persistence.DbService
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import com.orientechnologies.orient.core.command.OCommandRequest
-import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.record.impl.ODocument
+import com.orientechnologies.orient.core.sql.{OCommandSQL, OSQLEngine}
+import com.orientechnologies.orient.graph.sql.OGraphCommandExecutorSQLFactory
+import com.orientechnologies.orient.graph.sql.functions.OGraphFunctionFactory
+import com.tinkerpop.blueprints.impls.orient._
+import io.skysail.api.persistence.DbService
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import scala.reflect.ClassTag
-import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConverters._
 
 class OrientDbGraphService(url: String, user: String, pass: String) extends DbService {
 
