@@ -1,6 +1,7 @@
 package io.skysail.core.akka
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.SupervisorStrategy.{Restart, Stop}
+import akka.actor.{Actor, ActorInitializationException, ActorKilledException, ActorLogging, ActorRef, DeathPactException, OneForOneStrategy}
 import akka.event.LoggingReceive
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
@@ -129,6 +130,15 @@ class ControllerActor[T]() extends Actor with ActorLogging {
     case msg: Any => log info s">>> OUT >>>: received unknown message '$msg' in ${this.getClass.getName}"
   }
 
+  override val supervisorStrategy =
+    OneForOneStrategy() {
+      case _: ClassNotFoundException       ⇒ Stop
+      case _: ActorInitializationException ⇒ Stop
+      case _: ActorKilledException         ⇒ Stop
+      case _: DeathPactException           ⇒ Stop
+      case _: Exception                    ⇒ Restart
+    }
+
   private def handleHtmlWithFallback(response: ListResponseEvent[T], m: Future[MessageEntity]) = {
     try {
       val loader = response.req.cmd.cls.getClassLoader
@@ -148,7 +158,7 @@ class ControllerActor[T]() extends Actor with ActorLogging {
     }
   }
 
-  def handleHtmlWithFallback(response: ResponseEvent[T], e: JObject): Unit = {
+  private def handleHtmlWithFallback(response: ResponseEvent[T], e: JObject): Unit = {
     val resourceClassAsString = getHtmlTemplate(response.req)
     try {
       val loader = response.req.cmd.cls.getClassLoader
