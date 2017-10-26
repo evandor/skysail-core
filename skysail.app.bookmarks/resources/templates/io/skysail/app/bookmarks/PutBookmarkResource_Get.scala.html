@@ -12,8 +12,9 @@
 <div class="container">
     <div class="starter-template">
         <h1>Bookmarks</h1>
-        <p class="lead">add bookmark:</p>
-        <form action="/bookmarks/v1/" method="post">
+        <p class="lead">update bookmark:</p>
+        <span>@rep.rawData</span>
+        <form action='@rep.linkFor("io.skysail.app.bookmarks.PutBookmarkResource", rep.rawData.head.get("id"))?_method=PUT' method="GET">
 
             <table class="table table-sm">
                 <thead>
@@ -24,8 +25,8 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row"><input type="text" name="title"/></th>
-                    <td><input type="url" name="url"/></td>
+                    <th scope="row"><input type="text" name="title" value='@rep.rawData.head.get("title")'/></th>
+                    <td><input type="url" name="url" value='@rep.rawData.head.get("url")'/></td>
                 </tr>
                 <tr>
                     <th colspan="2">

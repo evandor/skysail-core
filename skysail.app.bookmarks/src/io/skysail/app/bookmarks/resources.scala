@@ -12,7 +12,7 @@ import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import io.skysail.core.akka.{ListResponseEvent, RequestEvent, ResponseEvent}
 import io.skysail.core.app.SkysailApplication
-import io.skysail.core.resources.{AsyncListResource, AsyncPostResource, AsyncResource}
+import io.skysail.core.resources.{AsyncListResource, AsyncPostResource, AsyncPutResource, AsyncResource}
 import io.skysail.core.server.actors.ApplicationActor
 import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import spray.json.{DefaultJsonProtocol, _}
@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val bookmarkFormat = jsonFormat3(Bookmark)
+  implicit val bookmarkFormat: RootJsonFormat[Bookmark] = jsonFormat3(Bookmark)
 }
 
 class BookmarksResource extends AsyncListResource[Bookmark] {
@@ -70,14 +70,37 @@ class PostBookmarkResource extends AsyncPostResource[Bookmark] with JsonSupport 
         .map(_.parseJson.convertTo[Bookmark])
 
     val entity1 = processCommand.ctx.request.entity
-    println ("Entity1" + entity1)
     val b = a.apply(entity1)
-    println ("Entity2" + b)
 
     formFieldMap { map =>
       val entity = Bookmark(Some(UUID.randomUUID().toString), map.getOrElse("title", "Unknown"), map.getOrElse("url", "Unknown"))
       super.createRoute(applicationActor, processCommand.copy(entity = entity))
     }
+  }
+}
+
+class PutBookmarkResource extends AsyncPutResource[Bookmark] with JsonSupport {
+
+  override def get(requestEvent: RequestEvent): Unit = {
+    val id = requestEvent.cmd.urlParameter.head
+
+    val applicationActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[BookmarksApplication].getName)
+    val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[BookmarksApplication]
+    r onSuccess {
+      case app =>
+        val optionalBookmark = app.repo.find(id)
+        requestEvent.controllerActor ! ResponseEvent(requestEvent, optionalBookmark.get)
+    }
+  }
+
+  override def put(requestEvent: RequestEvent): Unit = {
+    val applicationActor = SkysailApplication.getApplicationActorSelection(actorContext.system, classOf[BookmarksApplication].getName)
+    val r = (applicationActor ? ApplicationActor.GetApplication()).mapTo[BookmarksApplication]
+    r onSuccess {
+      case app => app.repo.save(requestEvent.cmd.entity)
+    }
+    requestEvent.controllerActor ! requestEvent.cmd.entity
+
   }
 }
 

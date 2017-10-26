@@ -27,7 +27,7 @@ Seq[Any](format.raw/*6.28*/("""
     <div class="starter-template">
         <h1>Bookmarks</h1>
         <p class="lead">add bookmark:</p>
-        <form actio="/bookmarks/v1/" method="post">
+        <form action="/bookmarks/v1/" method="post">
 
             <table class="table table-sm">
                 <thead>
@@ -70,9 +70,9 @@ Seq[Any](format.raw/*6.28*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Tue Oct 10 14:10:45 CEST 2017
-                  SOURCE: C:/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/PostBookmarkResource_Get.scala.html
-                  HASH: d616b5061a1df44b3b34fc54f8db8a4b1b1a80f3
+                  DATE: Mon Oct 23 09:51:32 CEST 2017
+                  SOURCE: /Users/carsten/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/PostBookmarkResource_Get.scala.html
+                  HASH: 6992842cc17f9219e5dfad11bda80f4b7f32ca65
                   MATRIX: 656->193|777->219|805->222|816->226|854->228|883->230
                   LINES: 15->6|20->6|22->8|22->8|22->8|24->10
                   -- GENERATED --

@@ -1,12 +1,12 @@
 package io.skysail.core.server.routes
 
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.util.TupleOps
 import akka.http.scaladsl.server.{PathMatcher, _}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.{Matchers, WordSpec, _}
 import org.slf4j.LoggerFactory
 
-//@RunWith(classOf[JUnitRunner])
 class ProgrammaticRouteDefinitionSpec extends WordSpec with BeforeAndAfterEach with Matchers with ScalatestRouteTest {
 
   private val log = LoggerFactory.getLogger(this.getClass)
@@ -15,29 +15,28 @@ class ProgrammaticRouteDefinitionSpec extends WordSpec with BeforeAndAfterEach w
   val route2: PathMatcher1[String] = PathMatchers.Segment
   val route3: PathMatcher[Unit] = PathMatcher("segment")
 
-//  override def beforeEach() {
-//    route1 = PathMatcher("app")
-//  }
-
   "The PathMatcherFactory" should {
 
+    "create a pathMatcher from a string definition" in {
+      val routeDef: Seq[PathMatcher[_ >: Unit with Tuple1[String]]] = List(route1, route2, route3)
 
-    "create a pathMatcher matching a path definition with placeholder for an app without version" in {
-      val v1 = route1 / route2
-      val resultingRoute: PathMatcher[Tuple1[String]] = route1 / route2 / route3
-    }
+      val t = new TupleOps.Join[String, String]() {
+        override type Out = this.type
 
-    "create a pathMatcher matching a path definition with placeholder for an app without version2" in {
-      implicit val join = akka.http.scaladsl.server.util.TupleOps.Join
-      val routeDef = List(route1, route2, route3)
-     // val resultingRoute = routeDef.reduceLeftOption((a,b) => a / b)
-//      val resultingRoute = routeDef.reduce((a,b) => {
-//        a match {
-//          case _: PathMatcher0 if(b.isInstanceOf[PathMatcher0]) => a / b.asInstanceOf[PathMatcher0]
-//          case _: PathMatcher0 if(b.isInstanceOf[PathMatcher1[String]]) => a ~ PathMatchers.Slash ~[PathMatcher1[String]] b
-//          case e: Any => a// println("EEE: " + e.toString); (a / b).asInstanceOf[PathMatcher1[Tuple1[String]]]
-//        }
-//      })
+        override def apply(prefix: String, suffix: String) = ???
+      }
+
+
+      class Joiner[L, R] extends TupleOps.Join[PathMatcher[L], PathMatcher[R]] {
+        override type Out = this.type
+
+        override def apply(prefix: PathMatcher[L], suffix: PathMatcher[R]) = ???
+      }
+
+      implicit val join = new Joiner[_ >: Unit with Tuple1[String], _ >: Unit with Tuple1[String]]()
+
+      val resultingRoute = routeDef.reduceLeftOption(
+        (a: PathMatcher[_ >: Unit with Tuple1[String]], b: PathMatcher[_ >: Unit with Tuple1[String]]) => a./(b))
     }
 
   }

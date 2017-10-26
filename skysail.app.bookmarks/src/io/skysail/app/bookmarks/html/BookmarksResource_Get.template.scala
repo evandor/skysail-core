@@ -42,7 +42,7 @@ Seq[Any](format.raw/*6.28*/("""
                 <th scope="row">"""),_display_(/*28.34*/p/*28.35*/.get("id")),format.raw/*28.45*/("""</th>
                 <th scope="row">"""),_display_(/*29.34*/p/*29.35*/.get("title")),format.raw/*29.48*/("""</th>
                 <td><a href='"""),_display_(/*30.31*/p/*30.32*/.get("url")),format.raw/*30.43*/("""'>"""),_display_(/*30.46*/p/*30.47*/.get("url")),format.raw/*30.58*/("""</a></td>
-                <td><a href='/bookmarks/v1/bm/"""),_display_(/*31.48*/p/*31.49*/.get("id")),format.raw/*31.59*/("""'>[update]</a></td>
+                <td><a href='"""),_display_(/*31.31*/rep/*31.34*/.linkFor("io.skysail.app.bookmarks.PutBookmarkResource", p.get("id"))),format.raw/*31.103*/("""'>[update]</a></td>
             </tr>
             """)))}),format.raw/*33.14*/("""
 
@@ -50,7 +50,7 @@ Seq[Any](format.raw/*6.28*/("""
 
         </table>
 
-        <a href="/bookmarks/v1/bm/">New</a>
+        <a href="/bookmarks/v1/bm/">Create New Bookmark</a>
 
     </div>
 </div>
@@ -71,10 +71,10 @@ Seq[Any](format.raw/*6.28*/("""
 
               /*
                   -- GENERATED --
-                  DATE: Thu Oct 12 16:14:07 CEST 2017
-                  SOURCE: C:/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/BookmarksResource_Get.scala.html
-                  HASH: abf8d2204a6356752127230476d1876e6208ec00
-                  MATRIX: 653->193|774->219|802->222|813->226|851->228|880->230|1319->642|1356->663|1396->665|1437->678|1502->716|1512->717|1543->727|1609->766|1619->767|1653->780|1716->816|1726->817|1758->828|1788->831|1798->832|1830->843|1914->900|1924->901|1955->911|2037->962|2079->976
+                  DATE: Mon Oct 23 09:07:26 CEST 2017
+                  SOURCE: /Users/carsten/git/skysail-core/skysail.app.bookmarks/./resources/templates/io/skysail/app/bookmarks/BookmarksResource_Get.scala.html
+                  HASH: 99f992770cf0098169b7e92ac476a9c4de868d53
+                  MATRIX: 653->193|774->219|802->222|813->226|851->228|880->230|1319->642|1356->663|1396->665|1437->678|1502->716|1512->717|1543->727|1609->766|1619->767|1653->780|1716->816|1726->817|1758->828|1788->831|1798->832|1830->843|1897->883|1909->886|2000->955|2082->1006|2124->1020
                   LINES: 15->6|20->6|22->8|22->8|22->8|24->10|40->26|40->26|40->26|41->27|42->28|42->28|42->28|43->29|43->29|43->29|44->30|44->30|44->30|44->30|44->30|44->30|45->31|45->31|45->31|47->33|49->35
                   -- GENERATED --
               */

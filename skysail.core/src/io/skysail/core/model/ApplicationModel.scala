@@ -37,7 +37,7 @@ case class ApplicationModel(
 
   def linkFor(clsName: String): Option[String] = {
     val res = resourceModels.map(m => m.linkFor(clsName)).filter(l => l.isDefined).map(l => l.get)
-    if (res.size == 0) None else Some("/" + name + res.head)
+    if (res.size == 0) None else Some("/" + id + res.head)
   }
 
   require(name != null, "The application's name should be unique and must not be null")

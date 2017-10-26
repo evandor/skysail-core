@@ -43,10 +43,10 @@
         name = Skysail Repository; \
         locations=https://github.com/evandor/skysail-repository/raw/master/index.xml.gz
 
--plugin.8.FixedIndexedRepo: \
-    aQute.bnd.deployer.repository.FixedIndexedRepo; \
-        name = Skysail Release Repository; \
-        locations=https://raw.githubusercontent.com/evandor/skysail/master/cnf/releaserepo/index.xml
+#-plugin.8.FixedIndexedRepo: \
+#    aQute.bnd.deployer.repository.FixedIndexedRepo; \
+#        name = Skysail Release Repository; \
+#        locations=https://raw.githubusercontent.com/evandor/skysail/master/cnf/releaserepo/index.xml
 
 #-plugin.7.FileRepo: \
 #   aQute.lib.deployer.FileRepo; \

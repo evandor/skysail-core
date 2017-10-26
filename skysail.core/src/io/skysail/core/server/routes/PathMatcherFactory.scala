@@ -14,7 +14,7 @@ object PathMatcherFactory {
   private val pattern = new Regex(":(.)*$")
 
   def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
-
+    println("path: " + path)
     path.trim() match {
       case "" => (appRoute ~ PathEnd, Unit)
       case "/" => (appRoute / PathEnd, Unit)
@@ -50,7 +50,11 @@ object PathMatcherFactory {
     res += res.reverse.head ~ PathEnd
 
     if (segments.size >= 2) {
-      val s = appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
+      val s = if (p.trim.endsWith("/")) {
+        appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1) ~ PathMatchers.Slash
+      } else {
+        appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
+      }
       //(res.reverse.head, classOf[Tuple1[List[String]]])
       (s, classOf[Tuple1[String]])
     } else {

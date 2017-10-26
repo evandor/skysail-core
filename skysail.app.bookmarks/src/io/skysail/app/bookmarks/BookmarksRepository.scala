@@ -11,7 +11,7 @@ class BookmarksRepository(dbService: DbService) {
     dbService.persist(entity)
   }
 
-  def find( /*Filter filter, Pagination pagination*/ ) = {
+  def find( /*Filter filter, Pagination pagination*/ ): List[Bookmark] = {
     val sql = "SELECT * from " + DbService.tableNameFor(classOf[Bookmark])
     //                + (!StringUtils.isNullOrEmpty(filter.getPreparedStatement()) ? " WHERE " + filter.getPreparedStatement()
     //                        : "")
@@ -21,4 +21,10 @@ class BookmarksRepository(dbService: DbService) {
     dbService.findGraphs(classOf[Bookmark], sql) //, filter.getParams());
   }
 
+  def find(id: String): Option[Bookmark] = {
+    val sql = s"SELECT * from ${DbService.tableNameFor(classOf[Bookmark])} where id='${id}'"
+    println("executing sql " + sql)
+    val res = dbService.findGraphs(classOf[Bookmark], sql) //, filter.getParams());
+    if (res.size == 0) None else res.headOption
+  }
 }

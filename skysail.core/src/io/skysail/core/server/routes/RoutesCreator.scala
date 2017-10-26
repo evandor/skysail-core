@@ -4,11 +4,13 @@ import java.lang.annotation.Annotation
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{ActorRef, ActorSelection, ActorSystem}
+import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.pattern.ask
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Source}
 import akka.util.Timeout
 import io.skysail.api.security.AuthenticationService
@@ -19,6 +21,7 @@ import io.skysail.core.security.AuthorizeByRole
 import io.skysail.core.server.actors.ApplicationActor.ProcessCommand
 import io.skysail.core.server.actors.{BundleActor, BundlesActor}
 import io.skysail.core.server.directives.MyDirectives._
+import io.skysail.core.server.directives.TunnelDirectives._
 import io.skysail.core.server.routes.RoutesCreator._
 import org.osgi.framework.wiring.BundleCapability
 import org.slf4j.LoggerFactory
@@ -61,16 +64,41 @@ class RoutesCreator(system: ActorSystem) {
 
   val pathMatcherFactory = PathMatcherFactory
 
+
   def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
     val appRoute = appInfoProvider.appModel.appRoute
-    log info s"creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
+    log info s" >>> creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
     val pathMatcher = if (mapping.pathMatcher != null)
       (mapping.pathMatcher, classOf[Tuple1[String]])
     else
       PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
-    staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
+    val route: Route = staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
+
+    def myRejectionHandler =
+      RejectionHandler.newBuilder()
+        .handle { case MissingCookieRejection(cookieName) =>
+          complete(HttpResponse(BadRequest, entity = "No cookies, no service!!!"))
+        }
+        .handle { case AuthorizationFailedRejection =>
+          complete((Forbidden, "You're out of your depth!"))
+        }
+        .handle { case ValidationRejection(msg, _) =>
+          complete((InternalServerError, "That wasn't valid! " + msg))
+        }
+        .handleAll[MethodRejection] { methodRejections =>
+        val names = methodRejections.map(_.supported.name)
+        complete((MethodNotAllowed, s"Can't do that! Supported: ${names mkString " or "}!"))
+      }
+//        .handleNotFound {
+//          complete((NotFound, "Not here!"))
+//        }
+        .result()
+
+    handleRejections(myRejectionHandler) {
+      route
+    }
   }
 
   private def indexPath(): Route = {
@@ -87,7 +115,7 @@ class RoutesCreator(system: ActorSystem) {
       } ~
       path("c4") {
         parameterMap { map =>
-          println ("MAP: " + map)
+          println("MAP: " + map)
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "hier we are"))
         }
       }
@@ -112,8 +140,8 @@ class RoutesCreator(system: ActorSystem) {
   private def clientPath(): Route = {
     pathPrefix("client") {
       get {
-        getFromResourceDirectory("client", getClientClassloader )
-        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader )
+        getFromResourceDirectory("client", getClientClassloader)
+        getFromResource("client/index.html", ContentTypes.`text/html(UTF-8)`, getClientClassloader)
       }
     }
   }
@@ -144,66 +172,82 @@ class RoutesCreator(system: ActorSystem) {
     pathMatcherWithClass match {
       case (pm: Any, Unit) =>
         pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {
-          test() {
+          parameters('_method.?) { tunnelMethod =>
             authenticationDirective(authentication) { username =>
-
-              get {
-                extractRequestContext {
-                  ctx =>
-                    test1("test1str") { f =>
-                      //println(f)
-                      routeWithUnmatchedPath2(ctx, mapping, appProvider)
-                    }
-                }
-              } ~
-                post {
-                    extractRequestContext {
-                      ctx =>
-                        routeWithUnmatchedPath2(ctx, mapping, appProvider)
-                    }
-                }
-            }
-          }
-        }
-      case (pm: Any, e: Class[Tuple1[_]]) => get {
-        pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { urlParameter =>
-          test() {
-            authenticationDirective(authentication) { username =>
-              optionalHeaderValueByName("Accept") { acceptHeader =>
+              handleOptionalTunnelMethod(tunnelMethod) {
                 get {
                   extractRequestContext {
                     ctx =>
                       test1("test1str") { f =>
                         //println(f)
-                        routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
+                        routeWithUnmatchedPath2(ctx, mapping, appProvider)
                       }
                   }
+                  //}
                 } ~
                   post {
                     extractRequestContext {
                       ctx =>
-                        routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
+                        routeWithUnmatchedPath2(ctx, mapping, appProvider)
                     }
                   }
               }
             }
           }
         }
-      }
-      case (first: Any, second: Any) =>
-        println(s"Unmatched! First '$first', Second ${second}");
-        get {
-          pathPrefix("") {
-            complete {
-              "error"
+      case (pm: Any, e: Class[Tuple1[_]]) => get {
+        pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { urlParameter =>
+          parameters('_method.?) { tunnelMethod =>
+            authenticationDirective(authentication) { username =>
+              optionalHeaderValueByName("Accept") { acceptHeader =>
+                //handleOptionalTunnelMethod(tunnelMethod) {
+                  get {
+                    log info s"getting..."
+                    handleRequest(mapping, appProvider, urlParameter)
+                  } ~
+                    post {
+                      log info s"posting..."
+                      handleRequest(mapping, appProvider, urlParameter)
+                    } ~
+                    put {
+                      log info s"putting..."
+                      handleRequest(mapping, appProvider, urlParameter)
+                    }
+                //}
+              }
             }
           }
+        }
+      }
+      case (first: Any, second: Any) =>
+        (get | post | put | delete) {
+          //pathPrefix("") {
+            complete {
+              "error1"
+            }
+          //}
+        }
+      case m: Any =>
+        (get | post | put | delete) {
+          //pathPrefix("") {
+            complete {
+              "error2"
+            }
+          //}
         }
     }
 
   }
 
-  private def createRoute(mapping: RouteMapping[_], appProvider: ApplicationProvider, urlParameter: List[String] = List()): Route = {
+  private def handleRequest(mapping: RouteMapping[_], appProvider: ApplicationProvider, urlParameter: List[String]) = {
+    extractRequestContext {
+      ctx => routeWithUnmatchedPath2(ctx, mapping, appProvider, urlParameter)
+    }
+  }
+
+  private def createRoute(mapping: RouteMapping[_], appProvider: ApplicationProvider, urlParameter: List[String] = List()): Route
+
+  = {
     test() {
       authenticationDirective(authentication) { username =>
         optionalHeaderValueByName("Accept") { acceptHeader =>
@@ -226,30 +270,13 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-//  private def routeWithUnmatchedPath(
-//                                      ctx: RequestContext,
-//                                      mapping: RouteMapping[_],
-//                                      appProvider: ApplicationProvider,
-//                                      urlParameter: List[String] = List()): Route = {
-//    extractUnmatchedPath { unmatchedPath =>
-//      val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
-//      //parameterMap { p =>
-//      val processCommand = ProcessCommand(ctx, mapping.resourceClass, urlParameter, unmatchedPath)
-//      //println(new PrivateMethodExposer(system)('printTree)())
-//      val t = (applicationActor ? processCommand).mapTo[ResponseEventBase]
-//      onComplete(t) {
-//        case Success(result) => complete(result.httpResponse)
-//        case Failure(failure) => log error s"Failure>>> ${failure}"; complete(StatusCodes.BadRequest, failure)
-//      }
-//      //}
-//    }
-//  }
-
   private def routeWithUnmatchedPath2(
-                                      ctx: RequestContext,
-                                      mapping: RouteMapping[_],
-                                      appProvider: ApplicationProvider,
-                                      urlParameter: List[String] = List()): Route = {
+                                       ctx: RequestContext,
+                                       mapping: RouteMapping[_],
+                                       appProvider: ApplicationProvider,
+                                       urlParameter: List[String] = List()): Route
+
+  = {
     extractUnmatchedPath { unmatchedPath =>
       val applicationActor = getApplicationActorSelection(system, appProvider.getClass.getName)
       val clazz = mapping.resourceClass
@@ -260,7 +287,9 @@ class RoutesCreator(system: ActorSystem) {
     }
   }
 
-  private def authenticationDirective(auth: AuthenticationService): Directive1[String] = auth.directive
+  private def authenticationDirective(auth: AuthenticationService): Directive1[String]
+
+  = auth.directive
 
   private def requestAnnotationForGet(cls: Class[_ <: Resource[_]]): Option[Annotation] = {
     try {

@@ -11,5 +11,17 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="skysail.core">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/skysail.core/generated/skysail.core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/skysail.core/generated/skysail.core.jar!/OSGI-OPT/src" />
+          <root url="jar://$MODULE_DIR$/skysail.core/generated/skysail.core.jar!/OSGI-OPT/src/io/skysail/api/um" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

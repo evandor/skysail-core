@@ -28,7 +28,7 @@
                 <th scope="row">@p.get("id")</th>
                 <th scope="row">@p.get("title")</th>
                 <td><a href='@p.get("url")'>@p.get("url")</a></td>
-                <td><a href='/bookmarks/v1/bm/@p.get("id")'>[update]</a></td>
+                <td><a href='@rep.linkFor("io.skysail.app.bookmarks.PutBookmarkResource", p.get("id"))'>[update]</a></td>
             </tr>
             }
 
@@ -36,7 +36,7 @@
 
         </table>
 
-        <a href="/bookmarks/v1/bm/">New</a>
+        <a href="/bookmarks/v1/bm/">Create New Bookmark</a>
 
     </div>
 </div>
