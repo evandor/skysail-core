@@ -3,6 +3,7 @@ package io.skysail.core.server.routes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import org.slf4j.LoggerFactory
+//import shapeless._
 
 import scala.util.matching.Regex
 import scala.util.matching.Regex.MatchIterator
@@ -13,14 +14,18 @@ object PathMatcherFactory {
 
   private val pattern = new Regex(":(.)*$")
 
+//  object join2 extends Poly {
+//    implicit def casePathMatcher[A, B](implicit t: akka.http.scaladsl.server.util.TupleOps.Join[A, B]) = use((a: PathMatcher[A], b: PathMatcher[B]) => a / b)
+//  }
+
   def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
     println("path: " + path)
     path.trim() match {
       case "" => (appRoute ~ PathEnd, Unit)
       case "/" => (appRoute / PathEnd, Unit)
       case p if p.endsWith("/*") => (handleCatchAll(appRoute, p), Unit)
-      case p if (containsParameters(p)) => handleParameters(appRoute, p)
-      case p if (containsSegments(p)) => (handleSegments(appRoute, p), Unit)
+      case p if containsParameters(p) => handleParameters(appRoute, p)
+      case p if containsSegments(p) => (handleSegments(appRoute, p), Unit)
       case any => (appRoute / getMatcher(any) ~ PathEnd, Unit)
     }
   }
@@ -31,6 +36,33 @@ object PathMatcherFactory {
 
   private def handleParameters(appRoute: PathMatcher[Unit], p: String): (PathMatcher[_], Any) = {
     val segments = splitBySlashes(p)
+
+    val splitted: Seq[String] = p.split("/").toList
+
+    val matchers = splitted.map(createPathMatcher)
+
+//    val r: HList = matchers.size match {
+//      case 1 => matchers(0) :: HNil
+//      case 2 => matchers(0) :: matchers(1) :: HNil
+//      case 3 => matchers(0) :: matchers(1) :: matchers(2) :: HNil
+//      case 4 => matchers(0) :: matchers(1) :: matchers(2) :: matchers(3) :: HNil
+//      case 5 => matchers(0) :: matchers(1) :: matchers(2) :: matchers(3) :: matchers(4) :: HNil
+//      case  _ => HNil//throw UnsupportedOperationException
+//    }
+//
+//    //val resultingRoute = r.reduceLeft(join2)
+//
+//    val r2: PathMatcher[_] = matchers.size match {
+//      case 1 => matchers(0)
+//      case 2 => matchers(0) / matchers(1)
+//      case 3 => matchers(0) / matchers(1) / matchers(2)
+//      case 4 => matchers(0) / matchers(1) / matchers(2) / matchers(3)
+//      case 5 => matchers(0) / matchers(1) / matchers(2) / matchers(3) / matchers(4)
+//      case  _ => PathMatchers.Slash //throw UnsupportedOperationException
+//    }
+
+
+
 
     val t = PathMatcher("seg1") / PathMatchers.Segment / PathMatcher("seg2") ~ PathEnd
 
@@ -88,6 +120,14 @@ object PathMatcherFactory {
     p.split("/").toList.filter(seg => seg != null && seg.trim() != "")
   }
 
+  private def createPathMatcher(str: String) = {
+    log info s"creating pathMatcher for '${str}'"
+    str match {
+      case "" => PathMatchers.Neutral
+      case _ if str.startsWith(":") => PathMatchers.Segment
+      case _ => PathMatcher(str)
+    }
+  }
 
   case class SegmentDescriptor(seg: String) {
     //    this(pathMatcher: PathMatcher[_]) {
@@ -97,5 +137,7 @@ object PathMatcherFactory {
       if (seg.trim.startsWith(":")) PathMatchers.Segment else PathMatcher(seg)
     }
   }
+
+
 
 }

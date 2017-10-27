@@ -1,9 +1,12 @@
 package io.skysail.app.bookmarks
 
+import akka.http.scaladsl.server.{PathMatcher, PathMatchers}
 import io.skysail.api.persistence.DbService
 import io.skysail.app.bookmarks.BookmarksApplication._
 import io.skysail.core.app._
 import io.skysail.core.app.menus.MenuItem
+import io.skysail.core.app.resources.BundleResource
+import java.io
 
 object BookmarksApplication {
   val APPLICATION_NAME = "bookmarks"
@@ -28,12 +31,17 @@ class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERS
       ))))
   }
 
-  override def routesMappings = List(
-    RouteMapping("", classOf[BookmarksResource]),
-    RouteMapping("/bm", classOf[BookmarksResource]),
-    RouteMapping("/bm/new", classOf[PostBookmarkResource]), // fix me
-    //RouteMapping("/bm/:id", classOf[BookmarkResource]),
-    RouteMapping("/bm/:id/", classOf[PutBookmarkResource])
-  )
+  override def routesMappings: List[RouteMapping[_]] = {
+    val root = PathMatcher("bookmarks") / PathMatcher("v1")
+    List(
+      RouteMapping(null, classOf[BookmarksResource]).setPathMatcher(PathMatcher("bookmarks") / PathMatcher("v1")),
+      //RouteMapping("", classOf[BookmarksResource]),
+      RouteMapping("/bm", classOf[BookmarksResource]),
+      RouteMapping("/bm/new", classOf[PostBookmarkResource]), // fix me
+      //RouteMapping("/bm/:id", classOf[BookmarkResource]),
+      RouteMapping(null, classOf[PutBookmarkResource]).setPathMatcher(root / PathMatcher("bm") / PathMatchers.Segment ~ PathMatchers.Slash)
+      //RouteMapping("/bm/:id/", classOf[PutBookmarkResource])
+    )
+  }
 
 }

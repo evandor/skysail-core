@@ -2,10 +2,11 @@ package io.skysail.core.server.routes
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.util.TupleOps
-import akka.http.scaladsl.server.{PathMatcher, _}
+import akka.http.scaladsl.server.{ PathMatcher, _ }
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import org.scalatest.{Matchers, WordSpec, _}
+import org.scalatest.{ Matchers, WordSpec, _ }
 import org.slf4j.LoggerFactory
+//import shapeless._
 
 class ProgrammaticRouteDefinitionSpec extends WordSpec with BeforeAndAfterEach with Matchers with ScalatestRouteTest {
 
@@ -26,21 +27,28 @@ class ProgrammaticRouteDefinitionSpec extends WordSpec with BeforeAndAfterEach w
         override def apply(prefix: String, suffix: String) = ???
       }
 
-
       class Joiner[L, R] extends TupleOps.Join[PathMatcher[L], PathMatcher[R]] {
         override type Out = this.type
 
         override def apply(prefix: PathMatcher[L], suffix: PathMatcher[R]) = ???
       }
 
-      implicit val join = new Joiner[_ >: Unit with Tuple1[String], _ >: Unit with Tuple1[String]]()
+     /* val routeDef2: HList = route1 :: route2 :: route3 :: HNil
 
-      val resultingRoute = routeDef.reduceLeftOption(
-        (a: PathMatcher[_ >: Unit with Tuple1[String]], b: PathMatcher[_ >: Unit with Tuple1[String]]) => a./(b))
+      object join extends Poly {
+        implicit def casePathMatcher[A, B](
+          implicit t: akka.http.scaladsl.server.util.TupleOps.Join[A, B]) = use((a: PathMatcher[A], b: PathMatcher[B]) => a / b)
+      }*/
+      
+      //val resultingRoute = routeDef2.reduceLeft(join)
+
+      //      implicit val join = new Joiner[_ >: Unit with Tuple1[String], _ >: Unit with Tuple1[String]]()
+      //
+      //      val resultingRoute = routeDef.reduceLeftOption(
+      //        (a: PathMatcher[_ >: Unit with Tuple1[String]], b: PathMatcher[_ >: Unit with Tuple1[String]]) => a./(b))
     }
 
   }
-
 
   private def expectSuccessFor(testedRoute: Route, testPath: String): Unit = {
     log info s" - testing '$testPath' against route definition, expecting success"
@@ -106,7 +114,8 @@ class ProgrammaticRouteDefinitionSpec extends WordSpec with BeforeAndAfterEach w
           }
         }
       }
-      case (first: Any, second: Any) => println(s"Unmatched! First '$first', Second ${second}");
+      case (first: Any, second: Any) =>
+        println(s"Unmatched! First '$first', Second ${second}");
         get {
           pathPrefix("") {
             complete {

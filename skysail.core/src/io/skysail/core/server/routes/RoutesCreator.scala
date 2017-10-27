@@ -170,20 +170,15 @@ class RoutesCreator(system: ActorSystem) {
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
     pathMatcherWithClass match {
-      case (pm: Any, Unit) =>
-        pathPrefix(pm.asInstanceOf[PathMatcher[Unit]]) {
+      case (pm: PathMatcher[Unit], Unit) =>
+        pathPrefix(pm) {
           parameters('_method.?) { tunnelMethod =>
             authenticationDirective(authentication) { username =>
               handleOptionalTunnelMethod(tunnelMethod) {
                 get {
                   extractRequestContext {
-                    ctx =>
-                      test1("test1str") { f =>
-                        //println(f)
-                        routeWithUnmatchedPath2(ctx, mapping, appProvider)
-                      }
+                    ctx => routeWithUnmatchedPath2(ctx, mapping, appProvider)
                   }
-                  //}
                 } ~
                   post {
                     extractRequestContext {
@@ -195,23 +190,23 @@ class RoutesCreator(system: ActorSystem) {
             }
           }
         }
-      case (pm: Any, e: Class[Tuple1[_]]) => get {
-        pathPrefix(pm.asInstanceOf[PathMatcher[Tuple1[List[String]]]]) { urlParameter =>
+      case (pm: PathMatcher[Tuple1[String]], e: Class[Tuple1[_]]) => get {
+        pathPrefix(pm) { urlParameter =>
           parameters('_method.?) { tunnelMethod =>
             authenticationDirective(authentication) { username =>
               optionalHeaderValueByName("Accept") { acceptHeader =>
                 //handleOptionalTunnelMethod(tunnelMethod) {
                   get {
                     log info s"getting..."
-                    handleRequest(mapping, appProvider, urlParameter)
+                    handleRequest(mapping, appProvider, List(urlParameter))
                   } ~
                     post {
                       log info s"posting..."
-                      handleRequest(mapping, appProvider, urlParameter)
+                      handleRequest(mapping, appProvider, List(urlParameter))
                     } ~
                     put {
                       log info s"putting..."
-                      handleRequest(mapping, appProvider, urlParameter)
+                      handleRequest(mapping, appProvider, List(urlParameter))
                     }
                 //}
               }

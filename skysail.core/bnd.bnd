@@ -36,7 +36,8 @@ Require-Capability: skysail.capability.auth
 	io.skysail.bundled.twirl-api_2.11;version=1.3,\
 	io.skysail.bundled.twirl-parser_2.11;version=1.3,\
 	io.skysail.bundled.twirl-compiler_2.11;version=1.3,\
-	org.scala-lang.scala-compiler;version=2.11
+	org.scala-lang.scala-compiler;version=2.11,\
+	shapeless;version=2.3
 
 Export-Package: \
 	io.skysail.api.doc,\
