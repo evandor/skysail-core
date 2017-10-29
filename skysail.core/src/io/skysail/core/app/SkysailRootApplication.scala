@@ -27,10 +27,11 @@ object SkysailRootApplication {
 //  property = { Array("service.pid=landingpages") },
 //  service = Array(classOf[ApplicationProvider], classOf[ManagedService]))
 class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.ROOT_APPLICATION_NAME, null, "backend root")
-    with ApplicationProvider
-    with ManagedService {
+  with ApplicationProvider
+  with ManagedService {
 
   var properties: Dictionary[String, _] = null
+
   def updated(props: Dictionary[String, _]): Unit = this.properties = props
 
   override def menu() = {
@@ -48,23 +49,18 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
 
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
-      //RouteMapping("/apps", classOf[AppsResource]),
-
-//      RouteMapping(root / "apps", classOf[AppsResource]),
-//      RouteMapping(root / "apps" / "menus", classOf[MenusResource]),
-
-
-      //RouteMapping("/apps/menus", classOf[MenusResource]),
-      RouteMapping("/bundles", classOf[BundlesResource]),
-      RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
+      RouteMapping("/apps", root / "apps", classOf[AppsResource]),
+      RouteMapping("/apps/menus", root / "apps" / "menus", classOf[MenusResource]),
+      RouteMapping("/bundles", root / "bundles", classOf[BundlesResource]),
+      RouteMapping("/bundlestop/:id", root / ":id", classOf[StopBundleResource]) // wait for pathmatcherFactory fix
       //RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundles") / PathMatchers.Segment),
-      RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
-      //RouteMapping("/bundles/:id", classOf[BundleResource]),
-      RouteMapping("/services", classOf[ServicesResource]),
-      RouteMapping("/app", classOf[AppResource]),
-      RouteMapping("/assets", classOf[AssetsResource]),
-      RouteMapping("/user", classOf[CurrentUserController]),
-      RouteMapping("/system/load", classOf[LoadAverageResource])
+//      RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
+//      //RouteMapping("/bundles/:id", classOf[BundleResource]),
+//      RouteMapping("/services", classOf[ServicesResource]),
+//      RouteMapping("/app", classOf[AppResource]),
+//      RouteMapping("/assets", classOf[AssetsResource]),
+//      RouteMapping("/user", classOf[CurrentUserController]),
+//      RouteMapping("/system/load", classOf[LoadAverageResource])
     )
   }
 

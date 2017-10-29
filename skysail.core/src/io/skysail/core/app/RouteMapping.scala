@@ -6,23 +6,14 @@ import io.skysail.core.resources.Resource._
 
 import scala.reflect.runtime.universe._
 
-case class RouteMapping[T /*<: DddElement*/: TypeTag](path: String, resourceClass: Class[_ <: Resource[T]]) {
+case class RouteMapping[T /*<: DddElement*/: TypeTag](
+                                 //                      path: String, resourceClass: Class[_ <: Resource[T]]
+                                 path: String,
+                                 pathMatcher: PathMatcher[_],
+                                 resourceClass: Class[_ <: Resource[T]]                    ) {
 
   var classes: Seq[Class[_]] = List()
 
-
-  var pathMatcher: PathMatcher[_] = null
-
-
-//  def this(pathMatcher: PathMatcher[_], resourceClass: Class[_ <: Resource[T]]) {
-//    this(null, resourceClass)
-//    this.pathMatcher = pathMatcher
-//  }
-
-  def setPathMatcher(pathMatcher: PathMatcher[_]): RouteMapping[T] = {
-    this.pathMatcher = pathMatcher
-    this
-  }
 
   def setTypes(classes: Class[_]*) = {
     this.classes = classes

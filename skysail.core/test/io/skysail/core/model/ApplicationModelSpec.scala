@@ -1,5 +1,7 @@
 package io.skysail.core.model
 
+import akka.http.scaladsl.server.PathMatcher
+
 import collection.mutable.Stack
 import org.scalatest._
 import org.junit.runner.RunWith
@@ -7,6 +9,7 @@ import org.scalatest.junit.JUnitRunner
 import org.slf4j.LoggerFactory
 import io.skysail.core.app.ApiVersion
 import io.skysail.core.app.RouteMapping
+
 import scala.reflect.runtime.universe._
 
 @RunWith(classOf[JUnitRunner])
@@ -60,9 +63,9 @@ class ApplicationModelSpec extends FlatSpec {
 
   "An ApplicationModel" should "add an ControllerModel (identified by its path) only once" in {
     val model = new  ApplicationModel("appName",null,"desc")
-    
-    val entityClass1 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
-    val entityClass2 = model.addResourceModel(RouteMapping("/path", classOf[TestStringEntityController]))
+    val root: PathMatcher[Unit] = PathMatcher("appName")
+    val entityClass1 = model.addResourceModel(RouteMapping("/path", root / "path", classOf[TestStringEntityController]))
+    val entityClass2 = model.addResourceModel(RouteMapping("/path", root / "path", classOf[TestStringEntityController]))
     
     assert(entityClass1.isDefined)
     assert(entityClass2.isEmpty)

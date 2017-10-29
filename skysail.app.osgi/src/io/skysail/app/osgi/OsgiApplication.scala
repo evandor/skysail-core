@@ -1,5 +1,6 @@
 package io.skysail.app.osgi
 
+import akka.http.scaladsl.server.PathMatcher
 import io.skysail.app.osgi.OsgiApplication._
 import io.skysail.core.app.{ApiVersion, ApplicationProvider, RouteMapping, SkysailApplication}
 
@@ -21,12 +22,15 @@ class OsgiApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, 
 //      ))))
 //  }
 
-  override def routesMappings = List(
-    RouteMapping("/bundles", classOf[BundlesResource]),
-    RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
-    RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
-    RouteMapping("/bundles/:id", classOf[BundleResource]),
-    RouteMapping("/services", classOf[ServicesResource])
-  )
+  override def routesMappings = {
+    val root: PathMatcher[Unit] = PathMatcher("root")
+    List(
+      RouteMapping("/bundles", root / "bundles", classOf[BundlesResource])
+//      RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
+//      RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
+//      RouteMapping("/bundles/:id", classOf[BundleResource]),
+//      RouteMapping("/services", classOf[ServicesResource])
+    )
+  }
 
 }

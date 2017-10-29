@@ -1,0 +1,2 @@
+// "bundles" >>> BundlesResource
+// "bundles/:id" >>> BundleResource

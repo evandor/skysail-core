@@ -1,5 +1,6 @@
 package io.skysail.app.elasticsearch
 
+import akka.http.scaladsl.server.{PathMatcher, PathMatchers}
 import io.skysail.core.app.{ApiVersion, ApplicationProvider, RouteMapping, SkysailApplication}
 import org.osgi.service.component.annotations._
 import io.skysail.app.elasticsearch.EsApplication._
@@ -22,10 +23,13 @@ class EsApplication extends SkysailApplication(APPLICATION_NAME, API_VERSION, "E
       ))))
   }
 
-  override def routesMappings = List(
-    RouteMapping("",classOf[IndicesResource]),
-    RouteMapping("/indices",classOf[IndicesResource]),
-    RouteMapping("/indices/",classOf[IndicesResource])
-  )
+  override def routesMappings = {
+    val root: PathMatcher[Unit] = PathMatcher("root")
+    List(
+      RouteMapping("",root, classOf[IndicesResource]),
+      RouteMapping("/indices",root / "indices", classOf[IndicesResource]),
+      RouteMapping("/indices/", root / PathMatcher("indices") ~ PathMatchers.Slash, classOf[IndicesResource])
+    )
+  }
 
 }
