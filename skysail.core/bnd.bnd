@@ -77,5 +77,6 @@ Private-Package: \
 	io.skysail.core.app.domain,\
 	io.skysail.core.app.services,\
     io.skysail.core.server.directives,\
+	io.skysail.core.compiler,\
     io.skysail.core.server.routes
 	

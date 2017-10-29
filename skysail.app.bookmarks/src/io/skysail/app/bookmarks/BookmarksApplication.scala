@@ -32,14 +32,17 @@ class BookmarksApplication extends SkysailApplication(APPLICATION_NAME, API_VERS
   }
 
   override def routesMappings: List[RouteMapping[_]] = {
-    val root = PathMatcher("bookmarks") / PathMatcher("v1")
+    val root: PathMatcher[Unit] = PathMatcher("bookmarks") / PathMatcher("v1")
+    val path2: PathMatcher[Tuple1[String]] = root / PathMatcher("bm") / PathMatchers.Segment ~ PathMatchers.Slash
     List(
-      RouteMapping(null, classOf[BookmarksResource]).setPathMatcher(PathMatcher("bookmarks") / PathMatcher("v1")),
+      RouteMapping(null, classOf[BookmarksResource]).setPathMatcher(root).setTypes(),
       //RouteMapping("", classOf[BookmarksResource]),
-      RouteMapping("/bm", classOf[BookmarksResource]),
+      //RouteMapping("/bm", classOf[BookmarksResource]),
       RouteMapping("/bm/new", classOf[PostBookmarkResource]), // fix me
       //RouteMapping("/bm/:id", classOf[BookmarkResource]),
-      RouteMapping(null, classOf[PutBookmarkResource]).setPathMatcher(root / PathMatcher("bm") / PathMatchers.Segment ~ PathMatchers.Slash)
+      RouteMapping(null, classOf[PutBookmarkResource])
+        .setPathMatcher(path2)
+          .setTypes(classOf[String])
       //RouteMapping("/bm/:id/", classOf[PutBookmarkResource])
     )
   }

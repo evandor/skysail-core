@@ -18,15 +18,14 @@ object PathMatcherFactory {
 //    implicit def casePathMatcher[A, B](implicit t: akka.http.scaladsl.server.util.TupleOps.Join[A, B]) = use((a: PathMatcher[A], b: PathMatcher[B]) => a / b)
 //  }
 
-  def matcherFor(appRoute: PathMatcher[Unit], path: String): (PathMatcher[_], Any) = {
-    println("path: " + path)
+  def matcherFor(appRoute: PathMatcher[Unit], path: String): MyRoute = {
     path.trim() match {
-      case "" => (appRoute ~ PathEnd, Unit)
-      case "/" => (appRoute / PathEnd, Unit)
-      case p if p.endsWith("/*") => (handleCatchAll(appRoute, p), Unit)
+      case "" => UnitRoute(appRoute ~ PathEnd)
+      case "/" => UnitRoute(appRoute / PathEnd)
+      case p if p.endsWith("/*") => UnitRoute(handleCatchAll(appRoute, p))
       case p if containsParameters(p) => handleParameters(appRoute, p)
-      case p if containsSegments(p) => (handleSegments(appRoute, p), Unit)
-      case any => (appRoute / getMatcher(any) ~ PathEnd, Unit)
+      case p if containsSegments(p) => UnitRoute(handleSegments(appRoute, p))
+      case any => UnitRoute(appRoute / getMatcher(any) ~ PathEnd)
     }
   }
 
@@ -34,7 +33,7 @@ object PathMatcherFactory {
     appRoute / PathMatcher(p.substring(1, p.length() - 2))
   }
 
-  private def handleParameters(appRoute: PathMatcher[Unit], p: String): (PathMatcher[_], Any) = {
+  private def handleParameters(appRoute: PathMatcher[Unit], p: String): MyRoute = {
     val segments = splitBySlashes(p)
 
     val splitted: Seq[String] = p.split("/").toList
@@ -88,10 +87,10 @@ object PathMatcherFactory {
         appRoute / PathMatcher(segments(0)) / PathMatchers.Segments(1)
       }
       //(res.reverse.head, classOf[Tuple1[List[String]]])
-      (s, classOf[Tuple1[String]])
+      StringRoute(s)//, classOf[Tuple1[String]])
     } else {
       val r = segments.foldLeft(appRoute)((a, b) => a / b) ~ PathEnd
-      (r, Unit)
+      UnitRoute(r)
     }
   }
 

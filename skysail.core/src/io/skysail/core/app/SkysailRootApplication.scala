@@ -43,13 +43,21 @@ class SkysailRootApplication extends SkysailApplication(SkysailRootApplication.R
   }
 
   def routesMappings: List[RouteMapping[_]] = {
+
+    val root: PathMatcher[Unit] = PathMatcher("root")
+
     List(
       //"/login" -> classOf[AkkaLoginResource[String]],
-      RouteMapping("/apps", classOf[AppsResource]),
-      RouteMapping("/apps/menus", classOf[MenusResource]),
+      //RouteMapping("/apps", classOf[AppsResource]),
+
+//      RouteMapping(root / "apps", classOf[AppsResource]),
+//      RouteMapping(root / "apps" / "menus", classOf[MenusResource]),
+
+
+      //RouteMapping("/apps/menus", classOf[MenusResource]),
       RouteMapping("/bundles", classOf[BundlesResource]),
       RouteMapping("/bundlestop/:id", classOf[StopBundleResource]), // wait for pathmatcherFactory fix
-      RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundles") / PathMatchers.Segment),
+      //RouteMapping(null, classOf[BundleResource]).setPathMatcher(PathMatcher("bundles") / PathMatchers.Segment),
       RouteMapping("/bundlestart/:id", classOf[StartBundleResource]), // wait for pathmatcherFactory fix
       //RouteMapping("/bundles/:id", classOf[BundleResource]),
       RouteMapping("/services", classOf[ServicesResource]),

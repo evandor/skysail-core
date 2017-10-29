@@ -1,0 +1,3 @@
+new Greenhouse {
+  override def getPlant() = new Rose()
+}

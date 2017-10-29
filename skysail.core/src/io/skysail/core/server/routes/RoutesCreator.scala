@@ -68,13 +68,19 @@ class RoutesCreator(system: ActorSystem) {
   def createRoute(mapping: RouteMapping[_], appInfoProvider: ApplicationProvider): Route = {
     val appRoute = appInfoProvider.appModel.appRoute
     log info s" >>> creating route from [${appInfoProvider.appModel.appPath()}]${mapping.path} -> ${mapping.resourceClass.getSimpleName}[${mapping.getEntityType()}]"
-    val pathMatcher = if (mapping.pathMatcher != null)
-      (mapping.pathMatcher, classOf[Tuple1[String]])
-    else
-      PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
+    val pathMatcherTypeTuple: MyRoute =
+      if (mapping.pathMatcher != null) {
+        mapping.classes.size match {
+          case 0 => UnitRoute(mapping.pathMatcher)
+          case 1 => StringRoute(mapping.pathMatcher)
+          case _ => throw new UnsupportedOperationException
+        }
+      }
+      else
+        PathMatcherFactory.matcherFor(appRoute, mapping.path.trim())
 
     val appSelector = getApplicationActorSelection(system, appInfoProvider.getClass.getName)
-    val route: Route = staticResources() ~ matcher(pathMatcher, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
+    val route: Route = staticResources() ~ matcher(pathMatcherTypeTuple, mapping, appInfoProvider) ~ clientPath() ~ indexPath() ~ websocketPath()
 
     def myRejectionHandler =
       RejectionHandler.newBuilder()
@@ -91,9 +97,9 @@ class RoutesCreator(system: ActorSystem) {
         val names = methodRejections.map(_.supported.name)
         complete((MethodNotAllowed, s"Can't do that! Supported: ${names mkString " or "}!"))
       }
-//        .handleNotFound {
-//          complete((NotFound, "Not here!"))
-//        }
+        //        .handleNotFound {
+        //          complete((NotFound, "Not here!"))
+        //        }
         .result()
 
     handleRejections(myRejectionHandler) {
@@ -165,13 +171,14 @@ class RoutesCreator(system: ActorSystem) {
     if (trimmed.startsWith("/")) PathMatcher(trimmed.substring(1)) else PathMatcher(trimmed)
   }
 
-  private def matcher(pathMatcherWithClass: (PathMatcher[_], Any), mapping: RouteMapping[_], appProvider: ApplicationProvider): Route = {
+  private def matcher(pathMatcherWithClass: MyRoute, mapping: RouteMapping[_], appProvider: ApplicationProvider): Route = {
 
     val getAnnotation = requestAnnotationForGet(mapping.resourceClass)
 
     pathMatcherWithClass match {
-      case (pm: PathMatcher[Unit], Unit) =>
-        pathPrefix(pm) {
+      //case (pm: PathMatcher[Unit], Unit) =>
+      case (pm: UnitRoute) =>
+        pathPrefix(pm.pathMatcher.asInstanceOf[PathMatcher0]) {
           parameters('_method.?) { tunnelMethod =>
             authenticationDirective(authentication) { username =>
               handleOptionalTunnelMethod(tunnelMethod) {
@@ -190,46 +197,42 @@ class RoutesCreator(system: ActorSystem) {
             }
           }
         }
-      case (pm: PathMatcher[Tuple1[String]], e: Class[Tuple1[_]]) => get {
-        pathPrefix(pm) { urlParameter =>
+      //case (pm: PathMatcher[Tuple1[String]], e: Class[Tuple1[_]]) => get {
+      case (pm: StringRoute) =>
+        pathPrefix(pm.pathMatcher.asInstanceOf[PathMatcher[Tuple1[String]]]) { urlParameter =>
           parameters('_method.?) { tunnelMethod =>
             authenticationDirective(authentication) { username =>
               optionalHeaderValueByName("Accept") { acceptHeader =>
                 //handleOptionalTunnelMethod(tunnelMethod) {
-                  get {
-                    log info s"getting..."
+                get {
+                  log info s"getting..."
+                  handleRequest(mapping, appProvider, List(urlParameter))
+                } ~
+                  post {
+                    log info s"posting..."
                     handleRequest(mapping, appProvider, List(urlParameter))
                   } ~
-                    post {
-                      log info s"posting..."
-                      handleRequest(mapping, appProvider, List(urlParameter))
-                    } ~
-                    put {
-                      log info s"putting..."
-                      handleRequest(mapping, appProvider, List(urlParameter))
-                    }
+                  put {
+                    log info s"putting..."
+                    handleRequest(mapping, appProvider, List(urlParameter))
+                  }
                 //}
               }
             }
+
           }
-        }
-      }
-      case (first: Any, second: Any) =>
-        (get | post | put | delete) {
-          //pathPrefix("") {
-            complete {
-              "error1"
-            }
-          //}
         }
       case m: Any =>
         (get | post | put | delete) {
-          //pathPrefix("") {
+          extractRequestContext { ctx =>
             complete {
-              "error2"
+              log info s"Ctx: ${ctx}"
+              log info s"First: ${m}"
+              "error1"
             }
-          //}
+          }
         }
+
     }
 
   }
