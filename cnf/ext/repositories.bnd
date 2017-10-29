@@ -24,12 +24,6 @@
         pretty = true; \
         local = ${build}/release
         
--plugin.5.ReleaseRepo: \
-    aQute.bnd.deployer.repository.LocalIndexedRepo; \
-        name = ReleaseRepo; \
-        pretty = true; \
-        local = ${build}/releaserepo
-
 -plugin.6.LocalRepo: \
     aQute.bnd.deployer.repository.LocalIndexedRepo; \
         name = LocalRepo; \
