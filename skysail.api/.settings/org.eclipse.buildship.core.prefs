@@ -1,3 +1,0 @@
-connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
-connection.project.dir=../skysail.app.demo
-eclipse.preferences.version=1

@@ -1,12 +1,9 @@
 package io.skysail.api.persistence
 
-import org.osgi.annotation.versioning.ProviderType
-
 object DbService {
   def tableNameFor(cls: Class[_]): String = cls.getName().replace(".", "_")
 }
 
-@ProviderType
 trait DbService {
 
   def createWithSuperClass(superClass: String, vertices: String*)

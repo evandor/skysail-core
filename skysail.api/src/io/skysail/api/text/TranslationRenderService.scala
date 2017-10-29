@@ -1,6 +1,5 @@
 package io.skysail.api.text
 
-import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A Translation render service asks a TranslationStore for the translation
@@ -11,7 +10,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * example they can provide asciidoc or markdown formatting.
  *
  */
-@ProviderType
+
+//@ProviderType
 trait TranslationRenderService {
 
     def render( content: String,substitutions: Any*): String
