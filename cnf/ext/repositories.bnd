@@ -24,13 +24,13 @@
         pretty = true; \
         local = ${build}/release
         
--plugin.5.LocalRepo: \
-    aQute.bnd.deployer.repository.LocalIndexedRepo; \
-        name = LocalRepo; \
-        pretty = true; \
-        local = ${build}/localrepo
+#-plugin.5.LocalRepo: \
+#    aQute.bnd.deployer.repository.LocalIndexedRepo; \
+#        name = LocalRepo; \
+#        pretty = true; \
+#        local = ${build}/localrepo
 
--plugin.6.FixedIndexedRepo: \
+-plugin.5.FixedIndexedRepo: \
     aQute.bnd.deployer.repository.FixedIndexedRepo; \
         name = Skysail Repository; \
         locations=https://github.com/evandor/skysail-repository/raw/master/index.xml.gz
