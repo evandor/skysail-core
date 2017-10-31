@@ -11,11 +11,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>bndtools.core.bndbuilder</name>
 			<arguments>
 			</arguments>
@@ -31,6 +26,5 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>bndtools.core.bndnature</nature>
 		<nature>org.scalastyle.scalastyleplugin.core.ScalastyleNature</nature>
-		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 </projectDescription>
