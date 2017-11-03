@@ -2,9 +2,9 @@ package io.skysail.server.auth.basic
 
 import domino.DominoActivator
 import org.slf4j.LoggerFactory
-import io.skysail.api.security.AuthenticationService
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.directives.Credentials
+import io.skysail.api.security.AuthenticationService
 
 class Activator extends DominoActivator {
 

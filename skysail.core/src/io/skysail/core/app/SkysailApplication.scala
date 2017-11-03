@@ -1,51 +1,20 @@
 package io.skysail.core.app
 
-import java.util.ArrayList
-import java.util.Collections
-import java.util.ResourceBundle
+import java.util.{Collections, ResourceBundle}
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.collection.JavaConverters.asScalaBufferConverter
-import scala.concurrent.duration.DurationInt
-import org.osgi.framework.Bundle
-import org.osgi.framework.BundleContext
-import org.osgi.service.component.ComponentContext
-import org.osgi.service.component.annotations.Activate
-import org.osgi.service.component.annotations.Deactivate
-import org.slf4j.LoggerFactory
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.server.Directives.get
-import akka.http.scaladsl.server.Directives.path
-import akka.http.scaladsl.server.PathMatcher
-import akka.http.scaladsl.server.Route
-import akka.pattern.ask
-import akka.stream.ActorMaterializer
-import akka.util.Timeout
-import io.skysail.core.ScalaReflectionUtils
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server._
-import io.skysail.core.model.ApplicationModel
-import akka.actor.ActorRef
-import akka.actor.Status.{ Failure, Success }
-import io.skysail.core.akka.PrivateMethodExposer
-import io.skysail.core.server.actors.{ ApplicationsActor, BundlesActor, BundleActor }
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Failure, Success }
-import scala.util.Random
-import scala.concurrent.Future
-import scala.concurrent.Await
-import io.skysail.core.app.SkysailApplication._
-import akka.http.scaladsl.model.HttpEntity
-import akka.http.scaladsl.model.ContentTypes
-import akka.actor.ActorSelection
+import akka.actor.{ActorRef, ActorSelection, ActorSystem, Props}
+import akka.http.scaladsl.server.{Route, _}
 import io.skysail.core.Constants
+import io.skysail.core.model.ApplicationModel
 import io.skysail.core.resources.Resource
-import io.skysail.core.resources.Resource._
-import io.skysail.core.app.resources.BundlesResource
-import io.skysail.core.app.resources.ModelResource
+import org.osgi.framework.{Bundle, BundleContext}
+import org.osgi.service.component.ComponentContext
+import org.osgi.service.component.annotations.{Activate, Deactivate}
+import org.slf4j.LoggerFactory
+
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
 
 object SkysailApplication {
   val log = LoggerFactory.getLogger(classOf[SkysailApplication])

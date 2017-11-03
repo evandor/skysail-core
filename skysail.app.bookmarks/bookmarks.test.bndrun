@@ -45,7 +45,7 @@ skysail.server.um:
     joda-time;version=2.9.3,\
     org.apache.httpcomponents.httpcore;version=4.3,\
     org.apache.httpcomponents.httpclient;version=4.3,\
-    skysail.api;version=latest,\
+    skysail.api;version=${skysail.api.version},\
     skysail.core;version=latest,\
     skysail.client;version=latest,\
     skysail.server.auth.basic;version=latest,\

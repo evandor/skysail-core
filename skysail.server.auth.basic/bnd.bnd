@@ -20,7 +20,7 @@ Bundle-Activator: io.skysail.server.auth.basic.Activator
     ${akka-compiletime},\
     ${akka-test},\
     ${json},\
-    skysail.api;version=latest,\
+    skysail.api;version=${skysail.api.version},\
     domino_2.11;version=1.1    
 
 Private-Package: io.skysail.server.auth.basic
